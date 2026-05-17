@@ -34,6 +34,7 @@ interface CenteredSectionHeaderProps {
   withDot?: boolean;
   className?: string;
   titleClassName?: string;
+  descriptionClassName?: string;
 }
 
 export const CenteredSectionHeader = ({
@@ -43,27 +44,48 @@ export const CenteredSectionHeader = ({
   withDot,
   className,
   titleClassName,
+  descriptionClassName,
 }: CenteredSectionHeaderProps) => {
   return (
     <div
       className={cn(
-        "mx-auto mb-12 max-w-3xl text-center lg:mb-16",
+        "mx-auto mb-12 flex w-full max-w-4xl flex-col items-center justify-center gap-1 px-4 text-center lg:mb-16",
         className,
       )}
     >
-      <SectionLabel withDot={withDot} className="mb-5">
+      {/* Glass pill label */}
+      <span
+        className={cn(
+          "text-foreground/80 inline-flex items-center justify-center rounded-full px-5 py-2.5",
+          "bg-card/25 ring-foreground/10 ring-1 backdrop-blur-md",
+          "text-base leading-[140%] font-normal gap-2",
+          "shadow-[inset_0_1px_0_var(--color-card),0_2px_6px_-2px_var(--color-foreground)/8%]",
+        )}
+      >
+        {withDot && (
+          <span className="bg-primary h-1.5 w-1.5 animate-pulse rounded-full" />
+        )}
         {label}
-      </SectionLabel>
+      </span>
+
+      {/* Premium heading */}
       <h2
         className={cn(
-          "font-heading text-foreground text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-[3.5rem] lg:leading-[1.1]",
+          "font-heading text-foreground mt-3 text-center text-[36px] leading-[120%] font-medium tracking-tight md:text-[56px] xl:mt-4",
           titleClassName,
         )}
       >
         {title}
       </h2>
+
+      {/* Description */}
       {description && (
-        <p className="text-muted-foreground mt-5 text-base leading-relaxed sm:text-lg">
+        <p
+          className={cn(
+            "text-foreground/75 mt-3 max-w-2xl text-center text-[16px] leading-[150%] md:text-[18px]",
+            descriptionClassName,
+          )}
+        >
           {description}
         </p>
       )}

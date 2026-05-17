@@ -35,9 +35,9 @@ export const ServiceCard = ({ service, className }: ServiceCardProps) => {
       {/* Front face — visible by default */}
       <div
         className={cn(
-          "bg-muted/60 text-foreground flex h-full flex-col items-start justify-start rounded-3xl px-5 py-6",
-          "transition-opacity duration-300",
-          "group-hover/service:opacity-0",
+          "bg-muted/60 text-foreground flex h-full flex-col items-start justify-start rounded-3xl px-5 py-6 w-full",
+          "transition-all duration-500 ease-out transform",
+          "group-hover/service:opacity-0 group-hover/service:-translate-y-6",
         )}
       >
         <h3 className="font-heading text-foreground text-xl font-semibold tracking-tight md:text-2xl">
@@ -62,8 +62,9 @@ export const ServiceCard = ({ service, className }: ServiceCardProps) => {
       {/* Back face — shown on hover */}
       <div
         className={cn(
-          "pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300",
-          "group-hover/service:pointer-events-auto group-hover/service:opacity-100",
+          "pointer-events-none absolute inset-0 opacity-0 w-full h-full",
+          "transition-all duration-500 ease-out transform translate-y-6",
+          "group-hover/service:pointer-events-auto group-hover/service:opacity-100 group-hover/service:translate-y-0",
         )}
       >
         {/* Gradient border wrapper */}

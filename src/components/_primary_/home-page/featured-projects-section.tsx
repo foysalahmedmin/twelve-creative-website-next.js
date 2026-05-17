@@ -1,9 +1,12 @@
 "use client";
 
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CenteredSectionHeader } from "@/components/common/section-label";
+import { ScrollReveal } from "@/components/common/scroll-reveal";
 import {
   FEATURED_CATEGORIES,
-  type TFeaturedProject,
   type TFeaturedAspect,
+  type TFeaturedProject,
 } from "@/data/featured-projects.data";
 import { cn } from "@/lib/utils";
 import { PlayIcon } from "@hugeicons/core-free-icons";
@@ -55,15 +58,15 @@ const ProjectCard = ({
               aria-hidden
               className={cn(
                 "absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center",
-                "h-10 w-14 rounded-lg backdrop-blur-[2px] md:h-10 md:w-16 md:rounded-xl",
-                "from-primary-from/85 to-primary-to/85 text-primary-foreground bg-linear-to-br",
-                "ring-1 ring-primary-foreground/30 shadow-lg",
-                "transition-transform duration-200 group-hover/project:scale-105 group-active/project:scale-95",
+                "h-10 w-16 rounded-xl md:h-12 md:w-20 md:rounded-2xl",
+                "bg-card/10 border border-white/20 text-white shadow-2xl backdrop-blur-md",
+                "group-hover/project:bg-card/30 transition-all duration-300 group-hover/project:scale-110 group-hover/project:border-white/35",
+                "group-active/project:scale-95",
               )}
             >
               <HugeiconsIcon
                 icon={PlayIcon}
-                className="size-4 md:size-6"
+                className="size-5 md:size-6"
                 fill="currentColor"
               />
             </span>
@@ -91,12 +94,9 @@ export const FeaturedProjectsSection = ({
   className?: string;
 }) => {
   const [activeId, setActiveId] = useState(FEATURED_CATEGORIES[0].id);
-  const activeCategory =
-    FEATURED_CATEGORIES.find((c) => c.id === activeId) ??
-    FEATURED_CATEGORIES[0];
 
   return (
-    <section className={cn("container mt-6 md:mt-10 lg:mt-[3.125rem]", className)}>
+    <section className={cn("container mt-6 md:mt-10 lg:mt-12", className)}>
       {/* Background-gradient wrapper card */}
       <div
         className={cn(
@@ -105,79 +105,58 @@ export const FeaturedProjectsSection = ({
         )}
       >
         {/* Header */}
-        <div className="mx-auto flex w-full max-w-4xl flex-col items-center justify-center gap-1 px-4">
-          {/* Glass pill label */}
-          <span
-            className={cn(
-              "text-foreground/80 inline-flex items-center justify-center rounded-3xl px-5 py-2.5",
-              "bg-card/45 ring-foreground/10 backdrop-blur-md ring-1",
-              "text-base font-normal leading-[140%]",
-              "shadow-[inset_0_1px_0_var(--color-card),0_2px_6px_-2px_var(--color-foreground)/8%]",
-            )}
-          >
-            Our Works
-          </span>
+        <CenteredSectionHeader
+          label="Our Works"
+          title="Featured Projects"
+          description="Real projects that show how strategy, creative, and systems work together."
+          className="mb-0 lg:mb-0"
+        />
 
-          <h2 className="font-heading text-foreground mt-2 text-center text-[36px] font-medium leading-[120%] tracking-tight md:text-[56px] xl:mt-4">
-            Featured Projects
-          </h2>
-
-          <p className="text-muted-foreground mx-auto mt-2 w-full text-center text-sm font-normal leading-[150%] md:text-base xl:w-8/9">
-            Real projects that show how strategy, creative, and systems work
-            together.
-          </p>
-        </div>
-
-        {/* Tabs container — glass */}
+        {/* Tabs wrapper */}
         <div className="px-4">
-          <div
-            className={cn(
-              "mx-auto mt-5 flex items-center overflow-x-auto rounded-[12px] px-3 py-3",
-              "bg-card/40 ring-foreground/10 backdrop-blur-2xl ring-1",
-              "shadow-[0_8px_24px_-12px] shadow-primary/10",
-              "h-[75px] gap-2 sm:max-w-[594px]",
-              "justify-start lg:justify-center",
-              "no-scrollbar cursor-grab",
-            )}
+          <Tabs
+            value={activeId}
+            onValueChange={setActiveId}
+            className="mt-5 flex w-full flex-col items-center"
           >
-            {FEATURED_CATEGORIES.map((category) => {
-              const isActive = category.id === activeId;
-              return (
-                <button
-                  key={category.id}
-                  type="button"
-                  onClick={() => setActiveId(category.id)}
-                  className={cn(
-                    "h-[51px] whitespace-nowrap rounded-[12px] px-3 py-2 text-sm font-medium transition-all duration-200",
-                    isActive
-                      ? "from-primary-from to-primary-to text-primary-foreground bg-linear-to-br font-semibold shadow-md"
-                      : "text-foreground/70 hover:text-foreground hover:bg-card/60",
-                  )}
-                  aria-pressed={isActive}
-                >
+            <TabsList>
+              {FEATURED_CATEGORIES.map((category) => (
+                <TabsTrigger key={category.id} value={category.id}>
                   {category.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
+                </TabsTrigger>
+              ))}
+            </TabsList>
 
-        {/* Grid */}
-        <div
-          className={cn(
-            "mx-auto mt-10 grid max-w-7xl gap-2 px-4 lg:mt-16",
-            activeCategory.aspect === "reel"
-              ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4"
-              : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3",
-          )}
-        >
-          {activeCategory.projects.map((project) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              aspect={activeCategory.aspect}
-            />
-          ))}
+            {FEATURED_CATEGORIES.map((category) => (
+              <TabsContent
+                key={category.id}
+                value={category.id}
+                className="mt-10 w-full lg:mt-16"
+              >
+                <div
+                  className={cn(
+                    "mx-auto grid max-w-7xl gap-2 px-4",
+                    category.aspect === "reel"
+                      ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4"
+                      : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3",
+                  )}
+                >
+                  {category.projects.map((project, idx) => (
+                    <ScrollReveal
+                      key={project.id}
+                      animation="fade-in-up"
+                      delayMs={100 * (idx % 4)}
+                    >
+                      <ProjectCard
+                        project={project}
+                        aspect={category.aspect}
+                      />
+                    </ScrollReveal>
+                  ))}
+                </div>
+              </TabsContent>
+            ))}
+          </Tabs>
         </div>
       </div>
     </section>

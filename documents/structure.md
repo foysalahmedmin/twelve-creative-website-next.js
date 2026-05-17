@@ -47,7 +47,7 @@ Components are organized by their scope and reuse potential.
 
 | Directory      | Description                                                                                             | Example                                | Managed By |
 | :------------- | :------------------------------------------------------------------------------------------------------ | :------------------------------------- | :--------- |
-| `ui/`          | **shadcn/ui ONLY.** All UI primitives. Do NOT manually create files here — use `npx shadcn@latest add`. | `button.tsx`, `card.tsx`, `dialog.tsx` | shadcn CLI |
+| `ui/`          | **shadcn/ui ONLY.** All UI primitives. Use `npx shadcn@latest add`. Can be modified to fit design. | `button.tsx`, `card.tsx`, `dialog.tsx` | shadcn CLI |
 | `base/`        | Non-UI utility wrappers (error boundaries, layout shells). NOT for UI primitives.                       | `error-boundary.tsx`                   | Manual     |
 | `partials/`    | Shared components composing FROM `ui/` primitives.                                                      | `header.tsx`, `footer.tsx`             | Manual     |
 | `cards/`       | Data-display cards. MUST use `<Card>` from `ui/`.                                                       | `doctor-card.tsx`, `hospital-card.tsx` | Manual     |
@@ -140,4 +140,4 @@ To bridge backend responses and frontend UI needs, every dynamic module follows 
 5.  **Always** maintain UI consistency specially for `border-radius` and minimalist color usage.
 6.  **Always** use shadcn/ui components from `src/components/ui/` for all UI primitives. Check `docs/llms.md` before creating custom elements.
 7.  **Never** install alternative UI libraries (`@mui/*`, `@chakra-ui/*`, `@headlessui/*`, etc.).
-8.  **Always** install new shadcn/ui components via `npx shadcn@latest add` or the MCP tools — never manually create files in `src/components/ui/`.
+8.  **Always** install new shadcn/ui components via `npx shadcn@latest add` or the MCP tools. You may modify existing files if required by the design.

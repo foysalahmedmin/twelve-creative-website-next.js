@@ -5,9 +5,9 @@ import { FeaturedProjectsSection } from "@/components/_primary_/home-page/featur
 import { HeroSection } from "@/components/_primary_/home-page/hero-section";
 import { HomeCtaSection } from "@/components/_primary_/home-page/home-cta-section";
 import { IndustriesSection } from "@/components/_primary_/home-page/industries-section";
-import { ProblemSection } from "@/components/_primary_/home-page/problem-section";
 import { ProcessSection } from "@/components/_primary_/home-page/process-section";
 import { ServicesSection } from "@/components/_primary_/home-page/services-section";
+import { TestimonialSection } from "@/components/_primary_/home-page/testimonial-section";
 import { WhyChooseUsSection } from "@/components/_primary_/home-page/why-choose-us-section";
 import { SITE } from "@/config/site";
 import type { Metadata } from "next";
@@ -29,8 +29,8 @@ export default function HomePage() {
       <HeroSection />
       <BrandsSection />
       <FeaturedProjectsSection />
-      <ProblemSection />
       <ServicesSection />
+      <TestimonialSection />
       <ProcessSection />
       <DifferenceSection />
       <IndustriesSection />

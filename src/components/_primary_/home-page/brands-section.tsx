@@ -2,6 +2,7 @@
 
 import { BRANDS_DATA, type TBrand } from "@/data/brands.data";
 import { cn } from "@/lib/utils";
+import { ScrollReveal } from "@/components/common/scroll-reveal";
 import Image from "next/image";
 import Marquee from "react-fast-marquee";
 
@@ -37,27 +38,29 @@ export const BrandsSection = ({ className }: { className?: string }) => {
         className,
       )}
     >
-      <div
-        className="mx-auto flex w-full flex-col items-center justify-center"
-        style={{
-          maskImage:
-            "linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)",
-          WebkitMaskImage:
-            "linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)",
-        }}
-      >
-        <Marquee
-          gradient={false}
-          speed={40}
-          pauseOnHover
-          autoFill
-          className="flex items-center"
+      <ScrollReveal animation="fade-in" durationMs={800}>
+        <div
+          className="mx-auto flex w-full flex-col items-center justify-center"
+          style={{
+            maskImage:
+              "linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)",
+            WebkitMaskImage:
+              "linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)",
+          }}
         >
-          {BRANDS_DATA.map((brand) => (
-            <BrandItem key={brand.id} brand={brand} />
-          ))}
-        </Marquee>
-      </div>
+          <Marquee
+            gradient={false}
+            speed={40}
+            pauseOnHover
+            autoFill
+            className="flex items-center"
+          >
+            {BRANDS_DATA.map((brand) => (
+              <BrandItem key={brand.id} brand={brand} />
+            ))}
+          </Marquee>
+        </div>
+      </ScrollReveal>
     </section>
   );
 };

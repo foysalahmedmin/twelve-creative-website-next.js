@@ -23,7 +23,7 @@ This document serves as the official guide for migrating and building UI compone
 ### Configuration:
 
 - **Config file:** `components.json` (style: `radix-luma`, icons: `hugeicons`)
-- **Component directory:** `src/components/ui/` (shadcn-managed, do NOT manually edit)
+- **Component directory:** `src/components/ui/` (shadcn-managed, but CAN be modified manually if required by UI/Design needs, e.g., changing rounded corners)
 - **Theme:** OKLCH CSS variables in `globals.css`
 
 ---
@@ -35,6 +35,7 @@ This document serves as the official guide for migrating and building UI compone
 - **Semantic Over Static:** Avoid hardcoded static colors like `bg-white` or `text-black`. Use semantic classes that adapt to both Dark and Light modes automatically.
 - **Component Driven:** **ALWAYS** use **shadcn/ui** primitives for interaction logic (Modals, Tabs, Accordions, Cards, etc.). Never re-implement what shadcn/ui provides.
 - **Consistency:** Follow the [rules.md](documents/rules.md) naming and folder structure laws strictly.
+- **Gradient Policy:** Any gradient used in the UI MUST be built using our OKLCH Semantic Variables (e.g., `from-primary to-primary/50`, `via-primary/80`). Never use hardcoded HEX/RGB colorful gradients outside of our established design system.
 
 ---
 

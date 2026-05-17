@@ -1,21 +1,18 @@
 "use client";
 
 import { CenteredSectionHeader } from "@/components/common/section-label";
+import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { Card } from "@/components/ui/card";
-import {
-  INDUSTRIES_DATA,
-  type TIndustryIconKey,
-} from "@/data/industries.data";
+import { INDUSTRIES_DATA, type TIndustryIconKey } from "@/data/industries.data";
 import { cn } from "@/lib/utils";
 import {
   Airplane01Icon,
-  ArrowRight01Icon,
   Briefcase01Icon,
   Building04Icon,
   Restaurant01Icon,
-  Tick02Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -28,130 +25,129 @@ const INDUSTRY_ICON_MAP: Record<TIndustryIconKey, typeof Restaurant01Icon> = {
 
 export const IndustriesSection = ({ className }: { className?: string }) => {
   const [activeId, setActiveId] = useState(INDUSTRIES_DATA[0].id);
-  const activeIndustry =
-    INDUSTRIES_DATA.find((i) => i.id === activeId) ?? INDUSTRIES_DATA[0];
-  const ActiveIcon = INDUSTRY_ICON_MAP[activeIndustry.icon];
 
   return (
-    <section
-      className={cn(
-        "relative bg-background py-20 sm:py-24 lg:py-32",
-        className,
-      )}
-    >
-      {/* Section card background */}
-      <div className="container">
-        <div className="from-primary/5 to-primary/2 ring-primary/15 relative overflow-hidden rounded-4xl bg-linear-to-br p-6 ring-1 sm:p-10 lg:p-16">
-          <div
-            aria-hidden
-            className="bg-primary/10 absolute top-0 right-0 h-64 w-64 rounded-full blur-3xl"
-          />
+    <section className={cn("container mt-6 md:mt-10 lg:mt-12", className)}>
+      <ScrollReveal animation="fade-in-up" durationMs={800}>
+        {/* Background-gradient wrapper card exactly like Our Works & Testimonials */}
+        <div
+          className={cn(
+            "relative overflow-hidden rounded-[28px] py-10 lg:rounded-[40px] lg:py-16",
+            "from-primary/6 via-primary/3 to-primary/4 bg-linear-to-b",
+          )}
+        >
+          {/* Decorative backdrop shapes inside container */}
+          <div className="bg-primary/5 absolute top-1/4 left-0 h-80 w-80 -translate-x-1/2 rounded-full blur-3xl" />
+          <div className="bg-primary/5 absolute right-0 bottom-1/4 h-80 w-80 translate-x-1/2 rounded-full blur-3xl" />
 
-          <div className="relative">
+          <div className="relative z-10 px-4 sm:px-8 lg:px-16">
+            {/* Header styled exactly like Our Works */}
             <CenteredSectionHeader
               label="Industries"
-              title="Industries we work with."
+              title="Industries We Work With"
               description="We work across industries where the buying decision depends on credibility, timing, taste, and a clear path to action."
               className="mb-10 lg:mb-12"
             />
 
-            {/* Tab Pills */}
-            <div className="mb-10 flex justify-center">
-              <div className="border-border bg-card inline-flex flex-wrap items-center justify-center gap-1 rounded-full border p-1.5 shadow-sm">
-                {INDUSTRIES_DATA.map((industry) => {
-                  const isActive = industry.id === activeId;
-                  return (
-                    <button
-                      key={industry.id}
-                      type="button"
-                      onClick={() => setActiveId(industry.id)}
-                      className={cn(
-                        "rounded-full px-5 py-2 text-sm font-semibold whitespace-nowrap transition-all duration-200",
-                        isActive
-                          ? "from-primary-from to-primary-to text-primary-foreground bg-linear-to-br shadow"
-                          : "text-foreground/70 hover:text-foreground hover:bg-muted",
-                      )}
-                      aria-pressed={isActive}
-                    >
-                      {industry.name}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Active Industry Content */}
-            <Card className="ring-primary/20 bg-card grid grid-cols-1 gap-0 overflow-hidden p-0 ring-1 lg:grid-cols-2">
-              {/* Left: Content */}
-              <div className="space-y-6 p-8 sm:p-10 lg:p-12">
-                <div className="space-y-3">
-                  <span className="text-primary text-xs font-bold tracking-widest uppercase">
-                    {activeIndustry.name}
-                  </span>
-                  <h3 className="font-heading text-foreground text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
-                    {activeIndustry.headline}
-                  </h3>
-                  <p className="text-muted-foreground text-base leading-relaxed">
-                    {activeIndustry.description}
-                  </p>
-                </div>
-
-                <div className="space-y-3">
-                  <p className="text-foreground text-sm font-semibold">
-                    What we offer
-                  </p>
-                  <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                    {activeIndustry.work.map((item) => (
-                      <li
-                        key={item}
-                        className="text-foreground/80 flex items-start gap-2 text-sm"
+            <Tabs
+              value={activeId}
+              onValueChange={setActiveId}
+              className="w-full flex flex-col items-center"
+            >
+              {/* Tab Pills - Styled exactly like the old glass navigation bar */}
+              <div className="mb-12 w-full flex justify-center overflow-x-auto scrollbar-none pb-2">
+                <TabsList className="border border-white/10 bg-card/45 backdrop-blur-md p-1.5 rounded-2xl flex gap-1">
+                  {INDUSTRIES_DATA.map((industry) => {
+                    const Icon = INDUSTRY_ICON_MAP[industry.icon];
+                    return (
+                      <TabsTrigger
+                        key={industry.id}
+                        value={industry.id}
+                        className="rounded-xl px-4 py-2.5 sm:px-6 text-sm font-semibold flex items-center gap-2 transition-all hover:bg-white/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
                       >
-                        <HugeiconsIcon
-                          icon={Tick02Icon}
-                          className="text-primary mt-0.5 h-4 w-4 shrink-0"
-                        />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                        <HugeiconsIcon icon={Icon} className="size-4 shrink-0" />
+                        {industry.name}
+                      </TabsTrigger>
+                    );
+                  })}
+                </TabsList>
+              </div>
 
-                <Link
-                  href={activeIndustry.href}
-                  className="text-primary group/link inline-flex items-center gap-1.5 text-sm font-semibold"
+              {INDUSTRIES_DATA.map((industry) => (
+                <TabsContent
+                  key={industry.id}
+                  value={industry.id}
+                  className="w-full max-w-5xl outline-none relative"
                 >
-                  Book a Call
-                  <HugeiconsIcon
-                    icon={ArrowRight01Icon}
-                    className="size-4 transition-transform group-hover/link:translate-x-1"
-                  />
-                </Link>
-              </div>
+                  {/* Content Card with Glass shadow and premium layout */}
+                  <Card className="border border-primary/15 bg-card/90 shadow-2xl relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center rounded-[32px] p-6 sm:p-8 lg:p-10">
+                    
+                    {/* Left: Content */}
+                    <div className="space-y-6 flex flex-col justify-center lg:pr-4">
+                      <div className="space-y-3">
+                        <h3 className="font-heading text-foreground text-3xl font-bold tracking-tight sm:text-4xl">
+                          {industry.name}
+                        </h3>
+                        <p className="text-muted-foreground text-base leading-relaxed font-medium">
+                          {industry.description}
+                        </p>
+                      </div>
 
-              {/* Right: Visual */}
-              <div className="from-primary/10 to-primary/5 relative flex min-h-80 items-center justify-center overflow-hidden bg-linear-to-br p-8 lg:min-h-full">
-                <div
-                  aria-hidden
-                  className="bg-primary/20 absolute -top-12 -right-12 h-56 w-56 rounded-full blur-3xl"
-                />
-                <div
-                  aria-hidden
-                  className="bg-primary/15 absolute -bottom-12 -left-12 h-56 w-56 rounded-full blur-3xl"
-                />
+                      {/* What we offer */}
+                      <div className="space-y-3">
+                        <h4 className="text-sm font-bold tracking-wider text-foreground uppercase">
+                          What we offer
+                        </h4>
+                        <ul className="space-y-3">
+                          {industry.work.map((item) => (
+                            <li
+                              key={item}
+                              className="flex items-center gap-3 text-sm text-foreground/90 font-medium"
+                            >
+                              <span className="flex items-center justify-center size-5 rounded-full border border-primary/30 text-primary shrink-0">
+                                <svg className="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                </svg>
+                              </span>
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
 
-                <div className="relative flex flex-col items-center gap-6 text-center">
-                  <div className="bg-card text-primary ring-primary/20 flex h-32 w-32 items-center justify-center rounded-3xl ring-8 shadow-xl backdrop-blur-sm">
-                    <HugeiconsIcon icon={ActiveIcon} className="h-16 w-16" />
-                  </div>
-                  <p className="font-heading text-foreground text-2xl font-bold tracking-tight">
-                    {activeIndustry.name}
-                  </p>
-                </div>
-              </div>
-            </Card>
+                      {/* CTA Button/Link styled exactly like the screenshot */}
+                      <div className="pt-2">
+                        <Link
+                          href={industry.href}
+                          className="inline-flex items-center gap-1.5 text-base font-semibold text-foreground hover:text-primary transition-colors group/cta"
+                        >
+                          Book a Call
+                          <span className="transition-transform duration-200 group-hover/cta:translate-x-1 font-normal">&gt;</span>
+                        </Link>
+                      </div>
+                    </div>
+
+                    {/* Right: Visual Showcase Image with curved corners and equal padding */}
+                    <div className="relative overflow-hidden rounded-[24px] border border-white/10 shadow-lg aspect-[4/3] w-full">
+                      <img
+                        src={industry.image}
+                        alt={industry.name}
+                        className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+                        loading="lazy"
+                      />
+                      {/* Subtle premium glass overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent pointer-events-none" />
+                    </div>
+                  </Card>
+
+                  {/* 3D Offset layered bottom card peeking from the bottom exactly like the user's screenshot */}
+                  <div className="absolute -bottom-3 left-[3%] right-[3%] h-12 bg-primary/15 dark:bg-primary/25 rounded-b-[28px] z-0 border-x border-b border-primary/10 shadow-md pointer-events-none" />
+                </TabsContent>
+              ))}
+            </Tabs>
           </div>
         </div>
-      </div>
+      </ScrollReveal>
     </section>
   );
 };

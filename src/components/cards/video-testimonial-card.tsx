@@ -1,0 +1,77 @@
+"use client";
+
+import { TTestimonial } from "@/data/testimonials.data";
+import { cn } from "@/lib/utils";
+import { PlayIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import Image from "next/image";
+
+type VideoTestimonialCardProps = {
+  testimonial: TTestimonial;
+  onOpen: (t: TTestimonial) => void;
+  className?: string;
+};
+
+export const VideoTestimonialCard = ({
+  testimonial,
+  onOpen,
+  className,
+}: VideoTestimonialCardProps) => {
+  return (
+    <div
+      onClick={() => onOpen(testimonial)}
+      className={cn(
+        "bg-card/25 border-border/40 hover:border-primary/30 group flex w-80 cursor-pointer flex-col gap-4 rounded-3xl border p-4 ring-1 ring-black/5 backdrop-blur-md transition-all duration-300 select-none md:w-96",
+        className,
+      )}
+    >
+      {/* Video cover aspect-9/16 */}
+      <div className="relative aspect-[9/16] w-full overflow-hidden rounded-2xl bg-black">
+        {testimonial.thumbnail ? (
+          <Image
+            src={testimonial.thumbnail}
+            alt={`${testimonial.name} Video Thumbnail`}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            draggable={false}
+          />
+        ) : (
+          <div className="from-primary/20 to-primary/5 h-full w-full bg-linear-to-br" />
+        )}
+
+        {/* Play button overlay */}
+        <div className="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors duration-300 group-hover:bg-black/35">
+          <div className="bg-card/25 flex h-14 w-14 items-center justify-center rounded-full border border-white/20 text-white shadow-2xl backdrop-blur-md transition-all duration-300 group-hover:scale-110">
+            <HugeiconsIcon
+              icon={PlayIcon}
+              className="h-6 w-6 text-white"
+              fill="white"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* User Info */}
+      <div className="flex items-center gap-3 px-1">
+        <div className="border-border/50 relative h-11 w-11 shrink-0 overflow-hidden rounded-full border">
+          <Image
+            src={testimonial.image}
+            alt={testimonial.name}
+            width={44}
+            height={44}
+            className="object-cover"
+            draggable={false}
+          />
+        </div>
+        <div className="flex flex-col">
+          <h4 className="text-foreground poppins text-sm leading-tight font-bold md:text-base">
+            {testimonial.name}
+          </h4>
+          <p className="text-muted-foreground opensans mt-0.5 text-xs font-normal">
+            {testimonial.designation}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};

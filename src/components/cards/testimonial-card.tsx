@@ -9,51 +9,54 @@ type TestimonialCardProps = {
   className?: string;
 };
 
-export const TestimonialCard = ({ testimonial, className }: TestimonialCardProps) => {
+export const TestimonialCard = ({
+  testimonial,
+  className,
+}: TestimonialCardProps) => {
   return (
-    <div className={cn(
-      "bg-muted/30 border-border/50 relative h-full overflow-hidden rounded-[0.75em] border p-[2em] lg:p-[2.5em]",
-      className
-    )}>
-      {/* Quote Icon */}
-      <div className="absolute top-0 left-0 p-[1em] opacity-10">
-        <svg
-          width="40"
-          height="36"
-          viewBox="0 0 53 49"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-[2.25em] w-[2.5em]"
-        >
-          <path
-            d="M19.5073 27.3911V48.5156H0V31.8384C0 22.8091 1.07812 16.2729 3.23438 12.23C6.06445 6.83936 10.5454 2.7627 16.6772 0L21.1245 7.0752C17.4185 8.625 14.6895 10.9497 12.9375 14.0493C11.1855 17.0815 10.2085 21.5288 10.0063 27.3911H19.5073ZM50.8403 27.3911V48.5156H31.333V31.8384C31.333 22.8091 32.4111 16.2729 34.5674 12.23C37.3975 6.83936 41.8784 2.7627 48.0103 0L52.4575 7.0752C48.7515 8.625 46.0225 10.9497 44.2705 14.0493C42.5186 17.0815 41.5415 21.5288 41.3394 27.3911H50.8403Z"
-            fill="currentColor"
-            className="text-primary"
+    <div
+      className={cn(
+        "bg-card/25 border-border/40 hover:border-primary/30 flex w-96 flex-col justify-between rounded-3xl border p-6 ring-1 ring-black/5 backdrop-blur-md transition-all duration-300 select-none md:w-md md:p-8",
+        className,
+      )}
+    >
+      <div className="flex flex-col gap-4">
+        {/* Quote comma */}
+        <div className="relative h-8 w-8 opacity-45">
+          <Image
+            src="/assets/comma.png"
+            alt="Quote"
+            width={32}
+            height={32}
+            className="object-contain"
+            draggable={false}
           />
-        </svg>
+        </div>
+
+        {/* Message */}
+        <p className="text-foreground/95 poppins min-h-[80px] text-sm leading-relaxed font-normal md:text-base">
+          {testimonial.message}
+        </p>
       </div>
 
-      {/* Feedback Text */}
-      <p className="text-foreground relative z-10 text-[1em] leading-relaxed font-medium lg:text-[1.125em]">
-        "{testimonial.feedback}"
-      </p>
-
-      {/* User Info */}
-      <div className="mt-[2em] flex items-center gap-[0.75em]">
-        <div className="border-border relative h-[2.75em] w-[2.75em] overflow-hidden rounded-full border shadow-sm">
+      {/* User info */}
+      <div className="mt-6 flex items-center gap-4">
+        <div className="border-border/50 relative h-12 w-12 shrink-0 overflow-hidden rounded-full border">
           <Image
             src={testimonial.image}
             alt={testimonial.name}
-            fill
+            width={48}
+            height={48}
             className="object-cover"
+            draggable={false}
           />
         </div>
-        <div>
-          <h6 className="text-foreground text-[0.875em] font-bold">
+        <div className="flex flex-col">
+          <h4 className="text-foreground poppins text-sm leading-tight font-bold md:text-[16px]">
             {testimonial.name}
-          </h6>
-          <p className="text-muted-foreground text-[0.625em] font-bold tracking-wider uppercase">
-            Patient
+          </h4>
+          <p className="text-muted-foreground opensans mt-1 text-xs font-normal">
+            {testimonial.designation}
           </p>
         </div>
       </div>

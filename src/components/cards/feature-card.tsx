@@ -37,7 +37,7 @@ export const FeatureCard = ({
       className={cn(
         "group/feature relative space-y-3 rounded-3xl p-6 transition-all duration-300",
         featured
-          ? "from-primary/8 to-card ring-primary/30 bg-linear-to-br ring-1 shadow-md"
+          ? "from-primary/8 to-card ring-primary/30 bg-linear-to-br shadow-md ring-1"
           : "hover:bg-primary/2 hover:ring-primary/10 hover:ring-1",
         className,
       )}

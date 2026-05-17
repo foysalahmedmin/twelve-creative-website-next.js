@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { HOME_HERO_DATA } from "@/data/home-hero.data";
 import { cn } from "@/lib/utils";
 import {
@@ -26,7 +26,7 @@ export const HeroSection = ({ className }: { className?: string }) => {
   const data = HOME_HERO_DATA;
 
   return (
-    <section className={cn("container relative mb-10", className)}>
+    <section className={cn("relative container mb-10", className)}>
       {/* Outer rounded hero card with background gradient */}
       <div
         className={cn(
@@ -50,8 +50,7 @@ export const HeroSection = ({ className }: { className?: string }) => {
             {/* Trust badge */}
             <div
               className={cn(
-                "bg-card/40 ring-foreground/10 inline-flex items-center justify-center gap-4 rounded-full py-3 pl-3 pr-5 ring-1 backdrop-blur-lg",
-                "shadow-[0_8px_30px_-12px] shadow-primary/20",
+                "bg-card/40 ring-foreground/10 inline-flex items-center justify-center gap-4 rounded-full py-3 pr-5 pl-3 ring-1 backdrop-blur-lg",
               )}
             >
               <div className="flex items-center -space-x-2">
@@ -73,18 +72,18 @@ export const HeroSection = ({ className }: { className?: string }) => {
                   );
                 })}
               </div>
-              <p className="text-foreground text-xs font-medium leading-[140%]">
+              <p className="text-foreground text-xs leading-[140%] font-medium">
                 {data.trust_label}
               </p>
             </div>
 
             {/* Headline */}
-            <h1 className="text-foreground font-heading mt-4 text-center text-[40px] font-medium leading-[110%] tracking-tight lg:mt-5 lg:text-[70px]">
+            <h1 className="text-foreground font-heading mt-4 text-center text-[40px] leading-[110%] font-medium tracking-tight lg:mt-5 lg:text-[70px]">
               {data.title}
             </h1>
 
             {/* Description */}
-            <p className="text-muted-foreground mt-6 text-center text-sm font-normal leading-[150%] md:text-base">
+            <p className="text-muted-foreground mt-6 text-center text-sm leading-[150%] font-normal md:text-base">
               {data.description}
             </p>
 
@@ -92,20 +91,14 @@ export const HeroSection = ({ className }: { className?: string }) => {
             <div className="mt-10 flex w-full flex-col items-center justify-center gap-3 px-4 md:flex-row md:px-0">
               <Link
                 href={data.primary_cta.href}
-                className={cn(
-                  buttonVariants(),
-                  "from-primary-from to-primary-to hover:shadow-primary h-14 w-full bg-linear-to-br px-5 py-4 text-sm font-medium shadow-lg transition-transform duration-200 hover:scale-105 md:w-[156px]",
-                  "rounded-xl",
-                )}
+                className={cn(buttonVariants({ size: "xl" }))}
               >
                 {data.primary_cta.label}
               </Link>
               <Link
                 href={data.secondary_cta.href}
                 className={cn(
-                  buttonVariants({ variant: "outline" }),
-                  "bg-card/40 ring-foreground/10 h-14 w-full px-5 py-4 text-sm font-medium backdrop-blur-sm ring-1 transition-transform duration-200 hover:scale-105 md:w-[156px]",
-                  "rounded-xl",
+                  buttonVariants({ variant: "outline", size: "xl" }),
                 )}
               >
                 {data.secondary_cta.label}
@@ -114,7 +107,7 @@ export const HeroSection = ({ className }: { className?: string }) => {
           </div>
 
           {/* Video showcase */}
-          <div className="relative mx-auto mt-8 aspect-video w-full max-w-7xl overflow-hidden rounded-2xl shadow-2xl ring-1 ring-foreground/10 lg:mt-10 lg:rounded-[40px]">
+          <div className="ring-foreground/10 relative mx-auto mt-8 aspect-video w-full max-w-7xl overflow-hidden rounded-2xl shadow-2xl ring-1 lg:mt-10 lg:rounded-[40px]">
             <ReactPlayer
               src={data.video.src}
               controls

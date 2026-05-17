@@ -10,6 +10,7 @@ export type TIndustry = {
   name: string;
   headline: string;
   description: string;
+  image: string;
   work: string[];
   href: string;
 };
@@ -22,6 +23,7 @@ export const INDUSTRIES_DATA: TIndustry[] = [
     headline: "Hospitality marketing that understands the room.",
     description:
       "Restaurants and hospitality brands grow when experience, menu, atmosphere, events, and local market all work together. We help connect the moments to revenue.",
+    image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80",
     work: [
       "Restaurant content",
       "Chef features",
@@ -39,6 +41,7 @@ export const INDUSTRIES_DATA: TIndustry[] = [
     headline: "Real estate marketing needs more than beautiful renders.",
     description:
       "Developments, luxury properties, and commercial spaces need to be positioned correctly before they are promoted. We turn projects into clear, credible campaigns.",
+    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
     work: [
       "Project positioning",
       "Sales decks",
@@ -56,6 +59,7 @@ export const INDUSTRIES_DATA: TIndustry[] = [
     headline: "High-trust marketing for high-value decisions.",
     description:
       "Private aviation is relationship-driven and credibility-dependent. We build positioning, content, funnels, and systems to support serious conversations.",
+    image: "https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&w=800&q=80",
     work: [
       "Founder content",
       "Charter campaigns",
@@ -73,6 +77,7 @@ export const INDUSTRIES_DATA: TIndustry[] = [
     headline: "Make expertise easier to understand.",
     description:
       "Professional service businesses often have real value but unclear communication. We translate expertise into a clearer message and stronger acquisition.",
+    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80",
     work: [
       "Personal brand strategy",
       "Service positioning",

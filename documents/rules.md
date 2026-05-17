@@ -36,7 +36,7 @@ This document outlines the standard development roles, practices, and architectu
 
 All UI components MUST reside in `src/components/`. The `src/app/` folder is reserved strictly for routing (groups and pages).
 
-- **UI Primitives (`src/components/ui/`):** **shadcn/ui managed directory.** All interactive UI primitives (Button, Input, Dialog, Card, Tabs, Select, etc.) live here. **Do NOT manually create or modify files in this directory** — use `npx shadcn@latest add <component>` or the MCP tools.
+- **UI Primitives (`src/components/ui/`):** **shadcn/ui managed directory.** All interactive UI primitives (Button, Input, Dialog, Card, Tabs, Select, etc.) live here. Install using `npx shadcn@latest add <component>`. **You CAN modify files in this directory** if the UI/Design requires custom adjustments (e.g., changing border radii or default padding).
 - **Base Components (`src/components/base/`):** Non-UI utility wrappers and structural elements only (e.g., layout wrappers, error boundaries). **NOT for UI primitives** — those belong in `ui/`.
 - **Common Components (`src/components/common/`):** Shared reusable components used across multiple modules. These MUST compose from `ui/` primitives.
 - **Page-Specific Components (`src/components/_[group-name]_/[page-name]-page/`):** Components that belong to a specific page (e.g., hero sections, specific forms).
@@ -79,7 +79,7 @@ To maintain a clean separation of concerns, all static data (like service lists,
 > **All UI primitives MUST come from shadcn/ui (`src/components/ui/`).** Introducing alternative UI component libraries (Material UI, Chakra UI, Ant Design, Headless UI, etc.) is **STRICTLY FORBIDDEN** without explicit architectural approval.
 
 - **Before creating any custom UI element**, verify no shadcn/ui equivalent exists by checking `docs/llms.md` or the shadcn MCP tools.
-- **Component Installation:** Use `npx shadcn@latest add <component>` — never manually create files in `src/components/ui/`.
+- **Component Installation:** Use `npx shadcn@latest add <component>` to add files. Modifying existing files in `src/components/ui/` is allowed for custom UI requirements.
 - **Composition Rule:** Feature components (`cards/`, `common/`, `app-*/`) MUST compose from shadcn/ui primitives. Example: use `<Card>` from `@/components/ui/card`, not `<div className="bg-card border rounded-xl">`.
 - **Empty States:** Use `<Empty>` from `@/components/ui/empty`.
 - **Loading States:** Use `<Skeleton>` from `@/components/ui/skeleton` and `<Spinner>` from `@/components/ui/spinner`.
