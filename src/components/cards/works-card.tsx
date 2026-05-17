@@ -12,7 +12,7 @@ interface WorksCardProps {
 export function WorksCard({ item, className }: WorksCardProps) {
   return (
     <Link
-      href={`/works/${item.slug}`}
+      href={`/works/${item.id}`}
       className={cn(
         "group relative flex flex-col rounded-[24px] bg-card border border-primary/10 overflow-hidden transition-all duration-300 hover:border-primary/30",
         className
