@@ -25,6 +25,7 @@ export const SITE = {
     email: "hello@twelvecreative.io",
     phones: ["+1 (000) 000-0000"],
     address: "New York, NY",
+    whatsapp: ["+1 (951) 822-6223"],
   },
   nav: [
     { name: "Home", href: "/" },

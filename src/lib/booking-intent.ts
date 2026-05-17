@@ -57,7 +57,7 @@ export type BookingIntent =
 export function saveIntent(intent: BookingIntent): void {
   if (typeof window === "undefined") return;
   localStorage.setItem(
-    CONSTANT.LOCAL_STORAGE_KEYS.BOOKING_INTENT,
+    "booking_intent",
     JSON.stringify(intent),
   );
 }
@@ -65,7 +65,7 @@ export function saveIntent(intent: BookingIntent): void {
 export function readIntent(): BookingIntent | null {
   if (typeof window === "undefined") return null;
   try {
-    const raw = localStorage.getItem(CONSTANT.LOCAL_STORAGE_KEYS.BOOKING_INTENT);
+    const raw = localStorage.getItem("booking_intent");
     if (!raw) return null;
     const intent = JSON.parse(raw) as BookingIntent;
     if (Date.now() - intent.savedAt > INTENT_TTL_MS) {
@@ -80,5 +80,5 @@ export function readIntent(): BookingIntent | null {
 
 export function clearIntent(): void {
   if (typeof window === "undefined") return;
-  localStorage.removeItem(CONSTANT.LOCAL_STORAGE_KEYS.BOOKING_INTENT);
+  localStorage.removeItem("booking_intent");
 }

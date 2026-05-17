@@ -18,47 +18,52 @@ export const HomeCtaSection = ({ className }: { className?: string }) => {
     >
       <div className="container relative">
         <ScrollReveal animation="fade-in-up" durationMs={800}>
-          <div className="from-primary-from to-primary-to ring-primary/20 relative overflow-hidden rounded-4xl bg-linear-to-br p-8 ring-1 sm:p-12 lg:p-16">
-            {/* Decorative orbs */}
+          {/* Card container using primary opacity and premium gradients exactly as requested */}
+          <div className="relative overflow-hidden rounded-4xl bg-gradient-to-br from-primary/12 via-primary/5 to-primary/8 border border-primary/20 p-8 sm:p-12 lg:p-16 backdrop-blur-sm">
+            {/* Soft, modern ambient glow orbs inside the card */}
             <div
               aria-hidden
-              className="bg-primary-foreground/15 absolute -top-20 -right-20 h-80 w-80 rounded-full blur-3xl"
+              className="bg-primary/25 absolute -top-24 -right-24 h-96 w-96 rounded-full blur-[100px]"
             />
             <div
               aria-hidden
-              className="bg-primary-foreground/10 absolute -bottom-32 -left-20 h-80 w-80 rounded-full blur-3xl"
+              className="bg-primary/15 absolute -bottom-36 -left-24 h-96 w-96 rounded-full blur-[100px]"
             />
 
-            <div className="relative mx-auto max-w-3xl text-center">
-              <span className="bg-primary-foreground/20 text-primary-foreground inline-flex items-center rounded-full px-4 py-1.5 text-xs font-semibold tracking-wider uppercase">
+            <div className="relative mx-auto max-w-3xl text-center z-10">
+              {/* Eyebrow Label */}
+              <span className="inline-flex px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-primary/10 text-primary border border-primary/20">
                 {data.eyebrow}
               </span>
 
-              <h2 className="font-heading text-primary-foreground mt-5 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+              {/* Title */}
+              <h2 className="font-heading text-foreground mt-5 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
                 {data.title}
               </h2>
 
-              <p className="text-primary-foreground/85 mt-5 text-base leading-relaxed sm:text-lg">
+              {/* Description */}
+              <p className="text-muted-foreground mt-5 text-base leading-relaxed sm:text-lg font-medium">
                 {data.description}
               </p>
 
+              {/* Action Buttons */}
               <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
                 <Button
                   asChild
                   size="lg"
-                  variant="secondary"
-                  className="h-12 bg-background text-foreground hover:bg-background/90 px-6 text-sm font-semibold"
+                  className="h-12 bg-primary text-primary-foreground hover:bg-primary/90 px-6 text-sm font-semibold transition-all hover:scale-[1.02] active:scale-[0.98]"
                 >
-                  <Link href={data.primary_cta.href}>
+                  <Link href={data.primary_cta.href} className="inline-flex items-center gap-2">
                     {data.primary_cta.label}
                     <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" />
                   </Link>
                 </Button>
+                
                 <Button
                   asChild
                   size="lg"
                   variant="outline"
-                  className="bg-primary-foreground/10 text-primary-foreground border-primary-foreground/30 hover:bg-primary-foreground/20 hover:text-primary-foreground h-12 px-6 text-sm font-semibold"
+                  className="border-primary/20 bg-primary/5 hover:bg-primary/10 hover:text-foreground text-foreground h-12 px-6 text-sm font-semibold transition-all hover:scale-[1.02] active:scale-[0.98]"
                 >
                   <Link href={data.secondary_cta.href}>
                     {data.secondary_cta.label}

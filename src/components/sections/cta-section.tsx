@@ -1,9 +1,16 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { TCTAData } from "@/data/cta.data";
 import Image from "next/image";
 import Link from "next/link";
+
+export interface TCTAData {
+  title: string;
+  description: string;
+  image: string;
+  href: string;
+  buttonText: string;
+}
 
 interface CTASectionProps {
   data: TCTAData;

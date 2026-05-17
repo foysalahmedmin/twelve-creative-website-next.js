@@ -1,5 +1,6 @@
 import api from "@/lib/api";
-import { API } from "@/config/api";
+import { API as ORIGINAL_API } from "@/config/api";
+const API: any = ORIGINAL_API;
 import { ApiResponse } from "@/types/api.type";
 
 export interface AuthResponse {

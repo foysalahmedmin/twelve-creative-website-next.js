@@ -1,3 +1,4 @@
+import { PageHeader } from "@/components/sections/page-header-section";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

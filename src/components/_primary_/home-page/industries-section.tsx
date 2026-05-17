@@ -80,7 +80,7 @@ export const IndustriesSection = ({ className }: { className?: string }) => {
                   className="w-full max-w-5xl outline-none relative"
                 >
                   {/* Content Card with Glass shadow and premium layout */}
-                  <Card className="border border-primary/15 bg-card/90 shadow-2xl relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center rounded-[32px] p-6 sm:p-8 lg:p-10">
+                  <Card className="border border-primary/15 bg-card/90 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center rounded-[32px] p-6 sm:p-8 lg:p-10">
                     
                     {/* Left: Content */}
                     <div className="space-y-6 flex flex-col justify-center lg:pr-4">
@@ -128,7 +128,7 @@ export const IndustriesSection = ({ className }: { className?: string }) => {
                     </div>
 
                     {/* Right: Visual Showcase Image with curved corners and equal padding */}
-                    <div className="relative overflow-hidden rounded-[24px] border border-white/10 shadow-lg aspect-[4/3] w-full">
+                    <div className="relative overflow-hidden rounded-[24px] border border-white/10 aspect-[4/3] w-full">
                       <img
                         src={industry.image}
                         alt={industry.name}
@@ -141,7 +141,7 @@ export const IndustriesSection = ({ className }: { className?: string }) => {
                   </Card>
 
                   {/* 3D Offset layered bottom card peeking from the bottom exactly like the user's screenshot */}
-                  <div className="absolute -bottom-3 left-[3%] right-[3%] h-12 bg-primary/15 dark:bg-primary/25 rounded-b-[28px] z-0 border-x border-b border-primary/10 shadow-md pointer-events-none" />
+                  <div className="absolute -bottom-3 left-[3%] right-[3%] h-12 bg-primary/15 dark:bg-primary/25 rounded-b-[28px] z-0 border-x border-b border-primary/10 pointer-events-none" />
                 </TabsContent>
               ))}
             </Tabs>
