@@ -1,3 +1,11 @@
+import { DifferenceSection } from "@/components/_primary_/home-page/difference-section";
+import { HeroSection } from "@/components/_primary_/home-page/hero-section";
+import { HomeCtaSection } from "@/components/_primary_/home-page/home-cta-section";
+import { IndustriesSection } from "@/components/_primary_/home-page/industries-section";
+import { ProblemSection } from "@/components/_primary_/home-page/problem-section";
+import { ProcessSection } from "@/components/_primary_/home-page/process-section";
+import { ServicesSection } from "@/components/_primary_/home-page/services-section";
+import { WhyChooseUsSection } from "@/components/_primary_/home-page/why-choose-us-section";
 import { SITE } from "@/config/site";
 import type { Metadata } from "next";
 
@@ -15,7 +23,14 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <div className="flex flex-col">
-
+      <HeroSection />
+      <ProblemSection />
+      <ServicesSection />
+      <DifferenceSection />
+      <IndustriesSection />
+      <ProcessSection />
+      <WhyChooseUsSection />
+      <HomeCtaSection />
     </div>
   );
 }

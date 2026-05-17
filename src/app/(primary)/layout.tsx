@@ -1,4 +1,4 @@
-import { Header } from "@/components/common/header";
+import { Header } from "@/components/partials/header";
 import { Footer } from "@/components/partials/footer";
 import { MobileBottomNav } from "@/components/partials/mobile-bottom-nav";
 import React from "react";
