@@ -1,4 +1,6 @@
 import { ScrollRestoration } from "@/components/common/scroll-restoration";
+import { SmoothFollowerCursor } from "@/components/common/smooth-cursor";
+import { WhatsAppFloat } from "@/components/common/whatsapp-float";
 import { SITE } from "@/config/site";
 import Providers from "@/providers";
 import type { Metadata } from "next";
@@ -62,6 +64,8 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${hindSiliguri.variable} antialiased`}
     >
       <body className="min-h-screen flex flex-col" suppressHydrationWarning>
+        <SmoothFollowerCursor />
+        <WhatsAppFloat />
         <ScrollRestoration />
         <Providers>{children}</Providers>
       </body>

@@ -60,10 +60,20 @@ export const Footer = ({ className }: { className?: string }) => {
   return (
     <footer
       className={cn(
-        "bg-muted/50 border-t pt-16 pb-8",
+        "relative overflow-hidden bg-muted/50 border-t pt-16 pb-8",
         className,
       )}
     >
+      {/* Primary gradient glow — bottom-left bloom */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -bottom-32 -left-32 h-80 w-80 rounded-full bg-primary/20 blur-[100px]"
+      />
+      {/* Softer center-bottom radial bloom */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -bottom-20 left-1/2 h-48 w-[600px] -translate-x-1/2 rounded-full bg-primary/8 blur-[80px]"
+      />
       <div className="container">
         <div className="grid grid-cols-1 gap-10 border-b pb-12 md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
           {/* Column 1: Brand */}

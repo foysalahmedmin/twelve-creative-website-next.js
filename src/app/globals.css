@@ -2,6 +2,14 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+/* Hide native cursor on desktop — custom cursor handles it */
+@media (min-width: 1024px) {
+  *, *::before, *::after {
+    cursor: none !important;
+  }
+}
+
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

@@ -26,10 +26,15 @@ export const MobileBottomNav = () => {
   return (
     <nav
       aria-label="Main navigation"
-      className="border-border bg-background fixed bottom-0 left-0 z-50 w-full border-t pb-[env(safe-area-inset-bottom,0px)] lg:hidden"
+      className="fixed bottom-0 left-0 z-50 w-full pb-[env(safe-area-inset-bottom,0px)] lg:hidden"
     >
-      <div className="container mx-auto px-1">
-        <ul className="flex h-[68px] items-center justify-around">
+      <div className="container px-3 pb-3">
+        <div
+          className={cn(
+            "bg-card/60 ring-foreground/8 flex h-[64px] items-center justify-around rounded-2xl px-2 backdrop-blur-xl ring-1",
+            "shadow-[0_8px_30px_-8px] shadow-foreground/15",
+          )}
+        >
           {MAIN_NAV_ITEMS.map((item) => {
             const isActive =
               item.href === "/"
@@ -37,36 +42,36 @@ export const MobileBottomNav = () => {
                 : pathname.startsWith(item.href);
 
             return (
-              <li key={item.href} className="flex-1 h-full">
-                <Link
-                  href={item.href}
-                  aria-current={isActive ? "page" : undefined}
-                  className="flex flex-col items-center justify-center w-full h-full"
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={isActive ? "page" : undefined}
+                className="flex flex-1 flex-col items-center justify-center h-full"
+              >
+                <div
+                  className={cn(
+                    "flex flex-col items-center justify-center transition-all duration-300 py-1.5 px-3 rounded-[14px]",
+                    isActive
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted-foreground",
+                  )}
                 >
-                  <div
+                  <HugeiconsIcon icon={item.icon} size={21} />
+                  <span
                     className={cn(
-                      "flex flex-col items-center justify-center transition-all duration-300 py-[5px] w-[85%] sm:w-16 rounded-[14px]",
-                      isActive
-                        ? "bg-primary/10 text-primary"
-                        : "text-muted-foreground bg-transparent",
+                      "mt-[3px] text-[10px] font-medium tracking-tight",
+                      isActive ? "text-primary font-semibold" : "",
                     )}
                   >
-                    <HugeiconsIcon icon={item.icon} size={22} />
-                    <span
-                      className={cn(
-                        "text-[10px] mt-[3px] font-medium tracking-tight truncate w-full text-center px-0.5",
-                        isActive ? "text-primary font-semibold" : "",
-                      )}
-                    >
-                      {item.label}
-                    </span>
-                  </div>
-                </Link>
-              </li>
+                    {item.label}
+                  </span>
+                </div>
+              </Link>
             );
           })}
-        </ul>
+        </div>
       </div>
     </nav>
   );
 };
+
