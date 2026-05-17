@@ -1,87 +1,128 @@
-import { Button } from "@/components/ui/button";
+"use client";
+
+import { Button, buttonVariants } from "@/components/ui/button";
 import { HOME_HERO_DATA } from "@/data/home-hero.data";
 import { cn } from "@/lib/utils";
-import { ArrowRight01Icon, PlayCircleIcon } from "@hugeicons/core-free-icons";
+import {
+  Airplane01Icon,
+  Briefcase01Icon,
+  Building04Icon,
+  Restaurant01Icon,
+} from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
+
+const ReactPlayer = dynamic(() => import("react-player"), { ssr: false });
+
+const AVATAR_ICON_MAP: Record<string, typeof Restaurant01Icon> = {
+  restaurant: Restaurant01Icon,
+  building: Building04Icon,
+  airplane: Airplane01Icon,
+  briefcase: Briefcase01Icon,
+};
 
 export const HeroSection = ({ className }: { className?: string }) => {
   const data = HOME_HERO_DATA;
 
   return (
-    <section
-      className={cn(
-        "relative overflow-hidden",
-        "bg-background pt-16 pb-20 sm:pt-20 sm:pb-24 lg:pt-24 lg:pb-32",
-        className,
-      )}
-    >
-      {/* Decorative background — soft primary radial glow */}
+    <section className={cn("container relative mb-10", className)}>
+      {/* Outer rounded hero card with background gradient */}
       <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10"
+        className={cn(
+          "relative min-h-screen overflow-hidden rounded-2xl lg:rounded-[40px]",
+          "from-primary/3 via-primary/8 to-primary/25 bg-linear-to-b",
+        )}
       >
-        <div className="bg-primary/15 absolute top-1/2 left-1/2 h-[60rem] w-[60rem] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-50 blur-3xl" />
-        <div className="bg-primary/8 absolute bottom-0 left-1/4 h-96 w-96 rounded-full blur-3xl" />
-      </div>
+        {/* Decorative orbs */}
+        <div
+          aria-hidden
+          className="bg-primary/15 pointer-events-none absolute top-1/3 -right-32 h-96 w-96 rounded-full blur-3xl"
+        />
+        <div
+          aria-hidden
+          className="bg-primary/10 pointer-events-none absolute -bottom-32 -left-32 h-96 w-96 rounded-full blur-3xl"
+        />
 
-      <div className="container relative flex flex-col items-center text-center">
-        {/* Eyebrow */}
-        <span className="border-primary/30 bg-primary/5 text-primary mb-6 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold tracking-wider uppercase">
-          <span className="bg-primary h-1.5 w-1.5 animate-pulse rounded-full" />
-          {data.eyebrow}
-        </span>
-
-        {/* Headline */}
-        <h1 className="font-heading text-foreground max-w-4xl text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
-          {data.title}{" "}
-          <span className="from-primary-from to-primary-to bg-linear-to-tr bg-clip-text text-transparent">
-            {data.highlight}
-          </span>
-        </h1>
-
-        {/* Description */}
-        <p className="text-muted-foreground mt-6 max-w-2xl text-base leading-relaxed font-medium sm:text-lg lg:text-xl">
-          {data.description}
-        </p>
-
-        {/* CTAs */}
-        <div className="mt-9 flex flex-col items-center gap-3 sm:flex-row sm:gap-4">
-          <Button asChild size="lg" className="h-12 px-6 text-sm font-semibold">
-            <Link href={data.primary_cta.href}>
-              {data.primary_cta.label}
-              <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" />
-            </Link>
-          </Button>
-          <Button
-            asChild
-            size="lg"
-            variant="outline"
-            className="h-12 px-6 text-sm font-semibold"
-          >
-            <Link href={data.secondary_cta.href}>
-              <HugeiconsIcon icon={PlayCircleIcon} className="size-4" />
-              {data.secondary_cta.label}
-            </Link>
-          </Button>
-        </div>
-
-        {/* Trust strip */}
-        <div className="border-border/60 mt-14 flex w-full max-w-3xl flex-col items-center gap-4 border-t pt-8 sm:flex-row sm:justify-center sm:gap-6">
-          <span className="text-muted-foreground text-xs font-semibold tracking-widest uppercase">
-            {data.trust_label}
-          </span>
-          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
-            {data.trust_industries.map((industry, index) => (
-              <div key={industry.id} className="flex items-center gap-5">
-                <span className="text-foreground/70 text-sm font-semibold">
-                  {industry.name}
-                </span>
-                {index < data.trust_industries.length - 1 && (
-                  <span className="bg-border h-1 w-1 rounded-full" />
-                )}
+        <div className="relative flex flex-col items-center justify-center gap-4 px-2 pt-32 pb-10 lg:gap-4 lg:pt-28">
+          {/* Center column for badge + headline + description + CTAs */}
+          <div className="mx-auto flex max-w-[780px] flex-col items-center justify-center pt-10">
+            {/* Trust badge */}
+            <div
+              className={cn(
+                "bg-card/40 ring-foreground/10 inline-flex items-center justify-center gap-4 rounded-full py-3 pl-3 pr-5 ring-1 backdrop-blur-lg",
+                "shadow-[0_8px_30px_-12px] shadow-primary/20",
+              )}
+            >
+              <div className="flex items-center -space-x-2">
+                {data.trust_avatars.map((avatar, index) => {
+                  const Icon = AVATAR_ICON_MAP[avatar.icon];
+                  return (
+                    <div
+                      key={avatar.id}
+                      style={{ zIndex: data.trust_avatars.length - index }}
+                      className={cn(
+                        "flex h-7 w-7 items-center justify-center rounded-full",
+                        "from-primary-from to-primary-to text-primary-foreground bg-linear-to-br",
+                        "ring-card ring-2",
+                      )}
+                      aria-label={avatar.label}
+                    >
+                      <HugeiconsIcon icon={Icon} className="h-3.5 w-3.5" />
+                    </div>
+                  );
+                })}
               </div>
-            ))}
+              <p className="text-foreground text-xs font-medium leading-[140%]">
+                {data.trust_label}
+              </p>
+            </div>
+
+            {/* Headline */}
+            <h1 className="text-foreground font-heading mt-4 text-center text-[40px] font-medium leading-[110%] tracking-tight lg:mt-5 lg:text-[70px]">
+              {data.title}
+            </h1>
+
+            {/* Description */}
+            <p className="text-muted-foreground mt-6 text-center text-sm font-normal leading-[150%] md:text-base">
+              {data.description}
+            </p>
+
+            {/* CTAs */}
+            <div className="mt-10 flex w-full flex-col items-center justify-center gap-3 px-4 md:flex-row md:px-0">
+              <Link
+                href={data.primary_cta.href}
+                className={cn(
+                  buttonVariants(),
+                  "from-primary-from to-primary-to hover:shadow-primary h-14 w-full bg-linear-to-br px-5 py-4 text-sm font-medium shadow-lg transition-transform duration-200 hover:scale-105 md:w-[156px]",
+                  "rounded-xl",
+                )}
+              >
+                {data.primary_cta.label}
+              </Link>
+              <Link
+                href={data.secondary_cta.href}
+                className={cn(
+                  buttonVariants({ variant: "outline" }),
+                  "bg-card/40 ring-foreground/10 h-14 w-full px-5 py-4 text-sm font-medium backdrop-blur-sm ring-1 transition-transform duration-200 hover:scale-105 md:w-[156px]",
+                  "rounded-xl",
+                )}
+              >
+                {data.secondary_cta.label}
+              </Link>
+            </div>
+          </div>
+
+          {/* Video showcase */}
+          <div className="relative mx-auto mt-8 aspect-video w-full max-w-7xl overflow-hidden rounded-2xl shadow-2xl ring-1 ring-foreground/10 lg:mt-10 lg:rounded-[40px]">
+            <ReactPlayer
+              src={data.video.src}
+              controls
+              width="100%"
+              height="100%"
+              playsInline
+              style={{ width: "100%", height: "100%" }}
+            />
           </div>
         </div>
       </div>

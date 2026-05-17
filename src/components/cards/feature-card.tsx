@@ -1,4 +1,3 @@
-import { Card, CardContent } from "@/components/ui/card";
 import type { TFeature, TFeatureIconKey } from "@/data/why-choose-us.data";
 import { cn } from "@/lib/utils";
 import {
@@ -22,33 +21,44 @@ const FEATURE_ICON_MAP: Record<TFeatureIconKey, typeof BulbIcon> = {
 
 interface FeatureCardProps {
   feature: TFeature;
+  featured?: boolean;
   className?: string;
 }
 
-export const FeatureCard = ({ feature, className }: FeatureCardProps) => {
+export const FeatureCard = ({
+  feature,
+  featured = false,
+  className,
+}: FeatureCardProps) => {
   const Icon = FEATURE_ICON_MAP[feature.icon];
 
   return (
-    <Card
-      size="sm"
+    <div
       className={cn(
-        "group/feature h-full gap-3 py-6 transition-all duration-300",
-        "hover:ring-primary/30 hover:-translate-y-1",
+        "group/feature relative space-y-3 rounded-3xl p-6 transition-all duration-300",
+        featured
+          ? "from-primary/8 to-card ring-primary/30 bg-linear-to-br ring-1 shadow-md"
+          : "hover:bg-primary/2 hover:ring-primary/10 hover:ring-1",
         className,
       )}
     >
-      <CardContent className="space-y-3">
-        <div className="bg-primary/10 text-primary inline-flex h-11 w-11 items-center justify-center rounded-xl transition-transform duration-300 group-hover/feature:scale-110">
-          <HugeiconsIcon icon={Icon} className="h-5 w-5" />
-        </div>
+      <div
+        className={cn(
+          "inline-flex h-12 w-12 items-center justify-center rounded-2xl transition-transform duration-300 group-hover/feature:scale-110",
+          featured
+            ? "bg-primary text-primary-foreground"
+            : "bg-primary/10 text-primary",
+        )}
+      >
+        <HugeiconsIcon icon={Icon} className="h-6 w-6" />
+      </div>
 
-        <h3 className="font-heading text-foreground text-base font-semibold tracking-tight">
-          {feature.title}
-        </h3>
-        <p className="text-muted-foreground text-sm leading-relaxed">
-          {feature.description}
-        </p>
-      </CardContent>
-    </Card>
+      <h3 className="font-heading text-foreground text-lg font-semibold tracking-tight">
+        {feature.title}
+      </h3>
+      <p className="text-muted-foreground text-sm leading-relaxed">
+        {feature.description}
+      </p>
+    </div>
   );
 };

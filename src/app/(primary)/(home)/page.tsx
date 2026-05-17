@@ -1,4 +1,7 @@
+import { BrandsSection } from "@/components/_primary_/home-page/brands-section";
 import { DifferenceSection } from "@/components/_primary_/home-page/difference-section";
+import { FaqSection } from "@/components/_primary_/home-page/faq-section";
+import { FeaturedProjectsSection } from "@/components/_primary_/home-page/featured-projects-section";
 import { HeroSection } from "@/components/_primary_/home-page/hero-section";
 import { HomeCtaSection } from "@/components/_primary_/home-page/home-cta-section";
 import { IndustriesSection } from "@/components/_primary_/home-page/industries-section";
@@ -24,12 +27,15 @@ export default function HomePage() {
   return (
     <div className="flex flex-col">
       <HeroSection />
+      <BrandsSection />
+      <FeaturedProjectsSection />
       <ProblemSection />
       <ServicesSection />
+      <ProcessSection />
       <DifferenceSection />
       <IndustriesSection />
-      <ProcessSection />
       <WhyChooseUsSection />
+      <FaqSection />
       <HomeCtaSection />
     </div>
   );

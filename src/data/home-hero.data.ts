@@ -1,27 +1,27 @@
 export type THomeHero = {
-  eyebrow: string;
+  trust_label: string;
+  trust_avatars: { id: string; label: string; icon: string }[];
   title: string;
-  highlight: string;
   description: string;
   primary_cta: { label: string; href: string };
   secondary_cta: { label: string; href: string };
-  trust_label: string;
-  trust_industries: { id: string; name: string }[];
+  video: { src: string; poster?: string };
 };
 
 export const HOME_HERO_DATA: THomeHero = {
-  eyebrow: "Growth Systems Studio",
-  title: "We build the structure behind",
-  highlight: "growth.",
+  trust_label: "Trusted across industries",
+  trust_avatars: [
+    { id: "hospitality", label: "Hospitality", icon: "restaurant" },
+    { id: "real-estate", label: "Real Estate", icon: "building" },
+    { id: "aviation", label: "Aviation", icon: "airplane" },
+    { id: "professional", label: "Professional", icon: "briefcase" },
+  ],
+  title: "We Build The Structure Behind Growth",
   description:
     "Twelve Creative helps businesses clarify their positioning, create stronger content, distribute it with purpose, and install the systems that turn attention into revenue.",
   primary_cta: { label: "Start a Conversation", href: "/contact" },
   secondary_cta: { label: "View Our Work", href: "/work" },
-  trust_label: "Trusted across",
-  trust_industries: [
-    { id: "hospitality", name: "Hospitality" },
-    { id: "real-estate", name: "Real Estate" },
-    { id: "aviation", name: "Aviation" },
-    { id: "professional-services", name: "Professional Services" },
-  ],
+  video: {
+    src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+  },
 };

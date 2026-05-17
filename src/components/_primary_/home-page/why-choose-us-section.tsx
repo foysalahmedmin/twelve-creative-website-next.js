@@ -1,24 +1,27 @@
 import { FeatureCard } from "@/components/cards/feature-card";
-import { SectionHeader } from "@/components/common/section-header";
+import { CenteredSectionHeader } from "@/components/common/section-label";
 import { WHY_CHOOSE_US_DATA } from "@/data/why-choose-us.data";
 import { cn } from "@/lib/utils";
 
 export const WhyChooseUsSection = ({ className }: { className?: string }) => {
+  const featuredId = "systems";
+
   return (
-    <section
-      className={cn("bg-muted/40 py-16 sm:py-20 lg:py-28", className)}
-    >
+    <section className={cn("bg-background py-20 sm:py-24 lg:py-32", className)}>
       <div className="container">
-        <SectionHeader
+        <CenteredSectionHeader
           label="Why Twelve Creative"
-          title="Built for businesses with real ambition and operational complexity."
+          title="Why serious operators & founders choose us."
           description="The work is measured by whether the business becomes easier to understand, easier to trust, and easier to buy from."
-          align="center"
         />
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {WHY_CHOOSE_US_DATA.map((feature) => (
-            <FeatureCard key={feature.id} feature={feature} />
+            <FeatureCard
+              key={feature.id}
+              feature={feature}
+              featured={feature.id === featuredId}
+            />
           ))}
         </div>
       </div>

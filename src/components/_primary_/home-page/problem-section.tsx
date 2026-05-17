@@ -1,3 +1,4 @@
+import { SectionLabel } from "@/components/common/section-label";
 import { PROBLEM_DATA } from "@/data/problem.data";
 import { cn } from "@/lib/utils";
 
@@ -6,15 +7,13 @@ export const ProblemSection = ({ className }: { className?: string }) => {
 
   return (
     <section
-      className={cn("bg-background py-16 sm:py-20 lg:py-28", className)}
+      className={cn("bg-background py-20 sm:py-24 lg:py-32", className)}
     >
       <div className="container">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="border-primary text-primary border-l-[0.125em] pl-[0.5em] text-xs font-bold tracking-wider uppercase">
-            {data.eyebrow}
-          </span>
+          <SectionLabel className="mb-5">{data.eyebrow}</SectionLabel>
 
-          <h2 className="font-heading text-foreground mt-5 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+          <h2 className="font-heading text-foreground text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-[3.5rem] lg:leading-[1.1]">
             {data.title}
           </h2>
 
@@ -24,7 +23,7 @@ export const ProblemSection = ({ className }: { className?: string }) => {
             ))}
           </div>
 
-          <p className="text-foreground mt-10 text-xl font-semibold sm:text-2xl">
+          <p className="from-primary-from to-primary-to mt-10 inline-block bg-linear-to-r bg-clip-text text-xl font-bold text-transparent sm:text-2xl">
             {data.conclusion}
           </p>
         </div>

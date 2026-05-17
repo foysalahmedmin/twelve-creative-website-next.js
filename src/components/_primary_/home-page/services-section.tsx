@@ -1,35 +1,43 @@
 import { ServiceCard } from "@/components/cards/service-card";
-import { SectionHeader } from "@/components/common/section-header";
-import { Button } from "@/components/ui/button";
 import { SERVICES_DATA } from "@/data/services.data";
 import { cn } from "@/lib/utils";
-import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
-import Link from "next/link";
 
 export const ServicesSection = ({ className }: { className?: string }) => {
   return (
-    <section className={cn("bg-muted/40 py-16 sm:py-20 lg:py-28", className)}>
-      <div className="container">
-        <SectionHeader
-          label="What We Build"
-          title="The pieces that move a business forward."
-          description="Positioning, creative production, websites, ads, CRM, and automation — designed to connect and work together as one system."
-          centeredOnMobile
+    <section
+      className={cn(
+        "container py-16 sm:py-20 lg:py-24",
+        className,
+      )}
+    >
+      {/* Header */}
+      <div className="mx-auto flex w-full max-w-4xl flex-col items-center justify-center gap-1">
+        {/* Glass pill label */}
+        <span
+          className={cn(
+            "text-primary inline-flex items-center justify-center rounded-3xl px-5 py-2.5",
+            "bg-card/45 ring-foreground/10 backdrop-blur-md ring-1",
+            "text-base font-normal leading-[140%]",
+            "shadow-[inset_0_1px_0_var(--color-card),0_2px_6px_-2px_var(--color-foreground)/8%]",
+          )}
         >
-          <Button asChild variant="outline" size="lg" className="rounded-full">
-            <Link href="/what-we-build">
-              See all services
-              <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" />
-            </Link>
-          </Button>
-        </SectionHeader>
+          Our Services
+        </span>
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {SERVICES_DATA.map((service) => (
-            <ServiceCard key={service.id} service={service} />
-          ))}
-        </div>
+        <h2 className="font-heading text-foreground mt-2 text-center text-[36px] font-medium leading-[120%] tracking-tight md:text-[56px] xl:mt-4">
+          Services Built to Move the Business
+        </h2>
+
+        <p className="text-muted-foreground mx-auto mt-2 w-full text-center text-sm font-normal leading-[150%] md:text-base xl:w-8/9">
+          We help businesses build positioning, creative, and systems that turn attention into revenue.
+        </p>
+      </div>
+
+      {/* Grid */}
+      <div className="mt-10 grid grid-cols-1 gap-8 md:grid-cols-2 lg:mt-20 lg:grid-cols-3">
+        {SERVICES_DATA.map((service) => (
+          <ServiceCard key={service.id} service={service} />
+        ))}
       </div>
     </section>
   );

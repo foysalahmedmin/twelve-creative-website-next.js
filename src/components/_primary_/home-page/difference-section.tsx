@@ -1,3 +1,4 @@
+import { CenteredSectionHeader } from "@/components/common/section-label";
 import { Card, CardContent } from "@/components/ui/card";
 import { DIFFERENCE_DATA } from "@/data/difference.data";
 import { cn } from "@/lib/utils";
@@ -12,20 +13,14 @@ export const DifferenceSection = ({ className }: { className?: string }) => {
 
   return (
     <section
-      className={cn("bg-background py-16 sm:py-20 lg:py-28", className)}
+      className={cn("bg-background py-20 sm:py-24 lg:py-32", className)}
     >
       <div className="container">
-        <div className="mx-auto mb-12 max-w-3xl text-center lg:mb-16">
-          <span className="border-primary text-primary border-l-[0.125em] pl-[0.5em] text-xs font-bold tracking-wider uppercase">
-            {data.eyebrow}
-          </span>
-          <h2 className="font-heading text-foreground mt-5 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
-            {data.title}
-          </h2>
-          <p className="text-muted-foreground mt-6 text-base leading-relaxed sm:text-lg">
-            {data.description}
-          </p>
-        </div>
+        <CenteredSectionHeader
+          label={data.eyebrow}
+          title={data.title}
+          description={data.description}
+        />
 
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
           {/* Fragmented */}
