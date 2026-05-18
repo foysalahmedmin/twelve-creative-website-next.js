@@ -42,158 +42,253 @@ export interface IWorkItem {
   calendly_url?: string;
 }
 
+/**
+ * Placeholder case studies adapted from Twelve Creative's actual work pattern
+ * (hospitality, real estate, aviation). Replace with real client work as
+ * permissions and assets become available.
+ */
 export const WORKS_PAGE_MOCK_DATA: IWorkItem[] = [
   {
-    id: "1",
-    type: "Growth System",
-    title: "How SparkLabs Scaled ARR by 3× in 9 Months",
-    description: "SparkLabs came to us with a fragmented marketing strategy. We installed our full-stack CRM integration, developed 12 cinematic short-form video hooks, and built a custom SaaS explainer landing page that completely restructured their outbound pipeline.",
-    image_url: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=1280&h=720&fit=crop&auto=format",
-    image_alt: "SparkLabs Dashboard Strategy",
-    created_at: "2024-03-15T12:00:00Z",
+    id: "hudson-hospitality",
+    type: "Hospitality",
+    title: "Helping a restaurant concept become easier to market — and eventually sell.",
+    description:
+      "A restaurant group had been trying to sell a sister concept for several years. Twelve Creative supported the brand with ongoing content, website updates, social, campaign execution, and a stronger digital presence — making the concept more visible, more organized, and more attractive in the market.",
+    image_url:
+      "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1280&h=720&fit=crop&auto=format",
+    image_alt: "Restaurant interior — Hudson Hospitality",
+    created_at: "2024-09-15T12:00:00Z",
     metrics: [
-      { label: "ARR Growth", value: "3×", sub: "Annual run rate" },
-      { label: "Timeline", value: "9 mo", sub: "Execution duration" },
-      { label: "Final ARR", value: "$2.4M", sub: "Total revenue" },
-      { label: "CAC", value: "-45%", sub: "Customer acquisition cost" },
+      { label: "Revenue", value: "+40%", sub: "Year one growth" },
+      { label: "Timeline", value: "12 mo", sub: "Engagement length" },
+      { label: "Outcome", value: "3 sites", sub: "Successfully sold" },
+      { label: "Reach", value: "+220%", sub: "Local awareness" },
     ],
-    tag_slugs: ["B2B SaaS", "CRM Build", "Cinematic Shorts"],
+    tag_slugs: ["Hospitality", "Brand Films", "Campaign Execution"],
     hero_stats: [
-      { label: "ARR Growth", value: "3×" },
-      { label: "Cost Per Lead", value: "-45%" },
+      { label: "Revenue Growth", value: "+40%" },
+      { label: "Locations Sold", value: "3 of 3" },
     ],
     client: {
-      name: "SparkLabs",
-      industry: "Software",
-      domain: "sparklabs.ai",
+      name: "Hudson Hospitality",
+      industry: "Restaurant Group",
+      domain: "hudsonhospitality.example",
       employees: "50-200",
-      tags: ["B2B", "SaaS", "Enterprise"],
-      desc: "SparkLabs is an enterprise data analytics platform helping mid-market businesses visualize complex supply chain structures.",
-      logo: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=128&h=128&fit=crop&auto=format",
+      tags: ["Restaurant", "Hospitality", "Multi-location"],
+      desc: "A multi-concept restaurant group operating across hospitality categories — full-service dining, a sister pizzeria, and a private events space.",
+      logo: "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=128&h=128&fit=crop&auto=format",
     },
-    situation_intro: "Before partnering with Twelve Creative, SparkLabs relied heavily on outbound cold calling with very little inbound marketing structure. Their sales cycles were long (90+ days), and prospects had trouble understanding the core software offering through their text-heavy website.",
-    challenge_intro: "The primary challenge was simplifying complex enterprise software into digestible, high-converting video assets and creating an automated distribution pipeline.",
+    situation_intro:
+      "The group was trying to sell their sister pizzeria concept. The concept had loyal regulars but inconsistent visibility, limited content, and a digital presence that did not match the quality of the in-room experience.",
+    challenge_intro:
+      "Make the concept easier to market, easier to talk about, and easier for buyers to evaluate — without compromising the existing guest experience.",
     challenge_items: [
-      { title: "Low Conversion Rates", desc: "The existing landing page converted traffic at less than 0.8%." },
-      { title: "No Visual Proof", desc: "Sales teams lacked high-end product explainer videos to send after discovery calls." },
-      { title: "Fragmented Data", desc: "Marketing data wasn't effectively syncing into the CRM for automated follow-ups." },
+      {
+        title: "Inconsistent content",
+        desc: "Social and web content was sporadic, often inconsistent with the brand's actual quality.",
+      },
+      {
+        title: "Weak digital presence",
+        desc: "The website did not communicate the concept clearly to potential buyers or guests.",
+      },
+      {
+        title: "No campaign rhythm",
+        desc: "Seasonal moments and events were not being promoted in any organized way.",
+      },
     ],
-    solution_intro: "We completely overhauled their external facing brand and hooked it directly into an automated sales engine.",
+    solution_intro:
+      "We installed a clear monthly content rhythm, sharpened the website, and ran campaigns around key seasonal moments — making the concept feel alive, organized, and credible.",
     solution_phases: [
-      { phase: "Brand Strategy Audit", time: "Weeks 1-2", desc: "We defined a clear market positioning statement and mapped out the exact buyer journey." },
-      { phase: "Cinematic Video Production", time: "Weeks 3-5", desc: "Shot and edited a suite of 12 short-form videos and 1 master explainer film." },
-      { phase: "System Implementation", time: "Weeks 6-8", desc: "Launched a new Webflow site natively integrated with HubSpot and automated email flows." },
-      { phase: "Iterative Scaling", time: "Month 3+", desc: "Began deploying paid media assets, continuously a/b testing hooks to drop CAC." },
+      {
+        phase: "Positioning & Audit",
+        time: "Month 1",
+        desc: "Clarified the concept's positioning, target guest, and the story buyers needed to believe.",
+      },
+      {
+        phase: "Website & Content Refresh",
+        time: "Month 2",
+        desc: "Updated the website with cleaner messaging, stronger photography, and clearer paths to reservations.",
+      },
+      {
+        phase: "Ongoing Production",
+        time: "Months 3-12",
+        desc: "Monthly content production, paid social campaigns, and email blasts tied to events and seasonal launches.",
+      },
     ],
-    outcome_desc: "Within 9 months of system deployment, SparkLabs saw their inbound lead volume triple and their sales cycle shorten by 40%. The cinematic explainer video became their highest-performing asset in paid channels.",
-    outcome_video: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    outcome_desc:
+      "After one year of working together, revenue increased by approximately 40%. The improved visibility and consistency helped attract buyers and contributed to the successful sale of all three locations.",
+    outcome_video:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
     testimonial: {
-      quote: "Twelve Creative didn't just give us a new website or a few videos. They built an entire growth machine that fundamentally changed how we acquire customers.",
-      name: "Johnathan Mercer",
-      role: "CEO, SparkLabs",
-      avatar_url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=128&h=128&fit=crop&auto=format",
+      quote:
+        "They didn't just make our content look better. They made the business easier to talk about — and easier to sell.",
+      name: "Elena Marchetti",
+      role: "Owner, Hudson Hospitality",
+      avatar_url:
+        "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=128&h=128&fit=crop&auto=format",
     },
-    calendly_url: "https://calendly.com/twelve-creative",
+    calendly_url: "/contact",
   },
   {
-    id: "2",
-    type: "Cinematic Branding",
-    title: "Empire Creative: Dominating the Agency Market",
-    description: "To stand out in a saturated market, Empire needed more than a new logo. We architected a complete brand positioning guideline, shot a high-end commercial documentary, and rolled out a responsive direct-to-consumer website overhaul.",
-    image_url: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1280&h=720&fit=crop&auto=format",
-    image_alt: "Empire Rebrand Process",
-    created_at: "2024-02-22T08:30:00Z",
+    id: "meridian-properties",
+    type: "Real Estate",
+    title: "Turning a luxury development into a clear, credible buyer story.",
+    description:
+      "A real estate developer needed to position a new residential project for serious buyers and brokers. Twelve Creative built the positioning, sales film, broker assets, and lead system that supported the full sales cycle.",
+    image_url:
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1280&h=720&fit=crop&auto=format",
+    image_alt: "Luxury residential development — Meridian Properties",
+    created_at: "2024-06-20T08:30:00Z",
     metrics: [
-      { label: "Bookings", value: "+145%", sub: "Qualified calls" },
-      { label: "Cost Per Lead", value: "-40%", sub: "Ad spend efficiency" },
-      { label: "Timeline", value: "4 mo", sub: "Execution phase" },
-      { label: "Retention", value: "98%", sub: "Client longevity" },
+      { label: "Qualified Leads", value: "+145%", sub: "Vs. prior launch" },
+      { label: "Sales Cycle", value: "-30%", sub: "Time to commit" },
+      { label: "Broker Activity", value: "3×", sub: "Engagement" },
+      { label: "Timeline", value: "6 mo", sub: "Pre-launch to close" },
     ],
-    tag_slugs: ["Agency Rebrand", "Commercial Documentary"],
+    tag_slugs: ["Real Estate", "Sales Film", "Lead Generation"],
     hero_stats: [
-      { label: "Qualified Calls", value: "+145%" },
-      { label: "Ad Efficiency", value: "-40% CPL" },
+      { label: "Qualified Leads", value: "+145%" },
+      { label: "Sales Cycle", value: "-30%" },
     ],
     client: {
-      name: "Empire Creative",
-      industry: "Marketing Agency",
-      domain: "empire.agency",
+      name: "Meridian Properties",
+      industry: "Real Estate Development",
+      domain: "meridianproperties.example",
       employees: "20-50",
-      tags: ["Agency", "B2B", "Consulting"],
-      desc: "Empire Creative is a boutique design and performance agency that was struggling to articulate their premium value proposition.",
-      logo: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=128&h=128&fit=crop&auto=format",
+      tags: ["Luxury", "Residential", "Development"],
+      desc: "A real estate developer focused on luxury residential and mixed-use projects in coastal markets.",
+      logo: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=128&h=128&fit=crop&auto=format",
     },
-    situation_intro: "Empire was charging premium prices but had a web presence that looked like a cheap freelancer portfolio. This created a massive dissonance for prospects coming off highly polished sales calls.",
-    challenge_intro: "They needed to visually demonstrate their authority and back up their high-ticket pricing with an undeniable aesthetic.",
+    situation_intro:
+      "The team had a strong project but a weak presentation. Renders existed but the story did not — buyers and brokers struggled to understand the value quickly.",
+    challenge_intro:
+      "Turn the project into a clear, credible, marketable story — and connect that story to a real lead system.",
     challenge_items: [
-      { title: "Brand Dissonance", desc: "The external branding did not match the internal delivery quality." },
-      { title: "Lack of Trust Assets", desc: "They had great case studies but no cinematic way to present them." },
+      {
+        title: "Weak positioning",
+        desc: "Marketing materials emphasized features instead of the buyer's reason to act.",
+      },
+      {
+        title: "No central lead path",
+        desc: "Inquiries were scattered across forms, brokers, and email — with no working CRM.",
+      },
+      {
+        title: "Broker-facing gaps",
+        desc: "Brokers had no premium materials to share with their networks.",
+      },
     ],
-    solution_intro: "We positioned them as the undeniable premium choice in their sector through a full visual and operational rebrand.",
+    solution_intro:
+      "We rebuilt the project's story end-to-end: positioning, sales film, broker assets, landing page, and CRM-backed lead system.",
     solution_phases: [
-      { phase: "Identity Design", time: "Month 1", desc: "Developed a sleek, typography-first visual identity (no drop shadows, flat elegant layouts)." },
-      { phase: "Documentary Build", time: "Month 2", desc: "Filmed a 5-minute brand documentary interviewing their top clients and showcasing their office culture." },
-      { phase: "Web Deployment", time: "Month 3-4", desc: "Built a fully custom, GSAP-animated web experience that wowed prospects instantly." },
+      {
+        phase: "Positioning",
+        time: "Weeks 1-2",
+        desc: "Defined the buyer profile, value angle, and core sales narrative.",
+      },
+      {
+        phase: "Sales Film & Assets",
+        time: "Weeks 3-6",
+        desc: "Produced a project film, broker decks, and a campaign-ready landing page.",
+      },
+      {
+        phase: "Lead System Install",
+        time: "Weeks 7-9",
+        desc: "Connected the landing page to a CRM with qualification, follow-up, and reporting.",
+      },
     ],
-    outcome_desc: "Empire immediately raised their prices by 30% without seeing a drop in close rates. The brand documentary now serves as their primary outbound anchor asset.",
-    outcome_video: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    outcome_desc:
+      "Qualified inquiries increased 145% versus the prior launch, and the average buyer commitment timeline compressed by roughly 30%. Brokers engaged the materials three times more than before.",
+    outcome_video:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
     testimonial: {
-      quote: "The visual authority they built for us makes the sales process almost effortless. People show up to the call already sold on our credibility.",
-      name: "Marcus Aurelius",
-      role: "Founding Partner, Empire Creative",
-      avatar_url: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=128&h=128&fit=crop&auto=format",
+      quote:
+        "They positioned the project, built the film, ran the campaign, and installed the CRM. We finally saw the path from interest to qualified buyer.",
+      name: "Daniel Hartwell",
+      role: "Founder, Meridian Properties",
+      avatar_url:
+        "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=128&h=128&fit=crop&auto=format",
     },
-    calendly_url: "https://calendly.com/twelve-creative",
+    calendly_url: "/contact",
   },
   {
-    id: "3",
-    type: "Automation Pipeline",
-    title: "NovaTech's Seamless E-Commerce Integration",
-    description: "We completely stripped out NovaTech's manual follow-up sequences. By connecting a dynamic custom headless commerce frontend directly to their backend workflows, we captured lost abandoned carts automatically.",
-    image_url: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1280&h=720&fit=crop&auto=format",
-    image_alt: "NovaTech Funnel System",
-    created_at: "2023-11-05T14:45:00Z",
+    id: "skyline-charter",
+    type: "Aviation",
+    title: "Building the trust infrastructure for a private aviation brand.",
+    description:
+      "A charter business needed to look and feel as serious as the service they delivered. We built the founder content, lead funnel, and follow-up system that matched their level — and started attracting the right conversations.",
+    image_url:
+      "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1280&h=720&fit=crop&auto=format",
+    image_alt: "Private aviation — Skyline Charter",
+    created_at: "2024-04-10T14:45:00Z",
     metrics: [
-      { label: "Recovery Rate", value: "28%", sub: "Abandoned carts" },
-      { label: "Automation", value: "100%", sub: "Follow-up sequences" },
-      { label: "ROAS", value: "4.2×", sub: "Ad spend return" },
-      { label: "Revenue", value: "+$400k", sub: "Added MMR" },
+      { label: "Qualified Calls", value: "+180%", sub: "Quarter over quarter" },
+      { label: "Inquiries", value: "+92%", sub: "Inbound" },
+      { label: "Close Rate", value: "+22%", sub: "On qualified" },
+      { label: "Timeline", value: "5 mo", sub: "End-to-end build" },
     ],
-    tag_slugs: ["E-Commerce", "Headless Build", "CRM Automation"],
+    tag_slugs: ["Aviation", "Founder Content", "Lead Funnel"],
     hero_stats: [
-      { label: "Cart Recovery", value: "28%" },
-      { label: "Added Revenue", value: "+$400k" },
+      { label: "Qualified Calls", value: "+180%" },
+      { label: "Close Rate", value: "+22%" },
     ],
     client: {
-      name: "NovaTech",
-      industry: "Consumer Electronics",
-      domain: "novatech.io",
-      employees: "200-500",
-      tags: ["DTC", "E-Commerce", "Tech"],
-      desc: "NovaTech builds high-end consumer hardware for remote workers, including modular desk systems and lighting.",
-      logo: "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=128&h=128&fit=crop&auto=format",
+      name: "Skyline Charter",
+      industry: "Private Aviation",
+      domain: "skylinecharter.example",
+      employees: "10-50",
+      tags: ["Charter", "Aviation", "Founder-led"],
+      desc: "A founder-led private aviation brand operating charter services for high-trust buyers and corporate clients.",
+      logo: "https://images.unsplash.com/photo-1540962351504-03099e0a754b?w=128&h=128&fit=crop&auto=format",
     },
-    situation_intro: "NovaTech had a great product but an incredibly leaky bucket. They were driving thousands of visitors per day through expensive paid media, but their cart abandonment rate was staggering and they had zero automated follow-up.",
-    challenge_intro: "We needed to stop the revenue leak by installing a proper automation infrastructure while simultaneously elevating the product's perceived value.",
+    situation_intro:
+      "The founder ran a serious operation but the marketing felt generic. Buyers landing on the site could not tell what made this charter different from any other listing.",
+    challenge_intro:
+      "Communicate trust, access, safety, and process — and create a qualification path that protected the founder's time.",
     challenge_items: [
-      { title: "Abandoned Carts", desc: "Over 70% of carts were abandoned with no recovery system in place." },
-      { title: "Slow Frontend", desc: "Their legacy Shopify template was bloated, causing 4-second load times." },
-      { title: "Poor Video Content", desc: "Product videos were shot on iPhones by the founders, lacking professional polish." },
+      {
+        title: "Generic marketing",
+        desc: "Content did not reflect the actual experience or the founder's expertise.",
+      },
+      {
+        title: "No qualification",
+        desc: "Every inquiry hit the founder directly — wasting time on low-fit conversations.",
+      },
+      {
+        title: "Weak follow-up",
+        desc: "Leads were lost between first contact and conversation.",
+      },
     ],
-    solution_intro: "A three-pronged attack: Speed up the site, automate the retention, and shoot high-end 3D product visuals.",
+    solution_intro:
+      "We built founder-led content, a credibility-focused landing page, a qualifying form, and a CRM-backed follow-up system.",
     solution_phases: [
-      { phase: "Headless Rebuild", time: "Weeks 1-4", desc: "Migrated them to a Next.js headless storefront utilizing Shopify's Storefront API for blazing fast 300ms load times." },
-      { phase: "CRM Flow Architecture", time: "Weeks 5-6", desc: "Installed comprehensive Klaviyo flows for browse abandonment, cart abandonment, and post-purchase upsells." },
-      { phase: "3D Visual Production", time: "Weeks 7-10", desc: "Produced stunning 3D rendered commercials highlighting the modularity of their hardware." },
+      {
+        phase: "Founder Content",
+        time: "Weeks 1-4",
+        desc: "Produced a short founder film and a series of trust-building social pieces.",
+      },
+      {
+        phase: "Landing & Qualification",
+        time: "Weeks 5-7",
+        desc: "Built a credibility-focused landing page with a qualifying inquiry form.",
+      },
+      {
+        phase: "CRM & Follow-Up",
+        time: "Weeks 8-10",
+        desc: "Installed CRM, email and SMS sequences, and a reporting dashboard.",
+      },
     ],
-    outcome_desc: "The new headless site immediately boosted conversion rates by 1.2%, while the automated flows started recovering 28% of all abandoned carts. The new 3D creative dropped their Facebook ad CPA by half.",
-    outcome_video: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    outcome_desc:
+      "Qualified call volume increased 180% quarter-over-quarter, with a meaningful improvement in close rate. The founder reclaimed roughly a day per week previously lost to unqualified inquiries.",
+    outcome_video:
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
     testimonial: {
-      quote: "The system runs fully automated behind the scenes. We're capturing revenue while we sleep now, and the site looks absolutely incredible.",
-      name: "Daniel Foster",
-      role: "VP Marketing, NovaTech",
-      avatar_url: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=128&h=128&fit=crop&auto=format",
+      quote:
+        "Aviation buyers move on trust. They built the founder content and follow-up system that finally matched the level of our service.",
+      name: "Aaron Whitfield",
+      role: "Founder, Skyline Charter",
+      avatar_url:
+        "https://images.unsplash.com/photo-1463453091185-61582044d556?w=128&h=128&fit=crop&auto=format",
     },
-    calendly_url: "https://calendly.com/twelve-creative",
+    calendly_url: "/contact",
   },
 ];

@@ -5,49 +5,62 @@ export interface IInsightStep {
   items: string[];
 }
 
+/**
+ * Variable name preserved for legacy imports. Content adapted to Twelve Creative —
+ * a deep-dive into how we structure a growth system end-to-end.
+ */
 export const CANVAS_PODCAST_INSIGHT_DATA = {
-  tag: "Podcast Mastery",
-  heading_title: "How We Engineer High-Impact Show Audits",
-  paragraph: "Creating a premium podcast requires more than hit record. We structure an engaging journey that keeps listeners coming back.",
+  tag: "Inside the Build",
+  heading_title: "How we structure a growth system end-to-end.",
+  paragraph:
+    "Most marketing fails because the pieces are not connected. Here is how Twelve Creative builds positioning, creative, distribution, and conversion as one working system.",
   steps: [
     {
-      title: "Show Hook & Framing",
-      description: "Grab attention in the first 15 seconds. Define an irresistible episode hook structure that prevents early drop-offs.",
-      image: "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=768&h=552&fit=crop&auto=format",
+      title: "Positioning the Business",
+      description:
+        "Before content, ads, or websites, we clarify what the business is, who it serves, and the angle the market needs to believe.",
+      image:
+        "https://images.unsplash.com/photo-1552664730-d307ca884978?w=768&h=552&fit=crop&auto=format",
       items: [
-        "15-second hyper-engaging intro teaser",
-        "Clear statement of key takeaway value",
-        "Pacing tailored for target listener segments",
+        "Brand messaging and offer structure",
+        "Founder or company positioning",
+        "Market differentiation and angle",
       ],
     },
     {
-      title: "Dynamic Segment Control",
-      description: "Avoid dull moments. We split episodes into snappy segments to maintain listener momentum and ad transition slots.",
-      image: "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=768&h=552&fit=crop&auto=format",
+      title: "Creative Production",
+      description:
+        "We produce the assets that make the business feel credible, relevant, and worth attention — from brand films to founder content.",
+      image:
+        "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=768&h=552&fit=crop&auto=format",
       items: [
-        "Custom musical audio cues & transition beds",
-        "Strategic sponsor callout integration",
-        "Fast-paced conversational dynamic editing",
+        "Brand films and campaign assets",
+        "Founder-led and event coverage",
+        "Restaurant, real estate, and aviation content",
       ],
     },
     {
-      title: "Omnichannel Repurposing",
-      description: "Multiply show impact. We slice full episodes into high-yield micro-clips for social platforms like TikTok and Reels.",
-      image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=768&h=552&fit=crop&auto=format",
+      title: "Distribution with Intent",
+      description:
+        "Creative only matters if it reaches the right people. We design campaigns around the audience, offer, and desired action.",
+      image:
+        "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=768&h=552&fit=crop&auto=format",
       items: [
-        "8-12 premium 9:16 short-form video cutdowns",
-        "Highly engaging kinetic custom subtitles",
-        "SEO-optimized audio transcription writeups",
+        "Meta ads and retargeting",
+        "Email and SMS campaigns",
+        "Launch and PR coordination",
       ],
     },
     {
-      title: "Audience Monetization",
-      description: "Convert listeners into buyers. We create custom sales funnel integrations mapping directly from podcast descriptions.",
-      image: "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=768&h=552&fit=crop&auto=format",
+      title: "Conversion Systems",
+      description:
+        "Attention needs somewhere to go. We install landing pages, CRM, and automations that capture demand and follow up properly.",
+      image:
+        "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=768&h=552&fit=crop&auto=format",
       items: [
-        "Seamless digital product integration",
-        "Direct-response audio CTAs",
-        "CRM syncing from specialized lead magnets",
+        "Landing pages and lead capture",
+        "CRM, automations, and follow-up",
+        "Tracking and reporting",
       ],
     },
   ] as IInsightStep[],

@@ -16,34 +16,54 @@ export type TFaqsData = {
 
 export const FAQS_DATA: TFaqsData = {
   image:
-    "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=256&h=256&fit=crop&auto=format",
-  alt: "Safwan Wafif - Project Coordinator",
+    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&auto=format",
+  alt: "Carlos Doce — Founder of Twelve Creative",
   title: "Have more questions?",
   description:
-    "Still curious? Let’s talk it out. Book a quick call. We’ll walk you through everything and help you figure out the best move for your brand.",
-  name: "Safwan Wafif",
-  position: "Project Co-ordinator",
-  contact_link: "https://calendly.com/imonofficial2/30min",
+    "Let's talk it out. Tell us where the business is now and what needs to move next. If the project is aligned, we'll schedule a conversation.",
+  name: "Carlos Doce",
+  position: "Founder, Twelve Creative",
+  contact_link: "/contact",
   faqs: [
     {
-      question: "Do you optimize for different platforms?",
+      question: "What does Twelve Creative actually do?",
       answer:
-        "Yes. We cut each feed: hooks fast, captions clean, pacing tuned, and the right crop. You get platform-ready exports, thumbnails, SRTs, and titles.",
+        "We build the marketing structure behind business growth. We work across positioning, creative production, distribution, websites, CRM, and automation — connecting these pieces so the business has a clearer path from attention to revenue.",
     },
     {
-      question: "What do I need to send you?",
+      question: "How is Twelve Creative different from a typical agency?",
       answer:
-        "Raw footage, brand kit, logos, scripts or talking points, your goal, and any refs you like. Share via Drive or Dropbox. If unsure, send it. We will be short.",
+        "Most agencies focus on one thing — content, ads, websites, or strategy. We build these pieces together. We look at the full path: how the business is positioned, how it is presented, how people discover it, and what happens after they show interest. The goal is a system, not just an activity.",
     },
     {
-      question: "Can you turn one long video into lots of short clips?",
+      question: "What types of businesses do you work with?",
       answer:
-        "Yes. We mine one recording for 8-12 strong hooks, cut clean clips, add captions and roll, then export 9:16, 1:1, 16:9 so you can post across channels.",
+        "Restaurant groups and hospitality brands, real estate developers and luxury property companies, private aviation and charter businesses, professional service firms, founders building personal brands connected to real offers, and companies without a full internal marketing department.",
     },
     {
-      question: "How many revision rounds do I get?",
+      question: "What does the process look like?",
       answer:
-        "Two rounds per edit. Most wrap in one. Leave time-stamped notes, and we turn them fast. Need extra versions or a new direction? We will confirm the scope first.",
+        "Understand the business, clarify the position, build the creative, launch distribution, install the system, and improve based on reality. We start with diagnosis, then move through positioning, creative, distribution, and backend installation — refining over time.",
+    },
+    {
+      question: "How do we get started?",
+      answer:
+        "Submit an inquiry through the contact page. Tell us what you are building, where the business is now, and what needs to move. If the project is aligned, we will reach out to schedule a conversation.",
+    },
+    {
+      question: "Do you work on a project basis or retainer?",
+      answer:
+        "Both. We offer defined project buildouts (System Install) for businesses that need a specific deliverable, and ongoing growth partnerships for companies that want embedded strategic and creative support over time.",
+    },
+    {
+      question: "Do you show pricing on the website?",
+      answer:
+        "No. Every business is different. The scope, timeline, and investment depend on what needs to be built. The best first step is a conversation.",
+    },
+    {
+      question: "What industries do you have the most experience in?",
+      answer:
+        "Hospitality — restaurants, lounges, rooftops, chefs, and hospitality groups. Real Estate — developers, luxury properties, commercial spaces. Aviation — private aviation brands and charter professionals. Professional Services — firms that depend on trust and referrals.",
     },
   ],
 };

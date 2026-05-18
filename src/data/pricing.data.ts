@@ -5,9 +5,13 @@ export interface IPackageFeature {
 export interface IPackage {
   name: string;
   description: string;
-  price: number;
-  billing_cycle: string;
+  /** Numeric price (renders as `$X/{billing_cycle}`) OR a label string like "Custom" for by-quote tiers. */
+  price: number | string;
+  /** Omit for by-quote tiers. */
+  billing_cycle?: string;
   features: IPackageFeature[];
+  cta_label?: string;
+  cta_href?: string;
 }
 
 export type TPricingData = {
@@ -17,54 +21,65 @@ export type TPricingData = {
   packages: IPackage[];
 };
 
+/**
+ * Twelve Creative offer ladder per project requirements.
+ * Pricing is intentionally not displayed — scope, timeline, and investment depend
+ * on what needs to be built. The first step is always a conversation.
+ */
 export const PACKAGES: IPackage[] = [
   {
-    name: "Starter Growth",
+    name: "Growth Diagnostic",
     description:
-      "Perfect for growing brands looking to establish their market presence.",
-    price: 1999,
-    billing_cycle: "month",
+      "A focused audit of positioning, website, content, distribution, funnel, CRM, and conversion. Best for companies that need clarity before committing to execution.",
+    price: "By quote",
     features: [
-      { feature: "Dedicated Producer & Content strategist" },
-      { feature: "8 high-end short-form video assets" },
-      { feature: "Custom landing page optimization" },
-      { feature: "1 CRM workflow sequence setup" },
+      { feature: "Business and audience review" },
+      { feature: "Positioning and offer audit" },
+      { feature: "Website, funnel, and CRM diagnostic" },
+      { feature: "Content and distribution audit" },
+      { feature: "Strategic recommendations document" },
     ],
+    cta_label: "Request a Diagnostic",
+    cta_href: "/contact",
   },
   {
-    name: "Market Leader",
+    name: "System Install",
     description:
-      "Our most popular setup for teams building high-impact brand dominance.",
-    price: 3999,
-    billing_cycle: "month",
+      "A defined buildout for companies that need a specific marketing system installed — positioning, creative assets, website, CRM, and the connections between them.",
+    price: "By quote",
     features: [
-      { feature: "Everything in Starter Growth" },
-      { feature: "16 premium short-form videos" },
-      { feature: "Full conversion-focused website overhaul" },
-      { feature: "Complete automated SMS & email retargeting" },
-      { feature: "Weekly strategic consulting & performance reviews" },
+      { feature: "Positioning and offer structure" },
+      { feature: "Landing page or website build" },
+      { feature: "Initial creative assets" },
+      { feature: "CRM setup and automations" },
+      { feature: "Lead capture and tracking" },
+      { feature: "Meta ad setup (optional)" },
     ],
+    cta_label: "Build the System",
+    cta_href: "/contact",
   },
   {
-    name: "Enterprise Engine",
+    name: "Full Growth Partnership",
     description:
-      "Custom built growth engines for high-volume corporate organizations.",
-    price: 7999,
-    billing_cycle: "month",
+      "An embedded relationship for companies without a real internal marketing department. Ongoing positioning, creative, campaigns, distribution, CRM, reporting, and growth strategy.",
+    price: "By quote",
     features: [
-      { feature: "Dedicated content and systems team" },
-      { feature: "Unlimited asset revisions" },
-      { feature: "Custom product explainer animations" },
-      { feature: "Full-stack automated operations audit" },
-      { feature: "24/7 Slack and video support channels" },
+      { feature: "Embedded strategic operator" },
+      { feature: "Ongoing creative production" },
+      { feature: "Distribution and campaign management" },
+      { feature: "CRM, automation, and reporting" },
+      { feature: "Monthly review and refinement" },
+      { feature: "Direct line to the team" },
     ],
+    cta_label: "Start a Partnership Conversation",
+    cta_href: "/contact",
   },
 ];
 
 export const PRICING_DATA: TPricingData = {
-  label: "Pricing Plans",
-  title: "Simple, Value-Driven Pricing Plans",
+  label: "How We Engage",
+  title: "Three ways to work with Twelve Creative.",
   description:
-    "Choose a plan tailored to your execution velocity. No hidden retainer fees or complex hourly breakdowns.",
+    "Every business is different. The scope, timeline, and investment depend on what needs to be built. The best first step is a conversation.",
   packages: PACKAGES,
 };

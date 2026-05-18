@@ -3,6 +3,7 @@
 import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { CenteredSectionHeader } from "@/components/common/section-label";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 export interface IPackageFeature {
   feature: string;
@@ -11,9 +12,11 @@ export interface IPackageFeature {
 export interface IPackage {
   name: string;
   description: string;
-  price: number;
-  billing_cycle: string;
+  price: number | string;
+  billing_cycle?: string;
   features: IPackageFeature[];
+  cta_label?: string;
+  cta_href?: string;
 }
 
 export interface PagePricingProps {
@@ -67,12 +70,22 @@ export const PricingSection = ({ pricing, className }: PagePricingProps) => {
 
                   {/* Price breakdown */}
                   <div className="flex items-baseline gap-1.5 pt-4">
-                    <span className="text-foreground font-heading text-5xl font-medium tracking-tight sm:text-6xl">
-                      ${pkg.price}
-                    </span>
-                    <span className="text-muted-foreground text-sm font-semibold sm:text-base">
-                      /{pkg.billing_cycle}
-                    </span>
+                    {typeof pkg.price === "number" ? (
+                      <>
+                        <span className="text-foreground font-heading text-5xl font-medium tracking-tight sm:text-6xl">
+                          ${pkg.price}
+                        </span>
+                        {pkg.billing_cycle && (
+                          <span className="text-muted-foreground text-sm font-semibold sm:text-base">
+                            /{pkg.billing_cycle}
+                          </span>
+                        )}
+                      </>
+                    ) : (
+                      <span className="text-foreground font-heading text-3xl font-medium tracking-tight sm:text-4xl">
+                        {pkg.price}
+                      </span>
+                    )}
                   </div>
                 </div>
 
@@ -104,9 +117,12 @@ export const PricingSection = ({ pricing, className }: PagePricingProps) => {
                     ))}
                   </ul>
 
-                  <button className="bg-primary w-full rounded-2xl px-6 py-4 font-semibold tracking-wide text-white transition-transform duration-200 select-none hover:scale-105 active:scale-95">
-                    Start a Conversation
-                  </button>
+                  <Link
+                    href={pkg.cta_href ?? "/contact"}
+                    className="bg-primary text-primary-foreground inline-flex w-full items-center justify-center rounded-2xl px-6 py-4 font-semibold tracking-wide transition-transform duration-200 select-none hover:scale-105 active:scale-95"
+                  >
+                    {pkg.cta_label ?? "Start a Conversation"}
+                  </Link>
                 </div>
               </div>
             </div>

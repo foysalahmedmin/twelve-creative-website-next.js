@@ -88,9 +88,9 @@ export const PROCESS_STEPS: TProcessStep[] = [
 
 export const PROCESS_DATA: TProcessData = {
   label: "Our Process",
-  title: "How We Work",
+  title: "A clear path from understanding to execution.",
   description:
-    "We follow a clear, repeatable process to ensure every project is delivered on time and to the highest standard.",
+    "We do not begin by making random assets. We begin by understanding what the business is trying to move, where the friction is, and what structure needs to be built.",
   image:
     "https://images.unsplash.com/photo-1552664730-d307ca884978?w=768&h=898&fit=crop&auto=format",
   process_steps: PROCESS_STEPS,

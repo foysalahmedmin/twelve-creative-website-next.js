@@ -13,41 +13,51 @@ export type TPortfolioData = {
   work: IPortfolioItem[];
 };
 
+const SAMPLE_VIDEO =
+  "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+
 export const CANVAS_PORTFOLIO_DATA: TPortfolioData = {
-  label: "Portfolio Showcase",
-  title: "Works That Turn Attention Into Action",
-  description: "Explore some of our high-performing client campaigns, video productions, and design structures.",
+  label: "Work Showcase",
+  title: "Work built around business context.",
+  description:
+    "Our work is measured by whether the business becomes clearer, more credible, and better equipped to convert attention into action.",
   type: "standard" as "standard" | "shortsreels-editing",
   work: [
     {
-      thumbnail: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=768&h=552&fit=crop&auto=format",
-      video_link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      title: "Commercial Film",
+      thumbnail:
+        "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=768&h=552&fit=crop&auto=format",
+      video_link: SAMPLE_VIDEO,
+      title: "Hudson Hospitality — Brand Film",
     },
     {
-      thumbnail: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=768&h=552&fit=crop&auto=format",
-      video_link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      title: "Brand Documentary",
+      thumbnail:
+        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=768&h=552&fit=crop&auto=format",
+      video_link: SAMPLE_VIDEO,
+      title: "Meridian Properties — Project Reveal",
     },
     {
-      thumbnail: "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=768&h=552&fit=crop&auto=format",
+      thumbnail:
+        "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=768&h=552&fit=crop&auto=format",
+      video_link: SAMPLE_VIDEO,
+      title: "Skyline Charter — Founder Film",
+    },
+    {
+      thumbnail:
+        "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=768&h=552&fit=crop&auto=format",
       video_link: null,
-      title: "UI Design Framework",
+      title: "Casa del Mar — Menu Launch",
     },
     {
-      thumbnail: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=768&h=552&fit=crop&auto=format",
-      video_link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      title: "Corporate Identity",
+      thumbnail:
+        "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=768&h=552&fit=crop&auto=format",
+      video_link: SAMPLE_VIDEO,
+      title: "Brightline Advisors — Founder Series",
     },
     {
-      thumbnail: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=768&h=552&fit=crop&auto=format",
+      thumbnail:
+        "https://images.unsplash.com/photo-1540962351504-03099e0a754b?w=768&h=552&fit=crop&auto=format",
       video_link: null,
-      title: "E-Commerce System",
-    },
-    {
-      thumbnail: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=768&h=552&fit=crop&auto=format",
-      video_link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      title: "Web App Launch",
+      title: "Velocity Aviation — Charter Campaign",
     },
   ] as IPortfolioItem[],
 };

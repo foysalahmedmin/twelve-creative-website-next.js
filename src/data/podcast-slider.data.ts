@@ -10,14 +10,38 @@ export type TPodcastSliderData = {
   slides: IPodcastSlide[];
 };
 
+const SAMPLE_VIDEO =
+  "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+
+/**
+ * Variable name preserved for legacy imports. Content adapted to Twelve Creative —
+ * brand visual showcase across hospitality, real estate, and aviation work.
+ */
 export const PODCAST_SLIDER_DATA: TPodcastSliderData = {
-  label: "Visual Assets",
-  title: "Premium Show Packaging Slides",
-  description: "Explore some of our beautiful cover art, social cards, and branding templates.",
+  label: "Visual Showcase",
+  title: "Brand work built around the business.",
+  description:
+    "Frames from recent hospitality, real estate, and aviation campaigns — content shot, edited, and distributed by Twelve Creative.",
   slides: [
-    { video_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", image_url: "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=768&h=512&fit=crop" },
-    { video_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", image_url: "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=768&h=512&fit=crop" },
-    { video_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", image_url: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=768&h=512&fit=crop" },
-    { video_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", image_url: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=768&h=512&fit=crop" },
+    {
+      video_url: SAMPLE_VIDEO,
+      image_url:
+        "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=768&h=512&fit=crop",
+    },
+    {
+      video_url: SAMPLE_VIDEO,
+      image_url:
+        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=768&h=512&fit=crop",
+    },
+    {
+      video_url: SAMPLE_VIDEO,
+      image_url:
+        "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=768&h=512&fit=crop",
+    },
+    {
+      video_url: SAMPLE_VIDEO,
+      image_url:
+        "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=768&h=512&fit=crop",
+    },
   ],
 };

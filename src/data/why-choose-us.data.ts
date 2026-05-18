@@ -66,9 +66,9 @@ export const FEATURES: TFeature[] = [
 ];
 
 export const WHY_CHOOSE_US_DATA: TWhyChooseUsData = {
-  label: "Why Choose Us",
-  title: "Why Brands Choose Twelve Creative",
+  label: "Why Twelve Creative",
+  title: "Built for businesses with real ambition.",
   description:
-    "We don't just edit clips or launch landing pages. We install complete positioning, cinematic production, and automated systems that move business metrics forward.",
+    "The work is measured by whether the business becomes easier to understand, easier to trust, and easier to buy from — not by how much marketing activity gets produced.",
   features: FEATURES,
 };

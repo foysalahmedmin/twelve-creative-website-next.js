@@ -4,40 +4,54 @@ export interface IMarqueeItem {
   alt?: string;
 }
 
+const SAMPLE_VIDEO =
+  "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+
+/**
+ * Vertical marquee assets representing Twelve Creative's work across industries.
+ * Replace image and video URLs with real client work as it becomes available.
+ */
 export const CANVAS_MARQUEE_DATA: IMarqueeItem[] = [
   {
-    image_url: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=512&h=768&fit=crop&auto=format",
-    video_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    alt: "Commercial Film Highlight",
+    image_url:
+      "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=512&h=768&fit=crop&auto=format",
+    video_url: SAMPLE_VIDEO,
+    alt: "Hospitality brand film — restaurant interior",
   },
   {
-    image_url: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=512&h=768&fit=crop&auto=format",
-    video_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    alt: "Client Interview Teaser",
+    image_url:
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=512&h=768&fit=crop&auto=format",
+    video_url: SAMPLE_VIDEO,
+    alt: "Real estate project reveal — luxury residential",
   },
   {
-    image_url: "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=512&h=768&fit=crop&auto=format",
+    image_url:
+      "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=512&h=768&fit=crop&auto=format",
     video_url: "",
-    alt: "Landing Page Architecture",
+    alt: "Website and landing page architecture",
   },
   {
-    image_url: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=512&h=768&fit=crop&auto=format",
-    video_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    alt: "Operational Growth Framework",
+    image_url:
+      "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=512&h=768&fit=crop&auto=format",
+    video_url: SAMPLE_VIDEO,
+    alt: "Aviation charter — founder film",
   },
   {
-    image_url: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=512&h=768&fit=crop&auto=format",
+    image_url:
+      "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=512&h=768&fit=crop&auto=format",
     video_url: "",
-    alt: "Event Activation Campaign",
+    alt: "Professional services — founder interview",
   },
   {
-    image_url: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=512&h=768&fit=crop&auto=format",
-    video_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    alt: "Tech Product Showcase",
+    image_url:
+      "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=512&h=768&fit=crop&auto=format",
+    video_url: SAMPLE_VIDEO,
+    alt: "Restaurant menu launch — campaign asset",
   },
   {
-    image_url: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=512&h=768&fit=crop&auto=format",
-    video_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    alt: "Corporate Vision Outline",
+    image_url:
+      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=512&h=768&fit=crop&auto=format",
+    video_url: SAMPLE_VIDEO,
+    alt: "CRM and automation dashboard",
   },
 ];
