@@ -1,11 +1,12 @@
 import { ComingSoon } from "@/components/common/coming-soon";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Health Blogs | Twelve Creative",
-  description: "Read our latest health articles and medical insights.",
+  title: "Insights | Twelve Creative",
+  description:
+    "Notes on positioning, creative, distribution, and the systems behind real business growth — coming soon.",
 };
 
 export default function BlogsPage() {
-  return <ComingSoon title="Health Blogs" />;
+  return <ComingSoon title="Insights" />;
 }

@@ -9,7 +9,8 @@ import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Industries | Hospitality, Real Estate, Aviation & Professional Services",
+  title:
+    "Industries | Hospitality, Real Estate, Aviation & Professional Services",
   description:
     "Twelve Creative works with hospitality, real estate, aviation, and professional service businesses that need stronger marketing structure.",
 };
@@ -29,7 +30,6 @@ export default function IndustriesPage() {
         label="Industries"
         title="Built for businesses where trust, presentation, and follow-up matter."
         description="Twelve Creative works across industries where the buying decision depends on credibility, timing, taste, and a clear path to action."
-        breadcrumb={[{ label: "Industries", active: true }]}
       />
 
       {/* Tabbed industries overview */}

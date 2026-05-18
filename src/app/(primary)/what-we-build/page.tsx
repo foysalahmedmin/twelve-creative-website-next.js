@@ -1,22 +1,57 @@
+import { DifferenceSection } from "@/components/_primary_/home-page/difference-section";
+import { AlternatingServicesSection } from "@/components/sections/alternating-services-section";
+import { CTASection } from "@/components/sections/cta-section";
 import { PageHeader } from "@/components/sections/page-header-section";
+import { PodcastInsight } from "@/components/sections/podcast-insight";
+import { ProcessSection } from "@/components/sections/process-section";
+import { WhyChooseUsSection } from "@/components/sections/why-choose-us-section";
+import { CTA_WHAT_WE_BUILD } from "@/data/page-ctas.data";
+import { CANVAS_PODCAST_INSIGHT_DATA } from "@/data/podcast-insight.data";
+import { PROCESS_DATA } from "@/data/process.data";
+import { SERVICES_DATA } from "@/data/services.data";
+import { WHY_CHOOSE_US_DATA } from "@/data/why-choose-us.data";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "What We Build | Twelve Creative",
+  title: "What We Build | Positioning, Creative, Websites, Ads & CRM",
   description:
-    "Positioning, creative production, websites, ads, CRM, and automation — built together as a system, not as separate activities.",
+    "Explore Twelve Creative's work across positioning, video production, websites, paid ads, CRM, automation, and conversion systems.",
 };
+
+const SERVICE_ITEMS = SERVICES_DATA.map((service) => ({
+  id: service.id,
+  title: service.title,
+  description: service.description,
+  highlights: service.highlights,
+  thumbnail_src: service.thumbnail_src,
+}));
 
 export default function WhatWeBuildPage() {
   return (
     <main className="bg-background min-h-screen">
       <PageHeader
         label="What We Build"
-        title="We build the systems that capture demand & move businesses forward."
-        description="Positioning, cinematic creative, websites, CRM, and automations — all built as a single unified engine to turn attention into revenue."
-        breadcrumb={[{ label: "What We Build", active: true }]}
-        videoSrc="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        title="Marketing works better when the pieces are connected."
+        description="Twelve Creative builds the creative, strategic, and operational pieces that help a business move from visibility to revenue."
       />
+
+      {/* Detailed alternating service breakdowns */}
+      <AlternatingServicesSection data={SERVICE_ITEMS} />
+
+      {/* Growth system end-to-end deep dive */}
+      <PodcastInsight data={CANVAS_PODCAST_INSIGHT_DATA} />
+
+      {/* The Twelve Creative Difference */}
+      <DifferenceSection />
+
+      {/* How we approach the work */}
+      <ProcessSection data={PROCESS_DATA} />
+
+      {/* Why operators choose us */}
+      <WhyChooseUsSection data={WHY_CHOOSE_US_DATA} />
+
+      {/* CTA */}
+      <CTASection data={CTA_WHAT_WE_BUILD} />
     </main>
   );
 }

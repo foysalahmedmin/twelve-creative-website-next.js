@@ -26,6 +26,8 @@ export const SITE = {
     phones: ["+1 (000) 000-0000"],
     address: "New York, NY",
     whatsapp: ["+1 (951) 822-6223"],
+    map_embed:
+      "https://maps.google.com/maps?q=New+York,+NY&t=&z=12&ie=UTF8&iwloc=&output=embed",
   },
   nav: [
     { name: "Home", href: "/" },

@@ -74,8 +74,18 @@ export const ContactSection = ({
   className?: string;
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [form, setForm] = useState({ name: "", phone: "", subject: "", message: "" });
-  const [errors, setErrors] = useState<{ name?: string; phone?: string; subject?: string; message?: string }>({});
+  const [form, setForm] = useState({
+    name: "",
+    phone: "",
+    subject: "",
+    message: "",
+  });
+  const [errors, setErrors] = useState<{
+    name?: string;
+    phone?: string;
+    subject?: string;
+    message?: string;
+  }>({});
 
   const handleChange = (field: keyof typeof form, value: string) => {
     setForm((p) => ({ ...p, [field]: value }));
@@ -85,7 +95,8 @@ export const ContactSection = ({
   const validate = () => {
     const e: typeof errors = {};
     if (!form.name.trim()) e.name = "Full name is required.";
-    if (!form.phone || form.phone.replace(/\D/g, "").length < 7) e.phone = "Please enter a valid phone number.";
+    if (!form.phone || form.phone.replace(/\D/g, "").length < 7)
+      e.phone = "Please enter a valid phone number.";
     if (!form.subject.trim()) e.subject = "Subject is required.";
     if (!form.message.trim()) e.message = "Message is required.";
     setErrors(e);
@@ -116,7 +127,10 @@ export const ContactSection = ({
   };
 
   return (
-    <section className={cn("bg-background py-8 md:py-16", className)} id="contact">
+    <section
+      className={cn("bg-background py-8 md:py-16", className)}
+      id="contact"
+    >
       <div className="container">
         {!hideHeader && (
           <SectionHeader
@@ -185,50 +199,77 @@ export const ContactSection = ({
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div className="grid gap-6 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <label className="text-foreground text-sm font-bold">Full Name <span className="text-destructive ml-0.5">*</span></label>
+                  <label className="text-foreground text-sm font-bold">
+                    Full Name <span className="text-destructive ml-0.5">*</span>
+                  </label>
                   <input
                     type="text"
                     value={form.name}
                     onChange={(e) => handleChange("name", e.target.value)}
                     placeholder="John Doe"
-                    className={`bg-background placeholder:text-muted-foreground/40 w-full rounded-xl border px-4 py-3 text-sm font-medium transition-all outline-none focus:border-primary ${errors.name ? "border-destructive" : "border-border"}`}
+                    className={`bg-background placeholder:text-muted-foreground/40 focus:border-primary w-full rounded-xl border px-4 py-3 text-sm font-medium transition-all outline-none ${errors.name ? "border-destructive" : "border-border"}`}
                   />
-                  {errors.name && <p className="text-destructive text-xs font-medium">{errors.name}</p>}
+                  {errors.name && (
+                    <p className="text-destructive text-xs font-medium">
+                      {errors.name}
+                    </p>
+                  )}
                 </div>
                 <div className="space-y-2">
-                  <label className="text-foreground text-sm font-bold">Phone Number <span className="text-destructive ml-0.5">*</span></label>
+                  <label className="text-foreground text-sm font-bold">
+                    Phone Number{" "}
+                    <span className="text-destructive ml-0.5">*</span>
+                  </label>
                   <PhoneInput
                     value={form.phone}
-                    onChange={(val) => handleChange("phone", val as string || "")}
+                    onChange={(val) =>
+                      handleChange("phone", (val as string) || "")
+                    }
                     placeholder="+8801XXXXXXXXX"
-                    className={`[&_input]:h-11.5 [&_button]:h-11.5 ${errors.phone ? "[&_input]:border-destructive" : ""}`}
+                    className={`[&_button]:h-11.5 [&_input]:h-11.5 ${errors.phone ? "[&_input]:border-destructive" : ""}`}
                   />
-                  {errors.phone && <p className="text-destructive text-xs font-medium">{errors.phone}</p>}
+                  {errors.phone && (
+                    <p className="text-destructive text-xs font-medium">
+                      {errors.phone}
+                    </p>
+                  )}
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="text-foreground text-sm font-bold">Subject <span className="text-destructive ml-0.5">*</span></label>
+                <label className="text-foreground text-sm font-bold">
+                  Subject <span className="text-destructive ml-0.5">*</span>
+                </label>
                 <input
                   type="text"
                   value={form.subject}
                   onChange={(e) => handleChange("subject", e.target.value)}
                   placeholder="How can we help?"
-                  className={`bg-background placeholder:text-muted-foreground/40 w-full rounded-xl border px-4 py-3 text-sm font-medium transition-all outline-none focus:border-primary ${errors.subject ? "border-destructive" : "border-border"}`}
+                  className={`bg-background placeholder:text-muted-foreground/40 focus:border-primary w-full rounded-xl border px-4 py-3 text-sm font-medium transition-all outline-none ${errors.subject ? "border-destructive" : "border-border"}`}
                 />
-                {errors.subject && <p className="text-destructive text-xs font-medium">{errors.subject}</p>}
+                {errors.subject && (
+                  <p className="text-destructive text-xs font-medium">
+                    {errors.subject}
+                  </p>
+                )}
               </div>
 
               <div className="space-y-2">
-                <label className="text-foreground text-sm font-bold">Message <span className="text-destructive ml-0.5">*</span></label>
+                <label className="text-foreground text-sm font-bold">
+                  Message <span className="text-destructive ml-0.5">*</span>
+                </label>
                 <textarea
                   rows={4}
                   value={form.message}
                   onChange={(e) => handleChange("message", e.target.value)}
                   placeholder="Type your question here..."
-                  className={`bg-background placeholder:text-muted-foreground/40 w-full rounded-xl border px-4 py-3 text-sm font-medium transition-all outline-none focus:border-primary ${errors.message ? "border-destructive" : "border-border"}`}
+                  className={`bg-background placeholder:text-muted-foreground/40 focus:border-primary w-full rounded-xl border px-4 py-3 text-sm font-medium transition-all outline-none ${errors.message ? "border-destructive" : "border-border"}`}
                 />
-                {errors.message && <p className="text-destructive text-xs font-medium">{errors.message}</p>}
+                {errors.message && (
+                  <p className="text-destructive text-xs font-medium">
+                    {errors.message}
+                  </p>
+                )}
               </div>
 
               <Button

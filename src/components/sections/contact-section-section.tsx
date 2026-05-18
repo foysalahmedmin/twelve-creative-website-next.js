@@ -3,14 +3,6 @@
 import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { CenteredSectionHeader } from "@/components/common/section-label";
 import { cn } from "@/lib/utils";
-import {
-  ArrowUpRight,
-  Briefcase,
-  Info,
-  Mail,
-  MessageCircle,
-} from "lucide-react";
-import Link from "next/link";
 import React, { useState } from "react";
 import { toast } from "sonner";
 
@@ -321,94 +313,27 @@ const ContactFormSection = () => {
 
 // ── Main Layout Coordinator ────────────────────────────
 export const PageContactSection = ({ className }: ContactSectionProps) => {
-  const contactCards = [
-    {
-      title: "Email Us",
-      value: "carlos@twelvecreative.io",
-      icon: Mail,
-      href: "mailto:carlos@twelvecreative.io",
-    },
-    {
-      title: "WhatsApp Us",
-      value: "+1 951 822 6223",
-      icon: MessageCircle,
-      href: "https://wa.me/19518226223?text=Hello!",
-    },
-    {
-      title: "Work with Us",
-      value: "Explore current opportunities",
-      icon: Briefcase,
-      href: "/careers",
-    },
-    {
-      title: "Explore Us",
-      value: "Learn about our services",
-      icon: Info,
-      href: "/about",
-    },
-  ];
-
   return (
     <section className={cn("container py-16 sm:py-20 lg:py-24", className)}>
       <div className="relative w-full">
         {/* Layered peeking back card element */}
         <div className="bg-primary/10 dark:bg-primary/20 border-primary/10 pointer-events-none absolute right-[2.5%] -bottom-3 left-[2.5%] z-0 h-12 rounded-b-[38px] border-x border-b" />
 
-        {/* Main box holding the form and detail cards */}
-        <div className="border-primary/15 bg-card/95 relative z-10 space-y-12 rounded-[40px] border p-8 sm:p-10 lg:p-12">
+        {/* Main box holding the form */}
+        <div className="border-primary/15 bg-card/95 relative z-10 space-y-10 rounded-[40px] border p-8 sm:p-10 lg:p-12">
           <ScrollReveal animation="fade-in-up" durationMs={800}>
             <CenteredSectionHeader
-              label="Contact Us"
-              title="Have a Project? Let's Talk"
-              description="Tell us about your project bottlenecks. We will get back to you with a clear tactical plan."
+              label="Send an Inquiry"
+              title="Tell us what needs to move."
+              description="Whether the issue is unclear positioning, weak content, poor follow-up, a website that does not convert, or a campaign that needs structure — the first step is understanding the business."
               className="mb-0"
             />
           </ScrollReveal>
 
-          {/* Quick Connect Cards Row */}
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
-            {contactCards.map((item, idx) => {
-              const Icon = item.icon;
-
-              return (
-                <ScrollReveal
-                  key={idx}
-                  animation="fade-in-up"
-                  delayMs={100 * idx}
-                  className="flex h-full"
-                >
-                  <Link
-                    href={item.href}
-                    target="_blank"
-                    className="group/contact-card from-primary/30 to-primary/5 dark:to-primary/2 flex h-full w-full rounded-[24px] bg-gradient-to-br p-[1px] transition-all duration-300 hover:scale-105"
-                  >
-                    <div className="bg-background flex h-full w-full items-center justify-between gap-4 rounded-[23px] p-5">
-                      {/* Left texts */}
-                      <div className="flex-1 space-y-1 truncate">
-                        <h4 className="font-heading text-foreground group-hover/contact-card:text-primary flex items-center gap-1.5 truncate text-base font-semibold transition-colors sm:text-lg">
-                          {item.title}
-                          <ArrowUpRight className="size-4 shrink-0 opacity-0 transition-all duration-200 group-hover/contact-card:opacity-100" />
-                        </h4>
-                        <p className="text-muted-foreground truncate text-xs sm:text-sm">
-                          {item.value}
-                        </p>
-                      </div>
-
-                      {/* Right icon element */}
-                      <div className="bg-primary/10 border-primary/20 text-primary flex size-11 shrink-0 items-center justify-center rounded-xl border">
-                        <Icon className="size-5" />
-                      </div>
-                    </div>
-                  </Link>
-                </ScrollReveal>
-              );
-            })}
-          </div>
-
           {/* Form wrapper */}
           <ScrollReveal
             animation="fade-in-up"
-            delayMs={400}
+            delayMs={200}
             className="border-primary/10 bg-primary/[0.02] dark:bg-primary/[0.04] w-full rounded-3xl border p-6 sm:p-8 lg:p-10"
           >
             <ContactFormSection />

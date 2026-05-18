@@ -58,14 +58,14 @@ const VerticalStepper = ({ steps, activeIndex, onStepClick }: VerticalStepperPro
                     background: `linear-gradient(250.64deg, rgba(234, 105, 45, 0.5) 0%, rgba(234, 105, 45, 0) 50%, rgba(234, 105, 45, 0.5) 100%)`,
                   }}
                 >
-                  <span className="w-full h-full rounded-[23px] bg-primary text-white flex items-center justify-center font-semibold text-lg">
+                  <span className="w-full h-full rounded-[23px] bg-linear-to-br from-primary-from to-primary-to text-white flex items-center justify-center font-semibold text-lg shadow-md">
                     {idx + 1}
                   </span>
                 </div>
               ) : (
-                // Inactive circular node
-                <div className="relative w-[84px] h-[84px] z-10 flex items-center justify-center text-zinc-900">
-                  <span className="text-xs font-semibold leading-none flex justify-center items-center h-7 w-7 rounded-full bg-white border border-primary/20">
+                // Inactive circular node with smooth hover effects
+                <div className="relative w-[84px] h-[84px] z-10 flex items-center justify-center text-zinc-900 group">
+                  <span className="text-xs font-semibold leading-none flex justify-center items-center h-7 w-7 rounded-full bg-white border border-primary/20 transition-all duration-200 group-hover:scale-110 group-hover:border-primary/50 group-hover:bg-primary/5 dark:bg-zinc-900 dark:text-zinc-100">
                     {idx + 1}
                   </span>
                 </div>

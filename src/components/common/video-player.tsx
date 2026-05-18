@@ -57,21 +57,23 @@ export const VideoPlayer = ({
         </div>
       )}
 
-      <ReactPlayer
-        url={link}
-        width="100%"
-        height="100%"
-        controls
-        playsinline
-        playing={isPlaying}
-        onPlay={() => setIsPlaying(true)}
-        onPause={() => setIsPlaying(false)}
-        onEnded={() => {
-          setIsPlaying(false);
-          setHasStarted(false);
-        }}
-        className="absolute top-0 left-0"
-      />
+      {hasStarted && (
+        <ReactPlayer
+          url={link}
+          width="100%"
+          height="100%"
+          controls
+          playsinline
+          playing={isPlaying}
+          onPlay={() => setIsPlaying(true)}
+          onPause={() => setIsPlaying(false)}
+          onEnded={() => {
+            setIsPlaying(false);
+            setHasStarted(false);
+          }}
+          className="absolute top-0 left-0"
+        />
+      )}
     </div>
   );
 };
