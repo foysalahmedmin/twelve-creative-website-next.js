@@ -13,7 +13,14 @@ export type TFeature = {
   description: string;
 };
 
-export const WHY_CHOOSE_US_DATA: TFeature[] = [
+export type TWhyChooseUsData = {
+  label: string;
+  title: string;
+  description: string;
+  features: TFeature[];
+};
+
+export const FEATURES: TFeature[] = [
   {
     id: "strategy",
     icon: "strategy",
@@ -57,3 +64,11 @@ export const WHY_CHOOSE_US_DATA: TFeature[] = [
       "We operate as the marketing department the business needs, not a vendor at arm's length.",
   },
 ];
+
+export const WHY_CHOOSE_US_DATA: TWhyChooseUsData = {
+  label: "Why Choose Us",
+  title: "Why Brands Choose Twelve Creative",
+  description:
+    "We don't just edit clips or launch landing pages. We install complete positioning, cinematic production, and automated systems that move business metrics forward.",
+  features: FEATURES,
+};

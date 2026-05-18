@@ -5,10 +5,18 @@ export interface IPortfolioItem {
   title?: string;
 }
 
-export const CANVAS_PORTFOLIO_DATA = {
-  tag: "Portfolio Showcase",
-  heading_part1: "Works That Turn Attention Into Action",
-  paragraph: "Explore some of our high-performing client campaigns, video productions, and design structures.",
+export type TPortfolioData = {
+  label: string;
+  title: string;
+  description: string;
+  type: "standard" | "shortsreels-editing";
+  work: IPortfolioItem[];
+};
+
+export const CANVAS_PORTFOLIO_DATA: TPortfolioData = {
+  label: "Portfolio Showcase",
+  title: "Works That Turn Attention Into Action",
+  description: "Explore some of our high-performing client campaigns, video productions, and design structures.",
   type: "standard" as "standard" | "shortsreels-editing",
   work: [
     {
@@ -40,16 +48,6 @@ export const CANVAS_PORTFOLIO_DATA = {
       thumbnail: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=768&h=552&fit=crop&auto=format",
       video_link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
       title: "Web App Launch",
-    },
-    {
-      thumbnail: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=768&h=552&fit=crop&auto=format",
-      video_link: null,
-      title: "Data Dashboard",
-    },
-    {
-      thumbnail: "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=768&h=552&fit=crop&auto=format",
-      video_link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      title: "Ad Campaign Assets",
     },
   ] as IPortfolioItem[],
 };

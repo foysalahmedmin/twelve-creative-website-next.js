@@ -16,9 +16,9 @@ export interface IPortfolioItem {
 
 export interface ThumbnailWorkSectionProps {
   works: {
-    tag: string;
-    heading_part1: string;
-    paragraph: string;
+    label: string;
+    title: string;
+    description: string;
     type?: "standard" | "shortsreels-editing";
     work: IPortfolioItem[];
   };
@@ -27,7 +27,7 @@ export interface ThumbnailWorkSectionProps {
 }
 
 export const ThumbnailWorkSection = ({ works, slug = "all", className }: ThumbnailWorkSectionProps) => {
-  const { tag, heading_part1, paragraph, type = "standard", work = [] } = works || {};
+  const { label, title, description, type = "standard", work = [] } = works || {};
 
   const isShorts = type === "shortsreels-editing";
 
@@ -36,9 +36,9 @@ export const ThumbnailWorkSection = ({ works, slug = "all", className }: Thumbna
       <div className="rounded-[40px] overflow-hidden bg-gradient-to-b from-[#fff5f0] to-[#fcece4] dark:from-primary/10 dark:to-primary/5 p-8 sm:p-12 lg:p-16 relative">
         <ScrollReveal animation="fade-in-up" durationMs={800} className="relative z-10">
           <CenteredSectionHeader
-            label={tag}
-            title={heading_part1}
-            description={paragraph}
+            label={label}
+            title={title}
+            description={description}
             className="mb-10 sm:mb-16"
           />
         </ScrollReveal>

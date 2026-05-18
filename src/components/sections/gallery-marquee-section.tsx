@@ -1,19 +1,21 @@
 "use client";
 
+import { ABOUT_GALLERY_DATA } from "@/data/about.data";
 import Image from "next/image";
 import Marquee from "react-fast-marquee";
-import { ABOUT_GALLERY_DATA } from "@/data/about.data";
 
-export function AboutGalleryMarquee() {
+export function GalleryMarqueeSection() {
   return (
-    <section className="py-12 sm:py-20 overflow-hidden">
+    <section className="overflow-hidden py-12 sm:py-20">
       <div className="flex flex-col gap-6 sm:gap-8">
-        
         {/* Row 1 - Left to Right */}
         <Marquee speed={40} gradient={false} direction="left">
-          <div className="flex gap-4 sm:gap-6 pr-4 sm:pr-6">
+          <div className="flex gap-4 pr-4 sm:gap-6 sm:pr-6">
             {ABOUT_GALLERY_DATA.map((url, idx) => (
-              <div key={`row1-${idx}`} className="relative h-48 sm:h-64 lg:h-80 aspect-[4/3] rounded-2xl overflow-hidden border border-primary/10 bg-muted">
+              <div
+                key={`row1-${idx}`}
+                className="border-primary/10 bg-muted relative aspect-[4/3] h-48 overflow-hidden rounded-2xl border sm:h-64 lg:h-80"
+              >
                 <Image
                   src={url}
                   alt={`Office gallery ${idx}`}
@@ -28,9 +30,12 @@ export function AboutGalleryMarquee() {
 
         {/* Row 2 - Right to Left */}
         <Marquee speed={35} gradient={false} direction="right">
-          <div className="flex gap-4 sm:gap-6 pr-4 sm:pr-6">
+          <div className="flex gap-4 pr-4 sm:gap-6 sm:pr-6">
             {[...ABOUT_GALLERY_DATA].reverse().map((url, idx) => (
-              <div key={`row2-${idx}`} className="relative h-48 sm:h-64 lg:h-80 aspect-[4/3] rounded-2xl overflow-hidden border border-primary/10 bg-muted">
+              <div
+                key={`row2-${idx}`}
+                className="border-primary/10 bg-muted relative aspect-[4/3] h-48 overflow-hidden rounded-2xl border sm:h-64 lg:h-80"
+              >
                 <Image
                   src={url}
                   alt={`Office gallery reversed ${idx}`}
@@ -42,7 +47,6 @@ export function AboutGalleryMarquee() {
             ))}
           </div>
         </Marquee>
-
       </div>
     </section>
   );

@@ -5,7 +5,18 @@ export interface IVideoItem {
   title: string;
 }
 
-export const CANVAS_PODCAST_VIDEO_SWIPER_DATA: IVideoItem[] = [
+export type TPodcastVideoData = {
+  label: string;
+  title: string;
+  description: string;
+  videos: IVideoItem[];
+};
+
+export const PODCAST_VIDEO_DATA: TPodcastVideoData = {
+  label: "Showcase Reel",
+  title: "Featured Production Carousel",
+  description: "Slide through and click to watch our high-yield promotional content productions.",
+  videos: [
   {
     id: 1,
     url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
@@ -53,5 +64,6 @@ export const CANVAS_PODCAST_VIDEO_SWIPER_DATA: IVideoItem[] = [
     url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     thumbnail: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=768&h=432&fit=crop&auto=format",
     title: "Event Coverage Highlights",
-  },
-];
+  }
+  ],
+};

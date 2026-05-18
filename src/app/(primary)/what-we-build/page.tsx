@@ -1,11 +1,11 @@
-import { PageHeader } from "@/components/sections/page-header-section";
-import { SERVICES_DATA } from "@/data/services.data";
-import { ProcessSection } from "@/components/_primary_/home-page/process-section";
 import { HomeCtaSection } from "@/components/_primary_/home-page/home-cta-section";
 import { ScrollReveal } from "@/components/common/scroll-reveal";
+import { PageHeader } from "@/components/sections/page-header-section";
+import { ProcessSection } from "@/components/sections/process-section";
+import { SERVICES_DATA } from "@/data/services.data";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "What We Build | Twelve Creative",
@@ -26,49 +26,45 @@ export default function WhatWeBuildPage() {
       />
 
       {/* 2. Interactive Alternating Showcase of Services */}
-      <div className="container py-12 md:py-16 space-y-24 sm:space-y-32 lg:space-y-40">
+      <div className="container space-y-24 py-12 sm:space-y-32 md:py-16 lg:space-y-40">
         {SERVICES_DATA.map((service, index) => {
           const isEven = index % 2 === 0;
 
           return (
-            <section
-              key={service.id}
-              id={service.id}
-              className="scroll-mt-24"
-            >
+            <section key={service.id} id={service.id} className="scroll-mt-24">
               <ScrollReveal animation="fade-in-up" durationMs={800}>
                 <div
                   className={cn(
-                    "flex flex-col lg:flex-row items-center gap-12 lg:gap-16",
-                    isEven ? "" : "lg:flex-row-reverse"
+                    "flex flex-col items-center gap-12 lg:flex-row lg:gap-16",
+                    isEven ? "" : "lg:flex-row-reverse",
                   )}
                 >
                   {/* Content Column */}
                   <div className="flex-1 space-y-6">
                     <div className="space-y-3">
-                      <span className="inline-flex px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest bg-primary/10 text-primary border border-primary/20">
+                      <span className="bg-primary/10 text-primary border-primary/20 inline-flex rounded-full border px-3 py-1 text-xs font-bold tracking-widest uppercase">
                         Service {index + 1}
                       </span>
-                      <h2 className="font-heading text-foreground text-3xl sm:text-4xl font-medium tracking-tight">
+                      <h2 className="font-heading text-foreground text-3xl font-medium tracking-tight sm:text-4xl">
                         {service.title}
                       </h2>
-                      <p className="text-muted-foreground text-base sm:text-lg leading-relaxed font-medium">
+                      <p className="text-muted-foreground text-base leading-relaxed font-medium sm:text-lg">
                         {service.description}
                       </p>
                     </div>
 
                     {/* Highlights */}
                     <div className="space-y-3">
-                      <h4 className="text-sm font-bold tracking-wider text-foreground uppercase">
+                      <h4 className="text-foreground text-sm font-bold tracking-wider uppercase">
                         What is included
                       </h4>
-                      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                      <ul className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
                         {service.highlights.map((item) => (
                           <li
                             key={item}
-                            className="flex items-center gap-3 text-sm text-foreground/90 font-medium"
+                            className="text-foreground/90 flex items-center gap-3 text-sm font-medium"
                           >
-                            <span className="flex items-center justify-center size-5 rounded-full border border-primary/30 text-primary shrink-0">
+                            <span className="border-primary/30 text-primary flex size-5 shrink-0 items-center justify-center rounded-full border">
                               <svg
                                 className="size-3"
                                 fill="none"
@@ -93,10 +89,10 @@ export default function WhatWeBuildPage() {
                     <div className="pt-2">
                       <Link
                         href="/contact"
-                        className="inline-flex items-center gap-1.5 text-base font-semibold text-foreground hover:text-primary transition-colors group/cta"
+                        className="text-foreground hover:text-primary group/cta inline-flex items-center gap-1.5 text-base font-semibold transition-colors"
                       >
                         Discuss {service.title}
-                        <span className="transition-transform duration-200 group-hover/cta:translate-x-1 font-normal">
+                        <span className="font-normal transition-transform duration-200 group-hover/cta:translate-x-1">
                           &gt;
                         </span>
                       </Link>
@@ -104,23 +100,23 @@ export default function WhatWeBuildPage() {
                   </div>
 
                   {/* Image Column: Styled with premium 3D layered card layout to match Industries exactly! */}
-                  <div className="flex-1 w-full max-w-2xl">
+                  <div className="w-full max-w-2xl flex-1">
                     <div className="relative w-full">
                       {/* Main Premium Card holding the showcase image */}
-                      <div className="relative overflow-hidden rounded-[32px] border border-primary/15 bg-card/90 p-4 z-10">
-                        <div className="relative overflow-hidden rounded-[24px] aspect-[4/3] w-full">
+                      <div className="border-primary/15 bg-card/90 relative z-10 overflow-hidden rounded-[32px] border p-4">
+                        <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[24px]">
                           <img
                             src={service.thumbnail_src}
                             alt={service.title}
                             className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
                             loading="lazy"
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent pointer-events-none" />
+                          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
                         </div>
                       </div>
 
                       {/* 3D Offset layered bottom card peeking from the bottom */}
-                      <div className="absolute -bottom-3 left-[3%] right-[3%] h-12 bg-primary/15 dark:bg-primary/25 rounded-b-[28px] z-0 border-x border-b border-primary/10 pointer-events-none" />
+                      <div className="bg-primary/15 dark:bg-primary/25 border-primary/10 pointer-events-none absolute right-[3%] -bottom-3 left-[3%] z-0 h-12 rounded-b-[28px] border-x border-b" />
                     </div>
                   </div>
                 </div>
@@ -131,10 +127,10 @@ export default function WhatWeBuildPage() {
       </div>
 
       {/* 3. Reusable Process Section */}
-      <ProcessSection className="border-t border-primary/10 mt-16 sm:mt-24 lg:mt-32" />
+      <ProcessSection className="border-primary/10 mt-16 border-t sm:mt-24 lg:mt-32" />
 
       {/* 4. Home CTA Section */}
-      <HomeCtaSection className="border-t border-primary/10" />
+      <HomeCtaSection className="border-primary/10 border-t" />
     </main>
   );
 }

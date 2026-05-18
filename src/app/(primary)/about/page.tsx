@@ -1,11 +1,12 @@
+import { BrandsSection } from "@/components/sections/brands-section";
+import { PageContactSection } from "@/components/sections/contact-section-section";
+import { FaqSection } from "@/components/sections/faqs-section";
+import { GalleryMarqueeSection } from "@/components/sections/gallery-marquee-section";
+import { OurMissionSection } from "@/components/sections/our-mission-section";
 import { PageHeader } from "@/components/sections/page-header-section";
-import { BrandsSection } from "@/components/_primary_/home-page/brands-section";
-import { AboutMission } from "@/components/sections/about-mission";
-import { AboutStory } from "@/components/sections/about-story";
-import { AboutTeam } from "@/components/sections/about-team";
-import { AboutGalleryMarquee } from "@/components/sections/about-gallery-marquee";
-import { PageFaqSection } from "@/components/sections/page-faq-section";
-import { PageContactSection } from "@/components/sections/page-contact-section";
+import { StorySection } from "@/components/sections/story-section";
+import { TeamSection } from "@/components/sections/team-section";
+import { FAQS_DATA } from "@/data/faqs.data";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -24,18 +25,18 @@ export default function AboutPage() {
       />
 
       {/* Legacy order: Brands -> Mission -> Story -> Team -> Gallery -> FAQ -> Contact */}
-      
+
       <div className="pt-8">
         <BrandsSection />
       </div>
 
-      <AboutMission />
-      <AboutStory />
-      <AboutTeam />
-      <AboutGalleryMarquee />
-      
+      <OurMissionSection />
+      <StorySection />
+      <TeamSection />
+      <GalleryMarqueeSection />
+
       <div className="container pb-16 lg:pb-24">
-        <PageFaqSection />
+        <FaqSection data={FAQS_DATA} />
       </div>
 
       <PageContactSection />

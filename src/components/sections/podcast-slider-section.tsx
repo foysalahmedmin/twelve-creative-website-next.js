@@ -1,27 +1,33 @@
 "use client";
 
+import { ScrollReveal } from "@/components/common/scroll-reveal";
+import { CenteredSectionHeader } from "@/components/common/section-label";
 import {
-  useLayoutEffect,
-  useRef,
-  useState,
-  useCallback,
-  useEffect,
-  useMemo,
-} from "react";
+  PODCAST_SLIDER_DATA,
+  type TPodcastSliderData,
+} from "@/data/podcast-slider.data";
+import { cn } from "@/lib/utils";
 import { gsap } from "gsap";
 import { Draggable } from "gsap/dist/Draggable";
-import dynamic from "next/dynamic";
 import { Play } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { CenteredSectionHeader } from "@/components/common/section-label";
-import { ScrollReveal } from "@/components/common/scroll-reveal";
+import dynamic from "next/dynamic";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 // Need to register Draggable in browser context
 if (typeof window !== "undefined") {
   gsap.registerPlugin(Draggable);
 }
 
-const ReactPlayer = dynamic(() => import("react-player"), { ssr: false }) as any;
+const ReactPlayer = dynamic(() => import("react-player"), {
+  ssr: false,
+}) as any;
 
 type Layout = {
   baseW: number;
@@ -36,17 +42,14 @@ type Layout = {
 
 export interface PodcastSliderProps {
   className?: string;
-  data?: any[];
+  data?: Partial<TPodcastSliderData>;
 }
 
-const DEFAULT_SLIDES = [
-  { video_url: "https://www.youtube.com/watch?v=VAz0GU6B9Yg", image_url: "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=768&h=512&fit=crop" },
-  { video_url: "https://www.youtube.com/watch?v=VAz0GU6B9Yg", image_url: "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=768&h=512&fit=crop" },
-  { video_url: "https://www.youtube.com/watch?v=VAz0GU6B9Yg", image_url: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=768&h=512&fit=crop" },
-  { video_url: "https://www.youtube.com/watch?v=VAz0GU6B9Yg", image_url: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=768&h=512&fit=crop" },
-];
-
-export const PodcastSlider = ({ className, data = DEFAULT_SLIDES }: PodcastSliderProps) => {
+export const PodcastSliderSection = ({
+  className,
+  data = PODCAST_SLIDER_DATA,
+}: PodcastSliderProps) => {
+  const { label, title, description, slides = [] } = data || {};
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
@@ -62,7 +65,7 @@ export const PodcastSlider = ({ className, data = DEFAULT_SLIDES }: PodcastSlide
 
   const EASE = "power4.out";
   const DUR = 1.0;
-  const len = data?.length ?? 0;
+  const len = slides?.length ?? 0;
 
   const [layout, setLayout] = useState<Layout>({
     baseW: 688,
@@ -164,98 +167,123 @@ export const PodcastSlider = ({ className, data = DEFAULT_SLIDES }: PodcastSlide
       const el = slidesRef.current[i];
       if (!el) continue;
 
-      gsap.set(el, { x: 0, y: 0, scaleX: 1, scaleY: 1, opacity: 1, rotateY: 0 });
+      gsap.set(el, {
+        x: 0,
+        y: 0,
+        scaleX: 1,
+        scaleY: 1,
+        opacity: 1,
+        rotateY: 0,
+      });
 
-      if (!s.x[i]) s.x[i] = gsap.quickTo(el, "x", { duration: DUR, ease: EASE });
-      if (!s.y[i]) s.y[i] = gsap.quickTo(el, "y", { duration: DUR, ease: EASE });
-      if (!s.scaleX[i]) s.scaleX[i] = gsap.quickTo(el, "scaleX", { duration: DUR, ease: EASE });
-      if (!s.scaleY[i]) s.scaleY[i] = gsap.quickTo(el, "scaleY", { duration: DUR, ease: EASE });
-      if (!s.opacity[i]) s.opacity[i] = gsap.quickTo(el, "opacity", { duration: DUR, ease: EASE });
-      if (!s.rotateY[i]) s.rotateY[i] = gsap.quickTo(el, "rotateY", { duration: DUR, ease: EASE });
+      if (!s.x[i])
+        s.x[i] = gsap.quickTo(el, "x", { duration: DUR, ease: EASE });
+      if (!s.y[i])
+        s.y[i] = gsap.quickTo(el, "y", { duration: DUR, ease: EASE });
+      if (!s.scaleX[i])
+        s.scaleX[i] = gsap.quickTo(el, "scaleX", { duration: DUR, ease: EASE });
+      if (!s.scaleY[i])
+        s.scaleY[i] = gsap.quickTo(el, "scaleY", { duration: DUR, ease: EASE });
+      if (!s.opacity[i])
+        s.opacity[i] = gsap.quickTo(el, "opacity", {
+          duration: DUR,
+          ease: EASE,
+        });
+      if (!s.rotateY[i])
+        s.rotateY[i] = gsap.quickTo(el, "rotateY", {
+          duration: DUR,
+          ease: EASE,
+        });
     }
   }, [len]);
 
-  const positionSlides = useCallback((idx: number) => {
-    if (!isInitialized || len === 0) return;
+  const positionSlides = useCallback(
+    (idx: number) => {
+      if (!isInitialized || len === 0) return;
 
-    ensureSetters();
-    const s = settersRef.current!;
-    const L = layoutRef.current;
+      ensureSetters();
+      const s = settersRef.current!;
+      const L = layoutRef.current;
 
-    for (let i = 0; i < len; i++) {
-      const slide = slidesRef.current[i];
-      if (!slide) continue;
+      for (let i = 0; i < len; i++) {
+        const slide = slidesRef.current[i];
+        if (!slide) continue;
 
-      let rel = i - (idx % len);
-      if (rel > len / 2) rel -= len;
-      if (rel < -len / 2) rel += len;
+        let rel = i - (idx % len);
+        if (rel > len / 2) rel -= len;
+        if (rel < -len / 2) rel += len;
 
-      let x = rel * L.stepX;
-      let y = 0;
-      let scaleX = 0.001;
-      let scaleY = 0.001;
-      let opacity = 0;
-      let rotateY = 0;
-      let zIndex = 0;
+        let x = rel * L.stepX;
+        let y = 0;
+        let scaleX = 0.001;
+        let scaleY = 0.001;
+        let opacity = 0;
+        let rotateY = 0;
+        let zIndex = 0;
 
-      if (Math.abs(rel) < 0.25) {
-        x = 0;
-        y = 0;
-        scaleX = 1;
-        scaleY = 1;
-        opacity = 1;
-        rotateY = 0;
-        zIndex = 30;
-      } else if (Math.abs(rel) <= 1.25) {
-        const dir = rel > 0 ? 1 : -1;
-        x = dir * L.sideX;
-        y = dir > 0 ? -L.sideY : L.sideY;
-        scaleX = L.sideScaleX;
-        scaleY = L.sideScaleY;
-        opacity = 0.86;
-        rotateY = dir * -18;
-        zIndex = 20;
-      } else {
-        const dir = rel > 0 ? 1 : -1;
-        x = dir * L.offscreenX;
-        y = 0;
-        scaleX = 0.001;
-        scaleY = 0.001;
-        opacity = 0;
-        rotateY = 0;
-        zIndex = 0;
+        if (Math.abs(rel) < 0.25) {
+          x = 0;
+          y = 0;
+          scaleX = 1;
+          scaleY = 1;
+          opacity = 1;
+          rotateY = 0;
+          zIndex = 30;
+        } else if (Math.abs(rel) <= 1.25) {
+          const dir = rel > 0 ? 1 : -1;
+          x = dir * L.sideX;
+          y = dir > 0 ? -L.sideY : L.sideY;
+          scaleX = L.sideScaleX;
+          scaleY = L.sideScaleY;
+          opacity = 0.86;
+          rotateY = dir * -18;
+          zIndex = 20;
+        } else {
+          const dir = rel > 0 ? 1 : -1;
+          x = dir * L.offscreenX;
+          y = 0;
+          scaleX = 0.001;
+          scaleY = 0.001;
+          opacity = 0;
+          rotateY = 0;
+          zIndex = 0;
+        }
+
+        slide.style.zIndex = String(zIndex);
+        s.x[i](x);
+        s.y[i](y);
+        s.scaleX[i](scaleX);
+        s.scaleY[i](scaleY);
+        s.opacity[i](opacity);
+        s.rotateY[i](rotateY);
       }
 
-      slide.style.zIndex = String(zIndex);
-      s.x[i](x);
-      s.y[i](y);
-      s.scaleX[i](scaleX);
-      s.scaleY[i](scaleY);
-      s.opacity[i](opacity);
-      s.rotateY[i](rotateY);
-    }
-
-    if (containerRef.current) {
-      gsap.set(containerRef.current, { x: 0, y: 0 });
-    }
-  }, [len, ensureSetters, isInitialized]);
+      if (containerRef.current) {
+        gsap.set(containerRef.current, { x: 0, y: 0 });
+      }
+    },
+    [len, ensureSetters, isInitialized],
+  );
 
   const nextSlide = useCallback(() => setCurrentIndex((p) => p + 1), []);
   const prevSlide = useCallback(() => setCurrentIndex((p) => p - 1), []);
 
-  const handleSlideClick = useCallback((index: number) => {
-    if (len === 0) return;
-    const safe = ((index % len) + len) % len;
-    const center = ((currentIndex % len) + len) % len;
+  const handleSlideClick = useCallback(
+    (index: number) => {
+      if (len === 0) return;
+      const safe = ((index % len) + len) % len;
+      const center = ((currentIndex % len) + len) % len;
 
-    if (safe === center) {
-      setIsPlaying((prev) => !prev);
-    } else {
-      setIsPlaying(false);
-      setCurrentIndex((p) => p + (safe - center));
-      setTimeout(() => setIsPlaying(true), 600);
-    }
-  }, [currentIndex, len]);
+      if (safe === center) {
+        setIsPlaying((prev) => !prev);
+      } else {
+        setIsPlaying(false);
+        setCurrentIndex((p) => p + (safe - center));
+        setTimeout(() => setIsPlaying(true), 600);
+      }
+    },
+    [currentIndex, len],
+  );
 
   const handleVideoReady = useCallback((index: number) => {
     setVideoReady((prev) => {
@@ -361,50 +389,73 @@ export const PodcastSlider = ({ className, data = DEFAULT_SLIDES }: PodcastSlide
     if (len === 0) return;
     playerRefs.current.forEach((player, index) => {
       if (player && index !== ((currentIndex % len) + len) % len) {
-        try { player.getInternalPlayer()?.pause(); } catch (e) {}
+        try {
+          player.getInternalPlayer()?.pause();
+        } catch (e) {}
       }
     });
 
     if (isPlaying) {
-      const currentPlayer = playerRefs.current[((currentIndex % len) + len) % len];
+      const currentPlayer =
+        playerRefs.current[((currentIndex % len) + len) % len];
       if (currentPlayer && videoReady[((currentIndex % len) + len) % len]) {
         setTimeout(() => {
-          currentPlayer.getInternalPlayer()?.play().catch(() => {});
+          currentPlayer
+            .getInternalPlayer()
+            ?.play()
+            .catch(() => {});
         }, 100);
       }
     }
   }, [currentIndex, isPlaying, len, videoReady]);
 
-  const safeCurrentIndex = useMemo(() => ((currentIndex % len) + len) % len, [currentIndex, len]);
+  const safeCurrentIndex = useMemo(
+    () => ((currentIndex % len) + len) % len,
+    [currentIndex, len],
+  );
 
   return (
-    <section className={cn("container py-16 sm:py-20 lg:py-24 overflow-hidden", className)}>
+    <section
+      className={cn(
+        "container overflow-hidden py-16 sm:py-20 lg:py-24",
+        className,
+      )}
+    >
       <ScrollReveal animation="fade-in-up" durationMs={800}>
         <CenteredSectionHeader
-          label="Visual Assets"
-          title="Premium Show Packaging Slides"
-          description="Explore some of our beautiful cover art, social cards, and branding templates."
+          label={label || "Visual Assets"}
+          title={title || "Premium Show Packaging Slides"}
+          description={
+            description ||
+            "Explore some of our beautiful cover art, social cards, and branding templates."
+          }
           className="mb-10 sm:mb-16"
         />
       </ScrollReveal>
-      
-      <ScrollReveal animation="fade-in-up" delayMs={200} className="w-full relative mt-8 lg:mt-16">
+
+      <ScrollReveal
+        animation="fade-in-up"
+        delayMs={200}
+        className="relative mt-8 w-full lg:mt-16"
+      >
         <div className="flex items-center justify-center overflow-hidden">
           <div className="w-full px-2 sm:px-4">
             <div
               ref={containerRef}
-              className="relative h-65 sm:h-80 md:h-[400px] lg:h-[460px] xl:h-[480px] cursor-grab active:cursor-grabbing touch-none"
+              className="relative h-65 cursor-grab touch-none active:cursor-grabbing sm:h-80 md:h-[400px] lg:h-[460px] xl:h-[480px]"
               style={{ perspective: "2000px" }}
             >
-              <div className="relative h-full flex items-center justify-center">
-                {data.map((item: any, index: number) => {
+              <div className="relative flex h-full items-center justify-center">
+                {slides.map((item: any, index: number) => {
                   const isCenterSlide = safeCurrentIndex === index;
                   return (
                     <div
                       key={index}
-                      ref={(el) => { slidesRef.current[index] = el; }}
+                      ref={(el) => {
+                        slidesRef.current[index] = el;
+                      }}
                       onClick={() => handleSlideClick(index)}
-                      className="absolute cursor-pointer select-none touch-none"
+                      className="absolute cursor-pointer touch-none select-none"
                       style={{
                         transformStyle: "preserve-3d",
                         backfaceVisibility: "hidden",
@@ -412,28 +463,48 @@ export const PodcastSlider = ({ className, data = DEFAULT_SLIDES }: PodcastSlide
                       }}
                     >
                       <div
-                        className="relative overflow-hidden bg-black rounded-[20px] shadow-lg"
+                        className="relative overflow-hidden rounded-[20px] bg-black shadow-lg"
                         style={{ width: layout.baseW, height: layout.baseH }}
                       >
                         <ReactPlayer
                           url={item?.video_url}
                           light={item?.image_url}
                           playIcon={
-                            <button className="md:w-16 w-14 md:h-10 h-8 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center items-center lg:rounded-xl rounded-lg bg-white/20 backdrop-blur-[2px] group hover:scale-105 transition-transform duration-200">
-                              <Play fill="#fff" strokeWidth={0} className="size-4 md:size-6" />
+                            <button className="group absolute top-1/2 left-1/2 flex h-8 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-lg bg-white/20 backdrop-blur-[2px] transition-transform duration-200 hover:scale-105 md:h-10 md:w-16 lg:rounded-xl">
+                              <Play
+                                fill="#fff"
+                                strokeWidth={0}
+                                className="size-4 md:size-6"
+                              />
                             </button>
                           }
-                          ref={(player: any) => { playerRefs.current[index] = player; }}
+                          ref={(player: any) => {
+                            playerRefs.current[index] = player;
+                          }}
                           playing={isCenterSlide && isPlaying}
                           controls={true}
                           width="100%"
                           height="100%"
-                          style={{ pointerEvents: isDragging ? "none" : "auto" }}
+                          style={{
+                            pointerEvents: isDragging ? "none" : "auto",
+                          }}
                           onReady={() => handleVideoReady(index)}
                           onPlay={handleVideoPlay}
-                          onPause={() => { if (isCenterSlide) setIsPlaying(false); }}
-                          onEnded={() => { if (isCenterSlide) setIsPlaying(false); }}
-                          config={{ youtube: { playerVars: { modestbranding: 1, showinfo: 0, rel: 0 } } }}
+                          onPause={() => {
+                            if (isCenterSlide) setIsPlaying(false);
+                          }}
+                          onEnded={() => {
+                            if (isCenterSlide) setIsPlaying(false);
+                          }}
+                          config={{
+                            youtube: {
+                              playerVars: {
+                                modestbranding: 1,
+                                showinfo: 0,
+                                rel: 0,
+                              },
+                            },
+                          }}
                         />
                       </div>
                     </div>
@@ -448,4 +519,4 @@ export const PodcastSlider = ({ className, data = DEFAULT_SLIDES }: PodcastSlide
   );
 };
 
-export default PodcastSlider;
+export default PodcastSliderSection;

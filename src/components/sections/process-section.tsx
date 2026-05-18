@@ -1,7 +1,7 @@
 "use client";
 
 import { CenteredSectionHeader } from "@/components/common/section-label";
-import { PROCESS_DATA, type TProcessIconKey } from "@/data/process.data";
+import { TProcessData, type TProcessIconKey } from "@/data/process.data";
 import { cn } from "@/lib/utils";
 import {
   Compass01Icon,
@@ -24,16 +24,16 @@ const PROCESS_ICON_MAP: Record<TProcessIconKey, typeof Search01Icon> = {
   improve: Refresh01Icon,
 };
 
-const PROCESS_IMAGES: Record<string, string> = {
-  "step-1": "/assets/discover.png",
-  "step-2": "/assets/location.png",
-  "step-3": "/assets/edit.png",
-  "step-4": "/assets/file-video.png",
-  "step-5": "/assets/review.png",
-  "step-6": "/assets/faq.png",
-};
+export interface PageProcessSectionProps {
+  data: TProcessData;
+  className?: string;
+}
 
-export const ProcessSection = ({ className }: { className?: string }) => {
+export const ProcessSection = ({
+  data,
+  className,
+}: Partial<PageProcessSectionProps>) => {
+  const { label, title, description, process_steps = [] } = data || {};
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
@@ -66,38 +66,41 @@ export const ProcessSection = ({ className }: { className?: string }) => {
   };
 
   return (
-    <section
-      className={cn("bg-background py-20 sm:py-24 lg:py-32", className)}
-    >
+    <section className={cn("bg-background py-20 sm:py-24 lg:py-32", className)}>
       <div className="container">
         <CenteredSectionHeader
-          label="Our Process"
-          title="A clear path from understanding to execution."
-          description="A tight process. Zero confusion. Real results — built around what the business actually needs to move."
+          label={label || "Our Process"}
+          title={title || "A clear path from understanding to execution."}
+          description={
+            description ||
+            "A tight process. Zero confusion. Real results — built around what the business actually needs to move."
+          }
         />
 
-        <div className="mt-12 flex flex-col gap-12 lg:flex-row lg:mt-20">
+        <div className="mt-12 flex flex-col gap-12 lg:mt-20 lg:flex-row">
           {/* Left: Sticky Image Showcase (hidden on small/medium screens, sticky on desktop) */}
-          <div className="hidden lg:block lg:sticky lg:top-36 lg:self-start max-w-[580px] w-full h-[620px] rounded-3xl overflow-hidden shadow-2xl">
-            <div className="relative w-full h-full from-primary/10 to-primary/5 bg-linear-to-br ring-primary/15 ring-1 rounded-3xl overflow-hidden">
-              {PROCESS_DATA.map((step, index) => (
+          <div className="hidden h-[620px] w-full max-w-[580px] overflow-hidden rounded-3xl shadow-2xl lg:sticky lg:top-36 lg:block lg:self-start">
+            <div className="from-primary/10 to-primary/5 ring-primary/15 relative h-full w-full overflow-hidden rounded-3xl bg-linear-to-br ring-1">
+              {process_steps?.map((step, index) => (
                 <div
                   key={step.id}
                   className={cn(
                     "absolute inset-0 transition-opacity duration-700 ease-in-out",
-                    index === activeIndex ? "opacity-100 z-10" : "opacity-0 z-0"
+                    index === activeIndex
+                      ? "z-10 opacity-100"
+                      : "z-0 opacity-0",
                   )}
                 >
                   <Image
-                    src={PROCESS_IMAGES[step.id] || "/assets/discover.png"}
+                    src={step.image}
                     alt={step.title}
                     fill
                     sizes="(min-width: 1024px) 50vw, 100vw"
-                    className="object-cover rounded-3xl transition-transform duration-700 ease-out scale-100 hover:scale-105"
+                    className="scale-100 rounded-3xl object-cover transition-transform duration-700 ease-out hover:scale-105"
                     priority={index === 0}
                   />
                   {/* Subtle glass overlay gradient at bottom */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent pointer-events-none" />
+                  <div className="from-background/40 pointer-events-none absolute inset-0 bg-linear-to-t via-transparent to-transparent" />
                 </div>
               ))}
             </div>
@@ -105,7 +108,7 @@ export const ProcessSection = ({ className }: { className?: string }) => {
 
           {/* Right: Step cards list */}
           <div className="flex-1 space-y-6">
-            {PROCESS_DATA.map((step, index) => {
+            {process_steps?.map((step, index) => {
               const Icon = PROCESS_ICON_MAP[step.icon];
               const isActive = index === activeIndex;
 
@@ -119,9 +122,9 @@ export const ProcessSection = ({ className }: { className?: string }) => {
                     onClick={() => scrollToStep(index)}
                     className={cn(
                       "group/step w-full text-left transition-all duration-300",
-                      "rounded-3xl border p-6 sm:p-8 cursor-pointer",
+                      "cursor-pointer rounded-3xl border p-6 sm:p-8",
                       isActive
-                        ? "from-primary/10 to-card border-primary/30 bg-linear-to-br shadow-xl ring-1 ring-primary/10 scale-[102%]"
+                        ? "from-primary/10 to-card border-primary/30 ring-primary/10 scale-[102%] bg-linear-to-br shadow-xl ring-1"
                         : "border-border/60 bg-card hover:border-primary/20 hover:bg-primary/2",
                     )}
                     aria-pressed={isActive}
@@ -131,7 +134,7 @@ export const ProcessSection = ({ className }: { className?: string }) => {
                         className={cn(
                           "flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl transition-all duration-300",
                           isActive
-                            ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-110"
+                            ? "bg-primary text-primary-foreground shadow-primary/20 scale-110 shadow-lg"
                             : "bg-primary/10 text-primary group-hover/step:scale-105",
                         )}
                       >
@@ -142,7 +145,9 @@ export const ProcessSection = ({ className }: { className?: string }) => {
                           <span
                             className={cn(
                               "text-xs font-bold tracking-widest uppercase transition-colors duration-300",
-                              isActive ? "text-primary" : "text-muted-foreground",
+                              isActive
+                                ? "text-primary"
+                                : "text-muted-foreground",
                             )}
                           >
                             STEP {step.index}
@@ -158,17 +163,19 @@ export const ProcessSection = ({ className }: { className?: string }) => {
                         {/* Collapsible Image for mobile view only */}
                         <div
                           className={cn(
-                            "lg:hidden overflow-hidden rounded-2xl transition-all duration-500 ease-in-out mt-4",
-                            isActive ? "max-h-[350px] opacity-100 scale-100" : "max-h-0 opacity-0 scale-95"
+                            "mt-4 overflow-hidden rounded-2xl transition-all duration-500 ease-in-out lg:hidden",
+                            isActive
+                              ? "max-h-[350px] scale-100 opacity-100"
+                              : "max-h-0 scale-95 opacity-0",
                           )}
                         >
-                          <div className="relative aspect-16/10 w-full rounded-2xl overflow-hidden border border-border/40">
+                          <div className="border-border/40 relative aspect-16/10 w-full overflow-hidden rounded-2xl border">
                             <Image
-                              src={PROCESS_IMAGES[step.id] || "/assets/discover.png"}
+                              src={step.image}
                               alt={step.title}
                               fill
                               sizes="100vw"
-                              className="object-cover rounded-2xl"
+                              className="rounded-2xl object-cover"
                             />
                           </div>
                         </div>

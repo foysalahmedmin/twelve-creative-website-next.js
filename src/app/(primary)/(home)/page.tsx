@@ -1,15 +1,19 @@
-import { BrandsSection } from "@/components/_primary_/home-page/brands-section";
 import { DifferenceSection } from "@/components/_primary_/home-page/difference-section";
-import { FaqSection } from "@/components/_primary_/home-page/faq-section";
 import { FeaturedProjectsSection } from "@/components/_primary_/home-page/featured-projects-section";
-import { HeroSection } from "@/components/_primary_/home-page/hero-section";
 import { HomeCtaSection } from "@/components/_primary_/home-page/home-cta-section";
 import { IndustriesSection } from "@/components/_primary_/home-page/industries-section";
-import { ProcessSection } from "@/components/_primary_/home-page/process-section";
 import { ServicesSection } from "@/components/_primary_/home-page/services-section";
-import { TestimonialSection } from "@/components/_primary_/home-page/testimonial-section";
-import { WhyChooseUsSection } from "@/components/_primary_/home-page/why-choose-us-section";
+import { BrandsSection } from "@/components/sections/brands-section";
+import FaqSection from "@/components/sections/faqs-section";
+import { HeroSection } from "@/components/sections/hero-section";
+import { ProcessSection } from "@/components/sections/process-section";
+import { TestimonialSection } from "@/components/sections/testimonial-section";
+import { WhyChooseUsSection } from "@/components/sections/why-choose-us-section";
 import { SITE } from "@/config/site";
+import { FAQS_DATA } from "@/data/faqs.data";
+import { PROCESS_DATA } from "@/data/process.data";
+import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
+import { WHY_CHOOSE_US_DATA } from "@/data/why-choose-us.data";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -30,12 +34,12 @@ export default function HomePage() {
       <BrandsSection />
       <FeaturedProjectsSection />
       <ServicesSection />
-      <TestimonialSection />
-      <ProcessSection />
+      <TestimonialSection data={TESTIMONIALS_DATA} />
+      <ProcessSection data={PROCESS_DATA} />
       <DifferenceSection />
       <IndustriesSection />
-      <WhyChooseUsSection />
-      <FaqSection />
+      <WhyChooseUsSection data={WHY_CHOOSE_US_DATA} />
+      <FaqSection data={FAQS_DATA} />
       <HomeCtaSection />
     </div>
   );

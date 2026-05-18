@@ -4,7 +4,7 @@ import { TestimonialCard } from "@/components/cards/testimonial-card";
 import { VideoTestimonialCard } from "@/components/cards/video-testimonial-card";
 import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { CenteredSectionHeader } from "@/components/common/section-label";
-import { TESTIMONIALS_DATA, type TTestimonial } from "@/data/testimonials.data";
+import { TESTIMONIALS_DATA, type TTestimonial, type TTestimonialData } from "@/data/testimonials.data";
 import { cn } from "@/lib/utils";
 import { Cancel01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -16,14 +16,20 @@ const ReactPlayer = dynamic(() => import("react-player"), {
   ssr: false,
 }) as any;
 
-export const TestimonialSection = ({ className }: { className?: string }) => {
+export interface PageTestimonialSectionProps {
+  data: TTestimonialData;
+  className?: string;
+}
+
+export const TestimonialSection = ({ data = TESTIMONIALS_DATA, className }: Partial<PageTestimonialSectionProps>) => {
+  const { label, title, description, testimonials = [] } = data || {};
   const [activeVideo, setActiveVideo] = useState<TTestimonial | null>(null);
 
   // Filter video & text reviews
-  const videoTestimonials = TESTIMONIALS_DATA.filter(
+  const videoTestimonials = testimonials.filter(
     (t) => t.category === "video_message",
   );
-  const textTestimonials = TESTIMONIALS_DATA.filter(
+  const textTestimonials = testimonials.filter(
     (t) => t.category === "message",
   );
 
@@ -54,9 +60,9 @@ export const TestimonialSection = ({ className }: { className?: string }) => {
 
           {/* Header styled exactly like Our Works */}
           <CenteredSectionHeader
-            label="Testimonials"
-            title="What Our Clients Say"
-            description="1,000+ creators trust us to edit their videos."
+            label={label || "Testimonials"}
+            title={title || "What Our Clients Say"}
+            description={description || "1,000+ creators trust us to edit their videos."}
             className="relative z-10 mb-0 lg:mb-0"
           />
 

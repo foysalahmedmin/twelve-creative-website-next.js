@@ -9,7 +9,14 @@ export interface TTestimonial {
   thumbnail?: string;
 }
 
-export const TESTIMONIALS_DATA: TTestimonial[] = [
+export type TTestimonialData = {
+  label: string;
+  title: string;
+  description: string;
+  testimonials: TTestimonial[];
+};
+
+export const TESTIMONIALS: TTestimonial[] = [
   {
     id: "1",
     name: "Ali Abdaal",
@@ -80,3 +87,10 @@ export const TESTIMONIALS_DATA: TTestimonial[] = [
     message: "Consistency is everything in the content game, and Twelve Creative delivers peak quality every single week without exception.",
   },
 ];
+
+export const TESTIMONIALS_DATA: TTestimonialData = {
+  label: "Testimonials",
+  title: "What Our Clients Say",
+  description: "1,000+ creators trust us to edit their videos.",
+  testimonials: TESTIMONIALS,
+};
