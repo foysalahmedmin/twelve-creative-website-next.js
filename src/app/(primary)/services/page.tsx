@@ -4,8 +4,6 @@ import { PageHeader } from "@/components/sections/page-header-section";
 import { PageContactSection } from "@/components/sections/contact-section-section";
 import { FaqSection } from "@/components/sections/faqs-section";
 import { PodcastInsight } from "@/components/sections/podcast-insight";
-import { PodcastSliderSection } from "@/components/sections/podcast-slider-section";
-import { PodcastVideoSwiperSection } from "@/components/sections/podcast-video-swiper-section";
 import { PricingSection } from "@/components/sections/pricing-section";
 import { SaasInsight } from "@/components/sections/saas-insight";
 import { ServiceServicesSection } from "@/components/sections/service-services-section";
@@ -14,8 +12,6 @@ import { VerticalMarqueeSlider } from "@/components/sections/vertical-marquee-sl
 
 // Import Static Mock Datasets
 import { CANVAS_PODCAST_INSIGHT_DATA } from "@/data/podcast-insight.data";
-import { PODCAST_SLIDER_DATA } from "@/data/podcast-slider.data";
-import { PODCAST_VIDEO_DATA } from "@/data/podcast-video-swiper.data";
 import { PRICING_DATA } from "@/data/pricing.data";
 import { SERVICE_SERVICES_DATA } from "@/data/service-services-section.data";
 import { CANVAS_PORTFOLIO_DATA } from "@/data/thumbnail-work-section.data";
@@ -97,16 +93,6 @@ export default function ServicesPage() {
           speed={30}
           pauseOnHover={true}
         />
-      </div>
-
-      {/* 8. Show Packaging Cover Slider (Swiper Coverflow) */}
-      <div className="border-primary/5 border-t pt-8">
-        <PodcastSliderSection data={PODCAST_SLIDER_DATA} />
-      </div>
-
-      {/* 9. Production Video Swiper (Scale Active Swiper) */}
-      <div className="border-primary/5 border-t pt-8">
-        <PodcastVideoSwiperSection data={PODCAST_VIDEO_DATA} />
       </div>
 
       {/* 10. Thumbnail Work Portfolio Grid */}
