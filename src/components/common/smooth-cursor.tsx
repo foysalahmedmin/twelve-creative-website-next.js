@@ -1,8 +1,10 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 
 export function SmoothFollowerCursor() {
+  const pathname = usePathname();
   const mousePosition = useRef({ x: 0, y: 0 });
   const dotPosition = useRef({ x: 0, y: 0 });
   const borderDotPosition = useRef({ x: 0, y: 0 });
@@ -89,6 +91,8 @@ export function SmoothFollowerCursor() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  if (pathname?.startsWith("/admin")) return null;
 
   return (
     <div

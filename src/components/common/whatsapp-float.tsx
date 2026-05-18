@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 
@@ -10,6 +11,7 @@ const WA_MESSAGE = encodeURIComponent(
 const WA_LINK = `https://wa.me/${WA_NUMBER}?text=${WA_MESSAGE}`;
 
 export function WhatsAppFloat() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [hasAutoOpened, setHasAutoOpened] = useState(false);
   const autoCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -54,6 +56,8 @@ export function WhatsAppFloat() {
     if (autoCloseTimer.current) clearTimeout(autoCloseTimer.current);
     setOpen((prev) => !prev);
   };
+
+  if (pathname?.startsWith("/admin")) return null;
 
   return (
     <div className="fixed bottom-6 right-5 sm:right-6 z-[9998] flex flex-col items-end gap-3">
