@@ -1,4 +1,3 @@
-import { IndustriesSection } from "@/components/_primary_/home-page/industries-section";
 import { AlternatingServicesSection } from "@/components/sections/alternating-services-section";
 import { CTASection } from "@/components/sections/cta-section";
 import { PageHeader } from "@/components/sections/page-header-section";
@@ -31,9 +30,6 @@ export default function IndustriesPage() {
         title="Built for businesses where trust, presentation, and follow-up matter."
         description="Twelve Creative works across industries where the buying decision depends on credibility, timing, taste, and a clear path to action."
       />
-
-      {/* Tabbed industries overview */}
-      <IndustriesSection />
 
       {/* Each industry in depth */}
       <AlternatingServicesSection data={INDUSTRY_ITEMS} />
