@@ -1,4 +1,3 @@
-import { AlternatingServicesSection } from "@/components/sections/alternating-services-section";
 import { BookingSection } from "@/components/sections/booking-section";
 import { BrandsSection } from "@/components/sections/brands-section";
 import { ContactInfoMapSection } from "@/components/sections/contact-info-map-section";
@@ -26,7 +25,6 @@ import { CTA_PROCESS } from "@/data/page-ctas.data";
 import { CANVAS_PODCAST_INSIGHT_DATA } from "@/data/podcast-insight.data";
 import { PROCESS_DATA } from "@/data/process.data";
 import { SERVICE_SERVICES_DATA } from "@/data/service-services-section.data";
-import { SERVICES_DATA } from "@/data/services.data";
 import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
 import { CANVAS_PORTFOLIO_DATA } from "@/data/thumbnail-work-section.data";
 import { CANVAS_MARQUEE_DATA } from "@/data/vertical-marquee.data";
@@ -61,8 +59,6 @@ export default function CanvasPage() {
       <WhyChooseUsSection data={WHY_CHOOSE_US_DATA} />
 
       <ServiceServicesSection data={SERVICE_SERVICES_DATA} />
-
-      <AlternatingServicesSection data={SERVICES_DATA} />
 
       <ProcessSection data={PROCESS_DATA} />
 

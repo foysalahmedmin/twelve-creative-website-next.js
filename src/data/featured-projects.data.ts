@@ -156,41 +156,6 @@ export const FEATURED_CATEGORIES: TFeaturedCategory[] = [
     ],
   },
   {
-    id: "reels",
-    label: "Reels & Shorts",
-    aspect: "reel",
-    projects: [
-      {
-        id: "r-1",
-        title: "Chef Q&A — 30s",
-        thumbnail_src:
-          "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=600&h=1067&fit=crop&auto=format",
-        video_src: PLACEHOLDER_VIDEO,
-      },
-      {
-        id: "r-2",
-        title: "Founder Daily — Aviation",
-        thumbnail_src:
-          "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=600&h=1067&fit=crop&auto=format",
-        video_src: PLACEHOLDER_VIDEO,
-      },
-      {
-        id: "r-3",
-        title: "Property Walkthrough — Reel",
-        thumbnail_src:
-          "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&h=1067&fit=crop&auto=format",
-        video_src: PLACEHOLDER_VIDEO,
-      },
-      {
-        id: "r-4",
-        title: "Dish Spotlight — 15s",
-        thumbnail_src:
-          "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&h=1067&fit=crop&auto=format",
-        video_src: PLACEHOLDER_VIDEO,
-      },
-    ],
-  },
-  {
     id: "founder",
     label: "Founder Content",
     aspect: "video",

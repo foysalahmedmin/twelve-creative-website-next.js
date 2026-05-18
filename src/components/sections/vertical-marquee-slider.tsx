@@ -1,7 +1,6 @@
 "use client";
 
-import { Play, X } from "lucide-react";
-import Image from "next/image";
+import { Play } from "lucide-react";
 import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import { cn } from "@/lib/utils";
@@ -83,7 +82,8 @@ export const VerticalMarqueeSlider: React.FC<VerticalMarqueeSliderProps> = ({
   if (!data || data.length === 0) return null;
 
   const doubled = [...data, ...data];
-  const itemHeight = 228 + 20;
+  // item width = 192px (w-48), aspect-[9/16] → height ≈ 341px, gap = 16px
+  const itemHeight = 341 + 16;
   const animationDuration = (data.length * itemHeight) / speed;
 
   const togglePause = (columnIndex: number, isPaused: boolean) => {
@@ -101,13 +101,13 @@ export const VerticalMarqueeSlider: React.FC<VerticalMarqueeSliderProps> = ({
     return (
       <div
         key={colKey}
-        className="relative h-[500px] md:h-[600px] overflow-hidden"
+        className="relative h-125 md:h-150 overflow-hidden"
         onMouseEnter={pauseOnHover ? () => togglePause(colKey, true) : undefined}
         onMouseLeave={pauseOnHover ? () => togglePause(colKey, false) : undefined}
       >
         <div
           className={cn(
-            "flex flex-col items-stretch gap-1 sm:gap-4 md:gap-5",
+            "flex flex-col items-stretch gap-4",
             isColumnPaused ? "animate-pause" : ""
           )}
           style={{
@@ -115,40 +115,24 @@ export const VerticalMarqueeSlider: React.FC<VerticalMarqueeSliderProps> = ({
           }}
         >
           {doubled.map((item, idx) => (
-            <React.Fragment key={idx}>
-              {item.video_url === "" || item.video_url === null ? (
-                // ── Image only ──────────────────────────────
-                <div className="relative w-38 sm:w-64 overflow-hidden rounded-lg md:w-52 h-20 xs:h-24 sm:h-32 md:h-33 mx-auto shrink-0">
-                  <Image
-                    src={item.image_url}
-                    alt={item.alt || ""}
-                    fill
-                    sizes="(max-width: 768px) 150px, 200px"
-                    className="object-cover"
-                  />
-                </div>
-              ) : (
-                // ── Video thumbnail (popup trigger) ──────────
-                <div
-                  className="w-38 sm:w-42.75 sm:h-57 md:w-42.75 h-67.5 md:h-57 overflow-hidden rounded-lg relative cursor-pointer shrink-0"
-                  onClick={() => setPopupUrl(item.video_url)}
-                >
-                  <img
-                    src={item.image_url}
-                    alt={item.alt || ""}
-                    className="w-full h-full object-cover"
-                  />
-                  {/* Play icon */}
-                  <button className="w-14 h-8 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center items-center rounded-lg text-white backdrop-blur-[2px] bg-white/20 group">
-                    <Play
-                      fill="#fff"
-                      strokeWidth={0}
-                      className="group-hover:scale-105 size-4 active:scale-90 duration-200 ease-in-out"
-                    />
-                  </button>
-                </div>
-              )}
-            </React.Fragment>
+            <div
+              key={idx}
+              className="relative w-40 sm:w-48 aspect-9/16 overflow-hidden rounded-xl cursor-pointer shrink-0"
+              onClick={() => setPopupUrl(item.video_url)}
+            >
+              <img
+                src={item.image_url}
+                alt={item.alt || ""}
+                className="w-full h-full object-cover"
+              />
+              <button className="w-14 h-8 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center items-center rounded-lg text-white backdrop-blur-[2px] bg-white/20 group">
+                <Play
+                  fill="#fff"
+                  strokeWidth={0}
+                  className="group-hover:scale-105 size-4 active:scale-90 duration-200 ease-in-out"
+                />
+              </button>
+            </div>
           ))}
         </div>
       </div>
@@ -164,20 +148,15 @@ export const VerticalMarqueeSlider: React.FC<VerticalMarqueeSliderProps> = ({
 
       <div
         className={cn(
-          "flex justify-center items-center gap-2 xs:gap-2.5 sm:gap-3 md:gap-3 w-full mx-auto",
-          data?.[0]?.video_url
-            ? "max-w-md md:max-w-[513px]"
-            : "max-w-md md:max-w-[468px]",
+          "flex justify-center items-center gap-3 sm:gap-4 w-full mx-auto max-w-xl md:max-w-3xl",
           className
         )}
       >
         <div className="shrink-0">{renderMarqueeColumn("up", 0)}</div>
         <div className="shrink-0">{renderMarqueeColumn("down", 1)}</div>
-        {data?.[0]?.video_url && (
-          <div className="hidden md:block shrink-0">
-            {renderMarqueeColumn("up", 2)}
-          </div>
-        )}
+        <div className="hidden md:block shrink-0">
+          {renderMarqueeColumn("up", 2)}
+        </div>
       </div>
 
       <style jsx global>{`

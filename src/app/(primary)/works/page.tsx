@@ -4,11 +4,9 @@ import { CenteredSectionHeader } from "@/components/common/section-label";
 import { BrandsSection } from "@/components/sections/brands-section";
 import { CTASection } from "@/components/sections/cta-section";
 import { PageHeader } from "@/components/sections/page-header-section";
-import { TestimonialSection } from "@/components/sections/testimonial-section";
 import { ThumbnailWorkSection } from "@/components/sections/thumbnail-work-section";
 import { VerticalMarqueeSlider } from "@/components/sections/vertical-marquee-slider";
 import { CTA_WORKS } from "@/data/page-ctas.data";
-import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
 import { CANVAS_PORTFOLIO_DATA } from "@/data/thumbnail-work-section.data";
 import { CANVAS_MARQUEE_DATA } from "@/data/vertical-marquee.data";
 import { WORKS_PAGE_MOCK_DATA } from "@/data/works.data";
@@ -66,11 +64,7 @@ export default function WorksPage() {
       </section>
 
       {/* Additional work showcase */}
-      <ThumbnailWorkSection works={CANVAS_PORTFOLIO_DATA} slug="work" />
-
-      {/* Client voices */}
-      <TestimonialSection data={TESTIMONIALS_DATA} />
-
+      <ThumbnailWorkSection works={CANVAS_PORTFOLIO_DATA} slug="works" />
       {/* CTA */}
       <CTASection data={CTA_WORKS} />
     </main>

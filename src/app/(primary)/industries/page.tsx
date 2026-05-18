@@ -1,5 +1,5 @@
-import { AlternatingServicesSection } from "@/components/sections/alternating-services-section";
 import { CTASection } from "@/components/sections/cta-section";
+import { IndustriesDetailSection } from "@/components/sections/industries-detail-section";
 import { PageHeader } from "@/components/sections/page-header-section";
 import { TestimonialSection } from "@/components/sections/testimonial-section";
 import { INDUSTRIES_DATA } from "@/data/industries.data";
@@ -14,14 +14,6 @@ export const metadata: Metadata = {
     "Twelve Creative works with hospitality, real estate, aviation, and professional service businesses that need stronger marketing structure.",
 };
 
-const INDUSTRY_ITEMS = INDUSTRIES_DATA.map((industry) => ({
-  id: industry.id,
-  title: industry.headline,
-  description: industry.description,
-  highlights: industry.work,
-  thumbnail_src: industry.image,
-}));
-
 export default function IndustriesPage() {
   return (
     <main className="bg-background min-h-screen">
@@ -32,7 +24,7 @@ export default function IndustriesPage() {
       />
 
       {/* Each industry in depth */}
-      <AlternatingServicesSection data={INDUSTRY_ITEMS} />
+      <IndustriesDetailSection data={INDUSTRIES_DATA} />
 
       {/* Client voices from these industries */}
       <TestimonialSection data={TESTIMONIALS_DATA} />

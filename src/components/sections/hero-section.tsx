@@ -46,7 +46,7 @@ export const HeroSection = ({ className }: { className?: string }) => {
 
         <div className="relative flex flex-col items-center justify-center gap-4 px-2 pt-32 pb-10 lg:gap-4 lg:pt-28">
           {/* Center column for badge + headline + description + CTAs */}
-          <div className="mx-auto flex max-w-[780px] flex-col items-center justify-center pt-10">
+          <div className="mx-auto flex max-w-195 flex-col items-center justify-center pt-10">
             {/* Trust badge */}
             <div
               className={cn(
@@ -107,15 +107,17 @@ export const HeroSection = ({ className }: { className?: string }) => {
           </div>
 
           {/* Video showcase */}
-          <div className="ring-foreground/10 relative mx-auto mt-8 aspect-video w-full max-w-7xl overflow-hidden rounded-2xl shadow-2xl ring-1 lg:mt-10 lg:rounded-[40px]">
-            <ReactPlayer
-              src={data.video.src}
-              controls
-              width="100%"
-              height="100%"
-              playsInline
-              style={{ width: "100%", height: "100%" }}
-            />
+          <div className="w-full px-4 lg:px-12">
+            <div className="ring-foreground/10 relative mx-auto mt-8 aspect-video w-full max-w-7xl overflow-hidden rounded-2xl shadow-2xl ring-1 lg:mt-10 lg:rounded-[40px]">
+              <ReactPlayer
+                src={data.video.src}
+                controls
+                width="100%"
+                height="100%"
+                playsInline
+                style={{ width: "100%", height: "100%" }}
+              />
+            </div>
           </div>
         </div>
       </div>
