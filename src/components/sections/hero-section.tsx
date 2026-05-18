@@ -26,7 +26,7 @@ export const HeroSection = ({ className }: { className?: string }) => {
   const data = HOME_HERO_DATA;
 
   return (
-    <section className={cn("relative container mb-10", className)}>
+    <section className={cn("relative container mt-6 mb-10", className)}>
       {/* Outer rounded hero card with background gradient */}
       <div
         className={cn(
