@@ -10,6 +10,7 @@ import { TestimonialSection } from "@/components/sections/testimonial-section";
 import { FAQS_DATA } from "@/data/faqs.data";
 import { CTA_ABOUT } from "@/data/page-ctas.data";
 import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
+import { getPublicTestimonialsForSection } from "@/lib/api/testimonials";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -18,7 +19,13 @@ export const metadata: Metadata = {
     "Twelve Creative was built from the belief that creative work should be connected to the business it serves. Led by Carlos Doce.",
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const testimonialsData = await getPublicTestimonialsForSection({
+    label: TESTIMONIALS_DATA.label,
+    title: TESTIMONIALS_DATA.title,
+    description: TESTIMONIALS_DATA.description,
+  });
+
   return (
     <main className="bg-background min-h-screen">
       <PageHeader
@@ -43,7 +50,7 @@ export default function AboutPage() {
       <GalleryMarqueeSection />
 
       {/* Client voices */}
-      <TestimonialSection data={TESTIMONIALS_DATA} />
+      <TestimonialSection data={testimonialsData} />
 
       {/* FAQ */}
       <div className="container py-8 lg:py-12">

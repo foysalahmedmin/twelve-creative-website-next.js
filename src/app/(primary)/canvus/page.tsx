@@ -29,6 +29,7 @@ import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
 import { CANVAS_PORTFOLIO_DATA } from "@/data/thumbnail-work-section.data";
 import { CANVAS_MARQUEE_DATA } from "@/data/vertical-marquee.data";
 import { WHY_CHOOSE_US_DATA } from "@/data/why-choose-us.data";
+import { getPublicTestimonialsForSection } from "@/lib/api/testimonials";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -37,7 +38,13 @@ export const metadata: Metadata = {
     "Preview playground for all reusable high-fidelity sections designed for Twelve Creative pages.",
 };
 
-export default function CanvasPage() {
+export default async function CanvasPage() {
+  const testimonialsData = await getPublicTestimonialsForSection({
+    label: TESTIMONIALS_DATA.label,
+    title: TESTIMONIALS_DATA.title,
+    description: TESTIMONIALS_DATA.description,
+  });
+
   return (
     <main className="bg-background min-h-screen space-y-12 pb-20 sm:space-y-16">
       <PageHeader
@@ -88,7 +95,7 @@ export default function CanvasPage() {
 
       <ThumbnailWorkSection works={CANVAS_PORTFOLIO_DATA} slug="creative" />
 
-      <TestimonialSection data={TESTIMONIALS_DATA} />
+      <TestimonialSection data={testimonialsData} />
 
       <CTASection data={CTA_PROCESS} />
 

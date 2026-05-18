@@ -4,6 +4,23 @@
 
 export type AdminRole = "admin" | "editor";
 
+/** Standard 3-source video reference used everywhere a video field appears. */
+export type VideoSource = "youtube" | "url" | "upload";
+export interface VideoRef {
+  source: VideoSource;
+  value: string;
+}
+
+/** Shape returned by the existing /api/file backend endpoint after a successful upload. */
+export interface UploadedFile {
+  _id: string;
+  url: string;
+  filename: string;
+  originalname: string;
+  mimetype: string;
+  size: number;
+}
+
 export interface AdminUser {
   _id: string;
   name: string;

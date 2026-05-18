@@ -30,7 +30,7 @@ export interface AdminNavItem {
  */
 export const ADMIN_NAV: AdminNavItem[] = [
   { label: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
-  { label: "Testimonials", href: "/admin/testimonials", icon: MessageSquareQuote, soon: true },
+  { label: "Testimonials", href: "/admin/testimonials", icon: MessageSquareQuote },
   { label: "Visual Library", href: "/admin/videos", icon: Film, soon: true },
   { label: "Bookings", href: "/admin/bookings", icon: CalendarCheck, soon: true },
   { label: "Messages", href: "/admin/messages", icon: Mail, soon: true },

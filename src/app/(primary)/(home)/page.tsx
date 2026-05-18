@@ -14,6 +14,7 @@ import { FAQS_DATA } from "@/data/faqs.data";
 import { PROCESS_DATA } from "@/data/process.data";
 import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
 import { WHY_CHOOSE_US_DATA } from "@/data/why-choose-us.data";
+import { getPublicTestimonialsForSection } from "@/lib/api/testimonials";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -27,14 +28,20 @@ export const metadata: Metadata = {
   },
 };
 
-export default function HomePage() {
+export default async function HomePage() {
+  const testimonialsData = await getPublicTestimonialsForSection({
+    label: TESTIMONIALS_DATA.label,
+    title: TESTIMONIALS_DATA.title,
+    description: TESTIMONIALS_DATA.description,
+  });
+
   return (
     <div className="flex flex-col">
       <HeroSection />
       <BrandsSection />
       <FeaturedProjectsSection />
       <ServicesSection />
-      <TestimonialSection data={TESTIMONIALS_DATA} />
+      <TestimonialSection data={testimonialsData} />
       <ProcessSection data={PROCESS_DATA} />
       <DifferenceSection />
       <IndustriesSection />
