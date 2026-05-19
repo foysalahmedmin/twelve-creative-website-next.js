@@ -14,6 +14,7 @@ import { FAQS_DATA } from "@/data/faqs.data";
 import { PROCESS_DATA } from "@/data/process.data";
 import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
 import { WHY_CHOOSE_US_DATA } from "@/data/why-choose-us.data";
+import { getPublicFaqsForSection } from "@/lib/api/faqs";
 import { getPublicTestimonialsForSection } from "@/lib/api/testimonials";
 import type { Metadata } from "next";
 
@@ -29,11 +30,22 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const testimonialsData = await getPublicTestimonialsForSection({
-    label: TESTIMONIALS_DATA.label,
-    title: TESTIMONIALS_DATA.title,
-    description: TESTIMONIALS_DATA.description,
-  });
+  const [testimonialsData, faqsData] = await Promise.all([
+    getPublicTestimonialsForSection({
+      label: TESTIMONIALS_DATA.label,
+      title: TESTIMONIALS_DATA.title,
+      description: TESTIMONIALS_DATA.description,
+    }),
+    getPublicFaqsForSection({
+      image: FAQS_DATA.image,
+      alt: FAQS_DATA.alt,
+      title: FAQS_DATA.title,
+      description: FAQS_DATA.description,
+      name: FAQS_DATA.name,
+      position: FAQS_DATA.position,
+      contact_link: FAQS_DATA.contact_link,
+    }),
+  ]);
 
   return (
     <div className="flex flex-col">
@@ -46,7 +58,7 @@ export default async function HomePage() {
       <DifferenceSection />
       <IndustriesSection />
       <WhyChooseUsSection data={WHY_CHOOSE_US_DATA} />
-      <FaqSection data={FAQS_DATA} />
+      <FaqSection data={faqsData} />
       <HomeCtaSection />
     </div>
   );

@@ -9,6 +9,7 @@ import {
   Newspaper,
   Settings,
   Users,
+  UsersRound,
   type LucideIcon,
 } from "lucide-react";
 import type { AdminRole } from "@/lib/admin/types";
@@ -36,7 +37,8 @@ export const ADMIN_NAV: AdminNavItem[] = [
   { label: "Messages", href: "/admin/messages", icon: Mail },
   { label: "Works", href: "/admin/works", icon: Newspaper },
   { label: "Brands", href: "/admin/brands", icon: Building2 },
-  { label: "FAQs", href: "/admin/faqs", icon: HelpCircle, soon: true },
-  { label: "Users", href: "/admin/users", icon: Users, soon: true, roles: ["admin"] },
+  { label: "FAQs", href: "/admin/faqs", icon: HelpCircle },
+  { label: "Team", href: "/admin/team", icon: UsersRound },
+  { label: "Users", href: "/admin/users", icon: Users, roles: ["admin"] },
   { label: "Settings", href: "/admin/settings", icon: Settings, roles: ["admin"] },
 ];

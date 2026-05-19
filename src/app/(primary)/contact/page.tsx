@@ -5,6 +5,7 @@ import { FaqSection } from "@/components/sections/faqs-section";
 import { PageHeader } from "@/components/sections/page-header-section";
 import { CONTACT_PAGE_DATA } from "@/data/contact.data";
 import { FAQS_DATA } from "@/data/faqs.data";
+import { getPublicFaqsForSection } from "@/lib/api/faqs";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -13,8 +14,17 @@ export const metadata: Metadata = {
     "Start a conversation with Twelve Creative about positioning, creative, campaigns, websites, CRM, automation, and business growth systems.",
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
   const { header, contact_cards, booking, map } = CONTACT_PAGE_DATA;
+  const faqsData = await getPublicFaqsForSection({
+    image: FAQS_DATA.image,
+    alt: FAQS_DATA.alt,
+    title: FAQS_DATA.title,
+    description: FAQS_DATA.description,
+    name: FAQS_DATA.name,
+    position: FAQS_DATA.position,
+    contact_link: FAQS_DATA.contact_link,
+  });
 
   return (
     <main className="bg-background min-h-screen">
@@ -45,7 +55,7 @@ export default function ContactPage() {
 
       {/* FAQ for common questions before reaching out */}
       <div className="container py-8 lg:py-12">
-        <FaqSection data={FAQS_DATA} />
+        <FaqSection data={faqsData} />
       </div>
     </main>
   );

@@ -6,18 +6,29 @@ import { ABOUT_TEAM_DATA } from "@/data/about.data";
 import Image from "next/image";
 import { useState } from "react";
 
-export function TeamSection() {
+export interface TeamSectionItem {
+  name: string;
+  designation: string;
+  photourl: string;
+}
+
+interface TeamSectionProps {
+  data?: TeamSectionItem[];
+}
+
+export function TeamSection({ data }: TeamSectionProps = {}) {
+  const members = data && data.length ? data : ABOUT_TEAM_DATA;
   const [visibleCount, setVisibleCount] = useState(6);
 
   const handleToggle = () => {
-    if (visibleCount >= ABOUT_TEAM_DATA.length) {
+    if (visibleCount >= members.length) {
       setVisibleCount(6); // Reset to initial
     } else {
       setVisibleCount((prev) => prev + 3);
     }
   };
 
-  const isShowingAll = visibleCount >= ABOUT_TEAM_DATA.length;
+  const isShowingAll = visibleCount >= members.length;
 
   return (
     <section className="container py-16 sm:py-24">
@@ -29,7 +40,7 @@ export function TeamSection() {
         />
 
         <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 lg:mt-16 lg:grid-cols-3">
-          {ABOUT_TEAM_DATA.slice(0, visibleCount).map((member, idx) => (
+          {members.slice(0, visibleCount).map((member, idx) => (
             <ScrollReveal key={idx} animation="fade-in-up" delayMs={idx * 100}>
               <div className="group bg-card/60 border-primary/10 hover:border-primary/30 hover:bg-card flex flex-col rounded-3xl border p-4 backdrop-blur-md transition-all sm:p-5">
                 <div className="bg-muted relative mb-5 aspect-[4/5] w-full overflow-hidden rounded-2xl">
@@ -54,7 +65,7 @@ export function TeamSection() {
           ))}
         </div>
 
-        {ABOUT_TEAM_DATA.length > 6 && (
+        {members.length > 6 && (
           <div className="mt-12 flex justify-center">
             <button
               onClick={handleToggle}

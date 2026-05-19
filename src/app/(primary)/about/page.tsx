@@ -5,11 +5,12 @@ import { GalleryMarqueeSection } from "@/components/sections/gallery-marquee-sec
 import { OurMissionSection } from "@/components/sections/our-mission-section";
 import { PageHeader } from "@/components/sections/page-header-section";
 import { StorySection } from "@/components/sections/story-section";
-import { TeamSection } from "@/components/sections/team-section";
+import { LiveTeamSection } from "@/components/sections/team-section-live";
 import { TestimonialSection } from "@/components/sections/testimonial-section";
 import { FAQS_DATA } from "@/data/faqs.data";
 import { CTA_ABOUT } from "@/data/page-ctas.data";
 import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
+import { getPublicFaqsForSection } from "@/lib/api/faqs";
 import { getPublicTestimonialsForSection } from "@/lib/api/testimonials";
 import type { Metadata } from "next";
 
@@ -20,11 +21,22 @@ export const metadata: Metadata = {
 };
 
 export default async function AboutPage() {
-  const testimonialsData = await getPublicTestimonialsForSection({
-    label: TESTIMONIALS_DATA.label,
-    title: TESTIMONIALS_DATA.title,
-    description: TESTIMONIALS_DATA.description,
-  });
+  const [testimonialsData, faqsData] = await Promise.all([
+    getPublicTestimonialsForSection({
+      label: TESTIMONIALS_DATA.label,
+      title: TESTIMONIALS_DATA.title,
+      description: TESTIMONIALS_DATA.description,
+    }),
+    getPublicFaqsForSection({
+      image: FAQS_DATA.image,
+      alt: FAQS_DATA.alt,
+      title: FAQS_DATA.title,
+      description: FAQS_DATA.description,
+      name: FAQS_DATA.name,
+      position: FAQS_DATA.position,
+      contact_link: FAQS_DATA.contact_link,
+    }),
+  ]);
 
   return (
     <main className="bg-background min-h-screen">
@@ -44,7 +56,7 @@ export default async function AboutPage() {
       <StorySection />
 
       {/* Team */}
-      <TeamSection />
+      <LiveTeamSection />
 
       {/* Behind the scenes gallery */}
       <GalleryMarqueeSection />
@@ -54,7 +66,7 @@ export default async function AboutPage() {
 
       {/* FAQ */}
       <div className="container py-8 lg:py-12">
-        <FaqSection data={FAQS_DATA} />
+        <FaqSection data={faqsData} />
       </div>
 
       {/* CTA */}
