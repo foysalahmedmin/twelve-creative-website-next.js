@@ -1,6 +1,7 @@
 "use client";
 
 import { LogoIcon } from "@/components/icons/logo-icon";
+import { submitBookingAction } from "@/lib/api/bookings-actions";
 import { cn } from "@/lib/utils";
 import {
   ArrowLeft01Icon,
@@ -10,6 +11,7 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const MARKETS = [
   "Hospitality (Restaurants, Hotels, Nightlife)",
@@ -44,6 +46,7 @@ interface BookingModalProps {
 
 export function BookingModal({ isOpen, onClose }: BookingModalProps) {
   const [step, setStep] = useState(1);
+  const [submitting, setSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     market: "",
     expectedDate: "",
@@ -117,9 +120,26 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
     setStep(4);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // No API — just go to success step
+    if (submitting) return;
+    setSubmitting(true);
+    const fullName = `${formData.firstName} ${formData.lastName}`.trim();
+    const res = await submitBookingAction({
+      name: fullName,
+      email: formData.email,
+      phone: formData.phone || undefined,
+      company: formData.company || undefined,
+      industry: formData.market || undefined,
+      timeline: formData.expectedDate || undefined,
+      preferred_date: formData.preferredDate || undefined,
+      preferred_time: formData.preferredTime || undefined,
+    });
+    setSubmitting(false);
+    if (!res.ok) {
+      toast.error(res.error ?? "Could not submit your booking.");
+      return;
+    }
     setStep(5);
   };
 
@@ -396,9 +416,10 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
 
                       <button
                         type="submit"
-                        className="bg-primary hover:bg-primary/90 mt-2 w-full rounded-2xl py-4 text-sm font-bold tracking-wider text-white uppercase transition-all active:scale-[0.98]"
+                        disabled={submitting}
+                        className="bg-primary hover:bg-primary/90 mt-2 w-full rounded-2xl py-4 text-sm font-bold tracking-wider text-white uppercase transition-all active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
                       >
-                        Submit →
+                        {submitting ? "Submitting…" : "Submit →"}
                       </button>
                     </form>
                   </motion.div>

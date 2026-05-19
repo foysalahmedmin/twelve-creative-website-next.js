@@ -3,7 +3,7 @@
 import { SectionHeader } from "@/components/common/section-header";
 import { Button } from "@/components/ui/button";
 import { PhoneInput } from "@/components/ui/phone-input";
-import api from "@/lib/api";
+import { submitContactMessageAction } from "@/lib/api/contact-messages-actions";
 import {
   CustomerService01Icon,
   Location01Icon,
@@ -76,12 +76,14 @@ export const ContactSection = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState({
     name: "",
+    email: "",
     phone: "",
     subject: "",
     message: "",
   });
   const [errors, setErrors] = useState<{
     name?: string;
+    email?: string;
     phone?: string;
     subject?: string;
     message?: string;
@@ -95,10 +97,12 @@ export const ContactSection = ({
   const validate = () => {
     const e: typeof errors = {};
     if (!form.name.trim()) e.name = "Full name is required.";
-    if (!form.phone || form.phone.replace(/\D/g, "").length < 7)
+    if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
+      e.email = "Please enter a valid email.";
+    if (form.phone && form.phone.replace(/\D/g, "").length < 7)
       e.phone = "Please enter a valid phone number.";
-    if (!form.subject.trim()) e.subject = "Subject is required.";
-    if (!form.message.trim()) e.message = "Message is required.";
+    if (!form.message.trim() || form.message.trim().length < 5)
+      e.message = "Message must be at least 5 characters.";
     setErrors(e);
     return Object.keys(e).length === 0;
   };
@@ -108,22 +112,22 @@ export const ContactSection = ({
     if (!validate()) return;
     setIsSubmitting(true);
 
-    try {
-      const { data } = await api.post("/contact-messages", form);
-      if (data?.success) {
-        toast.success("Message sent successfully!");
-        setForm({ name: "", phone: "", subject: "", message: "" });
-      } else {
-        throw new Error(data?.message || "Failed");
-      }
-    } catch (error: any) {
-      toast.error(
-        error?.response?.data?.message ||
-          "Failed to send message. Please try again.",
-      );
-    } finally {
-      setIsSubmitting(false);
+    const res = await submitContactMessageAction({
+      name: form.name.trim(),
+      email: form.email.trim(),
+      phone: form.phone || undefined,
+      subject: form.subject.trim() || undefined,
+      message: form.message.trim(),
+    });
+
+    setIsSubmitting(false);
+
+    if (!res.ok) {
+      toast.error(res.error ?? "Failed to send message. Please try again.");
+      return;
     }
+    toast.success("Message sent successfully!");
+    setForm({ name: "", email: "", phone: "", subject: "", message: "" });
   };
 
   return (
@@ -217,8 +221,27 @@ export const ContactSection = ({
                 </div>
                 <div className="space-y-2">
                   <label className="text-foreground text-sm font-bold">
-                    Phone Number{" "}
-                    <span className="text-destructive ml-0.5">*</span>
+                    Email <span className="text-destructive ml-0.5">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    value={form.email}
+                    onChange={(e) => handleChange("email", e.target.value)}
+                    placeholder="you@example.com"
+                    className={`bg-background placeholder:text-muted-foreground/40 focus:border-primary w-full rounded-xl border px-4 py-3 text-sm font-medium transition-all outline-none ${errors.email ? "border-destructive" : "border-border"}`}
+                  />
+                  {errors.email && (
+                    <p className="text-destructive text-xs font-medium">
+                      {errors.email}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="grid gap-6 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <label className="text-foreground text-sm font-bold">
+                    Phone Number
                   </label>
                   <PhoneInput
                     value={form.phone}
@@ -234,24 +257,23 @@ export const ContactSection = ({
                     </p>
                   )}
                 </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-foreground text-sm font-bold">
-                  Subject <span className="text-destructive ml-0.5">*</span>
-                </label>
-                <input
-                  type="text"
-                  value={form.subject}
-                  onChange={(e) => handleChange("subject", e.target.value)}
-                  placeholder="How can we help?"
-                  className={`bg-background placeholder:text-muted-foreground/40 focus:border-primary w-full rounded-xl border px-4 py-3 text-sm font-medium transition-all outline-none ${errors.subject ? "border-destructive" : "border-border"}`}
-                />
-                {errors.subject && (
-                  <p className="text-destructive text-xs font-medium">
-                    {errors.subject}
-                  </p>
-                )}
+                <div className="space-y-2">
+                  <label className="text-foreground text-sm font-bold">
+                    Subject
+                  </label>
+                  <input
+                    type="text"
+                    value={form.subject}
+                    onChange={(e) => handleChange("subject", e.target.value)}
+                    placeholder="How can we help?"
+                    className={`bg-background placeholder:text-muted-foreground/40 focus:border-primary w-full rounded-xl border px-4 py-3 text-sm font-medium transition-all outline-none ${errors.subject ? "border-destructive" : "border-border"}`}
+                  />
+                  {errors.subject && (
+                    <p className="text-destructive text-xs font-medium">
+                      {errors.subject}
+                    </p>
+                  )}
+                </div>
               </div>
 
               <div className="space-y-2">
