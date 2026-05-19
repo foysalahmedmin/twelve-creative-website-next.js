@@ -2,6 +2,8 @@ import { format } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { getPublicInsightBySlug } from "@/lib/api/insights";
 import type { Metadata } from "next";
 
@@ -82,8 +84,10 @@ export default async function InsightDetailPage({ params }: PageProps) {
           />
         </div>
 
-        <div className="text-foreground/90 whitespace-pre-wrap text-base leading-relaxed">
-          {article.content}
+        <div className="prose prose-neutral dark:prose-invert max-w-none text-foreground/90 prose-headings:font-heading prose-headings:tracking-tight prose-a:text-primary prose-img:rounded-xl prose-p:leading-relaxed">
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            {article.content}
+          </ReactMarkdown>
         </div>
       </article>
     </main>

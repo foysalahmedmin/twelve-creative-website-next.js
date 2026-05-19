@@ -10,8 +10,22 @@
  */
 
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { ADMIN_CONFIG } from "./config";
 import { ApiError, type ApiErrorPayload, type ApiResponse } from "./types";
+
+/**
+ * When the backend returns 401 for an admin-authenticated call, the access
+ * cookie is expired or has been invalidated. Clear both cookies so middleware
+ * routes the user back to login (with a callbackUrl pointing to where they were).
+ * Calls `redirect()` which throws — control never returns to the caller.
+ */
+async function handleExpiredSession(): Promise<never> {
+  const jar = await cookies();
+  jar.delete(ADMIN_CONFIG.cookies.access);
+  jar.delete(ADMIN_CONFIG.cookies.user);
+  redirect(ADMIN_CONFIG.loginPath);
+}
 
 interface ApiRequestOptions {
   method?: "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
@@ -78,6 +92,13 @@ export async function apiFetch<T = unknown>(
     cache: revalidate === undefined && !tags ? "no-store" : undefined,
     next: Object.keys(nextOptions).length ? nextOptions : undefined,
   });
+
+  // Session-expired auth path: clear admin cookies + redirect to login.
+  // Only applies when this request was authenticated; public unauthenticated
+  // reads (auth=false) shouldn't be hijacked by upstream 401s.
+  if (auth && res.status === 401) {
+    await handleExpiredSession();
+  }
 
   if (!parseJson) {
     if (!res.ok) {

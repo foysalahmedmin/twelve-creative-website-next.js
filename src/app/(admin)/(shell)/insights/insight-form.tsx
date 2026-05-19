@@ -181,14 +181,21 @@ export function InsightForm({ mode, initial }: Props) {
               id="content"
               required
               rows={16}
-              placeholder="Long-form copy. Line breaks are preserved when rendered."
+              placeholder={`Long-form copy. Markdown supported:
+
+## Heading
+**Bold**, _italic_, [links](https://example.com)
+- bullet lists
+1. numbered lists
+
+> Block quotes`}
               value={content}
               onChange={(e) => setContent(e.target.value)}
               className="font-mono text-sm"
             />
             <p className="text-muted-foreground text-xs">
-              {content.trim().split(/\s+/).filter(Boolean).length} words · plain
-              text (paragraph breaks preserved)
+              {content.trim().split(/\s+/).filter(Boolean).length} words ·
+              markdown (GFM) — headings, lists, links, code, quotes
             </p>
           </div>
 
