@@ -10,6 +10,7 @@ import { CTA_WORKS } from "@/data/page-ctas.data";
 import { CANVAS_PORTFOLIO_DATA } from "@/data/thumbnail-work-section.data";
 import { CANVAS_MARQUEE_DATA } from "@/data/vertical-marquee.data";
 import { WORKS_PAGE_MOCK_DATA } from "@/data/works.data";
+import { getPublicShowcaseVideosForMarquee } from "@/lib/api/showcase-videos";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -18,7 +19,10 @@ export const metadata: Metadata = {
     "See how Twelve Creative helps businesses improve visibility, trust, campaigns, content, and conversion systems.",
 };
 
-export default function WorksPage() {
+export default async function WorksPage() {
+  const showcaseVideos = await getPublicShowcaseVideosForMarquee();
+  const marqueeData = showcaseVideos.length ? showcaseVideos : CANVAS_MARQUEE_DATA;
+
   return (
     <main className="bg-background min-h-screen">
       <PageHeader
@@ -57,7 +61,7 @@ export default function WorksPage() {
           />
         </ScrollReveal>
         <VerticalMarqueeSlider
-          data={CANVAS_MARQUEE_DATA}
+          data={marqueeData}
           speed={30}
           pauseOnHover
         />
