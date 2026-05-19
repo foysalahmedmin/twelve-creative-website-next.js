@@ -1,4 +1,5 @@
 import {
+  BookOpen,
   Building2,
   CalendarCheck,
   Film,
@@ -37,6 +38,7 @@ export const ADMIN_NAV: AdminNavItem[] = [
   { label: "Messages", href: "/admin/messages", icon: Mail },
   { label: "Works", href: "/admin/works", icon: Newspaper },
   { label: "Brands", href: "/admin/brands", icon: Building2 },
+  { label: "Insights", href: "/admin/insights", icon: BookOpen },
   { label: "FAQs", href: "/admin/faqs", icon: HelpCircle },
   { label: "Team", href: "/admin/team", icon: UsersRound },
   { label: "Users", href: "/admin/users", icon: Users, roles: ["admin"] },

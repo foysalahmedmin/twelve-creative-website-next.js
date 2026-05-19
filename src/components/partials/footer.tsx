@@ -22,7 +22,27 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react";
 import Link from "next/link";
 
-export const Footer = ({ className }: { className?: string }) => {
+export interface FooterSocialItem {
+  platform: string;
+  href: string;
+}
+
+interface FooterProps {
+  className?: string;
+  socials?: FooterSocialItem[];
+  contactEmail?: string;
+  contactAddress?: string;
+}
+
+export const Footer = ({
+  className,
+  socials,
+  contactEmail,
+  contactAddress,
+}: FooterProps) => {
+  const socialLinks = socials && socials.length ? socials : SOCIAL_LINKS;
+  const email = contactEmail || FOOTER_CONTACT.email;
+  const address = contactAddress || FOOTER_CONTACT.address;
   const renderSocialIcon = (platform: string) => {
     switch (platform) {
       case "facebook":
@@ -87,7 +107,7 @@ export const Footer = ({ className }: { className?: string }) => {
               clearer path from attention to revenue.
             </p>
             <div className="flex items-center gap-3">
-              {SOCIAL_LINKS.map((social) => (
+              {socialLinks.map((social) => (
                 <Link
                   key={social.platform}
                   href={social.href}
@@ -154,10 +174,10 @@ export const Footer = ({ className }: { className?: string }) => {
                   className="text-primary h-5 w-5 shrink-0"
                 />
                 <a
-                  href={`mailto:${FOOTER_CONTACT.email}`}
+                  href={`mailto:${email}`}
                   className="hover:text-foreground transition-colors"
                 >
-                  {FOOTER_CONTACT.email}
+                  {email}
                 </a>
               </div>
               <div className="flex items-start gap-3">
@@ -165,7 +185,7 @@ export const Footer = ({ className }: { className?: string }) => {
                   icon={Call02Icon}
                   className="text-primary mt-0.5 h-5 w-5 shrink-0"
                 />
-                <p>{FOOTER_CONTACT.address}</p>
+                <p>{address}</p>
               </div>
             </div>
 

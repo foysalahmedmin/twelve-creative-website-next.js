@@ -1,5 +1,5 @@
 import { Header } from "@/components/partials/header";
-import { Footer } from "@/components/partials/footer";
+import { LiveFooter } from "@/components/partials/footer-live";
 import { MobileBottomNav } from "@/components/partials/mobile-bottom-nav";
 import React from "react";
 
@@ -14,7 +14,7 @@ export default function PrimaryLayout({
 
       <main className="flex-1 pb-16 lg:pb-0">{children}</main>
 
-      <Footer className="hidden lg:block" />
+      <LiveFooter className="hidden lg:block" />
       <MobileBottomNav />
     </div>
   );

@@ -28,6 +28,45 @@ interface ImageInputProps {
   className?: string;
 }
 
+/**
+ * Soft-warn when uploaded image differs significantly from the recommended
+ * aspect ratio. Tolerance defaults to 15%. Pass `expectedRatio` as a number
+ * (e.g. 1 for square, 16/9 for landscape, 9/16 for portrait) to enable.
+ */
+function checkAspectRatio(
+  file: File,
+  expectedRatio: number,
+  tolerance = 0.15,
+): Promise<string | null> {
+  return new Promise((resolve) => {
+    const img = new Image();
+    const objectUrl = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+      const actual = img.naturalWidth / img.naturalHeight;
+      const diff = Math.abs(actual - expectedRatio) / expectedRatio;
+      if (diff > tolerance) {
+        resolve(
+          `Image is ${img.naturalWidth}×${img.naturalHeight}. Recommended ratio is ${expectedRatio.toFixed(2)}:1; current is ${actual.toFixed(2)}:1.`,
+        );
+      } else {
+        resolve(null);
+      }
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      resolve(null);
+    };
+    img.src = objectUrl;
+  });
+}
+
+function parseAspect(aspect: string): number | null {
+  const parts = aspect.split("/").map((s) => Number(s.trim()));
+  if (parts.length !== 2 || !parts[0] || !parts[1]) return null;
+  return parts[0] / parts[1];
+}
+
 export function ImageInput({
   label,
   description,
@@ -43,13 +82,20 @@ export function ImageInput({
   const [mode, setMode] = useState<Mode>(value ? "url" : "url");
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [warning, setWarning] = useState<string | null>(null);
 
   const pickFile = () => fileRef.current?.click();
 
   const handleUpload = async (file: File) => {
     setError(null);
+    setWarning(null);
     setUploading(true);
     try {
+      const expected = parseAspect(previewAspect);
+      if (expected) {
+        const aspectWarning = await checkAspectRatio(file, expected);
+        if (aspectWarning) setWarning(aspectWarning);
+      }
       const uploaded = await uploadAdminFile(file);
       onChange(uploaded.url);
     } catch (e) {
@@ -143,6 +189,12 @@ export function ImageInput({
 
       {error && (
         <p className="text-destructive text-xs font-medium">{error}</p>
+      )}
+
+      {warning && !error && (
+        <p className="border-amber-500/30 bg-amber-500/5 text-amber-700 dark:text-amber-400 rounded-md border px-2.5 py-1.5 text-xs font-medium">
+          ⚠ {warning} The image will still upload — crop/resize for a tighter fit if needed.
+        </p>
       )}
 
       {value && (

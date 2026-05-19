@@ -11,6 +11,7 @@ import { CANVAS_PORTFOLIO_DATA } from "@/data/thumbnail-work-section.data";
 import { CANVAS_MARQUEE_DATA } from "@/data/vertical-marquee.data";
 import { WORKS_PAGE_MOCK_DATA } from "@/data/works.data";
 import { getPublicShowcaseVideosForMarquee } from "@/lib/api/showcase-videos";
+import { adaptWorkToLegacy, getPublicWorks } from "@/lib/api/works";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -20,8 +21,12 @@ export const metadata: Metadata = {
 };
 
 export default async function WorksPage() {
-  const showcaseVideos = await getPublicShowcaseVideosForMarquee();
+  const [showcaseVideos, liveWorks] = await Promise.all([
+    getPublicShowcaseVideosForMarquee(),
+    getPublicWorks(),
+  ]);
   const marqueeData = showcaseVideos.length ? showcaseVideos : CANVAS_MARQUEE_DATA;
+  const works = liveWorks.length ? liveWorks.map(adaptWorkToLegacy) : WORKS_PAGE_MOCK_DATA;
 
   return (
     <main className="bg-background min-h-screen">
@@ -37,7 +42,7 @@ export default async function WorksPage() {
       {/* Case Studies / Works Grid Section */}
       <section className="border-primary/5 container border-t py-16 sm:py-20 lg:py-24">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {WORKS_PAGE_MOCK_DATA.map((item, index) => (
+          {works.map((item, index) => (
             <ScrollReveal
               key={item.id}
               animation="fade-in-up"

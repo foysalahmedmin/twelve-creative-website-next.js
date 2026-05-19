@@ -3,14 +3,22 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { WORKS_PAGE_MOCK_DATA } from "@/data/works.data";
 import { VideoPlayer } from "@/components/common/video-player";
+import { adaptWorkToLegacy, getPublicWorkBySlug } from "@/lib/api/works";
+import type { IWorkItem } from "@/data/works.data";
 
 interface WorksDetailsPageProps {
   params: Promise<{ id: string }>;
 }
 
+async function loadWork(slug: string): Promise<IWorkItem | undefined> {
+  const live = await getPublicWorkBySlug(slug);
+  if (live) return adaptWorkToLegacy(live);
+  return WORKS_PAGE_MOCK_DATA.find((item) => item.id === slug);
+}
+
 export async function generateMetadata({ params }: WorksDetailsPageProps): Promise<Metadata> {
   const { id } = await params;
-  const workData = WORKS_PAGE_MOCK_DATA.find((item) => item.id === id);
+  const workData = await loadWork(id);
 
   if (!workData) return { title: "Not Found" };
 
@@ -27,7 +35,7 @@ export async function generateMetadata({ params }: WorksDetailsPageProps): Promi
 
 export default async function WorksDetailsPage({ params }: WorksDetailsPageProps) {
   const { id } = await params;
-  const workData = WORKS_PAGE_MOCK_DATA.find((item) => item.id === id);
+  const workData = await loadWork(id);
 
   if (!workData) return notFound();
 
@@ -151,9 +159,13 @@ export default async function WorksDetailsPage({ params }: WorksDetailsPageProps
                 </div>
                 
                 <div className="flex flex-col sm:flex-row sm:items-start gap-5 p-6 bg-card border border-primary/10 rounded-2xl">
-                  <div className="relative w-16 h-16 rounded-[14px] overflow-hidden border border-primary/20 shrink-0">
-                    <Image src={workData.client.logo} alt={workData.client.name} fill className="object-cover" />
-                  </div>
+                  {workData.client.logo ? (
+                    <div className="relative w-16 h-16 rounded-[14px] overflow-hidden border border-primary/20 shrink-0">
+                      <Image src={workData.client.logo} alt={workData.client.name} fill className="object-cover" />
+                    </div>
+                  ) : (
+                    <div className="w-16 h-16 rounded-[14px] border border-primary/20 shrink-0 bg-primary/5" />
+                  )}
                   <div className="space-y-2">
                     <h3 className="text-xl font-semibold text-foreground">{workData.client.name}</h3>
                     <div className="text-sm font-medium text-muted-foreground flex flex-wrap items-center gap-2">
