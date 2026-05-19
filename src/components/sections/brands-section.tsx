@@ -30,7 +30,13 @@ const BrandItem = ({ brand }: { brand: TBrand }) => {
   );
 };
 
-export const BrandsSection = ({ className }: { className?: string }) => {
+interface BrandsSectionProps {
+  data?: TBrand[];
+  className?: string;
+}
+
+export const BrandsSection = ({ data, className }: BrandsSectionProps) => {
+  const brands = data && data.length ? data : BRANDS_DATA;
   return (
     <section
       className={cn(
@@ -55,7 +61,7 @@ export const BrandsSection = ({ className }: { className?: string }) => {
             autoFill
             className="flex items-center"
           >
-            {BRANDS_DATA.map((brand) => (
+            {brands.map((brand) => (
               <BrandItem key={brand.id} brand={brand} />
             ))}
           </Marquee>

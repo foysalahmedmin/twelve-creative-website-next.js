@@ -3,7 +3,7 @@ import { FeaturedProjectsSection } from "@/components/_primary_/home-page/featur
 import { HomeCtaSection } from "@/components/_primary_/home-page/home-cta-section";
 import { IndustriesSection } from "@/components/_primary_/home-page/industries-section";
 import { ServicesSection } from "@/components/_primary_/home-page/services-section";
-import { BrandsSection } from "@/components/sections/brands-section";
+import { BrandsStrip } from "@/components/sections/brands-strip";
 import FaqSection from "@/components/sections/faqs-section";
 import { HeroSection } from "@/components/sections/hero-section";
 import { ProcessSection } from "@/components/sections/process-section";
@@ -38,7 +38,7 @@ export default async function HomePage() {
   return (
     <div className="flex flex-col">
       <HeroSection />
-      <BrandsSection />
+      <BrandsStrip />
       <FeaturedProjectsSection />
       <ServicesSection />
       <TestimonialSection data={testimonialsData} />

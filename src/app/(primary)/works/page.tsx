@@ -1,7 +1,7 @@
 import { WorksCard } from "@/components/cards/works-card";
 import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { CenteredSectionHeader } from "@/components/common/section-label";
-import { BrandsSection } from "@/components/sections/brands-section";
+import { BrandsStrip } from "@/components/sections/brands-strip";
 import { CTASection } from "@/components/sections/cta-section";
 import { PageHeader } from "@/components/sections/page-header-section";
 import { ThumbnailWorkSection } from "@/components/sections/thumbnail-work-section";
@@ -32,7 +32,7 @@ export default async function WorksPage() {
       />
 
       {/* Brands */}
-      <BrandsSection />
+      <BrandsStrip />
 
       {/* Case Studies / Works Grid Section */}
       <section className="border-primary/5 container border-t py-16 sm:py-20 lg:py-24">

@@ -1,4 +1,4 @@
-import { BrandsSection } from "@/components/sections/brands-section";
+import { BrandsStrip } from "@/components/sections/brands-strip";
 import { CTASection } from "@/components/sections/cta-section";
 import { FaqSection } from "@/components/sections/faqs-section";
 import { GalleryMarqueeSection } from "@/components/sections/gallery-marquee-section";
@@ -35,7 +35,7 @@ export default async function AboutPage() {
       />
 
       {/* Brands we've worked with */}
-      <BrandsSection />
+      <BrandsStrip />
 
       {/* Mission & Vision */}
       <OurMissionSection />

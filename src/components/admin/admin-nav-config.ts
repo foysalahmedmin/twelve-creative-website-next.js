@@ -34,9 +34,9 @@ export const ADMIN_NAV: AdminNavItem[] = [
   { label: "Visual Library", href: "/admin/videos", icon: Film },
   { label: "Bookings", href: "/admin/bookings", icon: CalendarCheck },
   { label: "Messages", href: "/admin/messages", icon: Mail },
-  { label: "Works", href: "/admin/works", icon: Newspaper, soon: true },
-  { label: "Brands", href: "/admin/brands", icon: Building2, soon: true },
+  { label: "Works", href: "/admin/works", icon: Newspaper },
+  { label: "Brands", href: "/admin/brands", icon: Building2 },
   { label: "FAQs", href: "/admin/faqs", icon: HelpCircle, soon: true },
   { label: "Users", href: "/admin/users", icon: Users, soon: true, roles: ["admin"] },
-  { label: "Settings", href: "/admin/settings", icon: Settings, soon: true, roles: ["admin"] },
+  { label: "Settings", href: "/admin/settings", icon: Settings, roles: ["admin"] },
 ];
