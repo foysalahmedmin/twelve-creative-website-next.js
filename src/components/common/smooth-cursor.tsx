@@ -92,7 +92,8 @@ export function SmoothFollowerCursor() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (pathname?.startsWith("/admin")) return null;
+  // Removed early return to allow SmoothFollowerCursor on admin pages
+// if (pathname?.startsWith("/admin")) return null;
 
   return (
     <div

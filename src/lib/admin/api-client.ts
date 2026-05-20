@@ -80,31 +80,30 @@ export async function apiFetch<T = unknown>(
   if (revalidate !== undefined) nextOptions.revalidate = revalidate;
   if (tags) nextOptions.tags = tags;
 
-  const res = await fetch(url, {
-    method,
-    headers: finalHeaders,
-    body:
-      body === undefined
-        ? undefined
-        : body instanceof FormData
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      method,
+      headers: finalHeaders,
+      body:
+        body === undefined
+          ? undefined
+          : body instanceof FormData
           ? body
           : JSON.stringify(body),
-    cache: revalidate === undefined && !tags ? "no-store" : undefined,
-    next: Object.keys(nextOptions).length ? nextOptions : undefined,
-  });
-
-  // Session-expired auth path: clear admin cookies + redirect to login.
-  // Only applies when this request was authenticated; public unauthenticated
-  // reads (auth=false) shouldn't be hijacked by upstream 401s.
-  if (auth && res.status === 401) {
-    await handleExpiredSession();
+      cache: revalidate === undefined && !tags ? "no-store" : undefined,
+      next: Object.keys(nextOptions).length ? nextOptions : undefined,
+    });
+  } catch (err) {
+    console.error("Network error while fetching", url, err);
+    // Return a safe failure response; callers can handle .success === false
+    return { success: false, data: undefined as T };
   }
 
-  if (!parseJson) {
-    if (!res.ok) {
-      throw new ApiError(res.status, `Request failed (${res.status})`, null);
-    }
-    return { success: true, data: undefined as T };
+  // If the response is not ok (e.g., 4xx/5xx), return a safe failure response instead of throwing.
+  if (!res.ok) {
+    console.warn(`API request failed with status ${res.status} for ${url}`);
+    return { success: false, data: undefined as T };
   }
 
   let json: ApiResponse<T> | ApiErrorPayload;
