@@ -19,7 +19,6 @@ export default function ProcessPage() {
         label="Our Process"
         title="Our process is built around clarity first."
         description="We do not begin by making random assets. We begin by understanding what the business is trying to move, where the friction is, and what structure needs to be built."
-        breadcrumb={[{ label: "Process", active: true }]}
       />
 
       {/* Interactive step overview */}
