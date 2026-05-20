@@ -1,5 +1,8 @@
-import { cn } from "@/lib/utils";
+"use client";
+
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 import React from "react";
+import { cn } from "@/lib/utils";
 
 interface SectionHeaderProps {
   label?: string;
@@ -11,6 +14,37 @@ interface SectionHeaderProps {
   centeredOnMobile?: boolean;
 }
 
+const EASE = [0.16, 1, 0.3, 1] as const;
+
+const containerVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.05,
+    },
+  },
+};
+
+const childVariants: Variants = {
+  hidden: { opacity: 0, y: 18 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.65, ease: EASE },
+  },
+};
+
+// Actions (right-aligned button) slide in from the right for a subtle distinction.
+const actionVariants: Variants = {
+  hidden: { opacity: 0, x: 18 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.65, ease: EASE },
+  },
+};
+
 export const SectionHeader = ({
   label,
   title,
@@ -20,8 +54,14 @@ export const SectionHeader = ({
   align = "left",
   centeredOnMobile,
 }: SectionHeaderProps) => {
+  const reduceMotion = useReducedMotion();
+
   return (
-    <div
+    <motion.div
+      initial={reduceMotion ? "visible" : "hidden"}
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.3, margin: "0px 0px -10% 0px" }}
+      variants={containerVariants}
       className={cn(
         "mb-[2.5em] flex flex-row items-end justify-between gap-[1em] lg:mb-[3em]",
         align === "center" &&
@@ -39,7 +79,8 @@ export const SectionHeader = ({
         )}
       >
         {label && (
-          <div
+          <motion.div
+            variants={childVariants}
             className={cn(
               "flex items-center",
               align === "center" && "justify-center",
@@ -49,18 +90,28 @@ export const SectionHeader = ({
             <span className="border-primary text-primary border-l-[0.125em] pl-[0.5em] text-[0.75em] font-bold tracking-wider uppercase">
               {label}
             </span>
-          </div>
+          </motion.div>
         )}
-        <h2 className="text-foreground text-[1.5em] sm:leading-tight leading-none font-bold tracking-tight sm:text-[1.875em] lg:text-[2em]">
+        <motion.h2
+          variants={childVariants}
+          className="text-foreground text-[1.5em] sm:leading-tight leading-none font-bold tracking-tight sm:text-[1.875em] lg:text-[2em]"
+        >
           {title}
-        </h2>
+        </motion.h2>
         {description && (
-          <p className="text-muted-foreground hidden text-[1em] leading-relaxed font-medium sm:block lg:text-[1.125em]">
+          <motion.p
+            variants={childVariants}
+            className="text-muted-foreground hidden text-[1em] leading-relaxed font-medium sm:block lg:text-[1.125em]"
+          >
             {description}
-          </p>
+          </motion.p>
         )}
       </div>
-      {children && <div className="shrink-0">{children}</div>}
-    </div>
+      {children && (
+        <motion.div variants={actionVariants} className="shrink-0">
+          {children}
+        </motion.div>
+      )}
+    </motion.div>
   );
 };

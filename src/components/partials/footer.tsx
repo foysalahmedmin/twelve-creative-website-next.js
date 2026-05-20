@@ -1,6 +1,7 @@
 "use client";
 
 import { LogoIcon } from "@/components/icons/logo-icon";
+import { ScrollReveal } from "@/components/common/scroll-reveal";
 import {
   FOOTER_CONTACT,
   FOOTER_INDUSTRIES,
@@ -97,7 +98,11 @@ export const Footer = ({
       <div className="container">
         <div className="grid grid-cols-1 gap-10 border-b pb-12 md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
           {/* Column 1: Brand */}
-          <div className="flex flex-col gap-6">
+          <ScrollReveal
+            animation="fade-in-left"
+            durationMs={700}
+            className="flex flex-col gap-6"
+          >
             <Link href="/" className="flex w-max items-center gap-2">
               <LogoIcon className="h-8 w-auto lg:h-10" />
             </Link>
@@ -122,10 +127,15 @@ export const Footer = ({
                 </Link>
               ))}
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Column 2: Navigation */}
-          <div className="flex flex-col gap-5">
+          <ScrollReveal
+            animation="fade-in-up"
+            delayMs={120}
+            durationMs={700}
+            className="flex flex-col gap-5"
+          >
             <h4 className="text-foreground text-sm font-bold uppercase tracking-widest">
               Navigation
             </h4>
@@ -141,10 +151,15 @@ export const Footer = ({
                 </li>
               ))}
             </ul>
-          </div>
+          </ScrollReveal>
 
           {/* Column 3: What We Build */}
-          <div className="flex flex-col gap-5">
+          <ScrollReveal
+            animation="fade-in-up"
+            delayMs={200}
+            durationMs={700}
+            className="flex flex-col gap-5"
+          >
             <h4 className="text-foreground text-sm font-bold uppercase tracking-widest">
               What We Build
             </h4>
@@ -160,10 +175,15 @@ export const Footer = ({
                 </li>
               ))}
             </ul>
-          </div>
+          </ScrollReveal>
 
           {/* Column 4: Contact */}
-          <div className="flex flex-col gap-5">
+          <ScrollReveal
+            animation="fade-in-right"
+            delayMs={280}
+            durationMs={700}
+            className="flex flex-col gap-5"
+          >
             <h4 className="text-foreground text-sm font-bold uppercase tracking-widest">
               Contact
             </h4>
@@ -206,7 +226,7 @@ export const Footer = ({
                 ))}
               </ul>
             </div>
-          </div>
+          </ScrollReveal>
         </div>
 
         {/* Bottom Bar */}

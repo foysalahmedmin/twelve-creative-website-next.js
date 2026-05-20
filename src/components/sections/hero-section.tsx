@@ -1,5 +1,6 @@
 "use client";
 
+import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { buttonVariants } from "@/components/ui/button";
 import { HOME_HERO_DATA } from "@/data/home-hero.data";
 import { cn } from "@/lib/utils";
@@ -47,67 +48,85 @@ export const HeroSection = ({ className }: { className?: string }) => {
         <div className="relative flex flex-col items-center justify-center gap-4 px-2 pt-32 pb-10 lg:gap-4 lg:pt-28">
           {/* Center column for badge + headline + description + CTAs */}
           <div className="mx-auto flex max-w-195 flex-col items-center justify-center pt-10">
-            {/* Trust badge */}
-            <div
-              className={cn(
-                "bg-card/40 ring-foreground/10 inline-flex items-center justify-center gap-4 rounded-full py-3 pr-5 pl-3 ring-1 backdrop-blur-lg",
-              )}
-            >
-              <div className="flex items-center -space-x-2">
-                {data.trust_avatars.map((avatar, index) => {
-                  const Icon = AVATAR_ICON_MAP[avatar.icon];
-                  return (
-                    <div
-                      key={avatar.id}
-                      style={{ zIndex: data.trust_avatars.length - index }}
-                      className={cn(
-                        "flex h-7 w-7 items-center justify-center rounded-full",
-                        "from-primary-from to-primary-to text-primary-foreground bg-linear-to-br",
-                        "ring-card ring-2",
-                      )}
-                      aria-label={avatar.label}
-                    >
-                      <HugeiconsIcon icon={Icon} className="h-3.5 w-3.5" />
-                    </div>
-                  );
-                })}
-              </div>
-              <p className="text-foreground text-xs leading-[140%] font-medium">
-                {data.trust_label}
-              </p>
-            </div>
-
-            {/* Headline */}
-            <h1 className="text-foreground font-heading mt-4 text-center text-[40px] leading-[110%] font-medium tracking-tight lg:mt-5 lg:text-[70px]">
-              {data.title}
-            </h1>
-
-            {/* Description */}
-            <p className="text-muted-foreground mt-6 text-center text-sm leading-[150%] font-normal md:text-base">
-              {data.description}
-            </p>
-
-            {/* CTAs */}
-            <div className="mt-10 flex w-full flex-col items-center justify-center gap-3 px-4 md:flex-row md:px-0">
-              <Link
-                href={data.primary_cta.href}
-                className={cn(buttonVariants({ size: "xl" }))}
-              >
-                {data.primary_cta.label}
-              </Link>
-              <Link
-                href={data.secondary_cta.href}
+            <ScrollReveal animation="fade-in-down" durationMs={700}>
+              {/* Trust badge */}
+              <div
                 className={cn(
-                  buttonVariants({ variant: "outline", size: "xl" }),
+                  "bg-card/40 ring-foreground/10 inline-flex items-center justify-center gap-4 rounded-full py-3 pr-5 pl-3 ring-1 backdrop-blur-lg",
                 )}
               >
-                {data.secondary_cta.label}
-              </Link>
-            </div>
+                <div className="flex items-center -space-x-2">
+                  {data.trust_avatars.map((avatar, index) => {
+                    const Icon = AVATAR_ICON_MAP[avatar.icon];
+                    return (
+                      <div
+                        key={avatar.id}
+                        style={{ zIndex: data.trust_avatars.length - index }}
+                        className={cn(
+                          "flex h-7 w-7 items-center justify-center rounded-full",
+                          "from-primary-from to-primary-to text-primary-foreground bg-linear-to-br",
+                          "ring-card ring-2",
+                        )}
+                        aria-label={avatar.label}
+                      >
+                        <HugeiconsIcon icon={Icon} className="h-3.5 w-3.5" />
+                      </div>
+                    );
+                  })}
+                </div>
+                <p className="text-foreground text-xs leading-[140%] font-medium">
+                  {data.trust_label}
+                </p>
+              </div>
+            </ScrollReveal>
+
+            {/* Headline */}
+            <ScrollReveal animation="fade-in-up" delayMs={120} durationMs={800}>
+              <h1 className="text-foreground font-heading mt-4 text-center text-[40px] leading-[110%] font-medium tracking-tight lg:mt-5 lg:text-[70px]">
+                {data.title}
+              </h1>
+            </ScrollReveal>
+
+            {/* Description */}
+            <ScrollReveal animation="fade-in-up" delayMs={250} durationMs={800}>
+              <p className="text-muted-foreground mt-6 text-center text-sm leading-[150%] font-normal md:text-base">
+                {data.description}
+              </p>
+            </ScrollReveal>
+
+            {/* CTAs */}
+            <ScrollReveal
+              animation="fade-in-up"
+              delayMs={380}
+              durationMs={800}
+              className="w-full"
+            >
+              <div className="mt-10 flex w-full flex-col items-center justify-center gap-3 px-4 md:flex-row md:px-0">
+                <Link
+                  href={data.primary_cta.href}
+                  className={cn(buttonVariants({ size: "xl" }))}
+                >
+                  {data.primary_cta.label}
+                </Link>
+                <Link
+                  href={data.secondary_cta.href}
+                  className={cn(
+                    buttonVariants({ variant: "outline", size: "xl" }),
+                  )}
+                >
+                  {data.secondary_cta.label}
+                </Link>
+              </div>
+            </ScrollReveal>
           </div>
 
           {/* Video showcase */}
-          <div className="w-full px-4 lg:px-12">
+          <ScrollReveal
+            animation="zoom-in"
+            delayMs={500}
+            durationMs={900}
+            className="w-full px-4 lg:px-12"
+          >
             <div className="ring-foreground/10 relative mx-auto mt-8 aspect-video w-full max-w-7xl overflow-hidden rounded-2xl shadow-2xl ring-1 lg:mt-10 lg:rounded-[40px]">
               <ReactPlayer
                 src={data.video.src}
@@ -118,7 +137,7 @@ export const HeroSection = ({ className }: { className?: string }) => {
                 style={{ width: "100%", height: "100%" }}
               />
             </div>
-          </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>
