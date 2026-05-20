@@ -27,7 +27,7 @@ export const DifferenceSection = ({ className }: { className?: string }) => {
 
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-2 mt-10 lg:mt-16">
           {/* Fragmented */}
-          <ScrollReveal animation="fade-in-up" delayMs={100} durationMs={800} className="h-full">
+          <ScrollReveal animation="fade-in-left" delayMs={100} durationMs={800} className="h-full">
             <Card className="border-border/60 gap-5 py-8 h-full">
               <CardContent className="space-y-5">
                 <div className="flex items-center gap-3">
@@ -54,7 +54,7 @@ export const DifferenceSection = ({ className }: { className?: string }) => {
           </ScrollReveal>
 
           {/* Connected */}
-          <ScrollReveal animation="fade-in-up" delayMs={200} durationMs={800} className="h-full">
+          <ScrollReveal animation="fade-in-right" delayMs={200} durationMs={800} className="h-full">
             <Card className="border-border/30 ring-primary/20 from-primary/10 to-card bg-linear-to-br gap-5 py-8 ring-1 shadow-lg h-full">
               <CardContent className="space-y-5">
                 <div className="flex items-center gap-3">

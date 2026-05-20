@@ -45,7 +45,7 @@ export const SaasInsight = ({ data = DEFAULT_SAAS_DATA, className }: SaasInsight
           <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
             
             {/* Left Image Showcase Panel */}
-            <ScrollReveal animation="fade-in-up" className="flex-1 w-full relative aspect-[4/3] rounded-[24px] overflow-hidden border border-primary/10">
+            <ScrollReveal animation="fade-in-left" durationMs={800} className="flex-1 w-full relative aspect-[4/3] rounded-[24px] overflow-hidden border border-primary/10">
               <Image
                 src={image}
                 alt="SaaS Insights Overview"
@@ -57,7 +57,7 @@ export const SaasInsight = ({ data = DEFAULT_SAAS_DATA, className }: SaasInsight
             </ScrollReveal>
 
             {/* Right Information Details Column */}
-            <ScrollReveal animation="fade-in-up" delayMs={200} className="flex-1 w-full space-y-6">
+            <ScrollReveal animation="fade-in-right" delayMs={150} durationMs={800} className="flex-1 w-full space-y-6">
               <div className="space-y-6">
                 <span className="inline-flex items-center justify-center w-[138px] h-[46px] rounded-3xl text-[14px] leading-[120%] font-normal text-primary bg-primary/10 border border-primary/20">
                   {tag}

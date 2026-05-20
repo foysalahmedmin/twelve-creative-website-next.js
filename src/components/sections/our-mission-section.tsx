@@ -15,7 +15,7 @@ export function OurMissionSection() {
         </ScrollReveal>
 
         <div className="relative z-10 mt-12 grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2 lg:mt-16">
-          <ScrollReveal animation="fade-in-up" delayMs={150} className="h-full">
+          <ScrollReveal animation="fade-in-left" delayMs={150} className="h-full">
             <div className="bg-card border-primary/10 hover:border-primary/20 h-full rounded-3xl border p-8 transition-colors sm:p-10">
               <h3 className="font-heading text-foreground mb-4 text-2xl font-semibold">
                 {ABOUT_MISSION_DATA.mission.title}
@@ -26,7 +26,7 @@ export function OurMissionSection() {
             </div>
           </ScrollReveal>
 
-          <ScrollReveal animation="fade-in-up" delayMs={300} className="h-full">
+          <ScrollReveal animation="fade-in-right" delayMs={300} className="h-full">
             <div className="bg-card border-primary/10 hover:border-primary/20 h-full rounded-3xl border p-8 transition-colors sm:p-10">
               <h3 className="font-heading text-foreground mb-4 text-2xl font-semibold">
                 {ABOUT_MISSION_DATA.vision.title}

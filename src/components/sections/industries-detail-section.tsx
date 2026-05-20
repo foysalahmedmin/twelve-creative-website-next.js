@@ -16,11 +16,18 @@ export const IndustriesDetailSection = ({
   return (
     <div className={cn("container py-12 md:py-16 lg:py-20", className)}>
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:gap-6">
-        {data.map((industry, index) => (
+        {data.map((industry, index) => {
+          // Even-indexed cards (left column on sm+) come in from the left;
+          // odd-indexed cards (right column) come in from the right.
+          // On mobile (single column) both still feel coherent — the same
+          // directional motion implies "left side / right side of the page".
+          const animation =
+            index % 2 === 0 ? "fade-in-left" : "fade-in-right";
+          return (
           <ScrollReveal
             key={industry.id}
-            animation="fade-in-up"
-            delayMs={index * 100}
+            animation={animation}
+            delayMs={(index % 2) * 80}
             durationMs={700}
           >
             <div
@@ -67,7 +74,8 @@ export const IndustriesDetailSection = ({
               </ul>
             </div>
           </ScrollReveal>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

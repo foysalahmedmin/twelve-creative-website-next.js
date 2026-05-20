@@ -107,7 +107,7 @@ export const PodcastInsight = ({ data, className }: PodcastInsightProps) => {
       <div className="flex flex-col lg:flex-row items-start justify-between gap-12 lg:gap-16">
         
         {/* Left Side: Header & Stepper list */}
-        <ScrollReveal animation="fade-in-up" className="flex-1 w-full space-y-6">
+        <ScrollReveal animation="fade-in-left" durationMs={800} className="flex-1 w-full space-y-6">
           <div className="flex flex-col gap-1 justify-start items-start max-w-[668px] w-full mx-auto space-y-3">
             <span className="min-w-[122px] h-[38px] rounded-3xl py-2 px-5 text-center flex justify-center items-center backdrop-blur-[2px] bg-primary/5 dark:bg-primary/10 text-[#ea692d] text-sm font-semibold shadow-sm border border-primary/10">
               {tag}
@@ -128,7 +128,7 @@ export const PodcastInsight = ({ data, className }: PodcastInsightProps) => {
         </ScrollReveal>
 
         {/* Right Side: Overlapping Image and Insight Card */}
-        <ScrollReveal animation="fade-in-up" delayMs={200} className="flex-1 w-full lg:max-w-[544px] relative lg:pb-10 pb-48">
+        <ScrollReveal animation="fade-in-right" delayMs={150} durationMs={800} className="flex-1 w-full lg:max-w-[544px] relative lg:pb-10 pb-48">
           
           {/* Background Showcase Image */}
           <div className="relative w-full max-w-[280px] lg:max-w-[544px] h-[auto] aspect-[544/506] rounded-[13px] overflow-hidden ml-4 lg:ml-0">

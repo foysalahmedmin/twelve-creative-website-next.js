@@ -90,7 +90,7 @@ export const BookingSection = ({
 
             <div className="relative grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-12">
               {/* Left: Steps preview */}
-              <div className="space-y-6">
+              <ScrollReveal animation="fade-in-left" durationMs={750} className="space-y-6">
                 <div className="space-y-2">
                   <span className="text-primary text-xs font-bold tracking-widest uppercase">
                     4-Step Booking
@@ -125,10 +125,10 @@ export const BookingSection = ({
                     </div>
                   ))}
                 </div>
-              </div>
+              </ScrollReveal>
 
               {/* Right: CTA card */}
-              <div className="flex flex-col justify-center">
+              <ScrollReveal animation="fade-in-right" delayMs={150} durationMs={750} className="flex flex-col justify-center">
                 <div className="from-primary-from/10 to-primary-to/5 border-primary/20 space-y-6 rounded-3xl border bg-linear-to-br p-8 backdrop-blur-sm sm:p-10">
                   <div className="space-y-3">
                     <div className="bg-primary text-primary-foreground inline-flex size-12 items-center justify-center rounded-2xl shadow-md">
@@ -175,7 +175,7 @@ export const BookingSection = ({
                     Or send a detailed inquiry using the form above.
                   </p>
                 </div>
-              </div>
+              </ScrollReveal>
             </div>
           </div>
         </div>
