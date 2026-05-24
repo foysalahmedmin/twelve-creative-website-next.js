@@ -9,6 +9,7 @@ import {
   MessageSquareQuote,
   Newspaper,
   Settings,
+  Sparkles,
   Star,
   Users,
   UsersRound,
@@ -33,6 +34,7 @@ export interface AdminNavItem {
  */
 export const ADMIN_NAV: AdminNavItem[] = [
   { label: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
+  { label: "Services", href: "/admin/services", icon: Sparkles },
   { label: "Testimonials", href: "/admin/testimonials", icon: MessageSquareQuote },
   { label: "Visual Library", href: "/admin/videos", icon: Film },
   { label: "Featured Projects", href: "/admin/featured-projects", icon: Star },

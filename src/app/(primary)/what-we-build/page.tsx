@@ -10,6 +10,7 @@ import { CANVAS_PODCAST_INSIGHT_DATA } from "@/data/podcast-insight.data";
 import { PROCESS_DATA } from "@/data/process.data";
 import { SERVICES_DATA } from "@/data/services.data";
 import { WHY_CHOOSE_US_DATA } from "@/data/why-choose-us.data";
+import { getPublicServicesAsLegacy } from "@/lib/api/services";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -18,15 +19,17 @@ export const metadata: Metadata = {
     "Explore Twelve Creative's work across positioning, video production, websites, paid ads, CRM, automation, and conversion systems.",
 };
 
-const SERVICE_ITEMS = SERVICES_DATA.map((service) => ({
-  id: service.id,
-  title: service.title,
-  description: service.description,
-  highlights: service.highlights,
-  thumbnail_src: service.thumbnail_src,
-}));
+export default async function WhatWeBuildPage() {
+  const live = await getPublicServicesAsLegacy();
+  const source = live.length ? live : SERVICES_DATA;
+  const serviceItems = source.map((service) => ({
+    id: service.id,
+    title: service.title,
+    description: service.description,
+    highlights: service.highlights,
+    thumbnail_src: service.thumbnail_src,
+  }));
 
-export default function WhatWeBuildPage() {
   return (
     <main className="bg-background min-h-screen">
       <PageHeader
@@ -36,7 +39,7 @@ export default function WhatWeBuildPage() {
       />
 
       {/* Detailed alternating service breakdowns */}
-      <AlternatingServicesSection data={SERVICE_ITEMS} />
+      <AlternatingServicesSection data={serviceItems} />
 
       {/* Growth system end-to-end deep dive */}
       <PodcastInsight data={CANVAS_PODCAST_INSIGHT_DATA} />

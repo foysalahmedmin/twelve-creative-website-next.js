@@ -1,10 +1,16 @@
 import { ServiceCard } from "@/components/cards/service-card";
 import { CenteredSectionHeader } from "@/components/common/section-label";
 import { ScrollReveal } from "@/components/common/scroll-reveal";
-import { SERVICES_DATA } from "@/data/services.data";
+import { SERVICES_DATA, type TService } from "@/data/services.data";
 import { cn } from "@/lib/utils";
 
-export const ServicesSection = ({ className }: { className?: string }) => {
+interface Props {
+  className?: string;
+  data?: TService[];
+}
+
+export const ServicesSection = ({ className, data }: Props) => {
+  const services = data && data.length ? data : SERVICES_DATA;
   return (
     <section
       className={cn(
@@ -24,7 +30,7 @@ export const ServicesSection = ({ className }: { className?: string }) => {
 
       {/* Grid */}
       <div className="mt-10 grid grid-cols-1 gap-8 md:grid-cols-2 lg:mt-20 lg:grid-cols-3">
-        {SERVICES_DATA.map((service, idx) => (
+        {services.map((service, idx) => (
           <ScrollReveal key={service.id} animation="fade-in-up" delayMs={150 * (idx % 3)}>
             <ServiceCard service={service} />
           </ScrollReveal>

@@ -2,7 +2,7 @@ import { DifferenceSection } from "@/components/_primary_/home-page/difference-s
 import { LiveFeaturedProjectsSection } from "@/components/_primary_/home-page/featured-projects-section-live";
 import { HomeCtaSection } from "@/components/_primary_/home-page/home-cta-section";
 import { IndustriesSection } from "@/components/_primary_/home-page/industries-section";
-import { ServicesSection } from "@/components/_primary_/home-page/services-section";
+import { LiveServicesSection } from "@/components/_primary_/home-page/services-section-live";
 import { BrandsStrip } from "@/components/sections/brands-strip";
 import FaqSection from "@/components/sections/faqs-section";
 import { HeroSection } from "@/components/sections/hero-section";
@@ -52,7 +52,7 @@ export default async function HomePage() {
       <HeroSection />
       <BrandsStrip />
       <LiveFeaturedProjectsSection />
-      <ServicesSection />
+      <LiveServicesSection />
       <TestimonialSection data={testimonialsData} />
       <ProcessSection data={PROCESS_DATA} />
       <DifferenceSection />
