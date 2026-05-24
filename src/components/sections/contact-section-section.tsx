@@ -3,6 +3,7 @@
 import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { CenteredSectionHeader } from "@/components/common/section-label";
 import { cn } from "@/lib/utils";
+import { submitContactMessageAction } from "@/lib/api/contact-messages-actions";
 import React, { useState } from "react";
 import { toast } from "sonner";
 
@@ -56,15 +57,31 @@ const ContactFormSection = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    try {
-      // Proactive delay mock submit
-      await new Promise((res) => setTimeout(res, 1200));
+    const parts: string[] = [];
+    if (formData.lookingFor) parts.push(`Looking for: ${formData.lookingFor}`);
+    if (formData.notWorking) parts.push(`Not working: ${formData.notWorking}`);
+    if (formData.timeline) parts.push(`Timeline: ${formData.timeline}`);
+    if (formData.budget) parts.push(`Budget: ${formData.budget}`);
+    if (formData.website) parts.push(`Website/Instagram: ${formData.website}`);
+    if (formData.industry) parts.push(`Industry: ${formData.industry}`);
+
+    const result = await submitContactMessageAction({
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone || undefined,
+      subject: formData.company
+        ? `Inquiry from ${formData.company}`
+        : "New inquiry",
+      message: parts.join("\n\n") || "No additional details provided.",
+    });
+
+    setIsSubmitting(false);
+
+    if (result.ok) {
       toast.success("Thank you. Your inquiry has been successfully received!");
       setFormData(INITIAL_FORM_DATA);
-    } catch {
-      toast.error("Failed to send inquiry. Please try again.");
-    } finally {
-      setIsSubmitting(false);
+    } else {
+      toast.error(result.error ?? "Failed to send inquiry. Please try again.");
     }
   };
 
@@ -334,7 +351,7 @@ export const PageContactSection = ({ className }: ContactSectionProps) => {
           <ScrollReveal
             animation="fade-in-up"
             delayMs={200}
-            className="border-primary/10 bg-primary/[0.02] dark:bg-primary/[0.04] w-full rounded-3xl border p-6 sm:p-8 lg:p-10"
+            className="border-primary/10 bg-primary/2 dark:bg-primary/4 w-full rounded-3xl border p-6 sm:p-8 lg:p-10"
           >
             <ContactFormSection />
           </ScrollReveal>

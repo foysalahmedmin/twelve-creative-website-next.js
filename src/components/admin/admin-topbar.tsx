@@ -54,6 +54,7 @@ export function AdminTopbar({
   const router = useRouter();
   const [isSigningOut, setIsSigningOut] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const [notifError, setNotifError] = useState<string | null>(null);
 
   const handleSignout = async () => {
     setIsSigningOut(true);
@@ -64,17 +65,21 @@ export function AdminTopbar({
     }
   };
 
-  const handleMarkRead = (id: string, is_read: boolean) => {
+  const handleMarkRead = (id: string, targetRead: boolean) => {
+    setNotifError(null);
     startTransition(async () => {
-      await markNotificationReadAction(id, !is_read);
-      router.refresh();
+      const result = await markNotificationReadAction(id, targetRead);
+      if (result.ok) router.refresh();
+      else setNotifError(result.error ?? "Failed to update notification");
     });
   };
 
   const handleMarkAll = () => {
+    setNotifError(null);
     startTransition(async () => {
-      await markAllNotificationsReadAction();
-      router.refresh();
+      const result = await markAllNotificationsReadAction();
+      if (result.ok) router.refresh();
+      else setNotifError(result.error ?? "Failed to mark all as read");
     });
   };
 
@@ -124,6 +129,12 @@ export function AdminTopbar({
             </div>
             <DropdownMenuSeparator />
 
+            {notifError && (
+              <p className="text-destructive px-3 py-2 text-xs font-medium">
+                {notifError}
+              </p>
+            )}
+
             {notifications.length === 0 ? (
               <p className="text-muted-foreground px-3 py-6 text-center text-sm">
                 No notifications yet
@@ -137,7 +148,7 @@ export function AdminTopbar({
                       !n.is_read ? "bg-primary/3" : ""
                     }`}
                     onClick={() => {
-                      if (!n.is_read) handleMarkRead(n._id, n.is_read);
+                      if (!n.is_read) handleMarkRead(n._id, true);
                       if (n.metadata?.url) router.push(n.metadata.url);
                       else if (n.notification.type === "booking")
                         router.push("/admin/bookings");
@@ -181,7 +192,7 @@ export function AdminTopbar({
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleMarkRead(n._id, n.is_read);
+                        handleMarkRead(n._id, !n.is_read);
                       }}
                       disabled={isPending}
                       className="text-muted-foreground hover:text-foreground mt-1 shrink-0 text-[11px] transition-colors disabled:opacity-50"

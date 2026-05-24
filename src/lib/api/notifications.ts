@@ -19,11 +19,18 @@ export interface ApiNotificationRecipient {
   created_at: string;
 }
 
-interface NotificationsMeta {
+interface RawNotificationsMeta {
+  total?: number;
+  page?: number;
+  limit?: number;
+  statistics?: { unread?: number };
+}
+
+export interface NotificationsMeta {
   total: number;
   page: number;
   limit: number;
-  unread?: number;
+  unread: number;
 }
 
 export async function getAdminNotifications(limit = 20): Promise<{
@@ -35,19 +42,25 @@ export async function getAdminNotifications(limit = 20): Promise<{
       `/api/notification-recipient/self?sort=-created_at&limit=${limit}`,
       { tags: [NOTIFICATIONS_TAG] },
     );
+    const raw = res.meta as RawNotificationsMeta | undefined;
     return {
       data: (res.data as ApiNotificationRecipient[]) ?? [],
-      meta: (res.meta as NotificationsMeta) ?? { total: 0, page: 1, limit },
+      meta: {
+        total: raw?.total ?? 0,
+        page: raw?.page ?? 1,
+        limit: raw?.limit ?? limit,
+        unread: raw?.statistics?.unread ?? 0,
+      },
     };
   } catch {
-    return { data: [], meta: { total: 0, page: 1, limit } };
+    return { data: [], meta: { total: 0, page: 1, limit, unread: 0 } };
   }
 }
 
 export async function getUnreadNotificationCount(): Promise<number> {
   try {
     const { meta } = await getAdminNotifications(1);
-    return meta.unread ?? 0;
+    return meta.unread;
   } catch {
     return 0;
   }

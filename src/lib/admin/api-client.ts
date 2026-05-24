@@ -100,19 +100,29 @@ export async function apiFetch<T = unknown>(
     return { success: false, data: undefined as T };
   }
 
-  // If the response is not ok (e.g., 4xx/5xx), return a safe failure response instead of throwing.
-  if (!res.ok) {
-    console.warn(`API request failed with status ${res.status} for ${url}`);
-    return { success: false, data: undefined as T };
+  // 401 = expired or invalid session — clear cookies and redirect to sign-in.
+  if (res.status === 401) {
+    await handleExpiredSession();
   }
 
+  // 204 No Content or caller opted out of JSON — return a bare success shell.
+  if (res.status === 204 || !parseJson) {
+    return { success: true, data: undefined as T };
+  }
+
+  // Parse the body (backend always sends JSON for both success and error responses).
   let json: ApiResponse<T> | ApiErrorPayload;
   try {
     json = (await res.json()) as ApiResponse<T> | ApiErrorPayload;
   } catch {
-    throw new ApiError(res.status, `Invalid JSON from ${path}`, null);
+    throw new ApiError(
+      res.status,
+      res.ok ? `Invalid JSON from ${path}` : `Request failed (${res.status})`,
+      null,
+    );
   }
 
+  // Non-ok status or backend's own success:false → throw so action catch blocks receive a real error.
   if (!res.ok || ("success" in json && json.success === false)) {
     const err = json as ApiErrorPayload;
     throw new ApiError(
