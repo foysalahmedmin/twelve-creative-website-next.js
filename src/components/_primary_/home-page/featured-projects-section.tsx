@@ -6,6 +6,7 @@ import { ScrollReveal } from "@/components/common/scroll-reveal";
 import {
   FEATURED_CATEGORIES,
   type TFeaturedAspect,
+  type TFeaturedCategory,
   type TFeaturedProject,
 } from "@/data/featured-projects.data";
 import { cn } from "@/lib/utils";
@@ -88,12 +89,20 @@ const ProjectCard = ({
   );
 };
 
+interface FeaturedProjectsSectionProps {
+  className?: string;
+  /** Categories to render. Defaults to the static FEATURED_CATEGORIES. */
+  data?: TFeaturedCategory[];
+}
+
 export const FeaturedProjectsSection = ({
   className,
-}: {
-  className?: string;
-}) => {
-  const [activeId, setActiveId] = useState(FEATURED_CATEGORIES[0].id);
+  data,
+}: FeaturedProjectsSectionProps) => {
+  const categories = data && data.length ? data : FEATURED_CATEGORIES;
+  const [activeId, setActiveId] = useState(categories[0]?.id ?? "");
+
+  if (!categories.length) return null;
 
   return (
     <section className={cn("container mt-6 md:mt-10 lg:mt-12", className)}>
@@ -120,14 +129,14 @@ export const FeaturedProjectsSection = ({
             className="mt-5 flex w-full flex-col items-center"
           >
             <TabsList>
-              {FEATURED_CATEGORIES.map((category) => (
+              {categories.map((category) => (
                 <TabsTrigger key={category.id} value={category.id}>
                   {category.label}
                 </TabsTrigger>
               ))}
             </TabsList>
 
-            {FEATURED_CATEGORIES.map((category) => (
+            {categories.map((category) => (
               <TabsContent
                 key={category.id}
                 value={category.id}

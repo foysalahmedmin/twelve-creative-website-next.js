@@ -1,35 +1,46 @@
 /**
- * Public + admin readers for the Visual Library (showcase videos).
+ * Public + admin readers for showcase videos.
  *
- * Public reader is tagged so admin mutations can invalidate it.
+ * One `showcase-video` collection feeds two different public surfaces, split
+ * by the `aspect` field:
+ *   - `aspect: 'reel'`      → Visual Library vertical marquee on Works page
+ *   - `aspect: 'landscape'` → "Work Showcase" thumbnail grid (Works page + Canvus)
  *
- * `getPublicShowcaseVideosForMarquee()` adapts to the legacy
- * `IMarqueeItem` shape (`image_url`, `video_url`, `alt`) so the
- * existing `VerticalMarqueeSlider` doesn't need to change.
+ * Public reader is tagged so admin mutations invalidate it.
  */
 
 import type { IMarqueeItem } from "@/data/vertical-marquee.data";
+import type {
+  IPortfolioItem,
+  TPortfolioData,
+} from "@/data/thumbnail-work-section.data";
 import { apiFetch } from "@/lib/admin/api-client";
 import type { VideoRef } from "@/lib/admin/types";
 import { extractYouTubeId } from "@/lib/media/video";
 
 export const SHOWCASE_VIDEOS_TAG = "showcase-videos";
 
+export type ShowcaseAspect = "reel" | "landscape";
+
 export interface ShowcaseVideo {
   _id: string;
   video: VideoRef;
   thumbnail?: string;
   alt: string;
+  aspect: ShowcaseAspect;
   order: number;
   is_active: boolean;
   created_at?: string;
   updated_at?: string;
 }
 
-export async function getPublicShowcaseVideos(): Promise<ShowcaseVideo[]> {
+export async function getPublicShowcaseVideos(
+  aspect?: ShowcaseAspect,
+): Promise<ShowcaseVideo[]> {
   try {
+    const qs = aspect ? `?aspect=${aspect}` : "";
     const res = await apiFetch<ShowcaseVideo[]>(
-      "/api/showcase-video/public",
+      `/api/showcase-video/public${qs}`,
       {
         method: "GET",
         auth: false,
@@ -78,14 +89,32 @@ export async function getShowcaseVideoById(
 }
 
 /**
- * Adapts active showcase videos to the legacy IMarqueeItem shape so
- * `VerticalMarqueeSlider` consumes them with no code change.
+ * Adapts active reel-aspect videos to the legacy `IMarqueeItem` shape so
+ * `VerticalMarqueeSlider` (Visual Library) consumes them with no changes.
  */
 export async function getPublicShowcaseVideosForMarquee(): Promise<
   IMarqueeItem[]
 > {
-  const items = await getPublicShowcaseVideos();
+  const items = await getPublicShowcaseVideos("reel");
   return items.map(adaptForMarquee);
+}
+
+/**
+ * Adapts active landscape-aspect videos to the legacy `TPortfolioData` shape
+ * so `ThumbnailWorkSection` consumes them with no changes. Chrome
+ * (label/title/description/type) comes from the caller's defaults.
+ */
+export async function getPublicShowcaseVideosForThumbnailGrid(
+  defaults: Omit<TPortfolioData, "work">,
+): Promise<TPortfolioData> {
+  const items = await getPublicShowcaseVideos("landscape");
+  const work: IPortfolioItem[] = items.map((item) => ({
+    id: item._id,
+    thumbnail: resolvePoster(item.video, item.thumbnail),
+    video_link: item.video.value,
+    title: item.alt,
+  }));
+  return { ...defaults, work };
 }
 
 function adaptForMarquee(item: ShowcaseVideo): IMarqueeItem {

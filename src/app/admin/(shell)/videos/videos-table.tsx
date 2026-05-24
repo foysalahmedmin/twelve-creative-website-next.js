@@ -87,6 +87,7 @@ export function ShowcaseVideosTable({ items }: Props) {
             <TableHead className="w-[80px]">Order</TableHead>
             <TableHead className="w-[100px]">Poster</TableHead>
             <TableHead>Alt</TableHead>
+            <TableHead>Aspect</TableHead>
             <TableHead>Source</TableHead>
             <TableHead className="w-[100px]">Active</TableHead>
             <TableHead className="w-[120px] text-right">Actions</TableHead>
@@ -101,7 +102,12 @@ export function ShowcaseVideosTable({ items }: Props) {
                   {item.order}
                 </TableCell>
                 <TableCell>
-                  <div className="border-border/60 bg-muted relative aspect-[9/16] w-12 overflow-hidden rounded">
+                  <div
+                    className={
+                      "border-border/60 bg-muted relative w-12 overflow-hidden rounded " +
+                      (item.aspect === "landscape" ? "aspect-video" : "aspect-[9/16]")
+                    }
+                  >
                     {preview?.posterUrl ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
@@ -116,6 +122,12 @@ export function ShowcaseVideosTable({ items }: Props) {
                   <p className="text-foreground line-clamp-2 max-w-md text-sm font-medium">
                     {item.alt}
                   </p>
+                </TableCell>
+                <TableCell>
+                  <StatusBadge
+                    label={item.aspect === "landscape" ? "Landscape" : "Reel"}
+                    tone={item.aspect === "landscape" ? "info" : "neutral"}
+                  />
                 </TableCell>
                 <TableCell>
                   <StatusBadge

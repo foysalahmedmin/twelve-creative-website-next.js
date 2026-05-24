@@ -11,6 +11,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import {
   createShowcaseVideoAction,
@@ -32,6 +39,9 @@ export function VideoForm({ mode, initial }: VideoFormProps) {
   const [video, setVideo] = useState<VideoRef | null>(initial?.video ?? null);
   const [thumbnail, setThumbnail] = useState<string>(initial?.thumbnail ?? "");
   const [alt, setAlt] = useState<string>(initial?.alt ?? "");
+  const [aspect, setAspect] = useState<"reel" | "landscape">(
+    initial?.aspect ?? "reel",
+  );
   const [order, setOrder] = useState<number>(initial?.order ?? 0);
   const [isActive, setIsActive] = useState<boolean>(initial?.is_active ?? true);
 
@@ -47,6 +57,7 @@ export function VideoForm({ mode, initial }: VideoFormProps) {
       video,
       thumbnail: thumbnail || undefined,
       alt: alt.trim(),
+      aspect,
       order,
       is_active: isActive,
     };
@@ -88,12 +99,41 @@ export function VideoForm({ mode, initial }: VideoFormProps) {
             description="YouTube, direct URL, or upload. Best as a portrait clip (9:16) for the marquee."
           />
 
+          <div className="space-y-2">
+            <Label>
+              Aspect <span className="text-destructive">*</span>
+            </Label>
+            <Select
+              value={aspect}
+              onValueChange={(v) => setAspect(v as "reel" | "landscape")}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="reel">
+                  Reel (9:16) — appears in Visual Library marquee
+                </SelectItem>
+                <SelectItem value="landscape">
+                  Landscape (16:9) — appears in Work Showcase grid
+                </SelectItem>
+              </SelectContent>
+            </Select>
+            <p className="text-muted-foreground text-xs">
+              Decides which public surface the video shows on.
+            </p>
+          </div>
+
           <ImageInput
             label="Thumbnail (optional)"
-            description="Used as the poster in the marquee. For YouTube, leave blank to auto-derive from the video."
+            description={
+              aspect === "reel"
+                ? "Used as the poster in the marquee. For YouTube, leave blank to auto-derive from the video."
+                : "Used as the poster in the Work Showcase grid. For YouTube, leave blank to auto-derive from the video."
+            }
             value={thumbnail}
             onChange={setThumbnail}
-            previewAspect="9/16"
+            previewAspect={aspect === "reel" ? "9/16" : "16/9"}
           />
 
           <div className="space-y-2">

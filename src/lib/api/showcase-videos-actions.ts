@@ -13,6 +13,7 @@ export interface ShowcaseVideoInput {
   video: VideoRef;
   thumbnail?: string;
   alt: string;
+  aspect?: "reel" | "landscape";
   order?: number;
   is_active?: boolean;
 }

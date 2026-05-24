@@ -1,5 +1,5 @@
 import { DifferenceSection } from "@/components/_primary_/home-page/difference-section";
-import { FeaturedProjectsSection } from "@/components/_primary_/home-page/featured-projects-section";
+import { LiveFeaturedProjectsSection } from "@/components/_primary_/home-page/featured-projects-section-live";
 import { HomeCtaSection } from "@/components/_primary_/home-page/home-cta-section";
 import { IndustriesSection } from "@/components/_primary_/home-page/industries-section";
 import { ServicesSection } from "@/components/_primary_/home-page/services-section";
@@ -51,7 +51,7 @@ export default async function HomePage() {
     <div className="flex flex-col">
       <HeroSection />
       <BrandsStrip />
-      <FeaturedProjectsSection />
+      <LiveFeaturedProjectsSection />
       <ServicesSection />
       <TestimonialSection data={testimonialsData} />
       <ProcessSection data={PROCESS_DATA} />

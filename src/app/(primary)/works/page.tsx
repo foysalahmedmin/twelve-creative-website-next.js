@@ -10,7 +10,10 @@ import { CTA_WORKS } from "@/data/page-ctas.data";
 import { CANVAS_PORTFOLIO_DATA } from "@/data/thumbnail-work-section.data";
 import { CANVAS_MARQUEE_DATA } from "@/data/vertical-marquee.data";
 import { WORKS_PAGE_MOCK_DATA } from "@/data/works.data";
-import { getPublicShowcaseVideosForMarquee } from "@/lib/api/showcase-videos";
+import {
+  getPublicShowcaseVideosForMarquee,
+  getPublicShowcaseVideosForThumbnailGrid,
+} from "@/lib/api/showcase-videos";
 import { adaptWorkToLegacy, getPublicWorks } from "@/lib/api/works";
 import type { Metadata } from "next";
 
@@ -21,12 +24,21 @@ export const metadata: Metadata = {
 };
 
 export default async function WorksPage() {
-  const [showcaseVideos, liveWorks] = await Promise.all([
+  const [showcaseVideos, liveWorks, livePortfolio] = await Promise.all([
     getPublicShowcaseVideosForMarquee(),
     getPublicWorks(),
+    getPublicShowcaseVideosForThumbnailGrid({
+      label: CANVAS_PORTFOLIO_DATA.label,
+      title: CANVAS_PORTFOLIO_DATA.title,
+      description: CANVAS_PORTFOLIO_DATA.description,
+      type: CANVAS_PORTFOLIO_DATA.type,
+    }),
   ]);
   const marqueeData = showcaseVideos.length ? showcaseVideos : CANVAS_MARQUEE_DATA;
   const works = liveWorks.length ? liveWorks.map(adaptWorkToLegacy) : WORKS_PAGE_MOCK_DATA;
+  const portfolioData = livePortfolio.work.length
+    ? livePortfolio
+    : CANVAS_PORTFOLIO_DATA;
 
   return (
     <main className="bg-background min-h-screen">
@@ -73,7 +85,7 @@ export default async function WorksPage() {
       </section>
 
       {/* Additional work showcase */}
-      <ThumbnailWorkSection works={CANVAS_PORTFOLIO_DATA} slug="works" />
+      <ThumbnailWorkSection works={portfolioData} slug="works" />
       {/* CTA */}
       <CTASection data={CTA_WORKS} />
     </main>
