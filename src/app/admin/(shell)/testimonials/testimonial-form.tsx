@@ -62,6 +62,11 @@ export function TestimonialForm({ mode, initial }: TestimonialFormProps) {
       payload.video_message = null;
       payload.thumbnail = "";
     } else {
+      if (!payload.video_message) {
+        toast.error("Video is required for a video testimonial.");
+        setSaving(false);
+        return;
+      }
       payload.message = "";
     }
 
