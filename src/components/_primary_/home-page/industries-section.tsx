@@ -3,7 +3,11 @@
 import { CenteredSectionHeader } from "@/components/common/section-label";
 import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { Card } from "@/components/ui/card";
-import { INDUSTRIES_DATA, type TIndustryIconKey } from "@/data/industries.data";
+import {
+  INDUSTRIES_DATA,
+  type TIndustry,
+  type TIndustryIconKey,
+} from "@/data/industries.data";
 import { cn } from "@/lib/utils";
 import {
   Airplane01Icon,
@@ -23,8 +27,14 @@ const INDUSTRY_ICON_MAP: Record<TIndustryIconKey, typeof Restaurant01Icon> = {
   "professional-services": Briefcase01Icon,
 };
 
-export const IndustriesSection = ({ className }: { className?: string }) => {
-  const [activeId, setActiveId] = useState(INDUSTRIES_DATA[0].id);
+interface Props {
+  className?: string;
+  data?: TIndustry[];
+}
+
+export const IndustriesSection = ({ className, data }: Props) => {
+  const industries = data && data.length ? data : INDUSTRIES_DATA;
+  const [activeId, setActiveId] = useState(industries[0].id);
 
   return (
     <section className={cn("container mt-6 md:mt-10 lg:mt-12", className)}>
@@ -57,7 +67,7 @@ export const IndustriesSection = ({ className }: { className?: string }) => {
               {/* Tab Pills - Styled exactly like the old glass navigation bar */}
               <div className="mb-12 w-full flex justify-center overflow-x-auto scrollbar-none pb-2">
                 <TabsList className="border border-white/10 bg-card/45 backdrop-blur-md p-1.5 rounded-2xl flex gap-1">
-                  {INDUSTRIES_DATA.map((industry) => {
+                  {industries.map((industry) => {
                     const Icon = INDUSTRY_ICON_MAP[industry.icon];
                     return (
                       <TabsTrigger
@@ -73,7 +83,7 @@ export const IndustriesSection = ({ className }: { className?: string }) => {
                 </TabsList>
               </div>
 
-              {INDUSTRIES_DATA.map((industry) => (
+              {industries.map((industry) => (
                 <TabsContent
                   key={industry.id}
                   value={industry.id}
