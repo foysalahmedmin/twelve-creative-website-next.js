@@ -33,6 +33,7 @@ export interface IWorkItem {
   solution_phases?: { phase: string; time?: string; desc: string }[];
   outcome_desc?: string;
   outcome_video?: string;
+  outcome_video_thumbnail?: string;
   testimonial?: {
     quote: string;
     avatar_url?: string;

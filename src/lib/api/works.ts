@@ -167,6 +167,7 @@ export function adaptWorkToLegacy(work: Work): IWorkItem {
     solution_phases: work.solution_phases,
     outcome_desc: work.outcome_desc,
     outcome_video: resolveOutcomeVideo(work.outcome_video),
+    outcome_video_thumbnail: resolveOutcomeThumbnail(work.outcome_video, work.outcome_video_thumbnail),
     testimonial: work.testimonial,
     calendly_url: work.calendly_url,
   };
@@ -179,4 +180,13 @@ function resolveOutcomeVideo(ref?: VideoRef): string | undefined {
     return id ? `https://www.youtube.com/embed/${id}` : ref.value;
   }
   return ref.value;
+}
+
+function resolveOutcomeThumbnail(ref?: VideoRef, thumbnail?: string): string | undefined {
+  if (thumbnail) return thumbnail;
+  if (ref?.source === "youtube") {
+    const id = extractYouTubeId(ref.value);
+    if (id) return `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+  }
+  return undefined;
 }

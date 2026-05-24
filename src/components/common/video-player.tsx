@@ -59,7 +59,7 @@ export const VideoPlayer = ({
 
       {hasStarted && (
         <ReactPlayer
-          url={link}
+          src={link}
           width="100%"
           height="100%"
           controls

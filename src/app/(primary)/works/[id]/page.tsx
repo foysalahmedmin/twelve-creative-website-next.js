@@ -296,7 +296,7 @@ export default async function WorksDetailsPage({ params }: WorksDetailsPageProps
 
                 {workData.outcome_video && (
                   <div className="pt-4">
-                    <VideoPlayer link={workData.outcome_video} thumbnail={workData.image_url} />
+                    <VideoPlayer link={workData.outcome_video} thumbnail={workData.outcome_video_thumbnail || workData.image_url} />
                   </div>
                 )}
               </div>

@@ -47,7 +47,7 @@ const VideoPopup = ({
         <div className="aspect-9/16 max-w-100 w-full mx-auto rounded-lg overflow-hidden relative h-full">
           <ReactPlayer
             className="aspect-9/16 absolute inset-0"
-            url={url}
+            src={url}
             playing={true}
             width="100%"
             height="100%"
@@ -55,11 +55,8 @@ const VideoPopup = ({
             playsinline
             config={{
               youtube: {
-                playerVars: {
-                  modestbranding: 1,
-                  showinfo: 0,
-                  rel: 0,
-                },
+                modestbranding: 1,
+                rel: 0,
               },
             }}
           />

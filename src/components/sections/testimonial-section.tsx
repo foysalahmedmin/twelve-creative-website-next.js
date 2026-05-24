@@ -153,7 +153,7 @@ export const TestimonialSection = ({ data = TESTIMONIALS_DATA, className }: Part
               {/* React Player Container */}
               <div className="aspect-[9/16] w-full overflow-hidden rounded-2xl bg-black">
                 <ReactPlayer
-                  url={activeVideo.video_message || ""}
+                  src={activeVideo.video_message || ""}
                   playing
                   controls
                   width="100%"
