@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import { LoginForm } from "./login-form";
+import { SigninForm } from "./signin-form";
 
 export const metadata: Metadata = {
   title: "Admin Sign In | Twelve Creative",
@@ -27,7 +27,7 @@ export default function AdminLoginPage() {
 
         <div className="bg-card border-border/60 rounded-2xl border p-6 sm:p-7">
           <Suspense fallback={null}>
-            <LoginForm />
+            <SigninForm />
           </Suspense>
         </div>
 

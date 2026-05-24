@@ -1,12 +1,13 @@
 "use client";
 
+import { Eye, EyeOff } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { loginAction, type LoginActionResult } from "@/lib/admin/auth-actions";
+import { signinAction, type SigninActionResult } from "@/lib/admin/auth-actions";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -17,13 +18,14 @@ function SubmitButton() {
   );
 }
 
-export function LoginForm() {
+export function SigninForm() {
   const router = useRouter();
   const params = useSearchParams();
   const callbackUrl = params.get("callbackUrl") ?? "";
+  const [showPassword, setShowPassword] = useState(false);
 
-  const [state, formAction] = useActionState<LoginActionResult | undefined, FormData>(
-    loginAction,
+  const [state, formAction] = useActionState<SigninActionResult | undefined, FormData>(
+    signinAction,
     undefined,
   );
 
@@ -53,14 +55,25 @@ export function LoginForm() {
 
       <div className="space-y-2">
         <Label htmlFor="password">Password</Label>
-        <Input
-          id="password"
-          name="password"
-          type="password"
-          autoComplete="current-password"
-          placeholder="••••••••"
-          required
-        />
+        <div className="relative">
+          <Input
+            id="password"
+            name="password"
+            type={showPassword ? "text" : "password"}
+            autoComplete="current-password"
+            placeholder="••••••••"
+            required
+            className="pr-10"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((v) => !v)}
+            className="text-muted-foreground hover:text-foreground absolute right-3 top-1/2 -translate-y-1/2"
+            aria-label={showPassword ? "Hide password" : "Show password"}
+          >
+            {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+          </button>
+        </div>
       </div>
 
       {state && !state.ok && state.error && (

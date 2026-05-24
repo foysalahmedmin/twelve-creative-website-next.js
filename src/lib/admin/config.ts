@@ -28,7 +28,7 @@ export const ADMIN_CONFIG = {
   ),
 
   /** Where unauthenticated users get redirected. */
-  loginPath: "/admin/login",
+  loginPath: "/admin/signin",
 
   /** Where users land after a successful login. */
   dashboardPath: "/admin/dashboard",

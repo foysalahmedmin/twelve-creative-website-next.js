@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 const ACCESS_COOKIE = "tc_admin_access";
-const LOGIN_PATH = "/admin/login";
+const LOGIN_PATH = "/admin/signin";
 const DASHBOARD_PATH = "/admin/dashboard";
 
 export function proxy(request: NextRequest) {

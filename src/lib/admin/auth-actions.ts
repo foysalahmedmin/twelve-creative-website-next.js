@@ -19,16 +19,16 @@ interface SigninResponse {
   info: AdminUser;
 }
 
-export interface LoginActionResult {
+export interface SigninActionResult {
   ok: boolean;
   error?: string;
   redirectTo?: string;
 }
 
-export async function loginAction(
-  _prevState: LoginActionResult | undefined,
+export async function signinAction(
+  _prevState: SigninActionResult | undefined,
   formData: FormData,
-): Promise<LoginActionResult> {
+): Promise<SigninActionResult> {
   const email = String(formData.get("email") ?? "").trim().toLowerCase();
   const password = String(formData.get("password") ?? "");
   const callbackUrl = String(formData.get("callbackUrl") ?? "").trim();
@@ -58,7 +58,7 @@ export async function loginAction(
     if (!res.ok || json.success === false) {
       return {
         ok: false,
-        error: (json as { message?: string }).message || "Login failed.",
+        error: (json as { message?: string }).message || "Sign-in failed.",
       };
     }
 
@@ -111,7 +111,7 @@ export async function loginAction(
   };
 }
 
-export async function logoutAction(): Promise<void> {
+export async function signoutAction(): Promise<void> {
   const jar = await cookies();
   const token = jar.get(ADMIN_CONFIG.cookies.access)?.value;
 

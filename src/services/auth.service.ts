@@ -34,7 +34,7 @@ export const authService = {
     return response;
   },
 
-  customerLogin: async (payload: { phone: string; password: string }) => {
+  customerSignin: async (payload: { phone: string; password: string }) => {
     const { data: response } = await api.post<ApiResponse<AuthResponse>>(API.ENDPOINTS.CUSTOMERS.LOGIN, payload);
     return response;
   },
@@ -44,7 +44,7 @@ export const authService = {
     return response;
   },
 
-  customerLogout: async () => {
+  customerSignout: async () => {
     const { data: response } = await api.post<ApiResponse<any>>(API.ENDPOINTS.CUSTOMERS.LOGOUT);
     return response;
   },
@@ -70,7 +70,7 @@ export const authService = {
   },
 
   // --- User/Staff Auth ---
-  userLogin: async (payload: { email: string; password: string }) => {
+  userSignin: async (payload: { email: string; password: string }) => {
     const { data: response } = await api.post<ApiResponse<AuthResponse>>("/users/login", payload);
     return response;
   },
@@ -80,7 +80,7 @@ export const authService = {
     return response;
   },
 
-  logout: async () => {
+  signout: async () => {
     const { data: response } = await api.post<ApiResponse<any>>("/users/logout");
     return response;
   }

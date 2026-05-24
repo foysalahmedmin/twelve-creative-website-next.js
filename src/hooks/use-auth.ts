@@ -1,5 +1,5 @@
 import { CONSTANT } from "@/config/constant";
-import { logout as logoutAction } from "@/redux/slices/auth-slice";
+import { signout as signoutAction } from "@/redux/slices/auth-slice";
 import { RootState } from "@/redux/store";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -15,9 +15,9 @@ export const useAuth = () => {
     (state: RootState) => state.auth,
   );
 
-  const logout = () => {
+  const signout = () => {
     queryClient.clear();
-    dispatch(logoutAction());
+    dispatch(signoutAction());
     if (typeof window !== "undefined") {
       deleteCookie(CONSTANT.LOCAL_STORAGE_KEYS.AUTH_TOKEN);
       deleteCookie("twelve-creative-refresh-token");
@@ -32,6 +32,6 @@ export const useAuth = () => {
     isAuthenticated,
     isLoading,
     error,
-    logout,
+    signout,
   };
 };

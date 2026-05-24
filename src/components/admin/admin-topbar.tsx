@@ -19,7 +19,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { logoutAction } from "@/lib/admin/auth-actions";
+import { signoutAction } from "@/lib/admin/auth-actions";
 import type { AdminUser } from "@/lib/admin/types";
 
 interface AdminTopbarProps {
@@ -34,14 +34,14 @@ export function AdminTopbar({
   unreadMessages = 0,
 }: AdminTopbarProps) {
   const router = useRouter();
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [isSigningOut, setIsSigningOut] = useState(false);
 
-  const handleLogout = async () => {
-    setIsLoggingOut(true);
+  const handleSignout = async () => {
+    setIsSigningOut(true);
     try {
-      await logoutAction();
+      await signoutAction();
     } catch {
-      setIsLoggingOut(false);
+      setIsSigningOut(false);
     }
   };
 
@@ -133,7 +133,7 @@ export function AdminTopbar({
             <Button
               variant="ghost"
               className="h-auto gap-2.5 px-2 py-1.5"
-              disabled={isLoggingOut}
+              disabled={isSigningOut}
             >
               <span className="bg-primary/15 text-primary flex size-8 items-center justify-center rounded-full text-xs font-bold">
                 {initials || "?"}
@@ -158,12 +158,12 @@ export function AdminTopbar({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              onClick={handleLogout}
-              disabled={isLoggingOut}
+              onClick={handleSignout}
+              disabled={isSigningOut}
               className="text-destructive focus:text-destructive"
             >
               <LogOut className="size-4" />
-              {isLoggingOut ? "Signing out…" : "Sign out"}
+              {isSigningOut ? "Signing out…" : "Sign out"}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
