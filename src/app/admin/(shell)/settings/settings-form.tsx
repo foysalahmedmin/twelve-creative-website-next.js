@@ -4,6 +4,7 @@ import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import { ImageInput } from "@/components/admin/inputs/image-input";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -29,6 +30,13 @@ export function SettingsForm({ initial }: Props) {
     youtube: initial.social?.youtube ?? "",
     x: initial.social?.x ?? "",
     facebook: initial.social?.facebook ?? "",
+    faq_image: initial.faq_section?.image ?? "",
+    faq_image_alt: initial.faq_section?.image_alt ?? "",
+    faq_title: initial.faq_section?.title ?? "",
+    faq_description: initial.faq_section?.description ?? "",
+    faq_name: initial.faq_section?.name ?? "",
+    faq_position: initial.faq_section?.position ?? "",
+    faq_contact_link: initial.faq_section?.contact_link ?? "",
   });
 
   const update = (key: keyof typeof form, value: string) =>
@@ -48,6 +56,15 @@ export function SettingsForm({ initial }: Props) {
         youtube: form.youtube || undefined,
         x: form.x || undefined,
         facebook: form.facebook || undefined,
+      },
+      faq_section: {
+        image: form.faq_image || undefined,
+        image_alt: form.faq_image_alt || undefined,
+        title: form.faq_title || undefined,
+        description: form.faq_description || undefined,
+        name: form.faq_name || undefined,
+        position: form.faq_position || undefined,
+        contact_link: form.faq_contact_link || undefined,
       },
     });
     setSaving(false);
@@ -146,6 +163,81 @@ export function SettingsForm({ initial }: Props) {
               />
             </div>
           ))}
+        </div>
+      </section>
+
+      <section className="space-y-4">
+        <div>
+          <h3 className="text-foreground text-sm font-semibold">FAQ Section</h3>
+          <p className="text-muted-foreground text-xs">
+            The coordinator profile card shown beside the FAQ list on the home,
+            about, and contact pages. Leave blank to use the built-in defaults.
+          </p>
+        </div>
+        <div className="space-y-2">
+          <ImageInput
+            label="Photo"
+            value={form.faq_image}
+            onChange={(v) => update("faq_image", v)}
+            previewAspect="1/1"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="faq_image_alt">Photo alt text</Label>
+          <Input
+            id="faq_image_alt"
+            value={form.faq_image_alt}
+            onChange={(e) => update("faq_image_alt", e.target.value)}
+            placeholder="e.g. Carlos Doce — Founder of Twelve Creative"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="faq_title">Heading</Label>
+          <Input
+            id="faq_title"
+            value={form.faq_title}
+            onChange={(e) => update("faq_title", e.target.value)}
+            placeholder="e.g. Have more questions?"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="faq_description">Description</Label>
+          <Textarea
+            id="faq_description"
+            rows={3}
+            value={form.faq_description}
+            onChange={(e) => update("faq_description", e.target.value)}
+            placeholder="Short paragraph shown below the heading"
+          />
+        </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="space-y-2">
+            <Label htmlFor="faq_name">Name</Label>
+            <Input
+              id="faq_name"
+              value={form.faq_name}
+              onChange={(e) => update("faq_name", e.target.value)}
+              placeholder="e.g. Carlos Doce"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="faq_position">Position</Label>
+            <Input
+              id="faq_position"
+              value={form.faq_position}
+              onChange={(e) => update("faq_position", e.target.value)}
+              placeholder="e.g. Founder, Twelve Creative"
+            />
+          </div>
+          <div className="space-y-2 sm:col-span-2">
+            <Label htmlFor="faq_contact_link">CTA link</Label>
+            <Input
+              id="faq_contact_link"
+              value={form.faq_contact_link}
+              onChange={(e) => update("faq_contact_link", e.target.value)}
+              placeholder="/contact"
+            />
+          </div>
         </div>
       </section>
 

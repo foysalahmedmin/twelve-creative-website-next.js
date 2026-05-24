@@ -5,6 +5,7 @@ import { apiFetch } from "@/lib/admin/api-client";
 import { ApiError } from "@/lib/admin/types";
 import {
   SITE_SETTING_TAG,
+  type FaqSection,
   type SiteSetting,
   type SiteSocials,
 } from "./site-setting";
@@ -15,6 +16,7 @@ export interface SiteSettingInput {
   contact_address?: string;
   booking_notification_email?: string;
   social?: SiteSocials;
+  faq_section?: FaqSection;
 }
 
 export interface ActionResult<T = unknown> {

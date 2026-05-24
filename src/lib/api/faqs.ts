@@ -1,5 +1,6 @@
 import type { TFaqsData, TFaqItem } from "@/data/faqs.data";
 import { apiFetch } from "@/lib/admin/api-client";
+import { getPublicSiteSetting } from "@/lib/api/site-setting";
 
 export const FAQS_TAG = "faqs";
 
@@ -60,15 +61,29 @@ export async function getFaqById(id: string): Promise<Faq> {
 
 /**
  * Adapts admin FAQs to the legacy `TFaqsData` shape `FaqSection` already
- * consumes — chrome (image/title/description/etc.) comes from defaults.
+ * consumes. Static defaults are used as fallback; live values from
+ * SiteSetting.faq_section override them when present.
  */
 export async function getPublicFaqsForSection(
   defaults: Omit<TFaqsData, "faqs">,
 ): Promise<TFaqsData> {
-  const items = await getPublicFaqs();
+  const [items, setting] = await Promise.all([
+    getPublicFaqs(),
+    getPublicSiteSetting(),
+  ]);
   const faqs: TFaqItem[] = items.map((f) => ({
     question: f.question,
     answer: f.answer,
   }));
-  return { ...defaults, faqs };
+  const live = setting.faq_section ?? {};
+  return {
+    image: live.image || defaults.image,
+    alt: live.image_alt || defaults.alt,
+    title: live.title || defaults.title,
+    description: live.description || defaults.description,
+    name: live.name || defaults.name,
+    position: live.position || defaults.position,
+    contact_link: live.contact_link || defaults.contact_link,
+    faqs,
+  };
 }

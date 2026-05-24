@@ -10,6 +10,16 @@ export interface SiteSocials {
   facebook?: string;
 }
 
+export interface FaqSection {
+  image?: string;
+  image_alt?: string;
+  title?: string;
+  description?: string;
+  name?: string;
+  position?: string;
+  contact_link?: string;
+}
+
 export interface SiteSetting {
   _id?: string;
   contact_email?: string;
@@ -17,6 +27,7 @@ export interface SiteSetting {
   contact_address?: string;
   social?: SiteSocials;
   booking_notification_email?: string;
+  faq_section?: FaqSection;
   updated_at?: string;
 }
 
