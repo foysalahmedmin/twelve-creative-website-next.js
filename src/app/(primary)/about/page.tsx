@@ -11,6 +11,7 @@ import { FAQS_DATA } from "@/data/faqs.data";
 import { CTA_ABOUT } from "@/data/page-ctas.data";
 import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
 import { getPublicFaqsForSection } from "@/lib/api/faqs";
+import { getPublicPageHero, resolveVideoSrc } from "@/lib/api/page-heroes";
 import { getPublicTestimonialsForSection } from "@/lib/api/testimonials";
 import type { Metadata } from "next";
 
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
 };
 
 export default async function AboutPage() {
-  const [testimonialsData, faqsData] = await Promise.all([
+  const [testimonialsData, faqsData, hero] = await Promise.all([
     getPublicTestimonialsForSection({
       label: TESTIMONIALS_DATA.label,
       title: TESTIMONIALS_DATA.title,
@@ -36,14 +37,16 @@ export default async function AboutPage() {
       position: FAQS_DATA.position,
       contact_link: FAQS_DATA.contact_link,
     }),
+    getPublicPageHero("about"),
   ]);
 
   return (
     <main className="bg-background min-h-screen">
       <PageHeader
-        label="About"
-        title="Built for businesses that need strategy and execution in the same room."
-        description="Twelve Creative was built from the belief that creative work should be connected to the business it serves. We exist to close the gap between strategy and execution."
+        label={hero?.label ?? "About"}
+        title={hero?.title ?? "Built for businesses that need strategy and execution in the same room."}
+        description={hero?.description ?? "Twelve Creative was built from the belief that creative work should be connected to the business it serves. We exist to close the gap between strategy and execution."}
+        videoSrc={resolveVideoSrc(hero?.video)}
       />
 
       {/* Brands we've worked with */}

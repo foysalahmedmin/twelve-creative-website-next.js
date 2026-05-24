@@ -1,11 +1,11 @@
 import { DifferenceSection } from "@/components/_primary_/home-page/difference-section";
 import { LiveFeaturedProjectsSection } from "@/components/_primary_/home-page/featured-projects-section-live";
 import { HomeCtaSection } from "@/components/_primary_/home-page/home-cta-section";
+import { LiveHeroSection } from "@/components/_primary_/home-page/hero-section-live";
 import { LiveIndustriesSection } from "@/components/_primary_/home-page/industries-section-live";
 import { LiveServicesSection } from "@/components/_primary_/home-page/services-section-live";
 import { BrandsStrip } from "@/components/sections/brands-strip";
 import FaqSection from "@/components/sections/faqs-section";
-import { HeroSection } from "@/components/sections/hero-section";
 import { ProcessSection } from "@/components/sections/process-section";
 import { TestimonialSection } from "@/components/sections/testimonial-section";
 import { WhyChooseUsSection } from "@/components/sections/why-choose-us-section";
@@ -49,7 +49,7 @@ export default async function HomePage() {
 
   return (
     <div className="flex flex-col">
-      <HeroSection />
+      <LiveHeroSection />
       <BrandsStrip />
       <LiveFeaturedProjectsSection />
       <LiveServicesSection />

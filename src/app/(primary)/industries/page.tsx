@@ -6,6 +6,7 @@ import { INDUSTRIES_DATA } from "@/data/industries.data";
 import { CTA_INDUSTRIES } from "@/data/page-ctas.data";
 import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
 import { getPublicIndustriesAsLegacy } from "@/lib/api/industries";
+import { getPublicPageHero, resolveVideoSrc } from "@/lib/api/page-heroes";
 import { getPublicTestimonialsForSection } from "@/lib/api/testimonials";
 import type { Metadata } from "next";
 
@@ -17,13 +18,14 @@ export const metadata: Metadata = {
 };
 
 export default async function IndustriesPage() {
-  const [testimonialsData, liveIndustries] = await Promise.all([
+  const [testimonialsData, liveIndustries, hero] = await Promise.all([
     getPublicTestimonialsForSection({
       label: TESTIMONIALS_DATA.label,
       title: TESTIMONIALS_DATA.title,
       description: TESTIMONIALS_DATA.description,
     }),
     getPublicIndustriesAsLegacy(),
+    getPublicPageHero("industries"),
   ]);
 
   const industries = liveIndustries.length ? liveIndustries : INDUSTRIES_DATA;
@@ -31,9 +33,10 @@ export default async function IndustriesPage() {
   return (
     <main className="bg-background min-h-screen">
       <PageHeader
-        label="Industries"
-        title="Built for businesses where trust, presentation, and follow-up matter."
-        description="Twelve Creative works across industries where the buying decision depends on credibility, timing, taste, and a clear path to action."
+        label={hero?.label ?? "Industries"}
+        title={hero?.title ?? "Built for businesses where trust, presentation, and follow-up matter."}
+        description={hero?.description ?? "Twelve Creative works across industries where the buying decision depends on credibility, timing, taste, and a clear path to action."}
+        videoSrc={resolveVideoSrc(hero?.video)}
       />
 
       {/* Each industry in depth */}

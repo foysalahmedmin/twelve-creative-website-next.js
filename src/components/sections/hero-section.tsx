@@ -2,7 +2,7 @@
 
 import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { buttonVariants } from "@/components/ui/button";
-import { HOME_HERO_DATA } from "@/data/home-hero.data";
+import { HOME_HERO_DATA, type THomeHero } from "@/data/home-hero.data";
 import { cn } from "@/lib/utils";
 import {
   Airplane01Icon,
@@ -23,8 +23,13 @@ const AVATAR_ICON_MAP: Record<string, typeof Restaurant01Icon> = {
   briefcase: Briefcase01Icon,
 };
 
-export const HeroSection = ({ className }: { className?: string }) => {
-  const data = HOME_HERO_DATA;
+interface HeroSectionProps {
+  className?: string;
+  data?: Partial<THomeHero>;
+}
+
+export const HeroSection = ({ className, data: override }: HeroSectionProps) => {
+  const data = { ...HOME_HERO_DATA, ...override };
 
   return (
     <section className={cn("relative container mt-6 mb-10", className)}>

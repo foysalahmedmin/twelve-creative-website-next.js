@@ -14,6 +14,7 @@ import {
   getPublicShowcaseVideosForMarquee,
   getPublicShowcaseVideosForThumbnailGrid,
 } from "@/lib/api/showcase-videos";
+import { getPublicPageHero, resolveVideoSrc } from "@/lib/api/page-heroes";
 import { adaptWorkToLegacy, getPublicWorks } from "@/lib/api/works";
 import type { Metadata } from "next";
 
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
 };
 
 export default async function WorksPage() {
-  const [showcaseVideos, liveWorks, livePortfolio] = await Promise.all([
+  const [showcaseVideos, liveWorks, livePortfolio, hero] = await Promise.all([
     getPublicShowcaseVideosForMarquee(),
     getPublicWorks(),
     getPublicShowcaseVideosForThumbnailGrid({
@@ -33,6 +34,7 @@ export default async function WorksPage() {
       description: CANVAS_PORTFOLIO_DATA.description,
       type: CANVAS_PORTFOLIO_DATA.type,
     }),
+    getPublicPageHero("works"),
   ]);
   const marqueeData = showcaseVideos.length ? showcaseVideos : CANVAS_MARQUEE_DATA;
   const works = liveWorks.length ? liveWorks.map(adaptWorkToLegacy) : WORKS_PAGE_MOCK_DATA;
@@ -43,9 +45,10 @@ export default async function WorksPage() {
   return (
     <main className="bg-background min-h-screen">
       <PageHeader
-        label="Work"
-        title="Work built around business context."
-        description="Our work is not measured by how it looks in isolation. It is measured by whether it helps the business become clearer, more credible, and better equipped to convert attention into action."
+        label={hero?.label ?? "Work"}
+        title={hero?.title ?? "Work built around business context."}
+        description={hero?.description ?? "Our work is not measured by how it looks in isolation. It is measured by whether it helps the business become clearer, more credible, and better equipped to convert attention into action."}
+        videoSrc={resolveVideoSrc(hero?.video)}
       />
 
       {/* Brands */}

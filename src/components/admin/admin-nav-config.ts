@@ -4,6 +4,7 @@ import {
   CalendarCheck,
   Film,
   HelpCircle,
+  ImagePlay,
   Layers,
   LayoutDashboard,
   Mail,
@@ -35,6 +36,7 @@ export interface AdminNavItem {
  */
 export const ADMIN_NAV: AdminNavItem[] = [
   { label: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
+  { label: "Page Heroes", href: "/admin/page-heroes", icon: ImagePlay },
   { label: "Services", href: "/admin/services", icon: Sparkles },
   { label: "Industries", href: "/admin/industries", icon: Layers },
   { label: "Testimonials", href: "/admin/testimonials", icon: MessageSquareQuote },

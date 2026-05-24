@@ -4,6 +4,7 @@ import { PageHeader } from "@/components/sections/page-header-section";
 import { ProcessSection } from "@/components/sections/process-section";
 import { CTA_PROCESS } from "@/data/page-ctas.data";
 import { PROCESS_DATA } from "@/data/process.data";
+import { getPublicPageHero, resolveVideoSrc } from "@/lib/api/page-heroes";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -12,13 +13,16 @@ export const metadata: Metadata = {
     "Learn how Twelve Creative approaches growth through diagnostics, positioning, creative production, system installation, and optimization.",
 };
 
-export default function ProcessPage() {
+export default async function ProcessPage() {
+  const hero = await getPublicPageHero("process");
+
   return (
     <main className="bg-background min-h-screen">
       <PageHeader
-        label="Our Process"
-        title="Our process is built around clarity first."
-        description="We do not begin by making random assets. We begin by understanding what the business is trying to move, where the friction is, and what structure needs to be built."
+        label={hero?.label ?? "Our Process"}
+        title={hero?.title ?? "Our process is built around clarity first."}
+        description={hero?.description ?? "We do not begin by making random assets. We begin by understanding what the business is trying to move, where the friction is, and what structure needs to be built."}
+        videoSrc={resolveVideoSrc(hero?.video)}
       />
 
       {/* Interactive step overview */}

@@ -10,6 +10,7 @@ import { CANVAS_PODCAST_INSIGHT_DATA } from "@/data/podcast-insight.data";
 import { PROCESS_DATA } from "@/data/process.data";
 import { SERVICES_DATA } from "@/data/services.data";
 import { WHY_CHOOSE_US_DATA } from "@/data/why-choose-us.data";
+import { getPublicPageHero, resolveVideoSrc } from "@/lib/api/page-heroes";
 import { getPublicServicesAsLegacy } from "@/lib/api/services";
 import type { Metadata } from "next";
 
@@ -20,7 +21,10 @@ export const metadata: Metadata = {
 };
 
 export default async function WhatWeBuildPage() {
-  const live = await getPublicServicesAsLegacy();
+  const [live, hero] = await Promise.all([
+    getPublicServicesAsLegacy(),
+    getPublicPageHero("what-we-build"),
+  ]);
   const source = live.length ? live : SERVICES_DATA;
   const serviceItems = source.map((service) => ({
     id: service.id,
@@ -33,9 +37,10 @@ export default async function WhatWeBuildPage() {
   return (
     <main className="bg-background min-h-screen">
       <PageHeader
-        label="What We Build"
-        title="Marketing works better when the pieces are connected."
-        description="Twelve Creative builds the creative, strategic, and operational pieces that help a business move from visibility to revenue."
+        label={hero?.label ?? "What We Build"}
+        title={hero?.title ?? "Marketing works better when the pieces are connected."}
+        description={hero?.description ?? "Twelve Creative builds the creative, strategic, and operational pieces that help a business move from visibility to revenue."}
+        videoSrc={resolveVideoSrc(hero?.video)}
       />
 
       {/* Detailed alternating service breakdowns */}

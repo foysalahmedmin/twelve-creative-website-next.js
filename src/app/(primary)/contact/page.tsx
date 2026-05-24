@@ -6,6 +6,7 @@ import { PageHeader } from "@/components/sections/page-header-section";
 import { CONTACT_PAGE_DATA } from "@/data/contact.data";
 import { FAQS_DATA } from "@/data/faqs.data";
 import { getPublicFaqsForSection } from "@/lib/api/faqs";
+import { getPublicPageHero, resolveVideoSrc } from "@/lib/api/page-heroes";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -16,22 +17,26 @@ export const metadata: Metadata = {
 
 export default async function ContactPage() {
   const { header, contact_cards, booking, map } = CONTACT_PAGE_DATA;
-  const faqsData = await getPublicFaqsForSection({
-    image: FAQS_DATA.image,
-    alt: FAQS_DATA.alt,
-    title: FAQS_DATA.title,
-    description: FAQS_DATA.description,
-    name: FAQS_DATA.name,
-    position: FAQS_DATA.position,
-    contact_link: FAQS_DATA.contact_link,
-  });
+  const [faqsData, hero] = await Promise.all([
+    getPublicFaqsForSection({
+      image: FAQS_DATA.image,
+      alt: FAQS_DATA.alt,
+      title: FAQS_DATA.title,
+      description: FAQS_DATA.description,
+      name: FAQS_DATA.name,
+      position: FAQS_DATA.position,
+      contact_link: FAQS_DATA.contact_link,
+    }),
+    getPublicPageHero("contact"),
+  ]);
 
   return (
     <main className="bg-background min-h-screen">
       <PageHeader
-        label="Contact"
-        title={header.title}
-        description={header.description}
+        label={hero?.label ?? "Contact"}
+        title={hero?.title ?? header.title}
+        description={hero?.description ?? header.description}
+        videoSrc={resolveVideoSrc(hero?.video)}
       />
 
       {/* Inquiry form (cards removed — moved below with map) */}

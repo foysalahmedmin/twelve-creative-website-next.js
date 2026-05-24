@@ -5,6 +5,7 @@ import { ComingSoon } from "@/components/common/coming-soon";
 import { PageHeader } from "@/components/sections/page-header-section";
 import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { getPublicInsights } from "@/lib/api/insights";
+import { getPublicPageHero, resolveVideoSrc } from "@/lib/api/page-heroes";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -16,7 +17,10 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function BlogsPage() {
-  const insights = await getPublicInsights();
+  const [insights, hero] = await Promise.all([
+    getPublicInsights(),
+    getPublicPageHero("blogs"),
+  ]);
 
   // If nothing is published yet, keep the "Coming Soon" experience —
   // the page goes live the moment the first article is published.
@@ -25,9 +29,10 @@ export default async function BlogsPage() {
   return (
     <main className="bg-background min-h-screen">
       <PageHeader
-        label="Insights"
-        title="Notes on positioning, creative, and growth systems."
-        description="Field-tested thinking from the work we do for hospitality, real estate, aviation, and professional service operators."
+        label={hero?.label ?? "Insights"}
+        title={hero?.title ?? "Notes on positioning, creative, and growth systems."}
+        description={hero?.description ?? "Field-tested thinking from the work we do for hospitality, real estate, aviation, and professional service operators."}
+        videoSrc={resolveVideoSrc(hero?.video)}
       />
 
       <section className="container py-12 sm:py-16 lg:py-20">
