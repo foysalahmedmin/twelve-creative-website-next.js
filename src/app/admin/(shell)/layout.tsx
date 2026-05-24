@@ -1,18 +1,16 @@
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
 import { AdminTopbar } from "@/components/admin/admin-topbar";
 import { requireAdminSession } from "@/lib/admin/session";
-import { getPendingBookingCount } from "@/lib/api/bookings";
-import { getUnreadMessageCount } from "@/lib/api/contact-messages";
+import { getAdminNotifications } from "@/lib/api/notifications";
 
 export default async function AdminShellLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [user, pendingBookings, unreadMessages] = await Promise.all([
+  const [user, { data: notifications, meta }] = await Promise.all([
     requireAdminSession(),
-    getPendingBookingCount(),
-    getUnreadMessageCount(),
+    getAdminNotifications(20),
   ]);
 
   return (
@@ -22,8 +20,8 @@ export default async function AdminShellLayout({
       <div className="flex flex-1 flex-col overflow-hidden">
         <AdminTopbar
           user={user}
-          pendingBookings={pendingBookings}
-          unreadMessages={unreadMessages}
+          notifications={notifications}
+          unreadCount={meta.unread ?? 0}
         />
         <main className="flex-1 overflow-y-auto">{children}</main>
       </div>
