@@ -1,31 +1,7 @@
 import { apiFetch } from "@/lib/admin/api-client";
 import type { VideoRef } from "@/lib/admin/types";
-
-export const PAGE_HERO_TAG = "page-hero";
-
-export const PAGE_KEYS = [
-  "home",
-  "about",
-  "works",
-  "industries",
-  "what-we-build",
-  "contact",
-  "blogs",
-  "process",
-] as const;
-
-export type PageKey = (typeof PAGE_KEYS)[number];
-
-export const PAGE_LABELS: Record<PageKey, string> = {
-  home: "Home",
-  about: "About",
-  works: "Works",
-  industries: "Industries",
-  "what-we-build": "What We Build",
-  contact: "Contact",
-  blogs: "Blogs / Insights",
-  process: "Process",
-};
+export { PAGE_HERO_TAG, PAGE_KEYS, PAGE_LABELS } from "./page-heroes.constants";
+export type { PageKey } from "./page-heroes.constants";
 
 export interface ApiPageHero {
   _id?: string;

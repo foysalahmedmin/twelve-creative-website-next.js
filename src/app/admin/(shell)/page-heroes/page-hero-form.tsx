@@ -11,8 +11,9 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import type { VideoRef } from "@/lib/admin/types";
-import type { ApiPageHero, PageKey } from "@/lib/api/page-heroes";
-import { PAGE_LABELS } from "@/lib/api/page-heroes";
+import type { ApiPageHero } from "@/lib/api/page-heroes";
+import { PAGE_LABELS } from "@/lib/api/page-heroes.constants";
+import type { PageKey } from "@/lib/api/page-heroes.constants";
 import { upsertPageHeroAction } from "@/lib/api/page-heroes-actions";
 
 interface Props {
