@@ -75,7 +75,7 @@ export async function signinAction(
   }
 
   const jar = await cookies();
-  const isProd = process.env.NODE_ENV === "production";
+  const isProd = ADMIN_CONFIG.apiUrl.startsWith("https");
 
   jar.set({
     name: ADMIN_CONFIG.cookies.access,
