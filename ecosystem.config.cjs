@@ -2,9 +2,10 @@ module.exports = {
   apps: [
     {
       name: 'tc-website',
-      script: './node_modules/.bin/next',
-      args: 'start -p 5005',
+      script: 'node_modules/.bin/next',
+      args: 'start',
       cwd: '/var/www/websites/twelve-creative-website',
+      exec_mode: 'fork',
       instances: 1,
       autorestart: true,
       watch: false,
