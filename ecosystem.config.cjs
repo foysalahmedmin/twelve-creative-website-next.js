@@ -1,27 +1,22 @@
 module.exports = {
   apps: [
     {
-      name: "twelve-creative-website",
-      cwd: __dirname,
-      script: "node_modules/next/dist/bin/next",
-      args: "start --port 3002",
+      name: 'tc-website',
+      script: './node_modules/.bin/next',
+      args: 'start -p 5005',
+      cwd: '/var/www/websites/twelve-creative-website',
       instances: 1,
-      exec_mode: "fork",
       autorestart: true,
       watch: false,
-      max_memory_restart: "1G",
+      max_memory_restart: '512M',
       env: {
-        NODE_ENV: "production",
-        PORT: 3002,
+        NODE_ENV: 'production',
+        PORT: 5005,
       },
-      env_development: {
-        NODE_ENV: "development",
-        PORT: 3002,
-      },
-      error_file: "./logs/web-error.log",
-      out_file: "./logs/web-out.log",
-      log_date_format: "YYYY-MM-DD HH:mm:ss Z",
+      error_file: '/root/.pm2/logs/tc-website-error.log',
+      out_file: '/root/.pm2/logs/tc-website-out.log',
       merge_logs: true,
+      log_date_format: 'YYYY-MM-DD HH:mm:ss',
     },
   ],
 };
