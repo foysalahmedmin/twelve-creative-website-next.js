@@ -1,5 +1,7 @@
 import { apiFetch } from "@/lib/admin/api-client";
 import type { VideoRef } from "@/lib/admin/types";
+import { PAGE_HERO_TAG } from "./page-heroes.constants";
+import type { PageKey } from "./page-heroes.constants";
 export { PAGE_HERO_TAG, PAGE_KEYS, PAGE_LABELS } from "./page-heroes.constants";
 export type { PageKey } from "./page-heroes.constants";
 
