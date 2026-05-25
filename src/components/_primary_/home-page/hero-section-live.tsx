@@ -1,5 +1,5 @@
 import { HeroSection } from "@/components/sections/hero-section";
-import type { THomeHero } from "@/data/home-hero.data";
+import { HOME_HERO_DATA, type THomeHero } from "@/data/home-hero.data";
 import { getPublicPageHero } from "@/lib/api/page-heroes";
 
 export async function LiveHeroSection({
@@ -17,7 +17,9 @@ export async function LiveHeroSection({
         ...(hero.primary_cta ? { primary_cta: hero.primary_cta } : {}),
         ...(hero.secondary_cta ? { secondary_cta: hero.secondary_cta } : {}),
         ...(hero.video?.value
-          ? { video: { src: hero.video.value, poster: hero.video.poster } }
+          ? { video: { src: hero.video.value, poster: hero.video.poster ?? hero.thumbnail } }
+          : hero.thumbnail
+          ? { video: { ...HOME_HERO_DATA.video, poster: hero.thumbnail } }
           : {}),
       }
     : undefined;

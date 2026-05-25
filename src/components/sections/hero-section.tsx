@@ -139,6 +139,7 @@ export const HeroSection = ({ className, data: override }: HeroSectionProps) => 
                 width="100%"
                 height="100%"
                 playsInline
+                light={data.video.poster || false}
                 style={{ width: "100%", height: "100%" }}
               />
             </div>
