@@ -5,7 +5,7 @@ import { ComingSoon } from "@/components/common/coming-soon";
 import { PageHeader } from "@/components/sections/page-header-section";
 import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { getPublicInsights } from "@/lib/api/insights";
-import { getPublicPageHero, resolveVideoSrc } from "@/lib/api/page-heroes";
+import { getPublicPageHero, resolveVideoSrc, resolveThumbnail } from "@/lib/api/page-heroes";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -33,6 +33,7 @@ export default async function BlogsPage() {
         title={hero?.title ?? "Notes on positioning, creative, and growth systems."}
         description={hero?.description ?? "Field-tested thinking from the work we do for hospitality, real estate, aviation, and professional service operators."}
         videoSrc={resolveVideoSrc(hero?.video)}
+        thumbnailSrc={resolveThumbnail(hero?.thumbnail, hero?.video)}
       />
 
       <section className="container py-12 sm:py-16 lg:py-20">

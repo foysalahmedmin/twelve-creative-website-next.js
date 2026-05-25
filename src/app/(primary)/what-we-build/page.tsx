@@ -10,7 +10,7 @@ import { CANVAS_PODCAST_INSIGHT_DATA } from "@/data/podcast-insight.data";
 import { PROCESS_DATA } from "@/data/process.data";
 import { SERVICES_DATA } from "@/data/services.data";
 import { WHY_CHOOSE_US_DATA } from "@/data/why-choose-us.data";
-import { getPublicPageHero, resolveVideoSrc } from "@/lib/api/page-heroes";
+import { getPublicPageHero, resolveVideoSrc, resolveThumbnail } from "@/lib/api/page-heroes";
 import { getPublicServicesAsLegacy } from "@/lib/api/services";
 import type { Metadata } from "next";
 
@@ -41,6 +41,7 @@ export default async function WhatWeBuildPage() {
         title={hero?.title ?? "Marketing works better when the pieces are connected."}
         description={hero?.description ?? "Twelve Creative builds the creative, strategic, and operational pieces that help a business move from visibility to revenue."}
         videoSrc={resolveVideoSrc(hero?.video)}
+        thumbnailSrc={resolveThumbnail(hero?.thumbnail, hero?.video)}
       />
 
       {/* Detailed alternating service breakdowns */}

@@ -14,6 +14,7 @@ export interface PageHeroInput {
   label?: string;
   title?: string;
   description?: string;
+  thumbnail?: string | null;
   video?: (VideoRef & { poster?: string }) | null;
   trust_label?: string;
   primary_cta?: { label: string; href: string } | null;

@@ -26,7 +26,7 @@ export function AdminSidebar({ user, className }: AdminSidebarProps) {
       )}
     >
       {/* Brand */}
-      <div className="border-border/60 flex items-center gap-2.5 border-b px-5 py-5">
+      <div className="border-border/60 flex h-14 items-center gap-2.5 border-b px-5">
         <div className="bg-primary text-primary-foreground flex size-9 items-center justify-center rounded-lg font-bold">
           12
         </div>

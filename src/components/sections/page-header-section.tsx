@@ -28,6 +28,7 @@ interface PageHeaderProps {
   description?: string;
   breadcrumb?: BreadcrumbItemType[];
   videoSrc?: string;
+  thumbnailSrc?: string;
   className?: string;
 }
 
@@ -37,6 +38,7 @@ export const PageHeader = ({
   description,
   breadcrumb,
   videoSrc,
+  thumbnailSrc,
   className,
 }: PageHeaderProps) => {
   return (
@@ -120,18 +122,28 @@ export const PageHeader = ({
             )}
           </>
 
-          {/* Optional Video Showcase exactly like Home Hero but optional */}
-          {videoSrc && (
+          {/* Video or thumbnail preview */}
+          {(videoSrc || thumbnailSrc) && (
             <ScrollReveal animation="zoom-in" delayMs={400} durationMs={900} className="w-full px-4 lg:px-12">
               <div className="ring-foreground/10 relative mx-auto mt-12 aspect-video w-full max-w-5xl overflow-hidden rounded-2xl ring-1 lg:mt-16 lg:rounded-[32px]">
-                <ReactPlayer
-                  src={videoSrc}
-                  controls
-                  width="100%"
-                  height="100%"
-                  playsInline
-                  style={{ width: "100%", height: "100%" }}
-                />
+                {videoSrc ? (
+                  <ReactPlayer
+                    src={videoSrc}
+                    controls
+                    width="100%"
+                    height="100%"
+                    playsInline
+                    light={thumbnailSrc || false}
+                    style={{ width: "100%", height: "100%" }}
+                  />
+                ) : (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={thumbnailSrc}
+                    alt={title}
+                    className="h-full w-full object-cover"
+                  />
+                )}
               </div>
             </ScrollReveal>
           )}

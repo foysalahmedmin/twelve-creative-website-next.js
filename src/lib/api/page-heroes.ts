@@ -11,6 +11,7 @@ export interface ApiPageHero {
   label?: string;
   title?: string;
   description?: string;
+  thumbnail?: string;
   video?: VideoRef & { poster?: string };
   trust_label?: string;
   primary_cta?: { label: string; href: string };
@@ -62,4 +63,30 @@ export function resolveVideoSrc(
   video: (VideoRef & { poster?: string }) | null | undefined,
 ): string | undefined {
   return video?.value || undefined;
+}
+
+/** Extracts a YouTube video ID from various YouTube URL formats. */
+function extractYouTubeId(url: string): string | null {
+  const match = url.match(
+    /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([A-Za-z0-9_-]{11})/,
+  );
+  return match?.[1] ?? null;
+}
+
+/**
+ * Resolves the thumbnail for a page hero with priority:
+ * 1. Manually set thumbnail (always wins)
+ * 2. YouTube video → auto-extract hqdefault.jpg
+ * 3. undefined (no thumbnail)
+ */
+export function resolveThumbnail(
+  thumbnail: string | undefined,
+  video: (VideoRef & { poster?: string }) | null | undefined,
+): string | undefined {
+  if (thumbnail) return thumbnail;
+  if (video?.source === "youtube") {
+    const id = extractYouTubeId(video.value);
+    if (id) return `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+  }
+  return undefined;
 }

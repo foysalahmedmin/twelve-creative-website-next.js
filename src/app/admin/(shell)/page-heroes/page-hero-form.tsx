@@ -4,6 +4,7 @@ import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import { ImageInput } from "@/components/admin/inputs/image-input";
 import { VideoInput } from "@/components/admin/inputs/video-input";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -37,6 +38,7 @@ export function PageHeroForm({ page, initial }: Props) {
     secondary_cta_href: initial?.secondary_cta?.href ?? "",
     is_active: initial?.is_active ?? true,
   });
+  const [thumbnail, setThumbnail] = useState<string>(initial?.thumbnail ?? "");
   const [video, setVideo] = useState<VideoRef | null>(
     initial?.video
       ? { source: initial.video.source, value: initial.video.value }
@@ -53,6 +55,7 @@ export function PageHeroForm({ page, initial }: Props) {
       label: form.label || undefined,
       title: form.title || undefined,
       description: form.description || undefined,
+      thumbnail: thumbnail || null,
       video: video ?? null,
       trust_label: isHome ? form.trust_label || undefined : undefined,
       primary_cta:
@@ -192,6 +195,15 @@ export function PageHeroForm({ page, initial }: Props) {
           </div>
         </section>
       )}
+
+      {/* Thumbnail */}
+      <ImageInput
+        label="Thumbnail / Poster image (optional)"
+        description="Shown as the video poster before it plays, or as a standalone preview image. For uploaded videos this is required. YouTube videos auto-extract a thumbnail if left empty."
+        value={thumbnail}
+        onChange={setThumbnail}
+        previewAspect="16/9"
+      />
 
       {/* Video (optional for all pages) */}
       <VideoInput

@@ -6,7 +6,7 @@ import { INDUSTRIES_DATA } from "@/data/industries.data";
 import { CTA_INDUSTRIES } from "@/data/page-ctas.data";
 import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
 import { getPublicIndustriesAsLegacy } from "@/lib/api/industries";
-import { getPublicPageHero, resolveVideoSrc } from "@/lib/api/page-heroes";
+import { getPublicPageHero, resolveVideoSrc, resolveThumbnail } from "@/lib/api/page-heroes";
 import { getPublicTestimonialsForSection } from "@/lib/api/testimonials";
 import type { Metadata } from "next";
 
@@ -37,6 +37,7 @@ export default async function IndustriesPage() {
         title={hero?.title ?? "Built for businesses where trust, presentation, and follow-up matter."}
         description={hero?.description ?? "Twelve Creative works across industries where the buying decision depends on credibility, timing, taste, and a clear path to action."}
         videoSrc={resolveVideoSrc(hero?.video)}
+        thumbnailSrc={resolveThumbnail(hero?.thumbnail, hero?.video)}
       />
 
       {/* Each industry in depth */}

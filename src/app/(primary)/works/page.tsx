@@ -14,7 +14,7 @@ import {
   getPublicShowcaseVideosForMarquee,
   getPublicShowcaseVideosForThumbnailGrid,
 } from "@/lib/api/showcase-videos";
-import { getPublicPageHero, resolveVideoSrc } from "@/lib/api/page-heroes";
+import { getPublicPageHero, resolveVideoSrc, resolveThumbnail } from "@/lib/api/page-heroes";
 import { adaptWorkToLegacy, getPublicWorks } from "@/lib/api/works";
 import type { Metadata } from "next";
 
@@ -49,6 +49,7 @@ export default async function WorksPage() {
         title={hero?.title ?? "Work built around business context."}
         description={hero?.description ?? "Our work is not measured by how it looks in isolation. It is measured by whether it helps the business become clearer, more credible, and better equipped to convert attention into action."}
         videoSrc={resolveVideoSrc(hero?.video)}
+        thumbnailSrc={resolveThumbnail(hero?.thumbnail, hero?.video)}
       />
 
       {/* Brands */}

@@ -4,7 +4,7 @@ import { PageHeader } from "@/components/sections/page-header-section";
 import { ProcessSection } from "@/components/sections/process-section";
 import { CTA_PROCESS } from "@/data/page-ctas.data";
 import { PROCESS_DATA } from "@/data/process.data";
-import { getPublicPageHero, resolveVideoSrc } from "@/lib/api/page-heroes";
+import { getPublicPageHero, resolveVideoSrc, resolveThumbnail } from "@/lib/api/page-heroes";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -23,6 +23,7 @@ export default async function ProcessPage() {
         title={hero?.title ?? "Our process is built around clarity first."}
         description={hero?.description ?? "We do not begin by making random assets. We begin by understanding what the business is trying to move, where the friction is, and what structure needs to be built."}
         videoSrc={resolveVideoSrc(hero?.video)}
+        thumbnailSrc={resolveThumbnail(hero?.thumbnail, hero?.video)}
       />
 
       {/* Interactive step overview */}

@@ -6,7 +6,7 @@ import { PageHeader } from "@/components/sections/page-header-section";
 import { CONTACT_PAGE_DATA } from "@/data/contact.data";
 import { FAQS_DATA } from "@/data/faqs.data";
 import { getPublicFaqsForSection } from "@/lib/api/faqs";
-import { getPublicPageHero, resolveVideoSrc } from "@/lib/api/page-heroes";
+import { getPublicPageHero, resolveVideoSrc, resolveThumbnail } from "@/lib/api/page-heroes";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -37,6 +37,7 @@ export default async function ContactPage() {
         title={hero?.title ?? header.title}
         description={hero?.description ?? header.description}
         videoSrc={resolveVideoSrc(hero?.video)}
+        thumbnailSrc={resolveThumbnail(hero?.thumbnail, hero?.video)}
       />
 
       {/* Inquiry form (cards removed — moved below with map) */}
