@@ -4,18 +4,8 @@ import { WhatsAppFloat } from "@/components/common/whatsapp-float";
 import { SITE } from "@/config/site";
 import Providers from "@/providers";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Hind_Siliguri } from "next/font/google";
+import { Hind_Siliguri } from "next/font/google";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 const hindSiliguri = Hind_Siliguri({
   subsets: ["bengali", "latin"],
@@ -61,7 +51,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} ${hindSiliguri.variable} antialiased`}
+      className={`${hindSiliguri.variable} antialiased`}
     >
       <body className="min-h-screen flex flex-col" suppressHydrationWarning>
         <SmoothFollowerCursor />

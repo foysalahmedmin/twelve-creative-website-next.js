@@ -72,7 +72,6 @@ export function CoreVerticalsSection({ industries }: Props) {
     const video = videoRefs.current[id];
     if (video) {
       video.pause();
-      video.currentTime = 0;
     }
   };
 

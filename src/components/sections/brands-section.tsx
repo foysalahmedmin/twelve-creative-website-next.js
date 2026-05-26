@@ -9,21 +9,21 @@ import Marquee from "react-fast-marquee";
 const BrandItem = ({ brand }: { brand: TBrand }) => {
   if (brand.logo_src) {
     return (
-      <div className="pointer-events-none mx-4 flex items-center justify-center select-none lg:mx-6">
+      <div className="pointer-events-none mx-6 flex items-center justify-center select-none lg:mx-10">
         <Image
           src={brand.logo_src}
           alt={brand.alt ?? brand.name}
-          width={180}
-          height={50}
-          className="h-[50px] w-auto rounded-lg object-contain"
+          width={220}
+          height={64}
+          className="h-16 w-auto rounded-lg object-contain"
         />
       </div>
     );
   }
 
   return (
-    <div className="pointer-events-none mx-4 flex h-[50px] items-center justify-center select-none lg:mx-6">
-      <span className="text-foreground/55 font-heading whitespace-nowrap text-xl font-bold tracking-tight">
+    <div className="pointer-events-none mx-6 flex h-16 items-center justify-center select-none lg:mx-10">
+      <span className="text-foreground/55 font-heading whitespace-nowrap text-2xl font-bold tracking-tight">
         {brand.name}
       </span>
     </div>
