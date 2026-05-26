@@ -1,5 +1,6 @@
 import { DifferenceSection } from "@/components/_primary_/home-page/difference-section";
 import { AlternatingServicesSection } from "@/components/sections/alternating-services-section";
+import { CoreVerticalsSection } from "@/components/sections/core-verticals-section";
 import { CTASection } from "@/components/sections/cta-section";
 import { PageHeader } from "@/components/sections/page-header-section";
 import { PodcastInsight } from "@/components/sections/podcast-insight";
@@ -11,6 +12,7 @@ import { PROCESS_DATA } from "@/data/process.data";
 import { SERVICES_DATA } from "@/data/services.data";
 import { WHY_CHOOSE_US_DATA } from "@/data/why-choose-us.data";
 import { getPublicPageHero, resolveVideoSrc, resolveThumbnail } from "@/lib/api/page-heroes";
+import { getPublicIndustries } from "@/lib/api/industries";
 import { getPublicServicesAsLegacy } from "@/lib/api/services";
 import type { Metadata } from "next";
 
@@ -21,9 +23,10 @@ export const metadata: Metadata = {
 };
 
 export default async function WhatWeBuildPage() {
-  const [live, hero] = await Promise.all([
+  const [live, hero, industries] = await Promise.all([
     getPublicServicesAsLegacy(),
     getPublicPageHero("what-we-build"),
+    getPublicIndustries(),
   ]);
   const source = live.length ? live : SERVICES_DATA;
   const serviceItems = source.map((service) => ({
@@ -43,6 +46,9 @@ export default async function WhatWeBuildPage() {
         videoSrc={resolveVideoSrc(hero?.video)}
         thumbnailSrc={resolveThumbnail(hero?.thumbnail, hero?.video)}
       />
+
+      {/* Core Verticals */}
+      <CoreVerticalsSection industries={industries} />
 
       {/* Detailed alternating service breakdowns */}
       <AlternatingServicesSection data={serviceItems} />

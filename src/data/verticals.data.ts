@@ -7,7 +7,6 @@ export type TVertical = {
   image: string;
   video?: string;
   href: string;
-  accent: string;
 };
 
 export const VERTICALS_DATA: TVertical[] = [
@@ -20,7 +19,6 @@ export const VERTICALS_DATA: TVertical[] = [
     image: "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=900&q=80",
     video: "",
     href: "/verticals/real-estate",
-    accent: "#c8a96e",
   },
   {
     id: "hospitality",
@@ -31,7 +29,6 @@ export const VERTICALS_DATA: TVertical[] = [
     image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&q=80",
     video: "",
     href: "/verticals/hospitality",
-    accent: "#e07b54",
   },
   {
     id: "ventures",
@@ -42,7 +39,6 @@ export const VERTICALS_DATA: TVertical[] = [
     image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=900&q=80",
     video: "",
     href: "/verticals/ventures",
-    accent: "#4a7c9e",
   },
   {
     id: "about-us",
@@ -53,6 +49,5 @@ export const VERTICALS_DATA: TVertical[] = [
     image: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=900&q=80",
     video: "",
     href: "/about",
-    accent: "#6b7280",
   },
 ];

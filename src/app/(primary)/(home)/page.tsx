@@ -16,6 +16,7 @@ import { PROCESS_DATA } from "@/data/process.data";
 import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
 import { WHY_CHOOSE_US_DATA } from "@/data/why-choose-us.data";
 import { getPublicFaqsForSection } from "@/lib/api/faqs";
+import { getPublicIndustries } from "@/lib/api/industries";
 import { getPublicTestimonialsForSection } from "@/lib/api/testimonials";
 import type { Metadata } from "next";
 
@@ -31,7 +32,7 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const [testimonialsData, faqsData] = await Promise.all([
+  const [testimonialsData, faqsData, industries] = await Promise.all([
     getPublicTestimonialsForSection({
       label: TESTIMONIALS_DATA.label,
       title: TESTIMONIALS_DATA.title,
@@ -46,13 +47,14 @@ export default async function HomePage() {
       position: FAQS_DATA.position,
       contact_link: FAQS_DATA.contact_link,
     }),
+    getPublicIndustries(),
   ]);
 
   return (
     <div className="flex flex-col">
       <LiveHeroSection />
       <BrandsStrip />
-      <CoreVerticalsSection />
+      <CoreVerticalsSection industries={industries} />
       <LiveFeaturedProjectsSection />
       <LiveServicesSection />
       <TestimonialSection data={testimonialsData} />

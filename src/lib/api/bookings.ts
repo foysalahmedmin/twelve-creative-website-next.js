@@ -75,7 +75,6 @@ export interface PublicBookingPayload {
   phone?: string;
   company?: string;
   industry?: string;
-  timeline?: string;
   preferred_date?: string; // ISO date
   preferred_time?: string;
   message?: string;

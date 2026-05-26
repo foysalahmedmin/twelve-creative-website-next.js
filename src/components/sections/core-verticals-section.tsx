@@ -1,12 +1,61 @@
 "use client";
 
+import { ScrollReveal } from "@/components/common/scroll-reveal";
+import { CenteredSectionHeader } from "@/components/common/section-label";
 import { VERTICALS_DATA } from "@/data/verticals.data";
 import { cn } from "@/lib/utils";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState } from "react";
 
-export function CoreVerticalsSection() {
+type CardItem = {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  videoSrc?: string;
+  href: string;
+};
+
+export type IndustryCardData = {
+  slug: string;
+  name: string;
+  description: string;
+  image: string;
+  video?: { source: string; value: string } | null;
+};
+
+function fromIndustry(industry: IndustryCardData): CardItem {
+  return {
+    id: industry.slug,
+    title: industry.name,
+    description: industry.description,
+    image: industry.image,
+    videoSrc: industry.video?.value || undefined,
+    href: `/industries/${industry.slug}`,
+  };
+}
+
+function fromVertical(v: (typeof VERTICALS_DATA)[0]): CardItem {
+  return {
+    id: v.id,
+    title: v.title,
+    description: v.description,
+    image: v.image,
+    videoSrc: v.video || undefined,
+    href: v.href,
+  };
+}
+
+interface Props {
+  industries?: IndustryCardData[];
+}
+
+export function CoreVerticalsSection({ industries }: Props) {
+  const cards: CardItem[] = industries?.length
+    ? industries.map(fromIndustry)
+    : VERTICALS_DATA.map(fromVertical);
+
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const videoRefs = useRef<Record<string, HTMLVideoElement | null>>({});
 
@@ -29,26 +78,27 @@ export function CoreVerticalsSection() {
 
   return (
     <section className="container py-10 lg:py-14">
-      {/* Section label */}
-      <div className="mb-6 flex items-center gap-3 lg:mb-8">
-        <span className="inline-flex px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-primary/10 text-primary border border-primary/20">
-          Core Verticals
-        </span>
-      </div>
+      <ScrollReveal animation="fade-in-up" durationMs={700}>
+        <CenteredSectionHeader
+          label="Industries"
+          title="Core Verticals"
+          description="We work across a focused set of industries where marketing structure, creative execution, and conversion systems make the biggest difference."
+          className="mb-8 lg:mb-10"
+        />
+      </ScrollReveal>
 
-      {/* Cards row */}
-      <div className="flex gap-2 overflow-x-auto pb-4 lg:pb-0 scrollbar-none snap-x snap-mandatory">
-        {VERTICALS_DATA.map((vertical, index) => {
-          const isHovered = hoveredId === vertical.id;
+      <div className="scrollbar-none flex snap-x snap-mandatory gap-2 overflow-x-auto pb-4 lg:pb-0">
+        {cards.map((card, index) => {
+          const isHovered = hoveredId === card.id;
           const isFirst = index === 0;
-          const isLast = index === VERTICALS_DATA.length - 1;
+          const isLast = index === cards.length - 1;
 
           return (
             <Link
-              key={vertical.id}
-              href={vertical.href}
+              key={card.id}
+              href={card.href}
               className={cn(
-                "group relative flex-shrink-0 snap-start overflow-hidden",
+                "group relative shrink-0 snap-start overflow-hidden",
                 "w-[80vw] sm:w-[60vw] lg:w-0 lg:flex-1",
                 "h-[500px] lg:h-[580px]",
                 isFirst ? "rounded-l-3xl" : "",
@@ -58,13 +108,13 @@ export function CoreVerticalsSection() {
                 isLast && "lg:rounded-r-[32px]",
                 "cursor-pointer select-none",
               )}
-              onMouseEnter={() => handleMouseEnter(vertical.id)}
-              onMouseLeave={() => handleMouseLeave(vertical.id)}
+              onMouseEnter={() => handleMouseEnter(card.id)}
+              onMouseLeave={() => handleMouseLeave(card.id)}
             >
               {/* Static image */}
               <img
-                src={vertical.image}
-                alt={vertical.title}
+                src={card.image}
+                alt={card.title}
                 className={cn(
                   "absolute inset-0 h-full w-full object-cover transition-all duration-700",
                   isHovered ? "scale-105 opacity-0" : "scale-100 opacity-100",
@@ -73,13 +123,15 @@ export function CoreVerticalsSection() {
               />
 
               {/* Video (plays on hover) */}
-              {vertical.video && (
+              {card.videoSrc && (
                 <video
-                  ref={(el) => { videoRefs.current[vertical.id] = el; }}
+                  ref={(el) => {
+                    videoRefs.current[card.id] = el;
+                  }}
                   muted
                   loop
                   playsInline
-                  src={vertical.video}
+                  src={card.videoSrc}
                   className={cn(
                     "absolute inset-0 h-full w-full object-cover transition-opacity duration-700",
                     isHovered ? "opacity-100" : "opacity-0",
@@ -90,36 +142,27 @@ export function CoreVerticalsSection() {
               {/* Gradient overlay */}
               <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/10 to-black/70" />
 
-              {/* Hover tint */}
-              <div
-                className={cn(
-                  "absolute inset-0 transition-opacity duration-500",
-                  isHovered ? "opacity-30" : "opacity-0",
-                )}
-                style={{ backgroundColor: vertical.accent }}
-              />
-
               {/* Content */}
               <div className="absolute inset-0 flex flex-col justify-between p-7 lg:p-8">
-                {/* Top: Title */}
                 <div>
-                  <h3 className="font-heading text-white text-3xl font-bold tracking-tight leading-none lg:text-4xl">
-                    {vertical.title}
+                  <h3 className="font-heading text-3xl leading-none font-bold tracking-tight text-white lg:text-4xl">
+                    {card.title}
                   </h3>
                 </div>
 
-                {/* Bottom: description + arrow */}
                 <div className="space-y-3">
-                  <p className="text-white/80 text-sm leading-relaxed lg:text-base">
-                    {vertical.description}
+                  <p className="text-sm leading-relaxed text-white/80 lg:text-base">
+                    {card.description}
                   </p>
                   <div
                     className={cn(
                       "flex items-center gap-2 transition-all duration-300",
-                      isHovered ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-2",
+                      isHovered
+                        ? "translate-x-0 opacity-100"
+                        : "-translate-x-2 opacity-0",
                     )}
                   >
-                    <span className="text-white text-xs font-bold uppercase tracking-widest">
+                    <span className="text-xs font-bold tracking-widest text-white uppercase">
                       Explore
                     </span>
                     <ArrowUpRight className="size-4 text-white" />

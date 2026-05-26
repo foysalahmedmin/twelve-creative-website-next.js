@@ -80,14 +80,7 @@ export default async function VerticalDetailPage({ params }: Props) {
         {/* Content */}
         <div className="relative z-10 container pt-24 pb-16 lg:pb-20">
           <ScrollReveal animation="fade-in-up" durationMs={700}>
-            <span
-              className="mb-6 inline-flex rounded-full border px-4 py-1.5 text-xs font-bold tracking-widest uppercase"
-              style={{
-                borderColor: `${vertical.accent}60`,
-                color: vertical.accent,
-                backgroundColor: `${vertical.accent}15`,
-              }}
-            >
+            <span className="mb-6 inline-flex rounded-full border border-white/30 bg-white/10 px-4 py-1.5 text-xs font-bold tracking-widest text-white uppercase backdrop-blur-sm">
               {vertical.tagline}
             </span>
             <h1 className="font-heading mb-6 text-5xl leading-[110%] font-bold tracking-tight text-white sm:text-6xl lg:text-7xl xl:text-8xl">

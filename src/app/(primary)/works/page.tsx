@@ -14,8 +14,10 @@ import {
   getPublicShowcaseVideosForMarquee,
   getPublicShowcaseVideosForThumbnailGrid,
 } from "@/lib/api/showcase-videos";
+import { CoreVerticalsSection } from "@/components/sections/core-verticals-section";
 import { getPublicPageHero, resolveVideoSrc, resolveThumbnail } from "@/lib/api/page-heroes";
 import { adaptWorkToLegacy, getPublicWorks } from "@/lib/api/works";
+import { getPublicIndustries } from "@/lib/api/industries";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -25,7 +27,7 @@ export const metadata: Metadata = {
 };
 
 export default async function WorksPage() {
-  const [showcaseVideos, liveWorks, livePortfolio, hero] = await Promise.all([
+  const [showcaseVideos, liveWorks, livePortfolio, hero, industries] = await Promise.all([
     getPublicShowcaseVideosForMarquee(),
     getPublicWorks(),
     getPublicShowcaseVideosForThumbnailGrid({
@@ -35,6 +37,7 @@ export default async function WorksPage() {
       type: CANVAS_PORTFOLIO_DATA.type,
     }),
     getPublicPageHero("works"),
+    getPublicIndustries(),
   ]);
   const marqueeData = showcaseVideos.length ? showcaseVideos : CANVAS_MARQUEE_DATA;
   const works = liveWorks.length ? liveWorks.map(adaptWorkToLegacy) : WORKS_PAGE_MOCK_DATA;
@@ -90,6 +93,10 @@ export default async function WorksPage() {
 
       {/* Additional work showcase */}
       <ThumbnailWorkSection works={portfolioData} slug="works" />
+
+      {/* Core Verticals */}
+      <CoreVerticalsSection industries={industries} />
+
       {/* CTA */}
       <CTASection data={CTA_WORKS} />
     </main>

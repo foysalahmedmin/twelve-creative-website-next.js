@@ -14,7 +14,7 @@ export function GalleryMarqueeSection() {
             {ABOUT_GALLERY_DATA.map((url, idx) => (
               <div
                 key={`row1-${idx}`}
-                className="border-primary/10 bg-muted relative aspect-[4/3] h-48 overflow-hidden rounded-2xl border sm:h-64 lg:h-80"
+                className="border-primary/10 bg-muted relative aspect-4/3 h-48 overflow-hidden rounded-2xl border sm:h-64 lg:h-80"
               >
                 <Image
                   src={url}

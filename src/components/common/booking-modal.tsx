@@ -18,16 +18,7 @@ const MARKETS = [
   "Real Estate (Developers, Projects, Brokerages)",
   "Aviation (Charter, Maintenance, Sales)",
   "Professional Services (Legal, Medical, Consulting)",
-  "SaaS & Technology",
   "Other",
-];
-
-const EXPECTED_DATES = [
-  "As soon as possible",
-  "Within 2 weeks",
-  "This month",
-  "Next 1–3 months",
-  "Just exploring for now",
 ];
 
 const TIME_SLOTS = [
@@ -37,7 +28,7 @@ const TIME_SLOTS = [
   { label: "Flexible", range: "Any time works" },
 ];
 
-const TOTAL_STEPS = 4;
+const TOTAL_STEPS = 3;
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -49,7 +40,6 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
   const [submitting, setSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     market: "",
-    expectedDate: "",
     preferredDate: "",
     preferredTime: "",
     firstName: "",
@@ -78,7 +68,6 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
         setStep(1);
         setFormData({
           market: "",
-          expectedDate: "",
           preferredDate: "",
           preferredTime: "",
           firstName: "",
@@ -110,14 +99,9 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
     setStep(2);
   };
 
-  const handleTimelineSelect = (date: string) => {
-    setFormData((d) => ({ ...d, expectedDate: date }));
-    setStep(3);
-  };
-
   const handleDateTime = () => {
     if (!formData.preferredDate || !formData.preferredTime) return;
-    setStep(4);
+    setStep(3);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -131,7 +115,6 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
       phone: formData.phone || undefined,
       company: formData.company || undefined,
       industry: formData.market || undefined,
-      timeline: formData.expectedDate || undefined,
       preferred_date: formData.preferredDate || undefined,
       preferred_time: formData.preferredTime || undefined,
     });
@@ -140,7 +123,7 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
       toast.error(res.error ?? "Could not submit your booking.");
       return;
     }
-    setStep(5);
+    setStep(4);
   };
 
   if (!isOpen) return null;
@@ -173,7 +156,7 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
             {/* Header */}
             <div className="relative flex items-center justify-between px-6 pt-6 pb-4">
               <div className="flex items-center gap-3">
-                {step > 1 && step < 4 && (
+                {step > 1 && step < 3 && (
                   <button
                     onClick={() => setStep(step - 1)}
                     className="text-muted-foreground hover:bg-muted flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:text-foreground"
@@ -231,53 +214,8 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
                   </motion.div>
                 )}
 
-                {/* ── STEP 2: Expected Date ── */}
+                {/* ── STEP 2: Date & Time ── */}
                 {step === 2 && (
-                  <motion.div
-                    key="step2"
-                    initial={{ opacity: 0, x: 30 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -30 }}
-                    transition={{ duration: 0.22 }}
-                    className="space-y-5"
-                  >
-                    <div className="space-y-1.5">
-                      <span className="bg-primary inline-flex h-7 w-7 items-center justify-center rounded-lg text-xs font-bold text-primary-foreground">
-                        2
-                      </span>
-                      <h2 className="font-heading text-foreground text-2xl font-semibold">
-                        When are you looking to get started?
-                      </h2>
-                      <p className="text-muted-foreground text-sm">
-                        Select your expected timeline so we can plan accordingly.
-                      </p>
-                    </div>
-                    <div className="grid gap-2.5">
-                      {EXPECTED_DATES.map((date, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => handleTimelineSelect(date)}
-                          className={cn(
-                            "group flex items-center gap-3.5 rounded-2xl border p-4 text-left transition-all",
-                            formData.expectedDate === date
-                              ? "border-primary bg-primary/10 text-foreground"
-                              : "border-border hover:border-primary/40 hover:bg-primary/8",
-                          )}
-                        >
-                          <span className="group-hover:border-primary group-hover:bg-primary border-border bg-muted text-muted-foreground group-hover:text-primary-foreground flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-sm font-semibold transition-all">
-                            {String.fromCharCode(65 + idx)}
-                          </span>
-                          <span className="text-foreground/80 group-hover:text-foreground text-sm font-medium">
-                            {date}
-                          </span>
-                        </button>
-                      ))}
-                    </div>
-                  </motion.div>
-                )}
-
-                {/* ── STEP 3: Date & Time ── */}
-                {step === 3 && (
                   <motion.div
                     key="step3"
                     initial={{ opacity: 0, x: 30 }}
@@ -288,7 +226,7 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
                   >
                     <div className="space-y-1.5">
                       <span className="bg-primary inline-flex h-7 w-7 items-center justify-center rounded-lg text-xs font-bold text-primary-foreground">
-                        3
+                        2
                       </span>
                       <h2 className="font-heading text-foreground text-2xl font-semibold">
                         Pick a date &amp; preferred time.
@@ -356,10 +294,10 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
                     </button>
                   </motion.div>
                 )}
-                {/* ── STEP 4: Contact Info ── */}
-                {step === 4 && (
+                {/* ── STEP 3: Contact Info ── */}
+                {step === 3 && (
                   <motion.div
-                    key="step4"
+                    key="step3b"
                     initial={{ opacity: 0, x: 30 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -30 }}
@@ -368,7 +306,7 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
                   >
                     <div className="space-y-1.5">
                       <span className="bg-primary inline-flex h-7 w-7 items-center justify-center rounded-lg text-xs font-bold text-primary-foreground">
-                        4
+                        3
                       </span>
                       <h2 className="font-heading text-foreground text-2xl font-semibold">
                         Great! Now let us know who you are.
@@ -426,7 +364,7 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
                 )}
 
                 {/* ── STEP 4: Success ── */}
-                {step === 5 && (
+                {step === 4 && (
                   <motion.div
                     key="step4"
                     initial={{ opacity: 0, scale: 0.85 }}
@@ -461,7 +399,7 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
             </div>
 
             {/* Progress bar at bottom */}
-            {step < 5 && (
+            {step < 4 && (
               <div className="h-1 w-full bg-muted">
                 <motion.div
                   className="bg-primary h-full"

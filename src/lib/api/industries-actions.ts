@@ -3,7 +3,7 @@
 import { revalidatePath, updateTag } from "next/cache";
 import type { TIndustryIconKey } from "@/data/industries.data";
 import { apiFetch } from "@/lib/admin/api-client";
-import { ApiError } from "@/lib/admin/types";
+import { ApiError, type VideoRef } from "@/lib/admin/types";
 import { INDUSTRIES_TAG, type ApiIndustry } from "./industries";
 
 export interface IndustryInput {
@@ -16,6 +16,9 @@ export interface IndustryInput {
   work?: string[];
   cta_label?: string;
   cta_href?: string;
+  tagline?: string;
+  thumbnail?: string | null;
+  video?: VideoRef | null;
   order?: number;
   is_active?: boolean;
 }
@@ -31,6 +34,7 @@ const invalidate = () => {
   revalidatePath("/admin/industries");
   revalidatePath("/");
   revalidatePath("/industries");
+  revalidatePath("/industries", "layout");
 };
 
 export async function createIndustryAction(

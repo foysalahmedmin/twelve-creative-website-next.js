@@ -10,6 +10,7 @@
 
 import type { TIndustry, TIndustryIconKey } from "@/data/industries.data";
 import { apiFetch } from "@/lib/admin/api-client";
+import type { VideoRef } from "@/lib/admin/types";
 
 export const INDUSTRIES_TAG = "industries";
 
@@ -24,10 +25,38 @@ export interface ApiIndustry {
   work: string[];
   cta_label?: string;
   cta_href?: string;
+  tagline?: string;
+  thumbnail?: string;
+  video?: VideoRef;
   order: number;
   is_active: boolean;
   created_at?: string;
   updated_at?: string;
+}
+
+/** Resolves an industry VideoRef to a plain URL string for react-player. */
+export function resolveIndustryVideoSrc(video: VideoRef | null | undefined): string | undefined {
+  return video?.value || undefined;
+}
+
+function extractYouTubeId(url: string): string | null {
+  const match = url.match(
+    /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([A-Za-z0-9_-]{11})/,
+  );
+  return match?.[1] ?? null;
+}
+
+/** Resolves thumbnail with priority: manual thumbnail > YouTube auto > undefined */
+export function resolveIndustryThumbnail(
+  thumbnail: string | undefined,
+  video: VideoRef | null | undefined,
+): string | undefined {
+  if (thumbnail) return thumbnail;
+  if (video?.source === "youtube") {
+    const id = extractYouTubeId(video.value);
+    if (id) return `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+  }
+  return undefined;
 }
 
 export async function getPublicIndustries(): Promise<ApiIndustry[]> {

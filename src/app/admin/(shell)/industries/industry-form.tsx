@@ -6,6 +6,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { ImageInput } from "@/components/admin/inputs/image-input";
+import { VideoInput } from "@/components/admin/inputs/video-input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -21,6 +22,7 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import type { TIndustryIconKey } from "@/data/industries.data";
 import type { ApiIndustry } from "@/lib/api/industries";
+import type { VideoRef } from "@/lib/admin/types";
 import {
   createIndustryAction,
   updateIndustryAction,
@@ -68,6 +70,9 @@ export function IndustryForm({ mode, initial }: Props) {
   );
   const [ctaLabel, setCtaLabel] = useState(initial?.cta_label ?? "");
   const [ctaHref, setCtaHref] = useState(initial?.cta_href ?? "");
+  const [tagline, setTagline] = useState(initial?.tagline ?? "");
+  const [thumbnail, setThumbnail] = useState(initial?.thumbnail ?? "");
+  const [video, setVideo] = useState<VideoRef | null>(initial?.video ?? null);
   const [order, setOrder] = useState(initial?.order ?? 0);
   const [isActive, setIsActive] = useState(initial?.is_active ?? true);
 
@@ -116,6 +121,9 @@ export function IndustryForm({ mode, initial }: Props) {
       icon,
       cta_label: ctaLabel.trim() || undefined,
       cta_href: ctaHref.trim() || undefined,
+      tagline: tagline.trim() || undefined,
+      thumbnail: thumbnail.trim() || null,
+      video: video ?? null,
       order,
       is_active: isActive,
     };
@@ -328,6 +336,35 @@ export function IndustryForm({ mode, initial }: Props) {
               </p>
             </div>
           </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="tagline">Tagline (optional)</Label>
+            <Input
+              id="tagline"
+              maxLength={120}
+              placeholder="From listing to sellout."
+              value={tagline}
+              onChange={(e) => setTagline(e.target.value)}
+            />
+            <p className="text-muted-foreground text-xs">
+              Short badge text shown on the detail page hero.
+            </p>
+          </div>
+
+          <ImageInput
+            label="Thumbnail"
+            description="Shown before the hero video plays on the detail page."
+            value={thumbnail}
+            onChange={setThumbnail}
+            previewAspect="16/9"
+          />
+
+          <VideoInput
+            label="Hero video"
+            description="Plays on the /industries/[slug] detail page hero."
+            value={video}
+            onChange={setVideo}
+          />
 
           <div className="space-y-2">
             <Label htmlFor="is_active">Active</Label>

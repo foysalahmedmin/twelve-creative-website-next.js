@@ -30,26 +30,27 @@ import type {
 } from "@/lib/api/featured-projects";
 import type { VideoRef } from "@/lib/admin/types";
 
+const INDUSTRY_CATEGORIES = [
+  "Hospitality",
+  "Real Estate",
+  "Aviation",
+  "Professional Services",
+] as const;
+
 interface Props {
   mode: "create" | "edit";
   initial?: FeaturedProject;
-  /**
-   * Existing category strings so the admin can reuse them via autocomplete
-   * datalist (no need to retype "Brand Films" perfectly).
-   */
-  existingCategories?: string[];
 }
 
 export function FeaturedProjectForm({
   mode,
   initial,
-  existingCategories = [],
 }: Props) {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
 
   const [title, setTitle] = useState(initial?.title ?? "");
-  const [category, setCategory] = useState(initial?.category ?? "");
+  const [category, setCategory] = useState(initial?.category ?? "Hospitality");
   const [aspect, setAspect] = useState<FeaturedProjectAspect>(
     initial?.aspect ?? "video",
   );
@@ -60,7 +61,7 @@ export function FeaturedProjectForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !category.trim() || !thumbnail || !video) {
+    if (!title.trim() || !category || !thumbnail || !video) {
       toast.error("Title, category, thumbnail, and video are required");
       return;
     }
@@ -116,28 +117,27 @@ export function FeaturedProjectForm({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="category">
+            <Label>
               Category <span className="text-destructive">*</span>
             </Label>
-            <Input
-              id="category"
-              required
-              list="featured-categories"
-              maxLength={80}
-              placeholder="Brand Films / Hospitality / Aviation / …"
+            <Select
               value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            />
-            {existingCategories.length > 0 && (
-              <datalist id="featured-categories">
-                {existingCategories.map((c) => (
-                  <option key={c} value={c} />
+              onValueChange={setCategory}
+              required
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select industry category" />
+              </SelectTrigger>
+              <SelectContent>
+                {INDUSTRY_CATEGORIES.map((c) => (
+                  <SelectItem key={c} value={c}>
+                    {c}
+                  </SelectItem>
                 ))}
-              </datalist>
-            )}
+              </SelectContent>
+            </Select>
             <p className="text-muted-foreground text-xs">
-              Free-form tab name. Projects with the same category land in the
-              same tab on the public site.
+              Each category maps to an industry tab on the public Featured Projects section.
             </p>
           </div>
 

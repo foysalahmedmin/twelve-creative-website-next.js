@@ -114,7 +114,7 @@ export const VerticalMarqueeSlider: React.FC<VerticalMarqueeSliderProps> = ({
           {doubled.map((item, idx) => (
             <div
               key={idx}
-              className="relative w-40 sm:w-48 aspect-9/16 overflow-hidden rounded-xl cursor-pointer shrink-0"
+              className="relative w-52 sm:w-64 aspect-9/16 overflow-hidden rounded-xl cursor-pointer shrink-0"
               onClick={() => setPopupUrl(item.video_url)}
             >
               <img
@@ -145,15 +145,14 @@ export const VerticalMarqueeSlider: React.FC<VerticalMarqueeSliderProps> = ({
 
       <div
         className={cn(
-          "flex justify-center items-center gap-3 sm:gap-4 w-full mx-auto max-w-xl md:max-w-3xl",
+          "flex justify-center items-center gap-3 sm:gap-4 w-full overflow-hidden px-4",
           className
         )}
       >
         <div className="shrink-0">{renderMarqueeColumn("up", 0)}</div>
         <div className="shrink-0">{renderMarqueeColumn("down", 1)}</div>
-        <div className="hidden md:block shrink-0">
-          {renderMarqueeColumn("up", 2)}
-        </div>
+        <div className="shrink-0">{renderMarqueeColumn("up", 2)}</div>
+        <div className="hidden sm:block shrink-0">{renderMarqueeColumn("down", 3)}</div>
       </div>
 
       <style jsx global>{`

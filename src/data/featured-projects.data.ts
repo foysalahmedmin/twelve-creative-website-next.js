@@ -23,56 +23,7 @@ const PLACEHOLDER_VIDEO =
 
 export const FEATURED_CATEGORIES: TFeaturedCategory[] = [
   {
-    id: "brand-films",
-    label: "Brand Films",
-    aspect: "video",
-    projects: [
-      {
-        id: "bf-1",
-        title: "Hudson Hospitality — Opening Night",
-        thumbnail_src:
-          "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&h=675&fit=crop&auto=format",
-        video_src: PLACEHOLDER_VIDEO,
-      },
-      {
-        id: "bf-2",
-        title: "Casa del Mar — Brand Story",
-        thumbnail_src:
-          "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=1200&h=675&fit=crop&auto=format",
-        video_src: PLACEHOLDER_VIDEO,
-      },
-      {
-        id: "bf-3",
-        title: "Meridian Properties — The Build",
-        thumbnail_src:
-          "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&h=675&fit=crop&auto=format",
-        video_src: PLACEHOLDER_VIDEO,
-      },
-      {
-        id: "bf-4",
-        title: "Vesta Group — Year in Review",
-        thumbnail_src:
-          "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200&h=675&fit=crop&auto=format",
-        video_src: PLACEHOLDER_VIDEO,
-      },
-      {
-        id: "bf-5",
-        title: "Northstar Aviation — Brand Anthem",
-        thumbnail_src:
-          "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1200&h=675&fit=crop&auto=format",
-        video_src: PLACEHOLDER_VIDEO,
-      },
-      {
-        id: "bf-6",
-        title: "Monarch Consulting — Founder Film",
-        thumbnail_src:
-          "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1200&h=675&fit=crop&auto=format",
-        video_src: PLACEHOLDER_VIDEO,
-      },
-    ],
-  },
-  {
-    id: "restaurant",
+    id: "hospitality",
     label: "Hospitality",
     aspect: "video",
     projects: [
@@ -87,7 +38,7 @@ export const FEATURED_CATEGORIES: TFeaturedCategory[] = [
         id: "h-2",
         title: "Rooftop Opening — Hudson Hospitality",
         thumbnail_src:
-          "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&h=675&fit=crop&auto=format",
+          "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200&h=675&fit=crop&auto=format",
         video_src: PLACEHOLDER_VIDEO,
       },
       {
@@ -120,7 +71,7 @@ export const FEATURED_CATEGORIES: TFeaturedCategory[] = [
       },
       {
         id: "re-3",
-        title: "Obsidian — Property Tour",
+        title: "Obsidian — Luxury Property Tour",
         thumbnail_src:
           "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&h=675&fit=crop&auto=format",
         video_src: PLACEHOLDER_VIDEO,
@@ -156,27 +107,27 @@ export const FEATURED_CATEGORIES: TFeaturedCategory[] = [
     ],
   },
   {
-    id: "founder",
-    label: "Founder Content",
+    id: "professional-services",
+    label: "Professional Services",
     aspect: "video",
     projects: [
       {
-        id: "f-1",
-        title: "Founder Talk — Carlos Doce",
+        id: "ps-1",
+        title: "Founder Talk — Brightline Advisors",
         thumbnail_src:
           "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&h=675&fit=crop&auto=format",
         video_src: PLACEHOLDER_VIDEO,
       },
       {
-        id: "f-2",
-        title: "Operator Interview — Hospitality",
+        id: "ps-2",
+        title: "Operator Interview — Forge Advisors",
         thumbnail_src:
           "https://images.unsplash.com/photo-1556157382-97eda2d62296?w=1200&h=675&fit=crop&auto=format",
         video_src: PLACEHOLDER_VIDEO,
       },
       {
-        id: "f-3",
-        title: "Behind the Build — Aviation",
+        id: "ps-3",
+        title: "Monarch Consulting — Expertise on Camera",
         thumbnail_src:
           "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1200&h=675&fit=crop&auto=format",
         video_src: PLACEHOLDER_VIDEO,
