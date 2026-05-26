@@ -52,7 +52,7 @@ export const VERTICALS_DATA: TVertical[] = [
     body: "Twelve Creative was built from the belief that creative work should be connected to the business it serves. We close the gap between strategy and execution for businesses that need both in the same room.",
     image: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=900&q=80",
     video: "",
-    href: "/verticals/about-us",
+    href: "/about",
     accent: "#6b7280",
   },
 ];

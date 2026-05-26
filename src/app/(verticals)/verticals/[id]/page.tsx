@@ -1,30 +1,30 @@
+import { ScrollReveal } from "@/components/common/scroll-reveal";
+import { CenteredSectionHeader } from "@/components/common/section-label";
 import { BookingInlineSection } from "@/components/sections/booking-inline-section";
 import { TestimonialSection } from "@/components/sections/testimonial-section";
 import { ThumbnailWorkSection } from "@/components/sections/thumbnail-work-section";
 import { VerticalMarqueeSlider } from "@/components/sections/vertical-marquee-slider";
-import { CenteredSectionHeader } from "@/components/common/section-label";
 import { WorkWithUsSection } from "@/components/sections/work-with-us-section";
-import { ScrollReveal } from "@/components/common/scroll-reveal";
-import { VERTICALS_DATA } from "@/data/verticals.data";
+import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
 import { CANVAS_PORTFOLIO_DATA } from "@/data/thumbnail-work-section.data";
 import { CANVAS_MARQUEE_DATA } from "@/data/vertical-marquee.data";
-import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
+import { VERTICALS_DATA } from "@/data/verticals.data";
 import {
   getPublicShowcaseVideosForMarquee,
   getPublicShowcaseVideosForThumbnailGrid,
 } from "@/lib/api/showcase-videos";
 import { getPublicTestimonialsForSection } from "@/lib/api/testimonials";
-import { notFound } from "next/navigation";
-import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
 interface Props {
   params: Promise<{ id: string }>;
 }
 
 export async function generateStaticParams() {
-  return VERTICALS_DATA.map((v) => ({ id: v.id }));
+  return VERTICALS_DATA.filter((v) => v.href.startsWith("/verticals/")).map((v) => ({ id: v.id }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -57,13 +57,17 @@ export default async function VerticalDetailPage({ params }: Props) {
     }),
   ]);
 
-  const marqueeData = showcaseVideos.length ? showcaseVideos : CANVAS_MARQUEE_DATA;
-  const portfolioData = livePortfolio.work.length ? livePortfolio : CANVAS_PORTFOLIO_DATA;
+  const marqueeData = showcaseVideos.length
+    ? showcaseVideos
+    : CANVAS_MARQUEE_DATA;
+  const portfolioData = livePortfolio.work.length
+    ? livePortfolio
+    : CANVAS_PORTFOLIO_DATA;
 
   return (
     <div className="bg-background min-h-screen">
       {/* ── Hero ── */}
-      <section className="relative min-h-[70vh] flex items-end overflow-hidden">
+      <section className="relative flex min-h-[70vh] items-end overflow-hidden">
         {/* Background image */}
         <img
           src={vertical.image}
@@ -71,26 +75,30 @@ export default async function VerticalDetailPage({ params }: Props) {
           className="absolute inset-0 h-full w-full object-cover"
         />
         {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/20" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/40 to-black/20" />
 
         {/* Content */}
-        <div className="container relative z-10 pb-16 pt-24 lg:pb-20">
+        <div className="relative z-10 container pt-24 pb-16 lg:pb-20">
           <ScrollReveal animation="fade-in-up" durationMs={700}>
             <span
-              className="inline-flex px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest border mb-6"
-              style={{ borderColor: `${vertical.accent}60`, color: vertical.accent, backgroundColor: `${vertical.accent}15` }}
+              className="mb-6 inline-flex rounded-full border px-4 py-1.5 text-xs font-bold tracking-widest uppercase"
+              style={{
+                borderColor: `${vertical.accent}60`,
+                color: vertical.accent,
+                backgroundColor: `${vertical.accent}15`,
+              }}
             >
               {vertical.tagline}
             </span>
-            <h1 className="font-heading text-white text-5xl font-bold tracking-tight leading-[110%] sm:text-6xl lg:text-7xl xl:text-8xl mb-6">
+            <h1 className="font-heading mb-6 text-5xl leading-[110%] font-bold tracking-tight text-white sm:text-6xl lg:text-7xl xl:text-8xl">
               {vertical.title}
             </h1>
-            <p className="text-white/70 text-lg leading-relaxed max-w-2xl mb-8 sm:text-xl">
+            <p className="mb-8 max-w-2xl text-lg leading-relaxed text-white/70 sm:text-xl">
               {vertical.body}
             </p>
             <Link
               href="/contact"
-              className="group inline-flex items-center gap-3 bg-white text-black font-bold text-sm uppercase tracking-widest px-7 py-4 rounded-full hover:bg-white/90 transition-all"
+              className="group inline-flex items-center gap-3 rounded-full bg-white px-7 py-4 text-sm font-bold tracking-widest text-black uppercase transition-all hover:bg-white/90"
             >
               Start a Conversation
               <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
