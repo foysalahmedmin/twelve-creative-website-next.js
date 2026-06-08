@@ -19,7 +19,7 @@ export function WhatsAppFloat() {
   };
 
   return (
-    <div className="pointer-events-none fixed right-5 bottom-32 z-9998 flex flex-col items-end gap-3 sm:right-6 lg:bottom-6">
+    <div className="pointer-events-none fixed right-5 bottom-24 z-9998 flex flex-col items-end gap-3 sm:right-6 lg:bottom-6">
       {/* Chat Bubble Popup */}
       <div
         className={cn(

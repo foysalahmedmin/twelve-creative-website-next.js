@@ -3,7 +3,7 @@ import { SmoothFollowerCursor } from "@/components/common/smooth-cursor";
 import { WhatsAppFloat } from "@/components/common/whatsapp-float";
 import { SITE } from "@/config/site";
 import Providers from "@/providers";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Hind_Siliguri } from "next/font/google";
 import "./globals.css";
 
@@ -13,6 +13,12 @@ const hindSiliguri = Hind_Siliguri({
   variable: "--font-hind-siliguri",
   display: "swap",
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),

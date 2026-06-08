@@ -430,7 +430,7 @@
   }
 
   html {
-    @apply scroll-smooth font-sans;
+    @apply scroll-smooth font-sans overflow-x-clip;
   }
 
   body {
