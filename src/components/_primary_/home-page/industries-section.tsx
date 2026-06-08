@@ -65,7 +65,8 @@ export const IndustriesSection = ({ className, data }: Props) => {
               className="w-full flex flex-col items-center"
             >
               {/* Tab Pills - Styled exactly like the old glass navigation bar */}
-              <div className="mb-12 w-full flex justify-center overflow-x-auto scrollbar-none pb-2">
+              <div className="mb-12 w-full overflow-x-auto scrollbar-none pb-2">
+                <div className="flex min-w-max justify-center px-4">
                 <TabsList className="border border-white/10 bg-card/45 backdrop-blur-md p-1.5 rounded-2xl flex gap-1">
                   {industries.map((industry) => {
                     const Icon = INDUSTRY_ICON_MAP[industry.icon];
@@ -81,6 +82,7 @@ export const IndustriesSection = ({ className, data }: Props) => {
                     );
                   })}
                 </TabsList>
+                </div>
               </div>
 
               {industries.map((industry) => (
