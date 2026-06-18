@@ -46,7 +46,7 @@ export function StorySection() {
         >
           {/* Left - Sticky Image Container */}
           <div className="relative lg:w-1/2">
-            <div className="bg-muted border-primary/10 sticky top-32 aspect-square w-full overflow-hidden rounded-[32px] border shadow-sm transition-all duration-500 sm:aspect-[4/3] lg:top-40 lg:aspect-square">
+            <div className="bg-muted border-primary/10 aspect-video w-full overflow-hidden rounded-[32px] border shadow-sm transition-all duration-500 lg:sticky lg:top-40 lg:aspect-square">
               <Image
                 src={
                   ABOUT_STORY_DATA[activeIndex]?.image ||

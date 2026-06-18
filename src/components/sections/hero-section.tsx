@@ -40,7 +40,7 @@ export const HeroSection = ({ className, data: override }: HeroSectionProps) => 
           className="bg-primary/15 pointer-events-none absolute bottom-1/4 right-1/4 h-72 w-72 rounded-full blur-[80px]"
         />
 
-        <div className="relative flex flex-col items-center justify-center gap-4 px-2 pt-32 pb-10 lg:gap-4 lg:pt-28">
+        <div className="relative flex flex-col items-center justify-center gap-4 px-2 pt-20 pb-10 lg:gap-4 lg:pt-28">
           {/* Center column for badge + headline + description + CTAs */}
           <div className="mx-auto flex max-w-195 flex-col items-center justify-center pt-10">
             {/* Headline */}

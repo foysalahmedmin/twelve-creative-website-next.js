@@ -128,13 +128,18 @@ export const FeaturedProjectsSection = ({
             onValueChange={setActiveId}
             className="mt-5 flex w-full flex-col items-center"
           >
-            <TabsList>
-              {categories.map((category) => (
-                <TabsTrigger key={category.id} value={category.id}>
-                  {category.label}
-                </TabsTrigger>
-              ))}
-            </TabsList>
+            {/* Horizontally scrollable on mobile */}
+            <div className="w-full overflow-x-auto scrollbar-none pb-1">
+              <div className="flex min-w-max justify-center px-2">
+                <TabsList>
+                  {categories.map((category) => (
+                    <TabsTrigger key={category.id} value={category.id}>
+                      {category.label}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </div>
+            </div>
 
             {categories.map((category) => (
               <TabsContent

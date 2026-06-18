@@ -40,12 +40,12 @@ export const FaqSection = ({ data, className }: FaqsSectionProps) => {
       </ScrollReveal>
 
       <div className="mt-8 grid grid-cols-1 items-start gap-8 lg:mt-16 lg:grid-cols-3">
-        {/* Left Coordinator Profile Card */}
+        {/* Left Coordinator Profile Card — appears after questions on mobile */}
         <ScrollReveal
           animation="fade-in-up"
-          className="mx-auto w-full max-w-[420px] lg:sticky lg:top-32 lg:max-w-full"
+          className="order-2 lg:order-1 mx-auto w-full max-w-105 lg:sticky lg:top-32 lg:max-w-full"
         >
-          <div className="from-primary/35 to-primary/5 dark:to-primary/2 mx-auto flex h-full w-full max-w-[420px] rounded-[32px] bg-gradient-to-br p-[1px] transition-all duration-300 hover:scale-[102%]">
+          <div className="from-primary/35 to-primary/5 dark:to-primary/2 mx-auto flex h-full w-full max-w-105 rounded-[32px] bg-linear-to-br p-px transition-all duration-300 hover:scale-[102%]">
             <div className="bg-card flex h-full w-full flex-col items-center space-y-6 rounded-[31px] p-8 text-center sm:p-10">
               {/* Profile Image with dual ring */}
               <div className="border-primary/20 bg-background relative size-28 shrink-0 overflow-hidden rounded-full border-2 p-1">
@@ -92,11 +92,11 @@ export const FaqSection = ({ data, className }: FaqsSectionProps) => {
           </div>
         </ScrollReveal>
 
-        {/* Right Accordion Questions list */}
+        {/* Right Accordion Questions list — appears first on mobile */}
         <ScrollReveal
           animation="fade-in-up"
           delayMs={200}
-          className="w-full lg:col-span-2"
+          className="order-1 lg:order-2 w-full lg:col-span-2"
         >
           <Accordion items={faqs} />
         </ScrollReveal>

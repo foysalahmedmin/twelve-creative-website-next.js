@@ -139,8 +139,8 @@ export const IndustriesSection = ({ className, data }: Props) => {
                       </div>
                     </div>
 
-                    {/* Right: Visual Showcase Image with curved corners and equal padding */}
-                    <div className="relative overflow-hidden rounded-[24px] border border-white/10 aspect-[4/3] w-full">
+                    {/* Right: Visual Showcase Image — appears first on mobile */}
+                    <div className="order-first lg:order-last relative overflow-hidden rounded-[24px] border border-white/10 aspect-4/3 w-full">
                       <img
                         src={industry.image}
                         alt={industry.name}
