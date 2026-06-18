@@ -1,4 +1,4 @@
-import { LogoIcon } from "@/components/icons/logo-icon";
+import Image from "next/image";
 
 export default function Loading() {
   return (
@@ -10,7 +10,7 @@ export default function Loading() {
 
           {/* Logo with pulse effect */}
           <div className="relative animate-pulse">
-            <LogoIcon className="text-primary h-16 w-16" />
+            <Image src="/logo-symbol-orange.png" alt="Twelve Creative" width={64} height={64} className="h-16 w-16 object-contain" />
           </div>
         </div>
 
