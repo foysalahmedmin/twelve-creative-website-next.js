@@ -116,7 +116,7 @@ export function CoreVerticalsSection({ industries }: Props) {
                 alt={card.title}
                 className={cn(
                   "absolute inset-0 h-full w-full object-cover transition-all duration-700",
-                  isHovered ? "scale-105 opacity-0" : "scale-100 opacity-100",
+                  isHovered && !!card.videoSrc ? "scale-105 opacity-0" : isHovered ? "scale-105 opacity-100" : "scale-100 opacity-100",
                 )}
                 draggable={false}
               />

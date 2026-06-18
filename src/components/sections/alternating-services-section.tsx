@@ -39,11 +39,11 @@ export const AlternatingServicesSection = ({
                 isEven ? "" : "lg:flex-row-reverse",
               )}
             >
-              {/* Content Column */}
+              {/* Content Column — below image on mobile */}
               <ScrollReveal
                 animation={contentAnim}
                 durationMs={800}
-                className="flex-1 space-y-6"
+                className="order-2 lg:order-0 flex-1 space-y-6"
               >
                 <div className="space-y-3">
                   <span className="bg-primary/10 text-primary border-primary/20 inline-flex rounded-full border px-3 py-1 text-xs font-bold tracking-widest uppercase">
@@ -108,19 +108,19 @@ export const AlternatingServicesSection = ({
                 animation={imageAnim}
                 durationMs={800}
                 delayMs={120}
-                className="w-full max-w-2xl flex-1"
+                className="order-1 lg:order-0 w-full max-w-2xl flex-1"
               >
                 <div className="relative w-full">
                   {/* Main Premium Card holding the showcase image */}
                   <div className="border-primary/15 bg-card/90 relative z-10 overflow-hidden rounded-[32px] border p-4">
-                    <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[24px]">
+                    <div className="relative aspect-4/3 w-full overflow-hidden rounded-[24px]">
                       <img
                         src={service.thumbnail_src}
                         alt={service.title}
                         className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
                         loading="lazy"
                       />
-                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
+                      <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/25 via-transparent to-transparent" />
                     </div>
                   </div>
 

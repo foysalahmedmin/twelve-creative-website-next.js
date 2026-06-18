@@ -5,6 +5,7 @@ import { GalleryMarqueeSection } from "@/components/sections/gallery-marquee-sec
 import { OurMissionSection } from "@/components/sections/our-mission-section";
 import { PageHeader } from "@/components/sections/page-header-section";
 import { StorySection } from "@/components/sections/story-section";
+import { FounderSection } from "@/components/sections/founder-section";
 import { TestimonialSection } from "@/components/sections/testimonial-section";
 import { FAQS_DATA } from "@/data/faqs.data";
 import { CTA_ABOUT } from "@/data/page-ctas.data";
@@ -57,6 +58,9 @@ export default async function AboutPage() {
 
       {/* Story timeline */}
       <StorySection />
+
+      {/* Founder — Carlos Doce */}
+      <FounderSection />
 
       {/* Behind the scenes gallery */}
       <GalleryMarqueeSection />
