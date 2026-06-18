@@ -93,7 +93,7 @@ export default async function VerticalDetailPage({ params }: Props) {
               href="/contact"
               className="group inline-flex items-center gap-3 rounded-full bg-white px-7 py-4 text-sm font-bold tracking-widest text-black uppercase transition-all hover:bg-white/90"
             >
-              Start a Conversation
+              Book A Call
               <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </ScrollReveal>

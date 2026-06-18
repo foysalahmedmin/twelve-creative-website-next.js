@@ -2,7 +2,6 @@
 
 import { LogoIcon } from "@/components/icons/logo-icon";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/common/theme-toggle";
 import { BookingModal } from "@/components/common/booking-modal";
 import { SITE } from "@/config/site";
 import { cn } from "@/lib/utils";
@@ -70,8 +69,6 @@ export const Header = ({ className }: { className?: string }) => {
 
           {/* Right Actions */}
           <div className="flex items-center gap-3">
-            <ThemeToggle />
-
             <button
               onClick={() => setIsBookingOpen(true)}
               className={cn(
@@ -79,7 +76,7 @@ export const Header = ({ className }: { className?: string }) => {
                 "from-primary-from to-primary-to hover:shadow-primary hidden bg-linear-to-br px-5 font-semibold shadow-md sm:inline-flex",
               )}
             >
-              Start a Conversation
+              Book A Call
               <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" />
             </button>
 
@@ -130,7 +127,7 @@ export const Header = ({ className }: { className?: string }) => {
                 }}
                 className="from-primary-from to-primary-to mt-2 bg-linear-to-br font-semibold"
               >
-                Start a Conversation
+                Book A Call
                 <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" />
               </Button>
               </nav>

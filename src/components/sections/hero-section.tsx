@@ -4,24 +4,10 @@ import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { buttonVariants } from "@/components/ui/button";
 import { HOME_HERO_DATA, type THomeHero } from "@/data/home-hero.data";
 import { cn } from "@/lib/utils";
-import {
-  Airplane01Icon,
-  Briefcase01Icon,
-  Building04Icon,
-  Restaurant01Icon,
-} from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 
 const ReactPlayer = dynamic(() => import("react-player"), { ssr: false });
-
-const AVATAR_ICON_MAP: Record<string, typeof Restaurant01Icon> = {
-  restaurant: Restaurant01Icon,
-  building: Building04Icon,
-  airplane: Airplane01Icon,
-  briefcase: Briefcase01Icon,
-};
 
 interface HeroSectionProps {
   className?: string;
@@ -53,38 +39,6 @@ export const HeroSection = ({ className, data: override }: HeroSectionProps) => 
         <div className="relative flex flex-col items-center justify-center gap-4 px-2 pt-32 pb-10 lg:gap-4 lg:pt-28">
           {/* Center column for badge + headline + description + CTAs */}
           <div className="mx-auto flex max-w-195 flex-col items-center justify-center pt-10">
-            <ScrollReveal animation="fade-in-down" durationMs={700}>
-              {/* Trust badge */}
-              <div
-                className={cn(
-                  "bg-card/40 ring-foreground/10 inline-flex items-center justify-center gap-4 rounded-full py-3 pr-5 pl-3 ring-1 backdrop-blur-lg",
-                )}
-              >
-                <div className="flex items-center -space-x-2">
-                  {data.trust_avatars.map((avatar, index) => {
-                    const Icon = AVATAR_ICON_MAP[avatar.icon];
-                    return (
-                      <div
-                        key={avatar.id}
-                        style={{ zIndex: data.trust_avatars.length - index }}
-                        className={cn(
-                          "flex h-7 w-7 items-center justify-center rounded-full",
-                          "from-primary-from to-primary-to text-primary-foreground bg-linear-to-br",
-                          "ring-card ring-2",
-                        )}
-                        aria-label={avatar.label}
-                      >
-                        <HugeiconsIcon icon={Icon} className="h-3.5 w-3.5" />
-                      </div>
-                    );
-                  })}
-                </div>
-                <p className="text-foreground text-xs leading-[140%] font-medium">
-                  {data.trust_label}
-                </p>
-              </div>
-            </ScrollReveal>
-
             {/* Headline */}
             <ScrollReveal animation="fade-in-up" delayMs={120} durationMs={800}>
               <h1 className="text-foreground font-heading mt-4 text-center text-[40px] leading-[110%] font-medium tracking-tight lg:mt-5 lg:text-[70px]">

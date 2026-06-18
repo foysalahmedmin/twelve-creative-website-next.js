@@ -1,11 +1,8 @@
 import { BookingSection } from "@/components/sections/booking-section";
 import { ContactInfoMapSection } from "@/components/sections/contact-info-map-section";
 import { PageContactSection } from "@/components/sections/contact-section-section";
-import { FaqSection } from "@/components/sections/faqs-section";
 import { PageHeader } from "@/components/sections/page-header-section";
 import { CONTACT_PAGE_DATA } from "@/data/contact.data";
-import { FAQS_DATA } from "@/data/faqs.data";
-import { getPublicFaqsForSection } from "@/lib/api/faqs";
 import { getPublicPageHero, resolveVideoSrc, resolveThumbnail } from "@/lib/api/page-heroes";
 import type { Metadata } from "next";
 
@@ -17,18 +14,7 @@ export const metadata: Metadata = {
 
 export default async function ContactPage() {
   const { header, contact_cards, booking, map } = CONTACT_PAGE_DATA;
-  const [faqsData, hero] = await Promise.all([
-    getPublicFaqsForSection({
-      image: FAQS_DATA.image,
-      alt: FAQS_DATA.alt,
-      title: FAQS_DATA.title,
-      description: FAQS_DATA.description,
-      name: FAQS_DATA.name,
-      position: FAQS_DATA.position,
-      contact_link: FAQS_DATA.contact_link,
-    }),
-    getPublicPageHero("contact"),
-  ]);
+  const hero = await getPublicPageHero("contact");
 
   return (
     <main className="bg-background min-h-screen">
@@ -59,10 +45,6 @@ export default async function ContactPage() {
         map={{ address: map.address, embed_src: map.embed_src }}
       />
 
-      {/* FAQ for common questions before reaching out */}
-      <div className="container py-8 lg:py-12">
-        <FaqSection data={faqsData} />
-      </div>
     </main>
   );
 }
