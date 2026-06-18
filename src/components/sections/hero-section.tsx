@@ -19,21 +19,25 @@ export const HeroSection = ({ className, data: override }: HeroSectionProps) => 
 
   return (
     <section className={cn("relative container mt-6 mb-10", className)}>
-      {/* Outer rounded hero card with background gradient */}
+      {/* Outer rounded hero card with artefact gradient */}
       <div
         className={cn(
           "relative min-h-screen overflow-hidden rounded-2xl lg:rounded-[40px]",
-          "from-primary/3 via-primary/8 to-primary/25 bg-linear-to-b",
+          "from-background via-primary/10 to-primary/35 bg-linear-to-br",
         )}
       >
-        {/* Decorative orbs */}
+        {/* Artefact orbs */}
         <div
           aria-hidden
-          className="bg-primary/15 pointer-events-none absolute top-1/3 -right-32 h-96 w-96 rounded-full blur-3xl"
+          className="bg-primary/30 pointer-events-none absolute -top-20 -right-20 h-125 w-125 rounded-full blur-[120px]"
         />
         <div
           aria-hidden
-          className="bg-primary/10 pointer-events-none absolute -bottom-32 -left-32 h-96 w-96 rounded-full blur-3xl"
+          className="bg-primary/20 pointer-events-none absolute -bottom-40 -left-20 h-100 w-100 rounded-full blur-[100px]"
+        />
+        <div
+          aria-hidden
+          className="bg-primary/15 pointer-events-none absolute bottom-1/4 right-1/4 h-72 w-72 rounded-full blur-[80px]"
         />
 
         <div className="relative flex flex-col items-center justify-center gap-4 px-2 pt-32 pb-10 lg:gap-4 lg:pt-28">
@@ -41,7 +45,7 @@ export const HeroSection = ({ className, data: override }: HeroSectionProps) => 
           <div className="mx-auto flex max-w-195 flex-col items-center justify-center pt-10">
             {/* Headline */}
             <ScrollReveal animation="fade-in-up" delayMs={120} durationMs={800}>
-              <h1 className="text-foreground font-heading mt-4 text-center text-[40px] leading-[110%] font-medium tracking-tight lg:mt-5 lg:text-[70px]">
+              <h1 className="text-foreground font-heading mt-4 text-center text-[40px] leading-[110%] font-black tracking-tight lg:mt-5 lg:text-[70px]">
                 {data.title}
               </h1>
             </ScrollReveal>

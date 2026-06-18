@@ -49,7 +49,7 @@ export const AlternatingServicesSection = ({
                   <span className="bg-primary/10 text-primary border-primary/20 inline-flex rounded-full border px-3 py-1 text-xs font-bold tracking-widest uppercase">
                     Service {index + 1}
                   </span>
-                  <h2 className="font-heading text-foreground text-3xl font-medium tracking-tight sm:text-4xl">
+                  <h2 className="font-heading text-foreground text-3xl font-black tracking-tight sm:text-4xl">
                     {service.title}
                   </h2>
                   <p className="text-muted-foreground text-base leading-relaxed font-medium sm:text-lg">

@@ -63,7 +63,7 @@ export const SaasInsight = ({ data = DEFAULT_SAAS_DATA, className }: SaasInsight
                   {tag}
                 </span>
                 
-                <h2 className="font-heading text-foreground text-[40px] md:text-[56px] font-semibold leading-[110%] tracking-tight mt-6">
+                <h2 className="font-heading text-foreground text-[40px] md:text-[56px] font-black leading-[110%] tracking-tight mt-6">
                   {heading}
                 </h2>
                 

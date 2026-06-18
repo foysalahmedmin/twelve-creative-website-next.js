@@ -18,7 +18,7 @@ export const SectionLabel = ({
   return (
     <span
       className={cn(
-        "border-primary/20 bg-primary/8 text-primary inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold tracking-wide",
+        "border-primary/20 bg-primary/8 text-primary inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-normal uppercase tracking-[0.075em]",
         className,
       )}
     >
@@ -89,7 +89,7 @@ export const CenteredSectionHeader = ({
         className={cn(
           "text-foreground/80 inline-flex items-center justify-center rounded-full px-5 py-2.5",
           "bg-card/25 ring-foreground/10 ring-1 backdrop-blur-md",
-          "text-base leading-[140%] font-normal gap-2",
+          "text-xs leading-[140%] font-normal uppercase tracking-[0.075em] gap-2",
           "shadow-[inset_0_1px_0_var(--color-card),0_2px_6px_-2px_var(--color-foreground)/8%]",
         )}
       >
@@ -103,7 +103,7 @@ export const CenteredSectionHeader = ({
       <motion.h2
         variants={childVariants}
         className={cn(
-          "font-heading text-foreground mt-3 text-center text-[36px] leading-[120%] font-medium tracking-tight md:text-[56px] xl:mt-4",
+          "font-heading text-foreground mt-3 text-center text-[36px] leading-[120%] font-black tracking-tight md:text-[56px] xl:mt-4",
           titleClassName,
         )}
       >

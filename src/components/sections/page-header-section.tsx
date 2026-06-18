@@ -108,7 +108,7 @@ export const PageHeader = ({
           {/* Title & Description */}
           <>
             <ScrollReveal animation="fade-in-up" durationMs={700} delayMs={120} className="max-w-3xl space-y-4">
-              <h1 className="text-foreground font-heading text-3xl font-medium tracking-tight sm:text-4xl md:text-5xl lg:text-6xl leading-[115%]">
+              <h1 className="text-foreground font-heading text-3xl font-black tracking-tight sm:text-4xl md:text-5xl lg:text-6xl leading-[115%]">
                 {title}
               </h1>
 

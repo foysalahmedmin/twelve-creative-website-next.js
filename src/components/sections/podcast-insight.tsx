@@ -112,7 +112,7 @@ export const PodcastInsight = ({ data, className }: PodcastInsightProps) => {
             <span className="min-w-[122px] h-[38px] rounded-3xl py-2 px-5 text-center flex justify-center items-center backdrop-blur-[2px] bg-primary/5 dark:bg-primary/10 text-[#ea692d] text-sm font-semibold shadow-sm border border-primary/10">
               {tag}
             </span>
-            <h2 className="font-heading font-semibold text-[32px] md:text-[56px] md:leading-[120%] text-foreground text-left">
+            <h2 className="font-heading font-black text-[32px] md:text-[56px] md:leading-[120%] text-foreground text-left">
               {heading_title}
             </h2>
             <p className="font-medium text-[14px] md:text-[16px] md:leading-[150%] text-muted-foreground text-left">

@@ -10,9 +10,9 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-linear-to-b from-primary-from to-primary-to text-primary-foreground shadow transition-transform duration-200 hover:shadow-primary hover:scale-105",
+          "bg-linear-to-b from-primary-from to-primary-to text-primary-foreground shadow transition-transform duration-200 hover:shadow-primary hover:scale-105 uppercase tracking-[0.025em]",
         outline:
-          "bg-card/25 ring-foreground/10 border-border backdrop-blur-sm shadow transition-transform duration-200 hover:scale-105",
+          "bg-card/25 ring-foreground/10 border-border backdrop-blur-sm shadow transition-transform duration-200 hover:scale-105 uppercase tracking-[0.025em]",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80 aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
         ghost:

@@ -92,7 +92,7 @@ export function WorkWithUsSection() {
                   </span>
                   <span className="bg-border h-px flex-1" />
                 </div>
-                <h3 className="font-heading text-foreground text-3xl leading-[115%] font-medium tracking-tight sm:text-4xl lg:text-5xl">
+                <h3 className="font-heading text-foreground text-3xl leading-[115%] font-black tracking-tight sm:text-4xl lg:text-5xl">
                   {card.title}
                 </h3>
                 <p className="text-muted-foreground text-base leading-relaxed lg:text-lg">

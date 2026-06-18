@@ -94,7 +94,7 @@ export function BookingInlineSection({ className }: { className?: string }) {
             <span className="bg-primary/10 text-primary border-primary/20 mb-5 inline-flex rounded-full border px-4 py-1.5 text-xs font-bold tracking-widest uppercase">
               Book a Call
             </span>
-            <h2 className="font-heading text-foreground text-3xl leading-[115%] font-medium tracking-tight sm:text-4xl">
+            <h2 className="font-heading text-foreground text-3xl leading-[115%] font-black tracking-tight sm:text-4xl">
               Start the conversation.
             </h2>
             <p className="text-muted-foreground mt-3 text-base leading-relaxed">
