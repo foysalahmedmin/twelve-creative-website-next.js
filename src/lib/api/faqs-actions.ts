@@ -64,6 +64,21 @@ export async function toggleFaqActiveAction(id: string, is_active: boolean): Pro
   }
 }
 
+export async function reorderFaqsAction(
+  items: { _id: string; order: number }[],
+): Promise<ActionResult> {
+  try {
+    await apiFetch("/api/faq/reorder", {
+      method: "POST",
+      body: { items },
+    });
+    invalidate();
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: errorMessage(e) };
+  }
+}
+
 function sanitize<T extends Partial<FaqInput>>(input: T): T {
   const out = { ...input } as T;
   if (out.group === "") delete (out as { group?: unknown }).group;

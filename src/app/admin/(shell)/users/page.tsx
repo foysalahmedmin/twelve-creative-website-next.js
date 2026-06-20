@@ -1,10 +1,15 @@
+import { Plus } from "lucide-react";
+import Link from "next/link";
+import { Suspense } from "react";
+import { redirect } from "next/navigation";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
-import { Card, CardContent } from "@/components/ui/card";
+import { AdminSearch } from "@/components/admin/admin-search";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { requireAdminSession } from "@/lib/admin/session";
 import { ADMIN_CONFIG } from "@/lib/admin/config";
 import { getAdminAccounts } from "@/lib/api/admin-users";
 import { UsersTable } from "./users-table";
-import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
@@ -32,20 +37,19 @@ export default async function UsersPage({ searchParams }: PageProps) {
           { label: "Admin", href: "/admin/dashboard" },
           { label: "Users" },
         ]}
+        action={
+          <Button asChild>
+            <Link href="/admin/users/new">
+              <Plus className="size-4" />
+              New user
+            </Link>
+          </Button>
+        }
       />
 
-      <Card>
-        <CardContent className="pt-6">
-          <p className="text-muted-foreground text-sm">
-            To invite a new teammate: have them sign up at
-            <code className="bg-muted mx-1 rounded px-1 py-0.5 text-xs">
-              /signup
-            </code>
-            (creates an `editor` account by default). You can then promote them
-            to `admin` from the row below.
-          </p>
-        </CardContent>
-      </Card>
+      <Suspense fallback={null}>
+        <AdminSearch placeholder="Search users…" />
+      </Suspense>
 
       <Card className="p-0 overflow-hidden">
         <UsersTable items={data} currentUserId={session._id} />

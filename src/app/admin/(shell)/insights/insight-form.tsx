@@ -3,6 +3,8 @@
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { toast } from "sonner";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { ImageInput } from "@/components/admin/inputs/image-input";
@@ -24,6 +26,7 @@ import {
   type InsightInput,
 } from "@/lib/api/insights-actions";
 import type { Insight } from "@/lib/api/insights";
+import { cn } from "@/lib/utils";
 
 interface Props {
   mode: "create" | "edit";
@@ -40,6 +43,7 @@ const slugify = (s: string) =>
 export function InsightForm({ mode, initial }: Props) {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
+  const [contentTab, setContentTab] = useState<"write" | "preview">("write");
 
   const [slug, setSlug] = useState(initial?.slug ?? "");
   const [slugTouched, setSlugTouched] = useState(!!initial?.slug);
@@ -174,25 +178,56 @@ export function InsightForm({ mode, initial }: Props) {
           />
 
           <div className="space-y-2">
-            <Label htmlFor="content">
-              Content <span className="text-destructive">*</span>
-            </Label>
-            <Textarea
-              id="content"
-              required
-              rows={16}
-              placeholder={`Long-form copy. Markdown supported:
-
-## Heading
-**Bold**, _italic_, [links](https://example.com)
-- bullet lists
-1. numbered lists
-
-> Block quotes`}
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              className="font-mono text-sm"
-            />
+            <div className="flex items-center justify-between">
+              <Label htmlFor="content">
+                Content <span className="text-destructive">*</span>
+              </Label>
+              <div className="flex overflow-hidden rounded border text-xs">
+                <button
+                  type="button"
+                  onClick={() => setContentTab("write")}
+                  className={cn(
+                    "px-3 py-1 transition-colors",
+                    contentTab === "write"
+                      ? "bg-primary text-primary-foreground"
+                      : "text-muted-foreground hover:text-foreground",
+                  )}
+                >
+                  Write
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setContentTab("preview")}
+                  className={cn(
+                    "px-3 py-1 transition-colors",
+                    contentTab === "preview"
+                      ? "bg-primary text-primary-foreground"
+                      : "text-muted-foreground hover:text-foreground",
+                  )}
+                >
+                  Preview
+                </button>
+              </div>
+            </div>
+            {contentTab === "write" ? (
+              <Textarea
+                id="content"
+                required
+                rows={16}
+                placeholder={`Long-form copy. Markdown supported:\n\n## Heading\n**Bold**, _italic_, [links](https://example.com)\n- bullet lists\n1. numbered lists\n\n> Block quotes`}
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                className="font-mono text-sm"
+              />
+            ) : (
+              <div className="prose prose-sm dark:prose-invert min-h-72 max-w-none rounded-md border p-4">
+                {content.trim() ? (
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
+                ) : (
+                  <p className="text-muted-foreground italic text-sm">Nothing to preview yet.</p>
+                )}
+              </div>
+            )}
             <p className="text-muted-foreground text-xs">
               {content.trim().split(/\s+/).filter(Boolean).length} words ·
               markdown (GFM) — headings, lists, links, code, quotes

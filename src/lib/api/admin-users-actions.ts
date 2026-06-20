@@ -6,6 +6,12 @@ import { ApiError } from "@/lib/admin/types";
 import type { AdminRole } from "@/lib/admin/types";
 import type { AdminAccount } from "./admin-users";
 
+export interface AdminAccountCreate {
+  name: string;
+  email: string;
+  password: string;
+}
+
 export interface AdminAccountUpdate {
   name?: string;
   email?: string;
@@ -22,6 +28,21 @@ export interface ActionResult<T = unknown> {
 const invalidate = () => {
   revalidatePath("/admin/users");
 };
+
+export async function createAdminAccountAction(
+  payload: AdminAccountCreate,
+): Promise<ActionResult<AdminAccount>> {
+  try {
+    const res = await apiFetch<AdminAccount>("/api/auth/signup", {
+      method: "POST",
+      body: payload,
+    });
+    invalidate();
+    return { ok: true, data: res.data };
+  } catch (e) {
+    return { ok: false, error: errorMessage(e) };
+  }
+}
 
 export async function updateAdminAccountAction(
   id: string,

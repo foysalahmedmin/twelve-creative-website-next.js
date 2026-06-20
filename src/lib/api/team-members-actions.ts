@@ -89,6 +89,21 @@ export async function toggleTeamMemberActiveAction(
   }
 }
 
+export async function reorderTeamMembersAction(
+  items: { _id: string; order: number }[],
+): Promise<ActionResult> {
+  try {
+    await apiFetch("/api/team-member/reorder", {
+      method: "POST",
+      body: { items },
+    });
+    invalidate();
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: errorMessage(e) };
+  }
+}
+
 function sanitize<T extends Partial<TeamMemberInput>>(input: T): T {
   const out = { ...input } as T;
   if (out.bio === "") delete (out as { bio?: unknown }).bio;

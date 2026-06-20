@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Plus } from "lucide-react";
+import { Suspense } from "react";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
+import { AdminSearch } from "@/components/admin/admin-search";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { getAdminTasks } from "@/lib/api/tasks";
@@ -8,8 +10,17 @@ import { TasksTable } from "./tasks-table";
 
 export const dynamic = "force-dynamic";
 
-export default async function TasksPage() {
-  const { data, meta } = await getAdminTasks({ limit: 50 });
+interface PageProps {
+  searchParams: Promise<{ search?: string; page?: string }>;
+}
+
+export default async function TasksPage({ searchParams }: PageProps) {
+  const params = await searchParams;
+  const { data, meta } = await getAdminTasks({
+    search: params.search,
+    page: params.page ? Number(params.page) : 1,
+    limit: 50,
+  });
 
   return (
     <div className="container max-w-6xl space-y-6 py-8">
@@ -30,6 +41,10 @@ export default async function TasksPage() {
           </Button>
         }
       />
+
+      <Suspense fallback={null}>
+        <AdminSearch placeholder="Search tasks…" />
+      </Suspense>
 
       <Card className="overflow-hidden p-0">
         <TasksTable items={data} />

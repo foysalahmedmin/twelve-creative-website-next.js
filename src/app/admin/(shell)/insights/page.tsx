@@ -1,6 +1,8 @@
 import { Plus } from "lucide-react";
 import Link from "next/link";
+import { Suspense } from "react";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
+import { AdminSearch } from "@/components/admin/admin-search";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { getAdminInsights } from "@/lib/api/insights";
@@ -52,7 +54,7 @@ export default async function InsightsPage({ searchParams }: PageProps) {
         }
       />
 
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         {FILTERS.map((f) => {
           const active = f.value === filter || (!f.value && !filter);
           const href = f.value ? `/admin/insights?filter=${f.value}` : "/admin/insights";
@@ -71,6 +73,11 @@ export default async function InsightsPage({ searchParams }: PageProps) {
             </Link>
           );
         })}
+        <div className="ml-auto">
+          <Suspense fallback={null}>
+            <AdminSearch placeholder="Search insights…" />
+          </Suspense>
+        </div>
       </div>
 
       <Card className="p-0 overflow-hidden">

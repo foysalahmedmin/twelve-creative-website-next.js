@@ -1,6 +1,8 @@
 import { Plus } from "lucide-react";
 import Link from "next/link";
+import { Suspense } from "react";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
+import { AdminSearch } from "@/components/admin/admin-search";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { getAdminTestimonials } from "@/lib/api/testimonials";
@@ -39,6 +41,10 @@ export default async function TestimonialsPage({ searchParams }: PageProps) {
           </Button>
         }
       />
+
+      <Suspense fallback={null}>
+        <AdminSearch placeholder="Search testimonials…" />
+      </Suspense>
 
       <Card className="p-0 overflow-hidden">
         <TestimonialsTable items={data} />

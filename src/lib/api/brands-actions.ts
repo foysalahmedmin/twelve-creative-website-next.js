@@ -81,6 +81,21 @@ export async function toggleBrandActiveAction(
   }
 }
 
+export async function reorderBrandsAction(
+  items: { _id: string; order: number }[],
+): Promise<ActionResult> {
+  try {
+    await apiFetch("/api/brand/reorder", {
+      method: "POST",
+      body: { items },
+    });
+    invalidate();
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: errorMessage(e) };
+  }
+}
+
 function sanitize<T extends Partial<BrandInput>>(input: T): T {
   const out = { ...input } as T;
   if (out.href === "") delete (out as { href?: unknown }).href;
