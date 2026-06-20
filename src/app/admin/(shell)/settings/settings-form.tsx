@@ -37,6 +37,14 @@ export function SettingsForm({ initial }: Props) {
     faq_name: initial.faq_section?.name ?? "",
     faq_position: initial.faq_section?.position ?? "",
     faq_contact_link: initial.faq_section?.contact_link ?? "",
+    calendly_url: initial.calendly_url ?? "",
+    process_thumbnail: initial.process_thumbnail ?? "",
+    how_we_structure_image: initial.how_we_structure_image ?? "",
+    meeting_scene_image: initial.meeting_scene_image ?? "",
+    cs_title: initial.content_section?.title ?? "",
+    cs_subtitle: initial.content_section?.subtitle ?? "",
+    cs_body: initial.content_section?.body ?? "",
+    cs_image: initial.content_section?.image ?? "",
   });
 
   const update = (key: keyof typeof form, value: string) =>
@@ -65,6 +73,16 @@ export function SettingsForm({ initial }: Props) {
         name: form.faq_name || undefined,
         position: form.faq_position || undefined,
         contact_link: form.faq_contact_link || undefined,
+      },
+      calendly_url: form.calendly_url || undefined,
+      process_thumbnail: form.process_thumbnail || undefined,
+      how_we_structure_image: form.how_we_structure_image || undefined,
+      meeting_scene_image: form.meeting_scene_image || undefined,
+      content_section: {
+        title: form.cs_title || undefined,
+        subtitle: form.cs_subtitle || undefined,
+        body: form.cs_body || undefined,
+        image: form.cs_image || undefined,
       },
     });
     setSaving(false);
@@ -239,6 +257,106 @@ export function SettingsForm({ initial }: Props) {
             />
           </div>
         </div>
+      </section>
+
+      <section className="space-y-4">
+        <div>
+          <h3 className="text-foreground text-sm font-semibold">Booking</h3>
+          <p className="text-muted-foreground text-xs">
+            If a Calendly URL is set, all "Book A Call" buttons link directly to
+            it instead of opening the built-in booking form.
+          </p>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="calendly_url">Calendly URL</Label>
+          <Input
+            id="calendly_url"
+            type="url"
+            placeholder="https://calendly.com/your-link"
+            value={form.calendly_url}
+            onChange={(e) => update("calendly_url", e.target.value)}
+          />
+        </div>
+      </section>
+
+      <section className="space-y-4">
+        <div>
+          <h3 className="text-foreground text-sm font-semibold">Page Media</h3>
+          <p className="text-muted-foreground text-xs">
+            Visual assets for specific public sections. Leave blank to use the
+            built-in placeholder images.
+          </p>
+        </div>
+        <ImageInput
+          label="Process section thumbnail (C4)"
+          description="Shown in the sticky left column of the Process section. Portrait / 3:4 works best."
+          value={form.process_thumbnail}
+          onChange={(v) => update("process_thumbnail", v)}
+          previewAspect="3/4"
+        />
+        <ImageInput
+          label="How we structure — section image (C5)"
+          description="Visual asset displayed in The Twelve Creative Difference section. Landscape 16:9 works best."
+          value={form.how_we_structure_image}
+          onChange={(v) => update("how_we_structure_image", v)}
+          previewAspect="16/9"
+        />
+        <ImageInput
+          label="Founder / Meeting scene photo (C6)"
+          description="Shown in the founder bio card on the About page. Portrait 3:4 works best."
+          value={form.meeting_scene_image}
+          onChange={(v) => update("meeting_scene_image", v)}
+          previewAspect="3/4"
+        />
+      </section>
+
+      <section className="space-y-4">
+        <div>
+          <h3 className="text-foreground text-sm font-semibold">
+            About Story Section (C7)
+          </h3>
+          <p className="text-muted-foreground text-xs">
+            Controls the "Merging Art and Science" section on the About page.
+            Leave fields blank to use the built-in defaults.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="space-y-2">
+            <Label htmlFor="cs_title">Section heading</Label>
+            <Input
+              id="cs_title"
+              placeholder="Merging Art and Science"
+              value={form.cs_title}
+              onChange={(e) => update("cs_title", e.target.value)}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="cs_subtitle">Eyebrow / label</Label>
+            <Input
+              id="cs_subtitle"
+              placeholder="Our Story"
+              value={form.cs_subtitle}
+              onChange={(e) => update("cs_subtitle", e.target.value)}
+            />
+          </div>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="cs_body">Section description</Label>
+          <Textarea
+            id="cs_body"
+            rows={3}
+            placeholder="Short paragraph shown below the heading…"
+            value={form.cs_body}
+            onChange={(e) => update("cs_body", e.target.value)}
+          />
+        </div>
+        <ImageInput
+          label="Section image"
+          description="Main sticky image shown in the left column of the story section."
+          value={form.cs_image}
+          onChange={(v) => update("cs_image", v)}
+          previewAspect="1/1"
+        />
       </section>
 
       <div className="flex justify-end">

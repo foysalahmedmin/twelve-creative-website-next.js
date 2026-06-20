@@ -20,6 +20,13 @@ export interface FaqSection {
   contact_link?: string;
 }
 
+export interface ContentSection {
+  title?: string;
+  subtitle?: string;
+  body?: string;
+  image?: string;
+}
+
 export interface SiteSetting {
   _id?: string;
   contact_email?: string;
@@ -28,6 +35,11 @@ export interface SiteSetting {
   social?: SiteSocials;
   booking_notification_email?: string;
   faq_section?: FaqSection;
+  calendly_url?: string;
+  process_thumbnail?: string;
+  how_we_structure_image?: string;
+  meeting_scene_image?: string;
+  content_section?: ContentSection;
   updated_at?: string;
 }
 

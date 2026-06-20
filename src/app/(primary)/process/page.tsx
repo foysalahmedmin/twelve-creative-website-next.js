@@ -5,6 +5,7 @@ import { ProcessSection } from "@/components/sections/process-section";
 import { CTA_PROCESS } from "@/data/page-ctas.data";
 import { PROCESS_DATA } from "@/data/process.data";
 import { getPublicPageHero, resolveVideoSrc, resolveThumbnail } from "@/lib/api/page-heroes";
+import { getPublicSiteSetting } from "@/lib/api/site-setting";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -14,7 +15,10 @@ export const metadata: Metadata = {
 };
 
 export default async function ProcessPage() {
-  const hero = await getPublicPageHero("process");
+  const [hero, settings] = await Promise.all([
+    getPublicPageHero("process"),
+    getPublicSiteSetting(),
+  ]);
 
   return (
     <main className="bg-background min-h-screen">
@@ -27,7 +31,7 @@ export default async function ProcessPage() {
       />
 
       {/* Interactive step overview */}
-      <ProcessSection data={PROCESS_DATA} />
+      <ProcessSection data={PROCESS_DATA} processThumbnail={settings.process_thumbnail || undefined} />
 
       {/* The Twelve Creative Difference */}
       <DifferenceSection />

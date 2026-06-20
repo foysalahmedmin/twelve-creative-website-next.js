@@ -27,11 +27,13 @@ const PROCESS_ICON_MAP: Record<TProcessIconKey, typeof Search01Icon> = {
 export interface PageProcessSectionProps {
   data: TProcessData;
   className?: string;
+  processThumbnail?: string;
 }
 
 export const ProcessSection = ({
   data,
   className,
+  processThumbnail,
 }: Partial<PageProcessSectionProps>) => {
   const { label, title, description, process_steps = [] } = data || {};
   const [activeIndex, setActiveIndex] = useState(0);
@@ -81,28 +83,41 @@ export const ProcessSection = ({
           {/* Left: Sticky Image Showcase (hidden on small/medium screens, sticky on desktop) */}
           <div className="hidden h-[620px] w-full max-w-[580px] overflow-hidden rounded-3xl shadow-2xl lg:sticky lg:top-36 lg:block lg:self-start">
             <div className="from-primary/10 to-primary/5 ring-primary/15 relative h-full w-full overflow-hidden rounded-3xl bg-linear-to-br ring-1">
-              {process_steps?.map((step, index) => (
-                <div
-                  key={step.id}
-                  className={cn(
-                    "absolute inset-0 transition-opacity duration-700 ease-in-out",
-                    index === activeIndex
-                      ? "z-10 opacity-100"
-                      : "z-0 opacity-0",
-                  )}
-                >
+              {processThumbnail ? (
+                <div className="absolute inset-0">
                   <Image
-                    src={step.image}
-                    alt={step.title}
+                    src={processThumbnail}
+                    alt="Our process"
                     fill
                     sizes="(min-width: 1024px) 50vw, 100vw"
                     className="scale-100 rounded-3xl object-cover transition-transform duration-700 ease-out hover:scale-105"
-                    priority={index === 0}
+                    priority
                   />
-                  {/* Subtle glass overlay gradient at bottom */}
                   <div className="from-background/40 pointer-events-none absolute inset-0 bg-linear-to-t via-transparent to-transparent" />
                 </div>
-              ))}
+              ) : (
+                process_steps?.map((step, index) => (
+                  <div
+                    key={step.id}
+                    className={cn(
+                      "absolute inset-0 transition-opacity duration-700 ease-in-out",
+                      index === activeIndex
+                        ? "z-10 opacity-100"
+                        : "z-0 opacity-0",
+                    )}
+                  >
+                    <Image
+                      src={step.image}
+                      alt={step.title}
+                      fill
+                      sizes="(min-width: 1024px) 50vw, 100vw"
+                      className="scale-100 rounded-3xl object-cover transition-transform duration-700 ease-out hover:scale-105"
+                      priority={index === 0}
+                    />
+                    <div className="from-background/40 pointer-events-none absolute inset-0 bg-linear-to-t via-transparent to-transparent" />
+                  </div>
+                ))
+              )}
             </div>
           </div>
 

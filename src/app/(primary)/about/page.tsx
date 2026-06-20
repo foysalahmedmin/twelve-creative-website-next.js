@@ -12,6 +12,7 @@ import { CTA_ABOUT } from "@/data/page-ctas.data";
 import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
 import { getPublicFaqsForSection } from "@/lib/api/faqs";
 import { getPublicPageHero, resolveVideoSrc, resolveThumbnail } from "@/lib/api/page-heroes";
+import { getPublicSiteSetting } from "@/lib/api/site-setting";
 import { getPublicTestimonialsForSection } from "@/lib/api/testimonials";
 import type { Metadata } from "next";
 
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
 };
 
 export default async function AboutPage() {
-  const [testimonialsData, faqsData, hero] = await Promise.all([
+  const [testimonialsData, faqsData, hero, settings] = await Promise.all([
     getPublicTestimonialsForSection({
       label: TESTIMONIALS_DATA.label,
       title: TESTIMONIALS_DATA.title,
@@ -38,6 +39,7 @@ export default async function AboutPage() {
       contact_link: FAQS_DATA.contact_link,
     }),
     getPublicPageHero("about"),
+    getPublicSiteSetting(),
   ]);
 
   return (
@@ -57,10 +59,10 @@ export default async function AboutPage() {
       <OurMissionSection />
 
       {/* Story timeline */}
-      <StorySection />
+      <StorySection contentSection={settings.content_section} />
 
       {/* Founder — Carlos Doce */}
-      <FounderSection />
+      <FounderSection imageSrc={settings.meeting_scene_image || undefined} />
 
       {/* Behind the scenes gallery */}
       <GalleryMarqueeSection />

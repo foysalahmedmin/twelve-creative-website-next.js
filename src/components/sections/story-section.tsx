@@ -2,11 +2,16 @@
 
 import { CenteredSectionHeader } from "@/components/common/section-label";
 import { ABOUT_STORY_DATA } from "@/data/about.data";
+import type { ContentSection } from "@/lib/api/site-setting";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
-export function StorySection() {
+interface StorySectionProps {
+  contentSection?: ContentSection;
+}
+
+export function StorySection({ contentSection }: StorySectionProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -35,9 +40,9 @@ export function StorySection() {
     <section className="bg-background py-16 sm:py-24">
       <div className="container max-w-7xl">
         <CenteredSectionHeader
-          title="Merging Art and Science"
-          description="Our journey of combining creative excellence with backend growth infrastructure."
-          label="Our Story"
+          title={contentSection?.title || "Merging Art and Science"}
+          description={contentSection?.body || "Our journey of combining creative excellence with backend growth infrastructure."}
+          label={contentSection?.subtitle || "Our Story"}
         />
 
         <div
@@ -49,6 +54,7 @@ export function StorySection() {
             <div className="bg-muted border-primary/10 aspect-video w-full overflow-hidden rounded-[32px] border shadow-sm transition-all duration-500 lg:sticky lg:top-40 lg:aspect-square">
               <Image
                 src={
+                  contentSection?.image ||
                   ABOUT_STORY_DATA[activeIndex]?.image ||
                   ABOUT_STORY_DATA[0].image
                 }

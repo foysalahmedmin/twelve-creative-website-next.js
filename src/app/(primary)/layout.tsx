@@ -1,4 +1,4 @@
-import { Header } from "@/components/partials/header";
+import { LiveHeader } from "@/components/partials/header-live";
 import { LiveFooter } from "@/components/partials/footer-live";
 import { MobileBottomNav } from "@/components/partials/mobile-bottom-nav";
 import React from "react";
@@ -10,7 +10,7 @@ export default function PrimaryLayout({
 }) {
   return (
     <div className="relative flex min-h-screen flex-col">
-      <Header />
+      <LiveHeader />
 
       <main className="flex-1 pb-16 lg:pb-0">{children}</main>
 

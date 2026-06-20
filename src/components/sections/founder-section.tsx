@@ -1,10 +1,12 @@
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 interface FounderSectionProps {
   className?: string;
+  imageSrc?: string;
 }
 
-export const FounderSection = ({ className }: FounderSectionProps) => {
+export const FounderSection = ({ className, imageSrc }: FounderSectionProps) => {
   return (
     <section className={cn("bg-background py-16 sm:py-24 lg:py-32", className)}>
       <div className="container max-w-7xl">
@@ -48,19 +50,28 @@ export const FounderSection = ({ className }: FounderSectionProps) => {
             </div>
           </div>
 
-          {/* Right: Photo placeholder */}
+          {/* Right: Photo */}
           <div className="relative w-full max-w-sm shrink-0 lg:w-96">
-            {/* Photo */}
             <div className="border-primary/15 bg-card relative overflow-hidden rounded-[32px] border aspect-[3/4] w-full">
-              {/* Placeholder until client provides photo */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-gradient-to-br from-primary/20 to-primary/5">
-                <div className="bg-primary/20 flex h-24 w-24 items-center justify-center rounded-full">
-                  <span className="font-heading text-primary text-4xl font-black">CD</span>
+              {imageSrc ? (
+                <Image
+                  src={imageSrc}
+                  alt="Carlos Doce — Founder, Twelve Creative"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 384px"
+                  className="object-cover"
+                  priority
+                />
+              ) : (
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-gradient-to-br from-primary/20 to-primary/5">
+                  <div className="bg-primary/20 flex h-24 w-24 items-center justify-center rounded-full">
+                    <span className="font-heading text-primary text-4xl font-black">CD</span>
+                  </div>
+                  <p className="text-muted-foreground text-xs uppercase tracking-widest">
+                    Photo coming soon
+                  </p>
                 </div>
-                <p className="text-muted-foreground text-xs uppercase tracking-widest">
-                  Photo coming soon
-                </p>
-              </div>
+              )}
             </div>
 
             {/* Accent decoration */}

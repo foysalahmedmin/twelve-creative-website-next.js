@@ -21,6 +21,7 @@ interface BookingSectionProps {
   title: string;
   description: string;
   className?: string;
+  calendlyUrl?: string;
 }
 
 const BOOKING_STEPS = [
@@ -61,6 +62,7 @@ export const BookingSection = ({
   title,
   description,
   className,
+  calendlyUrl,
 }: BookingSectionProps) => {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
 
@@ -158,18 +160,33 @@ export const BookingSection = ({
                     ))}
                   </ul>
 
-                  <Button
-                    size="lg"
-                    type="button"
-                    onClick={() => setIsBookingOpen(true)}
-                    className="from-primary-from to-primary-to hover:shadow-primary group/cta h-14 w-full rounded-2xl bg-linear-to-br text-base font-semibold shadow-md transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]"
-                  >
-                    Start Booking
-                    <HugeiconsIcon
-                      icon={ArrowRight01Icon}
-                      className="size-5 transition-transform group-hover/cta:translate-x-1"
-                    />
-                  </Button>
+                  {calendlyUrl ? (
+                    <a
+                      href={calendlyUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="from-primary-from to-primary-to hover:shadow-primary group/cta inline-flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-linear-to-br text-base font-semibold text-primary-foreground shadow-md transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                    >
+                      Start Booking
+                      <HugeiconsIcon
+                        icon={ArrowRight01Icon}
+                        className="size-5 transition-transform group-hover/cta:translate-x-1"
+                      />
+                    </a>
+                  ) : (
+                    <Button
+                      size="lg"
+                      type="button"
+                      onClick={() => setIsBookingOpen(true)}
+                      className="from-primary-from to-primary-to hover:shadow-primary group/cta h-14 w-full rounded-2xl bg-linear-to-br text-base font-semibold shadow-md transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                    >
+                      Start Booking
+                      <HugeiconsIcon
+                        icon={ArrowRight01Icon}
+                        className="size-5 transition-transform group-hover/cta:translate-x-1"
+                      />
+                    </Button>
+                  )}
 
                   <p className="text-muted-foreground text-center text-xs">
                     Or send a detailed inquiry using the form above.
@@ -181,11 +198,12 @@ export const BookingSection = ({
         </div>
       </ScrollReveal>
 
-      {/* Modal — same custom flow used in the header */}
-      <BookingModal
-        isOpen={isBookingOpen}
-        onClose={() => setIsBookingOpen(false)}
-      />
+      {!calendlyUrl && (
+        <BookingModal
+          isOpen={isBookingOpen}
+          onClose={() => setIsBookingOpen(false)}
+        />
+      )}
     </section>
   );
 };

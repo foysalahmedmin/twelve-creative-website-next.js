@@ -13,6 +13,7 @@ import { SERVICES_DATA } from "@/data/services.data";
 import { WHY_CHOOSE_US_DATA } from "@/data/why-choose-us.data";
 import { getPublicPageHero, resolveVideoSrc, resolveThumbnail } from "@/lib/api/page-heroes";
 import { getPublicIndustries } from "@/lib/api/industries";
+import { getPublicSiteSetting } from "@/lib/api/site-setting";
 import { getPublicServicesAsLegacy } from "@/lib/api/services";
 import type { Metadata } from "next";
 
@@ -23,10 +24,11 @@ export const metadata: Metadata = {
 };
 
 export default async function WhatWeBuildPage() {
-  const [live, hero, industries] = await Promise.all([
+  const [live, hero, industries, settings] = await Promise.all([
     getPublicServicesAsLegacy(),
     getPublicPageHero("what-we-build"),
     getPublicIndustries(),
+    getPublicSiteSetting(),
   ]);
   const source = live.length ? live : SERVICES_DATA;
   const serviceItems = source.map((service) => ({
@@ -57,10 +59,10 @@ export default async function WhatWeBuildPage() {
       <PodcastInsight data={CANVAS_PODCAST_INSIGHT_DATA} />
 
       {/* The Twelve Creative Difference */}
-      <DifferenceSection />
+      <DifferenceSection howWeStructureImage={settings.how_we_structure_image || undefined} />
 
       {/* How we approach the work */}
-      <ProcessSection data={PROCESS_DATA} />
+      <ProcessSection data={PROCESS_DATA} processThumbnail={settings.process_thumbnail || undefined} />
 
       {/* Why operators choose us */}
       <WhyChooseUsSection data={WHY_CHOOSE_US_DATA} />

@@ -15,7 +15,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
-export const Header = ({ className }: { className?: string }) => {
+interface HeaderProps {
+  className?: string;
+  calendlyUrl?: string;
+}
+
+export const Header = ({ className, calendlyUrl }: HeaderProps) => {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
@@ -69,16 +74,31 @@ export const Header = ({ className }: { className?: string }) => {
 
           {/* Right Actions */}
           <div className="flex items-center gap-3">
-            <button
-              onClick={() => setIsBookingOpen(true)}
-              className={cn(
-                buttonVariants({ size: "default" }),
-                "from-primary-from to-primary-to hover:shadow-primary hidden bg-linear-to-br px-5 font-semibold shadow-md sm:inline-flex",
-              )}
-            >
-              Book A Call
-              <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" />
-            </button>
+            {calendlyUrl ? (
+              <a
+                href={calendlyUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(
+                  buttonVariants({ size: "default" }),
+                  "from-primary-from to-primary-to hover:shadow-primary hidden bg-linear-to-br px-5 font-semibold shadow-md sm:inline-flex",
+                )}
+              >
+                Book A Call
+                <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" />
+              </a>
+            ) : (
+              <button
+                onClick={() => setIsBookingOpen(true)}
+                className={cn(
+                  buttonVariants({ size: "default" }),
+                  "from-primary-from to-primary-to hover:shadow-primary hidden bg-linear-to-br px-5 font-semibold shadow-md sm:inline-flex",
+                )}
+              >
+                Book A Call
+                <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" />
+              </button>
+            )}
 
             {/* Mobile Menu Toggle */}
             <button
@@ -120,24 +140,41 @@ export const Header = ({ className }: { className?: string }) => {
                   </Link>
                 );
               })}
-              <Button
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  setIsBookingOpen(true);
-                }}
-                className="from-primary-from to-primary-to mt-2 bg-linear-to-br font-semibold"
-              >
-                Book A Call
-                <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" />
-              </Button>
+              {calendlyUrl ? (
+                <a
+                  href={calendlyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cn(
+                    buttonVariants(),
+                    "from-primary-from to-primary-to mt-2 bg-linear-to-br font-semibold",
+                  )}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Book A Call
+                  <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" />
+                </a>
+              ) : (
+                <Button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    setIsBookingOpen(true);
+                  }}
+                  className="from-primary-from to-primary-to mt-2 bg-linear-to-br font-semibold"
+                >
+                  Book A Call
+                  <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" />
+                </Button>
+              )}
               </nav>
             </div>
           )}
         </div>
       </header>
 
-      {/* Booking Modal — rendered outside header so it's full-screen */}
-      <BookingModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
+      {!calendlyUrl && (
+        <BookingModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
+      )}
     </>
   );
 };

@@ -4,6 +4,7 @@ import { PageContactSection } from "@/components/sections/contact-section-sectio
 import { PageHeader } from "@/components/sections/page-header-section";
 import { CONTACT_PAGE_DATA } from "@/data/contact.data";
 import { getPublicPageHero, resolveVideoSrc, resolveThumbnail } from "@/lib/api/page-heroes";
+import { getPublicSiteSetting } from "@/lib/api/site-setting";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -14,7 +15,10 @@ export const metadata: Metadata = {
 
 export default async function ContactPage() {
   const { header, contact_cards, booking, map } = CONTACT_PAGE_DATA;
-  const hero = await getPublicPageHero("contact");
+  const [hero, settings] = await Promise.all([
+    getPublicPageHero("contact"),
+    getPublicSiteSetting(),
+  ]);
 
   return (
     <main className="bg-background min-h-screen">
@@ -34,6 +38,7 @@ export default async function ContactPage() {
         label={booking.label}
         title={booking.title}
         description={booking.description}
+        calendlyUrl={settings.calendly_url || undefined}
       />
 
       {/* Contact cards (left) + Map (right) — side-by-side on lg */}

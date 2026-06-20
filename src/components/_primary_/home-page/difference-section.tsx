@@ -8,8 +8,14 @@ import {
   Tick02Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import Image from "next/image";
 
-export const DifferenceSection = ({ className }: { className?: string }) => {
+interface DifferenceSectionProps {
+  className?: string;
+  howWeStructureImage?: string;
+}
+
+export const DifferenceSection = ({ className, howWeStructureImage }: DifferenceSectionProps) => {
   const data = DIFFERENCE_DATA;
 
   return (
@@ -24,6 +30,20 @@ export const DifferenceSection = ({ className }: { className?: string }) => {
             description={data.description}
           />
         </ScrollReveal>
+
+        {howWeStructureImage && (
+          <ScrollReveal animation="fade-in-up" delayMs={100} durationMs={800}>
+            <div className="relative mt-10 aspect-video w-full overflow-hidden rounded-3xl lg:mt-12">
+              <Image
+                src={howWeStructureImage}
+                alt="How we structure our work"
+                fill
+                sizes="(max-width: 1280px) 100vw, 1280px"
+                className="object-cover"
+              />
+            </div>
+          </ScrollReveal>
+        )}
 
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-2 mt-10 lg:mt-16">
           {/* Fragmented */}
