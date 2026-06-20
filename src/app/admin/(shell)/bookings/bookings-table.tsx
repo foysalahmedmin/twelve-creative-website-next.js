@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/table";
 import type { Booking } from "@/lib/api/bookings";
 import { BookingStatusBadge } from "./status-pill";
+import { LeadSourceBadge } from "./lead-source-badge";
 
 interface Props {
   items: Booking[];
@@ -37,6 +38,7 @@ export function BookingsTable({ items }: Props) {
           <TableHead>Name</TableHead>
           <TableHead>Industry</TableHead>
           <TableHead>Timeline</TableHead>
+          <TableHead>Lead Source</TableHead>
           <TableHead>Status</TableHead>
         </TableRow>
       </TableHeader>
@@ -62,6 +64,9 @@ export function BookingsTable({ items }: Props) {
             </TableCell>
             <TableCell className="text-muted-foreground text-xs">
               {item.timeline ?? "—"}
+            </TableCell>
+            <TableCell>
+              <LeadSourceBadge source={item.lead_source} />
             </TableCell>
             <TableCell>
               <BookingStatusBadge status={item.status} />

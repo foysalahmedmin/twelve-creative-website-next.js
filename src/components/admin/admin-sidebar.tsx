@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import type { AdminUser } from "@/lib/admin/types";
-import { ADMIN_NAV } from "./admin-nav-config";
+import { ADMIN_NAV, type AdminNavEntry } from "./admin-nav-config";
 
 interface AdminSidebarProps {
   user: AdminUser;
@@ -15,7 +15,7 @@ export function AdminSidebar({ user, className }: AdminSidebarProps) {
   const pathname = usePathname();
 
   const visibleNav = ADMIN_NAV.filter(
-    (item) => !item.roles || item.roles.includes(user.role),
+    (entry) => entry.type === "section" || !entry.roles || entry.roles.includes(user.role),
   );
 
   return (
@@ -43,16 +43,26 @@ export function AdminSidebar({ user, className }: AdminSidebarProps) {
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto px-3 py-4">
         <ul className="space-y-1">
-          {visibleNav.map((item) => {
-            const Icon = item.icon;
+          {visibleNav.map((entry, i) => {
+            if (entry.type === "section") {
+              return (
+                <li key={`section-${i}`} className="pt-4 pb-1">
+                  <span className="text-muted-foreground/60 px-3 text-[10px] font-bold tracking-widest uppercase">
+                    {entry.label}
+                  </span>
+                </li>
+              );
+            }
+
+            const Icon = entry.icon;
             const isActive =
-              pathname === item.href ||
-              (item.href !== "/admin" && pathname?.startsWith(item.href + "/"));
+              pathname === entry.href ||
+              (entry.href !== "/admin" && pathname?.startsWith(entry.href + "/"));
 
             return (
-              <li key={item.href}>
+              <li key={entry.href}>
                 <Link
-                  href={item.href}
+                  href={entry.href}
                   className={cn(
                     "group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                     isActive
@@ -61,8 +71,8 @@ export function AdminSidebar({ user, className }: AdminSidebarProps) {
                   )}
                 >
                   <Icon className="size-4 shrink-0" strokeWidth={2} />
-                  <span className="flex-1 truncate">{item.label}</span>
-                  {item.soon && (
+                  <span className="flex-1 truncate">{entry.label}</span>
+                  {entry.soon && (
                     <span className="bg-muted text-muted-foreground rounded-full px-1.5 py-0.5 text-[10px] font-bold tracking-wider uppercase">
                       Soon
                     </span>

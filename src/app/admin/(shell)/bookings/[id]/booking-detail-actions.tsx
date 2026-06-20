@@ -20,7 +20,7 @@ import {
   deleteBookingAction,
   updateBookingAction,
 } from "@/lib/api/bookings-actions";
-import type { Booking, BookingStatus } from "@/lib/api/bookings";
+import type { Booking, BookingStatus, LeadSource } from "@/lib/api/bookings";
 
 interface Props {
   booking: Booking;
@@ -33,21 +33,35 @@ const STATUS_OPTIONS: { value: BookingStatus; label: string }[] = [
   { value: "cancelled", label: "Cancelled" },
 ];
 
+const LEAD_SOURCE_OPTIONS: { value: LeadSource; label: string }[] = [
+  { value: "organic", label: "Organic" },
+  { value: "meta_ad", label: "Meta Ad" },
+  { value: "google_ad", label: "Google Ad" },
+  { value: "referral", label: "Referral" },
+  { value: "direct", label: "Direct" },
+  { value: "email", label: "Email Campaign" },
+  { value: "other", label: "Other" },
+];
+
 export function BookingDetailActions({ booking }: Props) {
   const router = useRouter();
   const [status, setStatus] = useState<BookingStatus>(booking.status);
   const [note, setNote] = useState<string>(booking.internal_note ?? "");
+  const [leadSource, setLeadSource] = useState<LeadSource | "">(booking.lead_source ?? "");
   const [saving, setSaving] = useState(false);
   const [confirmingDelete, setConfirmingDelete] = useState(false);
 
   const dirty =
-    status !== booking.status || note !== (booking.internal_note ?? "");
+    status !== booking.status ||
+    note !== (booking.internal_note ?? "") ||
+    leadSource !== (booking.lead_source ?? "");
 
   const handleSave = async () => {
     setSaving(true);
     const res = await updateBookingAction(booking._id, {
       status,
       internal_note: note,
+      lead_source: leadSource || null,
     });
     setSaving(false);
     if (!res.ok) {
@@ -87,6 +101,25 @@ export function BookingDetailActions({ booking }: Props) {
               </SelectTrigger>
               <SelectContent>
                 {STATUS_OPTIONS.map((opt) => (
+                  <SelectItem key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label>Lead Source</Label>
+            <Select
+              value={leadSource}
+              onValueChange={(v) => setLeadSource(v as LeadSource | "")}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Not set" />
+              </SelectTrigger>
+              <SelectContent>
+                {LEAD_SOURCE_OPTIONS.map((opt) => (
                   <SelectItem key={opt.value} value={opt.value}>
                     {opt.label}
                   </SelectItem>

@@ -1,3 +1,4 @@
+import type React from "react";
 import { notFound } from "next/navigation";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { Card, CardContent } from "@/components/ui/card";
@@ -5,6 +6,7 @@ import { ApiError } from "@/lib/admin/types";
 import { getBookingById } from "@/lib/api/bookings";
 import { BookingDetailActions } from "./booking-detail-actions";
 import { BookingStatusBadge } from "../status-pill";
+import { LeadSourceBadge } from "../lead-source-badge";
 
 export const dynamic = "force-dynamic";
 
@@ -18,6 +20,15 @@ const fieldRow = (label: string, value?: string) => (
       {label}
     </dt>
     <dd className="text-foreground col-span-2 text-sm">{value || "—"}</dd>
+  </div>
+);
+
+const badgeRow = (label: string, badge: React.ReactNode) => (
+  <div className="grid grid-cols-3 gap-3 border-b border-border/40 py-2.5 last:border-b-0">
+    <dt className="text-muted-foreground text-xs font-bold tracking-wider uppercase">
+      {label}
+    </dt>
+    <dd className="col-span-2">{badge}</dd>
   </div>
 );
 
@@ -58,6 +69,7 @@ export default async function BookingDetailPage({ params }: PageProps) {
             {fieldRow("Timeline", booking.timeline)}
             {fieldRow("Preferred date", preferredDate)}
             {fieldRow("Preferred time", booking.preferred_time)}
+            {badgeRow("Lead source", <LeadSourceBadge source={booking.lead_source} />)}
             {fieldRow("Message", booking.message)}
           </dl>
         </CardContent>

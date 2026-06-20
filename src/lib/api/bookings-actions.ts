@@ -8,6 +8,7 @@ import {
   BOOKINGS_TAG,
   type Booking,
   type BookingStatus,
+  type LeadSource,
   type PublicBookingPayload,
 } from "./bookings";
 
@@ -57,7 +58,7 @@ export async function submitBookingAction(
 
 export async function updateBookingAction(
   id: string,
-  payload: { status?: BookingStatus; internal_note?: string },
+  payload: { status?: BookingStatus; internal_note?: string; lead_source?: LeadSource | null },
 ): Promise<ActionResult<Booking>> {
   try {
     const res = await apiFetch<Booking>(`/api/booking/${id}`, {

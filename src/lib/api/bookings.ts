@@ -8,6 +8,15 @@ export type BookingStatus =
   | "completed"
   | "cancelled";
 
+export type LeadSource =
+  | "organic"
+  | "meta_ad"
+  | "google_ad"
+  | "referral"
+  | "direct"
+  | "email"
+  | "other";
+
 export interface Booking {
   _id: string;
   name: string;
@@ -22,6 +31,7 @@ export interface Booking {
   status: BookingStatus;
   internal_note?: string;
   source: "booking_form";
+  lead_source?: LeadSource;
   created_at: string;
   updated_at: string;
 }
