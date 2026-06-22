@@ -56,7 +56,8 @@ export function StorySection({ contentSection }: StorySectionProps) {
                 src={
                   contentSection?.image ||
                   ABOUT_STORY_DATA[activeIndex]?.image ||
-                  ABOUT_STORY_DATA[0].image
+                  ABOUT_STORY_DATA[0]?.image ||
+                  ""
                 }
                 alt={ABOUT_STORY_DATA[activeIndex]?.title || "Story image"}
                 fill

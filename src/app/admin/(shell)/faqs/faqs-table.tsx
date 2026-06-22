@@ -71,6 +71,7 @@ export function FaqsTable({ items: propItems }: Props) {
     if (!dragId || dragId === targetId) return;
     const from = items.findIndex((i) => i._id === dragId);
     const to = items.findIndex((i) => i._id === targetId);
+    if (from === -1 || to === -1) return;
     const next = [...items];
     const [moved] = next.splice(from, 1);
     next.splice(to, 0, moved);
