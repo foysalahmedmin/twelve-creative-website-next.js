@@ -447,6 +447,49 @@
   }
 }
 
+/* ── Testimonial swipers ─────────────────────────────────────────────── */
+
+/* Linear timing makes delay:1 + high speed feel like a true marquee */
+.tc-swiper .swiper-wrapper {
+  transition-timing-function: linear !important;
+}
+
+/*
+  With slidesPerView:"auto" Swiper reads each slide's offsetWidth.
+  Swiper base CSS sets .swiper-slide { width:100% } at specificity 0,1,0.
+  These double-class rules (specificity 0,2,0) win and lock in the widths.
+*/
+
+/* Reel (9:16 video) testimonial slides */
+.tc-swiper-reel .swiper-slide {
+  width: 162px;
+  flex-shrink: 0;
+}
+@media (min-width: 640px) {
+  .tc-swiper-reel .swiper-slide { width: 180px; }
+}
+@media (min-width: 1024px) {
+  .tc-swiper-reel .swiper-slide { width: 202px; }
+}
+@media (min-width: 1280px) {
+  .tc-swiper-reel .swiper-slide { width: 218px; }
+}
+
+/* Text testimonial slides */
+.tc-swiper-text .swiper-slide {
+  width: 272px;
+  flex-shrink: 0;
+}
+@media (min-width: 640px) {
+  .tc-swiper-text .swiper-slide { width: 310px; }
+}
+@media (min-width: 1024px) {
+  .tc-swiper-text .swiper-slide { width: 348px; }
+}
+@media (min-width: 1280px) {
+  .tc-swiper-text .swiper-slide { width: 384px; }
+}
+
 @layer utilities {
   .bg-accent-linear {
     @apply from-accent-from to-accent-to bg-linear-to-t;

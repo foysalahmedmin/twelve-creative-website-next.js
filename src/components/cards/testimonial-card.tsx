@@ -2,6 +2,8 @@
 
 import { TTestimonial } from "@/data/testimonials.data";
 import { cn } from "@/lib/utils";
+import { QuoteUpIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import Image from "next/image";
 
 type TestimonialCardProps = {
@@ -21,41 +23,35 @@ export const TestimonialCard = ({
       )}
     >
       <div className="flex flex-col gap-4">
-        {/* Quote comma */}
-        <div className="relative h-8 w-8 opacity-45">
-          <Image
-            src="/assets/comma.png"
-            alt="Quote"
-            width={32}
-            height={32}
-            className="object-contain"
-            draggable={false}
-          />
-        </div>
+        {/* Quote icon */}
+        <HugeiconsIcon
+          icon={QuoteUpIcon}
+          className="text-primary/50 size-8"
+        />
 
         {/* Message */}
-        <p className="text-foreground/95 poppins min-h-[80px] text-sm leading-relaxed font-normal md:text-base">
+        <p className="text-foreground/95 poppins min-h-20 text-sm leading-relaxed font-normal md:text-base">
           {testimonial.message}
         </p>
       </div>
 
       {/* User info */}
       <div className="mt-6 flex items-center gap-4">
-        <div className="border-border/50 relative h-12 w-12 shrink-0 overflow-hidden rounded-full border">
+        <div className="border-border/50 relative h-8 w-8 shrink-0 overflow-hidden rounded-full border">
           <Image
             src={testimonial.image}
             alt={testimonial.name}
-            width={48}
-            height={48}
+            width={32}
+            height={32}
             className="object-cover"
             draggable={false}
           />
         </div>
         <div className="flex flex-col">
-          <h4 className="text-foreground poppins text-sm leading-tight font-bold md:text-[16px]">
+          <h4 className="text-foreground poppins text-sm leading-tight font-bold">
             {testimonial.name}
           </h4>
-          <p className="text-muted-foreground opensans mt-1 text-xs font-normal">
+          <p className="text-muted-foreground opensans mt-0.5 text-xs font-normal">
             {testimonial.designation}
           </p>
         </div>

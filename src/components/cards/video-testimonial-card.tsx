@@ -21,12 +21,12 @@ export const VideoTestimonialCard = ({
     <div
       onClick={() => onOpen(testimonial)}
       className={cn(
-        "bg-card/25 border-border/40 hover:border-primary/30 group flex w-80 cursor-pointer flex-col gap-4 rounded-3xl border p-4 ring-1 ring-black/5 backdrop-blur-md transition-all duration-300 select-none md:w-96",
+        "bg-card/25 border-border/40 hover:border-primary/30 group flex w-80 cursor-pointer flex-col gap-4 rounded-2xl border p-2 ring-1 ring-black/5 backdrop-blur-md transition-all duration-300 select-none md:w-96",
         className,
       )}
     >
       {/* Video cover aspect-9/16 */}
-      <div className="relative aspect-[9/16] w-full overflow-hidden rounded-2xl bg-black">
+      <div className="relative aspect-9/16 w-full overflow-hidden rounded-xl bg-black">
         {testimonial.thumbnail ? (
           <Image
             src={testimonial.thumbnail}
@@ -52,21 +52,21 @@ export const VideoTestimonialCard = ({
       </div>
 
       {/* User Info */}
-      <div className="flex items-center gap-3 px-1">
-        <div className="border-border/50 relative h-11 w-11 shrink-0 overflow-hidden rounded-full border">
+      <div className="flex items-center gap-2 px-1">
+        <div className="border-border/50 relative h-8 w-8 shrink-0 overflow-hidden rounded-full border">
           <Image
             src={testimonial.image}
             alt={testimonial.name}
-            width={44}
-            height={44}
+            width={32}
+            height={32}
             className="object-cover"
             draggable={false}
           />
         </div>
         <div className="flex flex-col">
-          <h4 className="text-foreground poppins text-sm leading-tight font-bold md:text-base">
+          <h5 className="text-foreground poppins text-sm leading-tight font-bold">
             {testimonial.name}
-          </h4>
+          </h5>
           <p className="text-muted-foreground opensans mt-0.5 text-xs font-normal">
             {testimonial.designation}
           </p>
