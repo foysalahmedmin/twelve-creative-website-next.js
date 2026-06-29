@@ -9,12 +9,14 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { cn } from "@/lib/utils";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import React from "react";
-import dynamic from "next/dynamic";
 import { ScrollReveal } from "../common/scroll-reveal";
 
-const ReactPlayer = dynamic(() => import("react-player"), { ssr: false }) as any;
+const ReactPlayer = dynamic(() => import("react-player"), {
+  ssr: false,
+}) as any;
 
 interface BreadcrumbItemType {
   label: string;
@@ -46,7 +48,7 @@ export const PageHeader = ({
       {/* Outer rounded card with background gradient inspired by Home Hero */}
       <div
         className={cn(
-          "relative overflow-hidden rounded-2xl lg:rounded-[40px] py-16 sm:py-20 lg:py-28 px-4 sm:px-8",
+          "relative overflow-hidden rounded-2xl px-4 py-16 sm:px-8 sm:py-20 lg:rounded-[40px] lg:py-28",
           "from-primary/3 via-primary/8 to-primary/20 bg-linear-to-b",
         )}
       >
@@ -60,23 +62,27 @@ export const PageHeader = ({
           className="bg-primary/10 pointer-events-none absolute -bottom-32 -left-32 h-80 w-80 rounded-full blur-3xl"
         />
 
-        <div className="relative z-10 mx-auto max-w-4xl flex flex-col items-center justify-center text-center">
+        <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center justify-center text-center">
           {/* Eyebrow Label Capsule */}
           {label && (
             <>
               <ScrollReveal animation="fade-in-down" durationMs={700}>
-                <span className="inline-flex px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-primary/10 text-primary border border-primary/20 mb-6">
+                <span className="bg-primary/10 text-primary border-primary/20 mb-6 inline-flex rounded-full border px-4 py-1.5 text-xs font-bold tracking-widest uppercase">
                   {label}
                 </span>
               </ScrollReveal>
-
             </>
           )}
 
           {/* Breadcrumbs */}
           {breadcrumb && breadcrumb.length > 0 && (
             <>
-              <ScrollReveal animation="fade-in-up" delayMs={100} durationMs={700} className="mb-6">
+              <ScrollReveal
+                animation="fade-in-up"
+                delayMs={100}
+                durationMs={700}
+                className="mb-6"
+              >
                 <Breadcrumb>
                   <BreadcrumbList className="justify-center">
                     <BreadcrumbItem>
@@ -96,7 +102,9 @@ export const PageHeader = ({
                             </BreadcrumbLink>
                           )}
                         </BreadcrumbItem>
-                        {index < breadcrumb.length - 1 && <BreadcrumbSeparator />}
+                        {index < breadcrumb.length - 1 && (
+                          <BreadcrumbSeparator />
+                        )}
                       </React.Fragment>
                     ))}
                   </BreadcrumbList>
@@ -107,15 +115,24 @@ export const PageHeader = ({
 
           {/* Title & Description */}
           <>
-            <ScrollReveal animation="fade-in-up" durationMs={700} delayMs={120} className="max-w-3xl space-y-4">
-              <h1 className="text-foreground font-heading text-3xl font-black tracking-tight sm:text-4xl md:text-5xl lg:text-6xl leading-[115%]">
+            <ScrollReveal
+              animation="fade-in-up"
+              durationMs={700}
+              delayMs={120}
+              className="max-w-3xl space-y-4"
+            >
+              <h1 className="text-foreground font-heading text-3xl leading-[115%] font-black tracking-tight sm:text-4xl md:text-5xl lg:text-6xl">
                 {title}
               </h1>
-
             </ScrollReveal>
             {description && (
-              <ScrollReveal animation="fade-in-up" durationMs={700} delayMs={250} className="max-w-3xl space-y-4">
-                <p className="text-muted-foreground mx-auto text-base sm:text-lg leading-relaxed font-medium">
+              <ScrollReveal
+                animation="fade-in-up"
+                durationMs={700}
+                delayMs={250}
+                className="max-w-3xl space-y-4"
+              >
+                <p className="text-muted-foreground mx-auto text-base leading-relaxed font-medium sm:text-lg">
                   {description}
                 </p>
               </ScrollReveal>
@@ -124,7 +141,12 @@ export const PageHeader = ({
 
           {/* Video or thumbnail preview */}
           {(videoSrc || thumbnailSrc) && (
-            <ScrollReveal animation="zoom-in" delayMs={400} durationMs={900} className="w-full px-4 lg:px-12">
+            <ScrollReveal
+              animation="zoom-in"
+              delayMs={400}
+              durationMs={900}
+              className="w-full px-4 lg:px-12"
+            >
               <div className="ring-foreground/10 relative mx-auto mt-12 aspect-video w-full max-w-5xl overflow-hidden rounded-2xl ring-1 lg:mt-16 lg:rounded-[32px]">
                 {videoSrc ? (
                   <ReactPlayer
@@ -137,7 +159,6 @@ export const PageHeader = ({
                     style={{ width: "100%", height: "100%" }}
                   />
                 ) : (
-                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={thumbnailSrc}
                     alt={title}
