@@ -15,7 +15,7 @@ import type { VideoRef } from "@/lib/admin/types";
 
 export const FEATURED_PROJECTS_TAG = "featured-projects";
 
-export type FeaturedProjectAspect = "reel" | "video";
+export type FeaturedProjectAspect = "reel" | "landscape";
 
 export interface FeaturedProject {
   _id: string;

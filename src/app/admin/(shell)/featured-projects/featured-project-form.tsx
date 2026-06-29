@@ -52,7 +52,7 @@ export function FeaturedProjectForm({
   const [title, setTitle] = useState(initial?.title ?? "");
   const [category, setCategory] = useState(initial?.category ?? "Hospitality");
   const [aspect, setAspect] = useState<FeaturedProjectAspect>(
-    initial?.aspect ?? "video",
+    initial?.aspect ?? "landscape",
   );
   const [thumbnail, setThumbnail] = useState(initial?.thumbnail ?? "");
   const [video, setVideo] = useState<VideoRef | null>(initial?.video ?? null);
@@ -153,7 +153,7 @@ export function FeaturedProjectForm({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="video">Landscape (16:9)</SelectItem>
+                <SelectItem value="landscape">Landscape (16:9)</SelectItem>
                 <SelectItem value="reel">Reel (9:16)</SelectItem>
               </SelectContent>
             </Select>
