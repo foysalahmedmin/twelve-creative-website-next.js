@@ -3,6 +3,7 @@
 import { LogoIcon } from "@/components/icons/logo-icon";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { BookingModal } from "@/components/common/booking-modal";
+import { ThemeToggle } from "@/components/common/theme-toggle";
 import { SITE } from "@/config/site";
 import { cn } from "@/lib/utils";
 import {
@@ -74,6 +75,7 @@ export const Header = ({ className, calendlyUrl }: HeaderProps) => {
 
           {/* Right Actions */}
           <div className="flex items-center gap-3">
+            <ThemeToggle />
             {calendlyUrl ? (
               <a
                 href={calendlyUrl}
@@ -140,6 +142,10 @@ export const Header = ({ className, calendlyUrl }: HeaderProps) => {
                   </Link>
                 );
               })}
+              <div className="mt-1 flex items-center justify-between rounded-xl px-4 py-2">
+                <span className="text-muted-foreground text-sm font-semibold">Theme</span>
+                <ThemeToggle />
+              </div>
               {calendlyUrl ? (
                 <a
                   href={calendlyUrl}

@@ -32,7 +32,6 @@ export default function Providers({ children }: { children: React.ReactNode }) {
           attribute="class"
           defaultTheme="dark"
           enableSystem={false}
-          forcedTheme="dark"
           disableTransitionOnChange
         >
           <TooltipProvider delayDuration={0}>
