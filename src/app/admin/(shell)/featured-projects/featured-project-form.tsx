@@ -52,7 +52,7 @@ export function FeaturedProjectForm({
   const [title, setTitle] = useState(initial?.title ?? "");
   const [category, setCategory] = useState(initial?.category ?? "Hospitality");
   const [aspect, setAspect] = useState<FeaturedProjectAspect>(
-    initial?.aspect ?? "landscape",
+    initial?.aspect ?? "reel",
   );
   const [thumbnail, setThumbnail] = useState(initial?.thumbnail ?? "");
   const [video, setVideo] = useState<VideoRef | null>(initial?.video ?? null);
