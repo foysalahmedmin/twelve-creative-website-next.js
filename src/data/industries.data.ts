@@ -13,6 +13,10 @@ export type TIndustry = {
   image: string;
   work: string[];
   href: string;
+  /** Resolved promo video URL (when configured in the admin panel). */
+  videoSrc?: string;
+  /** Resolved poster used as the video's light-mode preview. */
+  thumbnailSrc?: string;
 };
 
 export const INDUSTRIES_DATA: TIndustry[] = [

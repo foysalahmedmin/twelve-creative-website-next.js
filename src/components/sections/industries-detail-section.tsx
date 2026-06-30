@@ -1,6 +1,132 @@
+"use client";
+
 import { ScrollReveal } from "@/components/common/scroll-reveal";
 import type { TIndustry } from "@/data/industries.data";
 import { cn } from "@/lib/utils";
+import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import dynamic from "next/dynamic";
+import Image from "next/image";
+import Link from "next/link";
+
+const ReactPlayer = dynamic(() => import("react-player"), {
+  ssr: false,
+}) as any;
+
+const pad = (n: number) => String(n).padStart(2, "0");
+
+const detailHref = (industry: TIndustry) => `/industries/${industry.id}`;
+
+// ── Media panel — plays the industry film, or shows the still ─────────────
+function IndustryMedia({ industry }: { industry: TIndustry }) {
+  const poster = industry.thumbnailSrc || industry.image;
+
+  return (
+    <div className="ring-foreground/10 relative aspect-4/3 w-full overflow-hidden rounded-[28px] shadow-xl ring-1 lg:aspect-16/11">
+      {industry.videoSrc ? (
+        <ReactPlayer
+          src={industry.videoSrc}
+          controls
+          playsInline
+          width="100%"
+          height="100%"
+          light={poster || true}
+          style={{ width: "100%", height: "100%" }}
+        />
+      ) : (
+        <Link href={detailHref(industry)} className="group block h-full w-full">
+          <Image
+            src={industry.image}
+            alt={industry.name}
+            fill
+            sizes="(max-width: 1024px) 100vw, 600px"
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+          <div className="from-background/30 absolute inset-0 bg-linear-to-t to-transparent" />
+        </Link>
+      )}
+    </div>
+  );
+}
+
+// ── One full-width industry section ───────────────────────────────────────
+function IndustryRow({
+  industry,
+  index,
+}: {
+  industry: TIndustry;
+  index: number;
+}) {
+  const mediaRight = index % 2 === 1;
+  const href = detailHref(industry);
+
+  return (
+    <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-14 xl:gap-20">
+      {/* Media */}
+      <ScrollReveal
+        animation={mediaRight ? "fade-in-right" : "fade-in-left"}
+        durationMs={800}
+        className={cn(mediaRight ? "lg:order-2" : "lg:order-1")}
+      >
+        <IndustryMedia industry={industry} />
+      </ScrollReveal>
+
+      {/* Content */}
+      <ScrollReveal
+        animation={mediaRight ? "fade-in-left" : "fade-in-right"}
+        durationMs={800}
+        delayMs={120}
+        className={cn(
+          "flex flex-col items-start gap-5",
+          mediaRight ? "lg:order-1" : "lg:order-2",
+        )}
+      >
+        <div className="flex items-center gap-4">
+          <span className="font-heading text-primary/25 text-4xl font-black tabular-nums sm:text-5xl">
+            {pad(index + 1)}
+          </span>
+          <span className="bg-primary/10 text-primary border-primary/20 rounded-full border px-3 py-1 text-xs font-bold tracking-widest uppercase">
+            {industry.name}
+          </span>
+        </div>
+
+        <h2 className="font-heading text-foreground text-2xl font-black tracking-tight sm:text-3xl lg:text-4xl lg:leading-[1.1]">
+          <Link href={href} className="hover:text-primary transition-colors">
+            {industry.headline}
+          </Link>
+        </h2>
+
+        <p className="text-muted-foreground max-w-xl text-sm leading-relaxed md:text-base">
+          {industry.description}
+        </p>
+
+        {industry.work.length > 0 && (
+          <ul className="flex flex-wrap gap-2">
+            {industry.work.slice(0, 6).map((item) => (
+              <li
+                key={item}
+                className="border-border/60 bg-muted/40 text-foreground/70 rounded-full border px-3 py-1 text-xs font-medium"
+              >
+                {item}
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <Link
+          href={href}
+          className="group from-primary-from to-primary-to text-primary-foreground focus-visible:ring-primary/50 mt-2 inline-flex items-center gap-2 rounded-md bg-linear-to-br px-6 py-3 text-sm font-semibold shadow-md transition-all duration-200 hover:shadow-lg focus-visible:ring-2 focus-visible:outline-none"
+        >
+          Explore {industry.name}
+          <HugeiconsIcon
+            icon={ArrowRight01Icon}
+            className="size-4 transition-transform duration-200 group-hover:translate-x-1"
+          />
+        </Link>
+      </ScrollReveal>
+    </div>
+  );
+}
 
 interface IndustriesDetailSectionProps {
   data: TIndustry[];
@@ -14,69 +140,17 @@ export const IndustriesDetailSection = ({
   if (!data || data.length === 0) return null;
 
   return (
-    <div className={cn("container py-12 md:py-16 lg:py-20", className)}>
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:gap-6">
-        {data.map((industry, index) => {
-          // Even-indexed cards (left column on sm+) come in from the left;
-          // odd-indexed cards (right column) come in from the right.
-          // On mobile (single column) both still feel coherent — the same
-          // directional motion implies "left side / right side of the page".
-          const animation =
-            index % 2 === 0 ? "fade-in-left" : "fade-in-right";
-          return (
-          <ScrollReveal
-            key={industry.id}
-            animation={animation}
-            delayMs={(index % 2) * 80}
-            durationMs={700}
-          >
-            <div
-              id={industry.id}
-              className="bg-card border-border/50 flex scroll-mt-24 flex-col gap-5 rounded-2xl border p-6 sm:p-8"
-            >
-              {/* Accent line */}
-              <div className="bg-primary/50 h-px w-10 rounded-full" />
-
-              {/* Number + industry name */}
-              <div className="flex items-center gap-3">
-                <span className="text-foreground/25 font-heading tabular-nums text-sm font-bold">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <span className="bg-primary/10 text-primary border-primary/20 rounded-full border px-2.5 py-0.5 text-xs font-bold tracking-widest uppercase">
-                  {industry.name}
-                </span>
-              </div>
-
-              {/* Headline */}
-              <h2 className="font-heading text-foreground text-xl font-medium tracking-tight sm:text-2xl">
-                {industry.headline}
-              </h2>
-
-              {/* Description */}
-              <p className="text-muted-foreground text-sm leading-relaxed">
-                {industry.description}
-              </p>
-
-              {/* Divider */}
-              <div className="border-border/30 border-t" />
-
-              {/* Work list — 2 columns */}
-              <ul className="grid grid-cols-2 gap-x-4 gap-y-2.5">
-                {industry.work.map((item) => (
-                  <li
-                    key={item}
-                    className="text-foreground/70 flex items-center gap-2 text-xs font-medium"
-                  >
-                    <span className="bg-primary/40 size-1 shrink-0 rounded-full" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </ScrollReveal>
-          );
-        })}
-      </div>
+    <div
+      className={cn(
+        "container flex flex-col gap-20 py-12 md:py-16 lg:gap-28 lg:py-24",
+        className,
+      )}
+    >
+      {data.map((industry, index) => (
+        <section key={industry.id} id={industry.id} className="scroll-mt-24">
+          <IndustryRow industry={industry} index={index} />
+        </section>
+      ))}
     </div>
   );
 };

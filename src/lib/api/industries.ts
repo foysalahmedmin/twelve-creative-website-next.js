@@ -122,6 +122,8 @@ export function toLegacyIndustries(items: ApiIndustry[]): TIndustry[] {
     image: i.image,
     work: i.work ?? [],
     href: i.cta_href && i.cta_href.trim() ? i.cta_href : `/industries#${i.slug}`,
+    videoSrc: resolveIndustryVideoSrc(i.video),
+    thumbnailSrc: resolveIndustryThumbnail(i.thumbnail, i.video),
   }));
 }
 
