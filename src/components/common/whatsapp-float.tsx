@@ -9,12 +9,19 @@ const WA_MESSAGE = encodeURIComponent(
 );
 const WA_LINK = `https://wa.me/${WA_NUMBER}?text=${WA_MESSAGE}`;
 
+const formatNow = () =>
+  new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
 export function WhatsAppFloat() {
   // Chat popup opens ONLY on click — no auto-open, no re-open timers
   // (founder feedback 6/6/2026: the widget must not occupy screen space uninvited)
   const [open, setOpen] = useState(false);
+  // Empty on server + first client render (no hydration mismatch from the
+  // clock); set to the current time when the user opens the chat.
+  const [time, setTime] = useState("");
 
   const handleToggle = () => {
+    if (!open) setTime(formatNow());
     setOpen((prev) => !prev);
   };
 
@@ -74,10 +81,7 @@ export function WhatsAppFloat() {
               Hi there! 👋 How can we help you today?
             </p>
             <p className="mt-1 text-right text-[10px] text-gray-500">
-              {new Date().toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
+              {time}
             </p>
           </div>
 
