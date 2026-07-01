@@ -147,7 +147,7 @@ export const ProcessSection = ({
                     <div className="flex items-start gap-5">
                       <div
                         className={cn(
-                          "flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl transition-all duration-300",
+                          "hidden h-12 w-12 shrink-0 items-center justify-center rounded-2xl transition-all duration-300 lg:flex",
                           isActive
                             ? "bg-primary text-primary-foreground shadow-primary/20 scale-110 shadow-lg"
                             : "bg-primary/10 text-primary group-hover/step:scale-105",
@@ -180,7 +180,7 @@ export const ProcessSection = ({
                           className={cn(
                             "mt-4 overflow-hidden rounded-2xl transition-all duration-500 ease-in-out lg:hidden",
                             isActive
-                              ? "max-h-[350px] scale-100 opacity-100"
+                              ? "max-h-85 scale-100 opacity-100"
                               : "max-h-0 scale-95 opacity-0",
                           )}
                         >

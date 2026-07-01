@@ -61,6 +61,8 @@ const Marquee = forwardRef<MarqueeHandle, MarqueeProps>(function Marquee(
   const moved = useRef(0);
   const lastX = useRef(0);
   const reduced = useRef(false);
+  const down = useRef(false);
+  const pointerId = useRef(-1);
 
   useImperativeHandle(ref, () => ({
     setDirection: (leftward: boolean) => {
@@ -122,37 +124,54 @@ const Marquee = forwardRef<MarqueeHandle, MarqueeProps>(function Marquee(
     };
   }, [pxPerSecond]);
 
-  // ── Pointer drag (with click-suppression when it was actually a drag) ──
+  // ── Pointer drag ──
+  // Engage drag (and capture the pointer) only after a small movement
+  // threshold, so a plain tap/click on a reel still reaches the card and opens
+  // its video — capturing on every pointerdown can swallow the click.
+  const DRAG_THRESHOLD = 5;
   const onPointerDown = (e: React.PointerEvent) => {
-    dragging.current = true;
+    down.current = true;
     moved.current = 0;
     lastX.current = e.clientX;
-    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    pointerId.current = e.pointerId;
   };
   const onPointerMove = (e: React.PointerEvent) => {
-    if (!dragging.current) return;
+    if (!down.current) return;
     const dx = e.clientX - lastX.current;
     lastX.current = e.clientX;
     moved.current += Math.abs(dx);
-    offset.current += dx;
-    wrap();
-    apply();
+    if (!dragging.current && moved.current > DRAG_THRESHOLD) {
+      dragging.current = true;
+      try {
+        (e.currentTarget as HTMLElement).setPointerCapture(pointerId.current);
+      } catch {
+        /* capture unsupported */
+      }
+    }
+    if (dragging.current) {
+      offset.current += dx;
+      wrap();
+      apply();
+    }
   };
   const onPointerUp = (e: React.PointerEvent) => {
-    if (!dragging.current) return;
-    dragging.current = false;
-    try {
-      (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
-    } catch {
-      /* pointer already released */
+    down.current = false;
+    if (dragging.current) {
+      dragging.current = false;
+      try {
+        (e.currentTarget as HTMLElement).releasePointerCapture(pointerId.current);
+      } catch {
+        /* already released */
+      }
     }
   };
   const onClickCapture = (e: React.MouseEvent) => {
+    // Swallow the click only if this pointer sequence was a real drag.
     if (moved.current > 6) {
       e.stopPropagation();
       e.preventDefault();
-      moved.current = 0;
     }
+    moved.current = 0;
   };
 
   return (
