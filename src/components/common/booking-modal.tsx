@@ -10,7 +10,8 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 const MARKETS = [
@@ -36,8 +37,10 @@ interface BookingModalProps {
 }
 
 export function BookingModal({ isOpen, onClose }: BookingModalProps) {
+  const router = useRouter();
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
+  const [redirectIn, setRedirectIn] = useState(3);
   const [formData, setFormData] = useState({
     market: "",
     preferredDate: "",
@@ -48,6 +51,12 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
     email: "",
     company: "",
   });
+
+  // Keep latest onClose without restarting the countdown on parent re-render.
+  const onCloseRef = useRef(onClose);
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
 
   // Lock body scroll when open
   useEffect(() => {
@@ -94,6 +103,23 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
 
+  // On success, count down then hand off to the confirmation page. Gated on
+  // isOpen so closing the modal mid-countdown cancels the pending redirect.
+  useEffect(() => {
+    if (!isOpen || step !== 4) return;
+    let n = 3;
+    const id = setInterval(() => {
+      n -= 1;
+      setRedirectIn(n);
+      if (n <= 0) {
+        clearInterval(id);
+        onCloseRef.current();
+        router.push("/booking/confirm");
+      }
+    }, 1000);
+    return () => clearInterval(id);
+  }, [isOpen, step, router]);
+
   const handleMarketSelect = (market: string) => {
     setFormData((d) => ({ ...d, market }));
     setStep(2);
@@ -123,6 +149,7 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
       toast.error(res.error ?? "Could not submit your booking.");
       return;
     }
+    setRedirectIn(3);
     setStep(4);
   };
 
@@ -381,18 +408,18 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
                     </div>
                     <div className="space-y-2">
                       <h2 className="font-heading text-foreground text-3xl font-bold">
-                        You&apos;re all set!
+                        Booking received!
                       </h2>
                       <p className="text-muted-foreground max-w-xs text-sm leading-relaxed">
-                        Thanks for reaching out. Our team will get back to you within 24 hours.
+                        Taking you to your confirmation…
                       </p>
                     </div>
-                    <button
-                      onClick={onClose}
-                      className="border-border bg-muted text-foreground hover:bg-muted/80 mt-2 rounded-xl border px-8 py-3 text-sm font-semibold transition-all"
-                    >
-                      Close
-                    </button>
+                    <p className="text-muted-foreground text-sm">
+                      Redirecting in{" "}
+                      <span className="text-primary font-bold tabular-nums">
+                        {redirectIn}
+                      </span>
+                    </p>
                   </motion.div>
                 )}
               </AnimatePresence>

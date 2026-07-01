@@ -22,6 +22,7 @@ import {
   getPublicShowcaseVideosForMarquee,
   getPublicShowcaseVideosForThumbnailGrid,
 } from "@/lib/api/showcase-videos";
+import { getPublicSiteSetting } from "@/lib/api/site-setting";
 import { getPublicTestimonialsForSection } from "@/lib/api/testimonials";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -49,7 +50,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function IndustryDetailPage({ params }: Props) {
   const { slug } = await params;
 
-  const [industries, showcaseVideos, livePortfolio, testimonialsData] =
+  const [industries, showcaseVideos, livePortfolio, testimonialsData, settings] =
     await Promise.all([
       getPublicIndustries(),
       getPublicShowcaseVideosForMarquee(),
@@ -64,6 +65,7 @@ export default async function IndustryDetailPage({ params }: Props) {
         title: TESTIMONIALS_DATA.title,
         description: TESTIMONIALS_DATA.description,
       }),
+      getPublicSiteSetting(),
     ]);
 
   const industry = industries.find((i) => i.slug === slug);
@@ -100,7 +102,7 @@ export default async function IndustryDetailPage({ params }: Props) {
       <CoreVerticalsSection industries={industries} />
 
       {/* ── Inline Booking ── */}
-      <BookingInlineSection />
+      <BookingInlineSection calendlyUrl={settings.calendly_url || undefined} />
 
       {/* ── Testimonials ── */}
       <TestimonialSection data={testimonialsData} />

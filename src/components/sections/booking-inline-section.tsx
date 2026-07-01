@@ -2,10 +2,14 @@
 
 import { submitBookingAction } from "@/lib/api/bookings-actions";
 import { cn } from "@/lib/utils";
-import { CheckmarkCircle02Icon } from "@hugeicons/core-free-icons";
+import {
+  ArrowRight01Icon,
+  CheckmarkCircle02Icon,
+} from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 const MARKETS = [
@@ -25,9 +29,18 @@ const TIME_SLOTS = [
 
 const TOTAL_STEPS = 3;
 
-export function BookingInlineSection({ className }: { className?: string }) {
+export function BookingInlineSection({
+  className,
+  calendlyUrl,
+}: {
+  className?: string;
+  /** When set, the section links out to Calendly instead of the built-in form. */
+  calendlyUrl?: string;
+}) {
+  const router = useRouter();
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
+  const [redirectIn, setRedirectIn] = useState(3);
   const [formData, setFormData] = useState({
     market: "",
     preferredDate: "",
@@ -68,22 +81,71 @@ export function BookingInlineSection({ className }: { className?: string }) {
       toast.error(res.error ?? "Could not submit your booking.");
       return;
     }
+    setRedirectIn(3);
     setStep(4);
   };
 
-  const handleReset = () => {
-    setStep(1);
-    setFormData({
-      market: "",
-      preferredDate: "",
-      preferredTime: "",
-      firstName: "",
-      lastName: "",
-      phone: "",
-      email: "",
-      company: "",
-    });
-  };
+  // On success, count down then redirect to the confirmation page.
+  useEffect(() => {
+    if (step !== 4) return;
+    let n = 3;
+    const id = setInterval(() => {
+      n -= 1;
+      setRedirectIn(n);
+      if (n <= 0) {
+        clearInterval(id);
+        router.push("/booking/confirm");
+      }
+    }, 1000);
+    return () => clearInterval(id);
+  }, [step, router]);
+
+  // When a Calendly URL is configured, this section links out to Calendly
+  // instead of showing the built-in multi-step form — matching the Header and
+  // contact page behaviour promised in the admin settings.
+  if (calendlyUrl) {
+    return (
+      <section className={cn("py-16 sm:py-20 lg:py-24", className)}>
+        <div className="container">
+          <div className="mb-10 text-center">
+            <span className="bg-primary/10 text-primary border-primary/20 mb-5 inline-flex rounded-full border px-4 py-1.5 text-xs font-bold tracking-widest uppercase">
+              Book a Call
+            </span>
+            <h2 className="font-heading text-foreground text-3xl leading-[115%] font-black tracking-tight sm:text-4xl">
+              Start the conversation.
+            </h2>
+            <p className="text-muted-foreground mx-auto mt-3 max-w-md text-base leading-relaxed">
+              A 30-minute call — no commitment, no pitch deck. Pick a time that
+              works for you.
+            </p>
+          </div>
+
+          <div className="border-border bg-card relative mx-auto max-w-xl overflow-hidden rounded-3xl border px-6 py-10 text-center md:px-12">
+            <div
+              aria-hidden
+              className="bg-primary/12 pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full blur-3xl"
+            />
+            <div
+              aria-hidden
+              className="bg-primary/8 pointer-events-none absolute -bottom-24 -left-24 h-64 w-64 rounded-full blur-3xl"
+            />
+            <a
+              href={calendlyUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="from-primary-from to-primary-to hover:shadow-primary text-primary-foreground group/cta relative z-10 inline-flex h-14 items-center justify-center gap-2 rounded-2xl bg-linear-to-br px-8 text-base font-semibold shadow-md transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]"
+            >
+              Start Booking
+              <HugeiconsIcon
+                icon={ArrowRight01Icon}
+                className="size-5 transition-transform group-hover/cta:translate-x-1"
+              />
+            </a>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className={cn("py-16 sm:py-20 lg:py-24", className)}>
@@ -371,19 +433,18 @@ export function BookingInlineSection({ className }: { className?: string }) {
                 </div>
                 <div className="space-y-2">
                   <h3 className="font-heading text-foreground text-3xl font-bold">
-                    You&apos;re all set!
+                    Booking received!
                   </h3>
                   <p className="text-muted-foreground max-w-xs text-sm leading-relaxed">
-                    Thanks for reaching out. Our team will get back to you
-                    within 24 hours.
+                    Taking you to your confirmation…
                   </p>
                 </div>
-                <button
-                  onClick={handleReset}
-                  className="border-border bg-muted text-foreground hover:bg-muted/80 rounded-xl border px-8 py-3 text-sm font-semibold transition-all"
-                >
-                  Book another call
-                </button>
+                <p className="text-muted-foreground text-sm">
+                  Redirecting in{" "}
+                  <span className="text-primary font-bold tabular-nums">
+                    {redirectIn}
+                  </span>
+                </p>
               </motion.div>
             )}
           </AnimatePresence>

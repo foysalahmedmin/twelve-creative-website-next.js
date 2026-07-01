@@ -13,6 +13,7 @@ import {
   getPublicShowcaseVideosForMarquee,
   getPublicShowcaseVideosForThumbnailGrid,
 } from "@/lib/api/showcase-videos";
+import { getPublicSiteSetting } from "@/lib/api/site-setting";
 import { getPublicTestimonialsForSection } from "@/lib/api/testimonials";
 import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
@@ -42,20 +43,22 @@ export default async function VerticalDetailPage({ params }: Props) {
   const vertical = VERTICALS_DATA.find((v) => v.id === id);
   if (!vertical) notFound();
 
-  const [showcaseVideos, livePortfolio, testimonialsData] = await Promise.all([
-    getPublicShowcaseVideosForMarquee(),
-    getPublicShowcaseVideosForThumbnailGrid({
-      label: CANVAS_PORTFOLIO_DATA.label,
-      title: CANVAS_PORTFOLIO_DATA.title,
-      description: CANVAS_PORTFOLIO_DATA.description,
-      type: CANVAS_PORTFOLIO_DATA.type,
-    }),
-    getPublicTestimonialsForSection({
-      label: TESTIMONIALS_DATA.label,
-      title: TESTIMONIALS_DATA.title,
-      description: TESTIMONIALS_DATA.description,
-    }),
-  ]);
+  const [showcaseVideos, livePortfolio, testimonialsData, settings] =
+    await Promise.all([
+      getPublicShowcaseVideosForMarquee(),
+      getPublicShowcaseVideosForThumbnailGrid({
+        label: CANVAS_PORTFOLIO_DATA.label,
+        title: CANVAS_PORTFOLIO_DATA.title,
+        description: CANVAS_PORTFOLIO_DATA.description,
+        type: CANVAS_PORTFOLIO_DATA.type,
+      }),
+      getPublicTestimonialsForSection({
+        label: TESTIMONIALS_DATA.label,
+        title: TESTIMONIALS_DATA.title,
+        description: TESTIMONIALS_DATA.description,
+      }),
+      getPublicSiteSetting(),
+    ]);
 
   const marqueeData = showcaseVideos.length
     ? showcaseVideos
@@ -123,7 +126,7 @@ export default async function VerticalDetailPage({ params }: Props) {
       <WorkWithUsSection />
 
       {/* ── Inline Booking ── */}
-      <BookingInlineSection />
+      <BookingInlineSection calendlyUrl={settings.calendly_url || undefined} />
     </div>
   );
 }
