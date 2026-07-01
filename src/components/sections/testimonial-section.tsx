@@ -1,7 +1,5 @@
 "use client";
 
-import "swiper/css";
-
 import { TestimonialCard } from "@/components/cards/testimonial-card";
 import { VideoTestimonialCard } from "@/components/cards/video-testimonial-card";
 import { ScrollReveal } from "@/components/common/scroll-reveal";
@@ -16,14 +14,184 @@ import { Cancel01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import dynamic from "next/dynamic";
-import { useEffect, useRef, useState } from "react";
-import type { Swiper as SwiperType } from "swiper";
-import { Autoplay } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 
 const ReactPlayer = dynamic(() => import("react-player"), {
   ssr: false,
 }) as any;
+
+// ── Continuous rAF marquee ──────────────────────────────────────────────────
+// A hand-rolled ticker: the track's translateX is advanced every animation
+// frame by a signed velocity. Because "direction" is just the sign of that
+// velocity (read fresh each frame), flipping it reverses on the very next
+// frame — genuinely instant, with no transition to finish first. Supports
+// seamless looping (content rendered twice + wrap), hover-to-pause and
+// pointer drag.
+export type MarqueeHandle = { setDirection: (leftward: boolean) => void };
+
+interface MarqueeProps {
+  items: TTestimonial[];
+  renderItem: (item: TTestimonial, index: number) => React.ReactNode;
+  pxPerSecond: number;
+  /** true → content scrolls right → left; false → left → right */
+  initialLeftward: boolean;
+  gap: number;
+  itemWidthClass: string;
+  className?: string;
+}
+
+const Marquee = forwardRef<MarqueeHandle, MarqueeProps>(function Marquee(
+  { items, renderItem, pxPerSecond, initialLeftward, gap, itemWidthClass, className },
+  ref,
+) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const copyRef = useRef<HTMLDivElement>(null);
+
+  const offset = useRef(0);
+  const copyWidth = useRef(0);
+  const sign = useRef(initialLeftward ? -1 : 1); // -1 = leftward, +1 = rightward
+  const hover = useRef(false);
+  const dragging = useRef(false);
+  const moved = useRef(0);
+  const lastX = useRef(0);
+  const reduced = useRef(false);
+
+  useImperativeHandle(ref, () => ({
+    setDirection: (leftward: boolean) => {
+      sign.current = leftward ? -1 : 1;
+    },
+  }));
+
+  const wrap = () => {
+    const w = copyWidth.current;
+    if (w <= 0) return;
+    if (offset.current <= -w) offset.current += w;
+    else if (offset.current > 0) offset.current -= w;
+  };
+  const apply = () => {
+    const t = trackRef.current;
+    if (t) t.style.transform = `translate3d(${offset.current}px,0,0)`;
+  };
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    reduced.current = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    // Measure one real copy's outer width (exact & browser-consistent) rather
+    // than dividing the total, which trailing margins can throw off.
+    const measure = () => {
+      copyWidth.current = copyRef.current?.offsetWidth ?? track.scrollWidth / 2;
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    if (copyRef.current) ro.observe(copyRef.current);
+    ro.observe(track);
+
+    let raf = 0;
+    let last = performance.now();
+    const tick = (now: number) => {
+      const dt = Math.min(now - last, 50);
+      last = now;
+      if (
+        !reduced.current &&
+        !hover.current &&
+        !dragging.current &&
+        copyWidth.current > 0
+      ) {
+        offset.current += (sign.current * pxPerSecond * dt) / 1000;
+        wrap();
+        apply();
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      ro.disconnect();
+    };
+  }, [pxPerSecond]);
+
+  // ── Pointer drag (with click-suppression when it was actually a drag) ──
+  const onPointerDown = (e: React.PointerEvent) => {
+    dragging.current = true;
+    moved.current = 0;
+    lastX.current = e.clientX;
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+  };
+  const onPointerMove = (e: React.PointerEvent) => {
+    if (!dragging.current) return;
+    const dx = e.clientX - lastX.current;
+    lastX.current = e.clientX;
+    moved.current += Math.abs(dx);
+    offset.current += dx;
+    wrap();
+    apply();
+  };
+  const onPointerUp = (e: React.PointerEvent) => {
+    if (!dragging.current) return;
+    dragging.current = false;
+    try {
+      (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+    } catch {
+      /* pointer already released */
+    }
+  };
+  const onClickCapture = (e: React.MouseEvent) => {
+    if (moved.current > 6) {
+      e.stopPropagation();
+      e.preventDefault();
+      moved.current = 0;
+    }
+  };
+
+  return (
+    <div
+      className={cn(
+        "min-w-0 flex-1 cursor-grab overflow-hidden select-none active:cursor-grabbing",
+        className,
+      )}
+      onMouseEnter={() => (hover.current = true)}
+      onMouseLeave={() => (hover.current = false)}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerCancel={onPointerUp}
+      onClickCapture={onClickCapture}
+    >
+      <div ref={trackRef} className="flex w-max will-change-transform">
+        {[0, 1].map((copy) => (
+          <div
+            key={copy}
+            ref={copy === 0 ? copyRef : undefined}
+            className="flex shrink-0"
+            aria-hidden={copy === 1}
+          >
+            {items.map((item, i) => (
+              <div
+                key={`${item.id}-${i}`}
+                className={cn("shrink-0", itemWidthClass)}
+                style={{ marginRight: gap }}
+              >
+                {renderItem(item, i)}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+});
 
 // ── Arrow nav button ───────────────────────────────────────────────────────
 function SliderArrow({
@@ -37,11 +205,11 @@ function SliderArrow({
     <button
       type="button"
       onClick={onClick}
-      aria-label={direction === "prev" ? "Previous slide" : "Next slide"}
+      aria-label={direction === "prev" ? "Scroll right to left" : "Scroll left to right"}
       className={cn(
         "z-10 hidden shrink-0 items-center justify-center lg:flex",
         "h-10 w-10 rounded-full",
-        "border border-border/40 bg-card/50 backdrop-blur-sm",
+        "border-border/40 bg-card/50 border backdrop-blur-sm",
         "text-foreground/60 transition-all duration-200",
         "hover:border-primary/50 hover:bg-card/80 hover:text-foreground",
         "focus-visible:ring-primary/50 focus-visible:ring-2 focus-visible:outline-none",
@@ -70,46 +238,23 @@ export const TestimonialSection = ({
   const { label, title, description, testimonials = [] } = data || {};
   const [activeVideo, setActiveVideo] = useState<TTestimonial | null>(null);
 
-  const videoSwiperRef = useRef<SwiperType | null>(null);
-  const textSwiperRef = useRef<SwiperType | null>(null);
+  const videoMarquee = useRef<MarqueeHandle>(null);
+  const textMarquee = useRef<MarqueeHandle>(null);
 
   const videoTestimonials = testimonials.filter(
     (t) => t.category === "video_message",
   );
-  const textTestimonials = testimonials.filter(
-    (t) => t.category === "message",
-  );
+  const textTestimonials = testimonials.filter((t) => t.category === "message");
 
-  // Swiper's loop mode needs enough slides to clone from — duplicate short
-  // lists so autoplay never runs out of slides to recycle.
-  const repeatToFill = <T,>(items: T[], min: number): T[] => {
+  // Duplicate short lists so a single "copy" is wider than the viewport —
+  // otherwise the seamless-loop wrap would leave a visible gap.
+  const repeatToFill = (items: TTestimonial[], min: number): TTestimonial[] => {
     if (items.length === 0) return items;
     const copies = Math.max(1, Math.ceil(min / items.length));
     return Array.from({ length: copies }, () => items).flat();
   };
   const videoItems = repeatToFill(videoTestimonials, 12);
   const textItems = repeatToFill(textTestimonials, 12);
-
-  // Swap params.speed to 600 before calling slideNext/slidePrev so the
-  // browser transitions from current visual position to the next slide in
-  // 600ms (interrupts the slow 9s marquee animation cleanly without needing
-  // internal Swiper methods that aren't typed in v12).
-  const slide = (
-    swiperRef: typeof videoSwiperRef,
-    dir: "left" | "right",
-  ) => {
-    const s = swiperRef.current;
-    if (!s) return;
-    const originalSpeed = s.params.speed as number;
-    s.params.speed = 600;
-    s.autoplay?.stop();
-    if (dir === "left") s.slideNext();
-    else s.slidePrev();
-    setTimeout(() => {
-      s.params.speed = originalSpeed;
-      s.autoplay?.start();
-    }, 700);
-  };
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -142,94 +287,65 @@ export const TestimonialSection = ({
             className="relative z-10 mb-0 lg:mb-0"
           />
 
-          {/* ── Swiper rows ── */}
+          {/* ── Marquee rows ── */}
           <div className="relative z-10 mt-12 flex flex-col gap-10 md:mt-16 md:gap-12">
-            {/* ── Row 1: Reels — drift left → right ── */}
+            {/* ── Row 1: Reels — default drifts left → right ── */}
             {videoTestimonials.length > 0 && (
               <div className="flex items-center gap-3 px-4 md:px-8 lg:px-12">
                 <SliderArrow
                   direction="prev"
-                  onClick={() => slide(videoSwiperRef, "left")}
+                  onClick={() => videoMarquee.current?.setDirection(true)}
                 />
 
-                <div className="min-w-0 flex-1 overflow-hidden">
-                  <Swiper
-                    className="tc-swiper tc-swiper-reel"
-                    modules={[Autoplay]}
-                    onSwiper={(s) => {
-                      videoSwiperRef.current = s;
-                    }}
-                    slidesPerView="auto"
-                    spaceBetween={14}
-                    loop
-                    speed={9000}
-                    grabCursor
-                    autoplay={{
-                      delay: 1,
-                      disableOnInteraction: false,
-                      pauseOnMouseEnter: true,
-                      reverseDirection: true,
-                    }}
-                  >
-                    {videoItems.map((testimonial, idx) => (
-                      <SwiperSlide key={`${testimonial.id}-${idx}`}>
-                        <VideoTestimonialCard
-                          testimonial={testimonial}
-                          onOpen={setActiveVideo}
-                          className="w-full md:w-full"
-                        />
-                      </SwiperSlide>
-                    ))}
-                  </Swiper>
-                </div>
+                <Marquee
+                  ref={videoMarquee}
+                  items={videoItems}
+                  initialLeftward={false}
+                  pxPerSecond={30}
+                  gap={14}
+                  itemWidthClass="w-[162px] sm:w-[180px] lg:w-[202px] xl:w-[218px]"
+                  renderItem={(testimonial) => (
+                    <VideoTestimonialCard
+                      testimonial={testimonial}
+                      onOpen={setActiveVideo}
+                      className="w-full md:w-full"
+                    />
+                  )}
+                />
 
                 <SliderArrow
                   direction="next"
-                  onClick={() => slide(videoSwiperRef, "right")}
+                  onClick={() => videoMarquee.current?.setDirection(false)}
                 />
               </div>
             )}
 
-            {/* ── Row 2: Text — drift right → left ── */}
+            {/* ── Row 2: Text — default drifts right → left ── */}
             {textTestimonials.length > 0 && (
               <div className="flex items-center gap-3 px-4 md:px-8 lg:px-12">
                 <SliderArrow
                   direction="prev"
-                  onClick={() => slide(textSwiperRef, "left")}
+                  onClick={() => textMarquee.current?.setDirection(true)}
                 />
 
-                <div className="min-w-0 flex-1 overflow-hidden">
-                  <Swiper
-                    className="tc-swiper tc-swiper-text"
-                    modules={[Autoplay]}
-                    onSwiper={(s) => {
-                      textSwiperRef.current = s;
-                    }}
-                    slidesPerView="auto"
-                    spaceBetween={18}
-                    loop
-                    speed={11000}
-                    grabCursor
-                    autoplay={{
-                      delay: 1,
-                      disableOnInteraction: false,
-                      pauseOnMouseEnter: true,
-                    }}
-                  >
-                    {textItems.map((testimonial, idx) => (
-                      <SwiperSlide key={`${testimonial.id}-${idx}`}>
-                        <TestimonialCard
-                          testimonial={testimonial}
-                          className="w-full md:w-full"
-                        />
-                      </SwiperSlide>
-                    ))}
-                  </Swiper>
-                </div>
+                <Marquee
+                  ref={textMarquee}
+                  items={textItems}
+                  initialLeftward={true}
+                  pxPerSecond={40}
+                  gap={18}
+                  itemWidthClass="w-[272px] sm:w-[310px] lg:w-[348px] xl:w-[384px]"
+                  renderItem={(testimonial) => (
+                    <TestimonialCard
+                      testimonial={testimonial}
+                      className="w-full md:w-full"
+                    />
+                  )}
+                />
 
                 <SliderArrow
                   direction="next"
-                  onClick={() => slide(textSwiperRef, "right")}
+                  onClick={() => textMarquee.current?.setDirection(false)}
                 />
               </div>
             )}

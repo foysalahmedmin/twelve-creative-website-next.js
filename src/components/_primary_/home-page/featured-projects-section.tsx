@@ -1,8 +1,15 @@
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselDots,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import { CenteredSectionHeader } from "@/components/common/section-label";
-import { ScrollReveal } from "@/components/common/scroll-reveal";
 import {
   FEATURED_CATEGORIES,
   type TFeaturedAspect,
@@ -147,27 +154,37 @@ export const FeaturedProjectsSection = ({
                 value={category.id}
                 className="mt-10 w-full lg:mt-16"
               >
-                <div
-                  className={cn(
-                    "mx-auto grid max-w-7xl gap-2 px-4",
-                    category.aspect === "reel"
-                      ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4"
-                      : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3",
-                  )}
+                {/* Carousel instead of a grid: on mobile the projects sit
+                    side-by-side and swipe horizontally, so you never scroll a
+                    tall column of videos or lose sight of the tabs. Desktop
+                    keeps the same item counts as the old grid. */}
+                <Carousel
+                  opts={{ align: "start" }}
+                  className="mx-auto max-w-7xl px-4 lg:px-14"
                 >
-                  {category.projects.map((project, idx) => (
-                    <ScrollReveal
-                      key={project.id}
-                      animation="fade-in-up"
-                      delayMs={100 * (idx % 4)}
-                    >
-                      <ProjectCard
-                        project={project}
-                        aspect={category.aspect}
-                      />
-                    </ScrollReveal>
-                  ))}
-                </div>
+                  <CarouselContent className="-ml-2">
+                    {category.projects.map((project) => (
+                      <CarouselItem
+                        key={project.id}
+                        className={cn(
+                          "pl-2",
+                          category.aspect === "reel"
+                            ? "basis-1/2 sm:basis-1/3 lg:basis-1/4"
+                            : "basis-full sm:basis-1/2 lg:basis-1/3",
+                        )}
+                      >
+                        <ProjectCard
+                          project={project}
+                          aspect={category.aspect}
+                        />
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+
+                  <CarouselPrevious className="left-2 z-20 hidden lg:flex" />
+                  <CarouselNext className="right-2 z-20 hidden lg:flex" />
+                  <CarouselDots className="mt-6" />
+                </Carousel>
               </TabsContent>
             ))}
           </Tabs>

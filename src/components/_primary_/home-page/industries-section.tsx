@@ -17,8 +17,13 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useState } from "react";
+
+const ReactPlayer = dynamic(() => import("react-player"), {
+  ssr: false,
+}) as any;
 
 const INDUSTRY_ICON_MAP: Record<TIndustryIconKey, typeof Restaurant01Icon> = {
   hospitality: Restaurant01Icon,
@@ -139,16 +144,31 @@ export const IndustriesSection = ({ className, data }: Props) => {
                       </div>
                     </div>
 
-                    {/* Right: Visual Showcase Image — appears first on mobile */}
+                    {/* Right: Visual Showcase — plays the industry video when set,
+                        otherwise shows the thumbnail/image; appears first on mobile */}
                     <div className="order-first lg:order-last relative overflow-hidden rounded-[24px] border border-white/10 aspect-4/3 w-full">
-                      <img
-                        src={industry.image}
-                        alt={industry.name}
-                        className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
-                        loading="lazy"
-                      />
-                      {/* Subtle premium glass overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent pointer-events-none" />
+                      {industry.videoSrc ? (
+                        <ReactPlayer
+                          src={industry.videoSrc}
+                          controls
+                          playsInline
+                          width="100%"
+                          height="100%"
+                          light={industry.thumbnailSrc || industry.image || true}
+                          style={{ width: "100%", height: "100%" }}
+                        />
+                      ) : (
+                        <>
+                          <img
+                            src={industry.thumbnailSrc || industry.image}
+                            alt={industry.name}
+                            className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+                            loading="lazy"
+                          />
+                          {/* Subtle premium glass overlay */}
+                          <div className="absolute inset-0 bg-linear-to-t from-black/35 via-transparent to-transparent pointer-events-none" />
+                        </>
+                      )}
                     </div>
                   </Card>
 
