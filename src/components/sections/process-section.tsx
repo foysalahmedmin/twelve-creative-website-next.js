@@ -12,8 +12,15 @@ import {
   Search01Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  AnimatePresence,
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const PROCESS_ICON_MAP: Record<TProcessIconKey, typeof Search01Icon> = {
   understand: Search01Icon,
@@ -23,6 +30,9 @@ const PROCESS_ICON_MAP: Record<TProcessIconKey, typeof Search01Icon> = {
   install: ConnectIcon,
   improve: Refresh01Icon,
 };
+
+const EASE = [0.16, 1, 0.3, 1] as const;
+const pad2 = (n: number | string) => String(n).padStart(2, "0");
 
 export interface PageProcessSectionProps {
   data: TProcessData;
@@ -37,35 +47,43 @@ export const ProcessSection = ({
 }: Partial<PageProcessSectionProps>) => {
   const { label, title, description, process_steps = [] } = data || {};
   const [activeIndex, setActiveIndex] = useState(0);
+  const reduceMotion = useReducedMotion();
+  const rowRef = useRef<HTMLDivElement>(null);
+
+  // Scroll progress across the steps column — drives the parallax + progress bar.
+  const { scrollYProgress } = useScroll({
+    target: rowRef,
+    offset: ["start start", "end end"],
+  });
+  const zoom = useTransform(scrollYProgress, [0, 1], [1.08, 1.2]);
+  const drift = useTransform(scrollYProgress, [0, 1], ["-3%", "3%"]);
+  const imgScale = reduceMotion ? 1 : zoom;
+  const imgY = reduceMotion ? "0%" : drift;
 
   useEffect(() => {
     const handleScroll = () => {
       const cards = document.querySelectorAll(".process-story-card");
+      const mid = window.innerHeight / 2;
       cards.forEach((card, index) => {
         const rect = card.getBoundingClientRect();
-        if (
-          rect.top < window.innerHeight / 2 &&
-          rect.bottom > window.innerHeight / 2
-        ) {
-          setActiveIndex(index);
-        }
+        if (rect.top < mid && rect.bottom > mid) setActiveIndex(index);
       });
     };
-
-    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const scrollToStep = (index: number) => {
     const cards = document.querySelectorAll(".process-story-card");
     if (cards[index]) {
-      cards[index].scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
+      cards[index].scrollIntoView({ behavior: "smooth", block: "center" });
       setActiveIndex(index);
     }
   };
+
+  const activeStep = process_steps[activeIndex];
+  const useStepImages = !processThumbnail && process_steps.length > 0;
 
   return (
     <section className={cn("bg-background py-20 sm:py-24 lg:py-32", className)}>
@@ -79,49 +97,83 @@ export const ProcessSection = ({
           }
         />
 
-        <div className="mt-12 flex flex-col gap-12 lg:mt-20 lg:flex-row">
-          {/* Left: Sticky Image Showcase (hidden on small/medium screens, sticky on desktop) */}
-          <div className="h-155 w-full max-w-145 items-center justify-center overflow-hidden rounded-3xl lg:sticky lg:top-24 lg:bottom-4 lg:flex lg:h-[calc(100vh-7rem)] lg:self-start">
-            <div className="from-primary/10 to-primary/5 ring-primary/15 relative h-full w-full overflow-hidden rounded-3xl bg-linear-to-br ring-1">
-              {processThumbnail ? (
-                <div className="absolute inset-0">
+        <div
+          ref={rowRef}
+          className="mt-12 flex flex-col gap-12 lg:mt-20 lg:flex-row lg:items-start"
+        >
+          {/* ── Left: pinned parallax showcase (desktop only) ── */}
+          <div className="hidden w-full shrink-0 lg:sticky lg:top-24 lg:block lg:h-[calc(100vh-8rem)] lg:max-w-130 lg:self-start">
+            <div className="ring-primary/15 relative h-full w-full overflow-hidden rounded-3xl ring-1">
+              {/* Parallax image layer */}
+              <motion.div
+                style={{ scale: imgScale, y: imgY }}
+                className="absolute inset-0"
+              >
+                {useStepImages ? (
+                  process_steps.map((step, index) => (
+                    <div
+                      key={step.id}
+                      className={cn(
+                        "absolute inset-0 transition-opacity duration-700 ease-in-out",
+                        index === activeIndex ? "opacity-100" : "opacity-0",
+                      )}
+                    >
+                      <Image
+                        src={step.image}
+                        alt={step.title}
+                        fill
+                        sizes="(min-width: 1024px) 520px, 100vw"
+                        className="object-cover"
+                        priority={index === 0}
+                      />
+                    </div>
+                  ))
+                ) : (
                   <Image
-                    src={processThumbnail}
+                    src={processThumbnail || process_steps[0]?.image || ""}
                     alt="Our process"
                     fill
-                    sizes="(min-width: 1024px) 50vw, 100vw"
-                    className="scale-100 rounded-3xl object-cover transition-transform duration-700 ease-out hover:scale-105"
+                    sizes="(min-width: 1024px) 520px, 100vw"
+                    className="object-cover"
                     priority
                   />
-                  <div className="from-background/40 pointer-events-none absolute inset-0 bg-linear-to-t via-transparent to-transparent" />
-                </div>
-              ) : (
-                process_steps?.map((step, index) => (
-                  <div
-                    key={step.id}
-                    className={cn(
-                      "absolute inset-0 transition-opacity duration-700 ease-in-out",
-                      index === activeIndex
-                        ? "z-10 opacity-100"
-                        : "z-0 opacity-0",
-                    )}
+                )}
+              </motion.div>
+
+              {/* Scrim for legible overlay text */}
+              <div className="from-background/80 via-background/15 pointer-events-none absolute inset-0 bg-linear-to-t to-transparent" />
+
+              {/* Overlay: active step + progress */}
+              <div className="absolute inset-x-0 bottom-0 z-10 p-8">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeIndex}
+                    initial={{ opacity: 0, y: 14 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -14 }}
+                    transition={{ duration: 0.45, ease: EASE }}
                   >
-                    <Image
-                      src={step.image}
-                      alt={step.title}
-                      fill
-                      sizes="(min-width: 1024px) 50vw, 100vw"
-                      className="scale-100 rounded-3xl object-cover transition-transform duration-700 ease-out hover:scale-105"
-                      priority={index === 0}
-                    />
-                    <div className="from-background/40 pointer-events-none absolute inset-0 bg-linear-to-t via-transparent to-transparent" />
-                  </div>
-                ))
-              )}
+                    <span className="font-heading text-primary text-sm font-bold tracking-[0.25em]">
+                      STEP {pad2(activeStep?.index ?? activeIndex + 1)} /{" "}
+                      {pad2(process_steps.length)}
+                    </span>
+                    <h3 className="font-heading text-foreground mt-1.5 text-2xl font-black tracking-tight lg:text-3xl">
+                      {activeStep?.title}
+                    </h3>
+                  </motion.div>
+                </AnimatePresence>
+
+                <div className="bg-foreground/15 mt-6 h-1 w-full overflow-hidden rounded-full">
+                  <motion.div
+                    style={{ scaleX: reduceMotion ? 1 : scrollYProgress }}
+                    className="from-primary-from to-primary-to h-full w-full origin-left rounded-full bg-linear-to-r"
+                  />
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Right: Step cards list */}
+          {/* ── Right: step cards ── */}
           <div className="flex-1 space-y-6">
             {process_steps?.map((step, index) => {
               const Icon = PROCESS_ICON_MAP[step.icon];
@@ -175,7 +227,7 @@ export const ProcessSection = ({
                           {step.description}
                         </p>
 
-                        {/* Collapsible Image for mobile view only */}
+                        {/* Collapsible image — mobile only */}
                         <div
                           className={cn(
                             "mt-4 overflow-hidden rounded-2xl transition-all duration-500 ease-in-out lg:hidden",
