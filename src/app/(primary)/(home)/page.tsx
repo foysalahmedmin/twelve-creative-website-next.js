@@ -1,11 +1,10 @@
 import { DifferenceSection } from "@/components/_primary_/home-page/difference-section";
 import { LiveFeaturedProjectsSection } from "@/components/_primary_/home-page/featured-projects-section-live";
-import { HomeCtaSection } from "@/components/_primary_/home-page/home-cta-section";
 import { LiveHeroSection } from "@/components/_primary_/home-page/hero-section-live";
+import { HomeCtaSection } from "@/components/_primary_/home-page/home-cta-section";
 import { LiveIndustriesSection } from "@/components/_primary_/home-page/industries-section-live";
 import { LiveServicesSection } from "@/components/_primary_/home-page/services-section-live";
 import { BrandsStrip } from "@/components/sections/brands-strip";
-import { CoreVerticalsSection } from "@/components/sections/core-verticals-section";
 import FaqSection from "@/components/sections/faqs-section";
 import { ProcessSection } from "@/components/sections/process-section";
 import { TestimonialSection } from "@/components/sections/testimonial-section";
@@ -56,12 +55,16 @@ export default async function HomePage() {
     <div className="flex flex-col">
       <LiveHeroSection />
       <BrandsStrip />
-      <CoreVerticalsSection industries={industries} />
       <LiveFeaturedProjectsSection />
       <LiveServicesSection />
       <TestimonialSection data={testimonialsData} />
-      <ProcessSection data={PROCESS_DATA} processThumbnail={settings.process_thumbnail || undefined} />
-      <DifferenceSection howWeStructureImage={settings.how_we_structure_image || undefined} />
+      <ProcessSection
+        data={PROCESS_DATA}
+        processThumbnail={settings.process_thumbnail || undefined}
+      />
+      <DifferenceSection
+        howWeStructureImage={settings.how_we_structure_image || undefined}
+      />
       <LiveIndustriesSection />
       <WhyChooseUsSection data={WHY_CHOOSE_US_DATA} />
       <FaqSection data={faqsData} />

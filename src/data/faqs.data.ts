@@ -4,6 +4,7 @@ export type TFaqItem = {
 };
 
 export type TFaqsData = {
+  is_side_hide?: boolean;
   image: string;
   alt: string;
   title: string;

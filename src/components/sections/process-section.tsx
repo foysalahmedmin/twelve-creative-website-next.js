@@ -81,7 +81,7 @@ export const ProcessSection = ({
 
         <div className="mt-12 flex flex-col gap-12 lg:mt-20 lg:flex-row">
           {/* Left: Sticky Image Showcase (hidden on small/medium screens, sticky on desktop) */}
-          <div className="hidden h-[620px] w-full max-w-[580px] overflow-hidden rounded-3xl shadow-2xl lg:sticky lg:top-36 lg:block lg:self-start">
+          <div className="h-155 w-full max-w-145 items-center justify-center overflow-hidden rounded-3xl lg:sticky lg:top-24 lg:bottom-4 lg:flex lg:h-[calc(100vh-7rem)] lg:self-start">
             <div className="from-primary/10 to-primary/5 ring-primary/15 relative h-full w-full overflow-hidden rounded-3xl bg-linear-to-br ring-1">
               {processThumbnail ? (
                 <div className="absolute inset-0">
