@@ -59,7 +59,7 @@ export const ServiceCard = ({ service, className }: ServiceCardProps) => {
         </div>
       </div>
 
-      {/* Back face — shown on hover */}
+      {/* Back face — shown on hover: brand-orange gradient reveal */}
       <div
         className={cn(
           "pointer-events-none absolute inset-0 opacity-0 w-full h-full",
@@ -67,30 +67,33 @@ export const ServiceCard = ({ service, className }: ServiceCardProps) => {
           "group-hover/service:pointer-events-auto group-hover/service:opacity-100 group-hover/service:translate-y-0",
         )}
       >
-        {/* Card surface */}
-        <div className="border-border bg-card h-full w-full rounded-2xl border p-px">
-          <div className="bg-card flex h-full w-full flex-col justify-between gap-6 rounded-2xl px-5 py-6 md:py-6">
+        {/* Orange gradient surface — brand primary, dark-on-orange content */}
+        <div className="from-primary-from to-primary-to relative h-full w-full overflow-hidden rounded-2xl bg-linear-to-br shadow-[0_24px_50px_-18px] shadow-primary/50">
+          {/* Subtle symbol texture for depth over the orange */}
+          <div className="bg-brand-texture pointer-events-none absolute inset-0 opacity-40" />
+
+          <div className="relative flex h-full w-full flex-col justify-between gap-6 px-5 py-6 md:py-6">
             {/* Top: icon + title */}
             <div>
-              <div className="bg-primary/10 text-primary inline-flex h-11 w-11 items-center justify-center rounded-xl">
+              <div className="bg-primary-foreground/10 text-primary-foreground inline-flex h-11 w-11 items-center justify-center rounded-xl backdrop-blur-[2px]">
                 <HugeiconsIcon icon={Icon} className="h-5 w-5" />
               </div>
-              <h3 className="font-heading text-foreground mt-3 text-xl font-black tracking-tight leading-tight md:text-2xl">
+              <h3 className="font-heading text-primary-foreground mt-3 text-xl font-black tracking-tight leading-tight md:text-2xl">
                 {service.title}
               </h3>
             </div>
 
             {/* Middle: description */}
-            <p className="text-muted-foreground text-sm font-normal leading-[140%] md:text-base">
+            <p className="text-primary-foreground/80 text-sm font-normal leading-[140%] md:text-base">
               {service.description}
             </p>
 
-            {/* Bottom: button */}
+            {/* Bottom: button — teal-black on orange for contrast */}
             <div className="flex w-full justify-end">
               <Link
                 href={service.href}
                 className={cn(
-                  "bg-primary text-primary-foreground rounded-lg px-6 py-3 text-sm font-semibold uppercase tracking-[0.05em] transition-transform duration-200 ease-out",
+                  "bg-primary-foreground text-primary-dark-foreground rounded-lg px-6 py-3 text-sm font-semibold uppercase tracking-[0.05em] transition-transform duration-200 ease-out",
                   "hover:scale-105 active:scale-95",
                 )}
               >

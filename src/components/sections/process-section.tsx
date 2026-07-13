@@ -101,9 +101,14 @@ export const ProcessSection = ({
           ref={rowRef}
           className="mt-12 flex flex-col gap-12 lg:mt-20 lg:flex-row lg:items-start"
         >
-          {/* ── Left: pinned parallax showcase (desktop only) ── */}
-          <div className="hidden w-full shrink-0 lg:sticky lg:top-24 lg:block lg:h-[calc(100vh-8rem)] lg:max-w-130 lg:self-start">
-            <div className="border-border relative h-full w-full overflow-hidden rounded-3xl border">
+          {/* ── Left: pinned parallax showcase (desktop only) ──
+              The column itself is the sticky element (its containing block is
+              the tall row), a fixed-height track that vertically centres the
+              media. This keeps the image perfectly still — no drift — for the
+              entire time the step cards scroll past. */}
+          <div className="hidden w-full shrink-0 lg:sticky lg:top-[8vh] lg:flex lg:h-[84vh] lg:max-w-130 lg:items-center lg:self-start">
+            {/* Capped media card — aspect + max-height so it never gets oversized */}
+            <div className="border-border relative aspect-4/5 max-h-[72vh] w-full overflow-hidden rounded-3xl border">
               {/* Parallax image layer */}
               <motion.div
                 style={{ scale: imgScale, y: imgY }}
@@ -173,8 +178,11 @@ export const ProcessSection = ({
             </div>
           </div>
 
-          {/* ── Right: step cards ── */}
-          <div className="flex-1 space-y-6">
+          {/* ── Right: step cards ──
+              The vertical runway (desktop only) gives the sticky media a large
+              enough pinned window that every card reaches centre while the
+              image is already fixed — so the image never drifts up or down. */}
+          <div className="flex-1 space-y-6 lg:py-[38vh]">
             {process_steps?.map((step, index) => {
               const Icon = PROCESS_ICON_MAP[step.icon];
               const isActive = index === activeIndex;
