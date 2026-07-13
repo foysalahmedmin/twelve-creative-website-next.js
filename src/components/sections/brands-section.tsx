@@ -40,33 +40,35 @@ export const BrandsSection = ({ data, className }: BrandsSectionProps) => {
   return (
     <section
       className={cn(
-        "relative mx-auto mt-10 w-full max-w-7xl overflow-hidden px-6 py-6",
+        "relative w-full overflow-hidden py-12",
         className,
       )}
     >
-      <ScrollReveal animation="fade-in" durationMs={800}>
-        <div
-          className="mx-auto flex w-full flex-col items-center justify-center"
-          style={{
-            maskImage:
-              "linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)",
-            WebkitMaskImage:
-              "linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)",
-          }}
-        >
-          <Marquee
-            gradient={false}
-            speed={40}
-            pauseOnHover
-            autoFill
-            className="flex items-center"
+      <div className="mx-auto max-w-7xl px-6">
+        <ScrollReveal animation="fade-in" durationMs={800}>
+          <div
+            className="mx-auto flex w-full flex-col items-center justify-center"
+            style={{
+              maskImage:
+                "linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)",
+              WebkitMaskImage:
+                "linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)",
+            }}
           >
-            {brands.map((brand) => (
-              <BrandItem key={brand.id} brand={brand} />
-            ))}
-          </Marquee>
-        </div>
-      </ScrollReveal>
+            <Marquee
+              gradient={false}
+              speed={40}
+              pauseOnHover
+              autoFill
+              className="flex items-center"
+            >
+              {brands.map((brand) => (
+                <BrandItem key={brand.id} brand={brand} />
+              ))}
+            </Marquee>
+          </div>
+        </ScrollReveal>
+      </div>
     </section>
   );
 };

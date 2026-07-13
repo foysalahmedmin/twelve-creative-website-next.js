@@ -154,16 +154,23 @@ export const ServiceServicesSection = ({
   };
 
   return (
-    <section className={cn("container py-16 sm:py-20 lg:py-24", className)}>
-      <ScrollReveal animation="fade-in-up" durationMs={800}>
-        <CenteredSectionHeader
-          label={label}
-          title={title}
-          description={description}
-          className="mb-10 sm:mb-16"
-        />
-      </ScrollReveal>
-      {renderGrid()}
+    <section
+      className={cn(
+        "w-full bg-background border-t border-border/40 py-16 sm:py-20 lg:py-24",
+        className,
+      )}
+    >
+      <div className="container">
+        <ScrollReveal animation="fade-in-up" durationMs={800}>
+          <CenteredSectionHeader
+            label={label}
+            title={title}
+            description={description}
+            className="mb-10 sm:mb-16"
+          />
+        </ScrollReveal>
+        {renderGrid()}
+      </div>
     </section>
   );
 };

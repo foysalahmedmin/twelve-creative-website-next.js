@@ -298,9 +298,11 @@ export const TestimonialSection = ({
   }, []);
 
   return (
-    <section className={cn("container mt-6 md:mt-10 lg:mt-12", className)}>
+    <section
+      className={cn("w-full bg-muted py-16 sm:py-20 lg:py-24", className)}
+    >
       <ScrollReveal animation="fade-in-up" durationMs={800}>
-        <div className="bg-muted relative overflow-hidden rounded-3xl py-10 lg:py-16">
+        <div className="container">
           {/* Section header */}
           <CenteredSectionHeader
             label={label || "Testimonials"}

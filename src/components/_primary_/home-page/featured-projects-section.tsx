@@ -112,9 +112,10 @@ export const FeaturedProjectsSection = ({
   if (!categories.length) return null;
 
   return (
-    <section className={cn("container mt-6 md:mt-10 lg:mt-12", className)}>
-      {/* Background-gradient wrapper card */}
-      <div className="bg-muted relative overflow-hidden rounded-3xl py-10 lg:py-16">
+    <section
+      className={cn("w-full bg-muted py-16 sm:py-20 lg:py-24", className)}
+    >
+      <div className="container">
         {/* Header */}
         <CenteredSectionHeader
           label="Our Works"

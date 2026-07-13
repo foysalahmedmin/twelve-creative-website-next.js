@@ -140,17 +140,19 @@ export const IndustriesDetailSection = ({
   if (!data || data.length === 0) return null;
 
   return (
-    <div
+    <section
       className={cn(
-        "container flex flex-col gap-20 py-12 md:py-16 lg:gap-28 lg:py-24",
+        "w-full bg-background border-t border-border/40 py-16 sm:py-20 lg:py-24",
         className,
       )}
     >
-      {data.map((industry, index) => (
-        <section key={industry.id} id={industry.id} className="scroll-mt-24">
-          <IndustryRow industry={industry} index={index} />
-        </section>
-      ))}
-    </div>
+      <div className="container flex flex-col gap-20 lg:gap-28">
+        {data.map((industry, index) => (
+          <section key={industry.id} id={industry.id} className="scroll-mt-24">
+            <IndustryRow industry={industry} index={index} />
+          </section>
+        ))}
+      </div>
+    </section>
   );
 };

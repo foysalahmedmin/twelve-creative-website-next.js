@@ -31,8 +31,8 @@ export function TeamSection({ data }: TeamSectionProps = {}) {
   const isShowingAll = visibleCount >= members.length;
 
   return (
-    <section className="container py-16 sm:py-24">
-      <div className="bg-muted border-border rounded-3xl border p-6 sm:p-10 lg:p-16">
+    <section className="w-full bg-muted py-16 sm:py-20 lg:py-24">
+      <div className="container">
         <CenteredSectionHeader
           title="Inside Twelve Creative"
           description="Our office, our team, our everyday moments. The real people behind every edit, every thumbnail, and every deadline we hit for you."

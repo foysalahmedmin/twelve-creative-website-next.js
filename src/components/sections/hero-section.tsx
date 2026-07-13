@@ -22,17 +22,16 @@ export const HeroSection = ({
   const data = { ...HOME_HERO_DATA, ...override };
 
   return (
-    <section className={cn("relative container mt-6 mb-10", className)}>
-      {/* Outer rounded hero card with artefact gradient */}
-      <div
-        className={cn(
-          "bg-brand-hero relative min-h-screen overflow-hidden rounded-3xl",
-        )}
-      >
-        {/* Brand texture depth */}
-        <BrandTexture opacity={35} />
+    <section
+      className={cn(
+        "bg-brand-hero relative w-full overflow-hidden",
+        className,
+      )}
+    >
+      {/* Brand texture depth */}
+      <BrandTexture opacity={35} />
 
-        <div className="relative flex flex-col items-center justify-center gap-4 px-2 pt-10 pb-10 lg:gap-4 lg:pt-16">
+      <div className="relative container flex min-h-screen flex-col items-center justify-center gap-4 px-4 pt-24 pb-16 lg:gap-4 lg:pt-28 lg:pb-24">
           {/* Center column for badge + headline + description + CTAs */}
           <div className="mx-auto flex max-w-195 flex-col items-center justify-center pt-10">
             {/* Headline */}
@@ -116,7 +115,6 @@ export const HeroSection = ({
             </div>
           </ScrollReveal>
         </div>
-      </div>
     </section>
   );
 };

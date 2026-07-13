@@ -4,8 +4,8 @@ import { ABOUT_MISSION_DATA } from "@/data/about.data";
 
 export function OurMissionSection() {
   return (
-    <section className="container py-16 sm:py-24">
-      <div className="bg-muted border-border relative overflow-hidden rounded-3xl border p-6 sm:p-10 lg:p-16">
+    <section className="w-full bg-muted py-16 sm:py-20 lg:py-24">
+      <div className="container">
         <ScrollReveal animation="fade-in-up">
           <CenteredSectionHeader
             title="Built for Strategic Execution"

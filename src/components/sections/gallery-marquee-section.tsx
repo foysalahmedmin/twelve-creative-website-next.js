@@ -6,7 +6,7 @@ import Marquee from "react-fast-marquee";
 
 export function GalleryMarqueeSection() {
   return (
-    <section className="overflow-hidden py-12 sm:py-20">
+    <section className="overflow-hidden py-12 sm:py-16">
       <div className="flex flex-col gap-6 sm:gap-8">
         {/* Row 1 - Left to Right */}
         <Marquee speed={40} gradient={false} direction="left">

@@ -45,17 +45,16 @@ export const PageHeader = ({
   className,
 }: PageHeaderProps) => {
   return (
-    <section className={cn("relative container mt-6 mb-10", className)}>
-      {/* Outer rounded card with background gradient inspired by Home Hero */}
-      <div
-        className={cn(
-          "bg-brand-hero relative overflow-hidden rounded-3xl px-4 py-16 sm:px-8 sm:py-20 lg:py-28",
-        )}
-      >
-        {/* Symbol texture (brand device) */}
-        <BrandTexture opacity={35} />
+    <section
+      className={cn(
+        "bg-brand-hero relative w-full overflow-hidden py-20 sm:py-24 lg:py-28",
+        className,
+      )}
+    >
+      {/* Symbol texture (brand device) */}
+      <BrandTexture opacity={35} />
 
-        <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center justify-center text-center">
+      <div className="relative z-10 container mx-auto flex max-w-4xl flex-col items-center justify-center text-center">
           {/* Eyebrow Label Capsule */}
           {label && (
             <>
@@ -162,7 +161,6 @@ export const PageHeader = ({
             </ScrollReveal>
           )}
         </div>
-      </div>
     </section>
   );
 };

@@ -331,8 +331,14 @@ const ContactFormSection = () => {
 // ── Main Layout Coordinator ────────────────────────────
 export const PageContactSection = ({ className }: ContactSectionProps) => {
   return (
-    <section className={cn("container py-16 sm:py-20 lg:py-24", className)}>
-      <div className="relative w-full">
+    <section
+      className={cn(
+        "w-full bg-background border-t border-border/40 py-16 sm:py-20 lg:py-24",
+        className,
+      )}
+    >
+      <div className="container">
+        <div className="relative w-full">
         {/* Layered peeking back card element */}
         <div className="bg-muted border-border pointer-events-none absolute right-[2.5%] -bottom-3 left-[2.5%] z-0 h-12 rounded-b-3xl border-x border-b" />
 
@@ -355,6 +361,7 @@ export const PageContactSection = ({ className }: ContactSectionProps) => {
           >
             <ContactFormSection />
           </ScrollReveal>
+        </div>
         </div>
       </div>
     </section>

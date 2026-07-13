@@ -76,17 +76,18 @@ export function CoreVerticalsSection({ industries }: Props) {
   };
 
   return (
-    <section className="container py-10 lg:py-14">
-      <ScrollReveal animation="fade-in-up" durationMs={700}>
-        <CenteredSectionHeader
-          label="Industries"
-          title="Core Verticals"
-          description="We work across a focused set of industries where marketing structure, creative execution, and conversion systems make the biggest difference."
-          className="mb-8 lg:mb-10"
-        />
-      </ScrollReveal>
+    <section className="w-full bg-background border-t border-border/40 py-16 sm:py-20 lg:py-24">
+      <div className="container">
+        <ScrollReveal animation="fade-in-up" durationMs={700}>
+          <CenteredSectionHeader
+            label="Industries"
+            title="Core Verticals"
+            description="We work across a focused set of industries where marketing structure, creative execution, and conversion systems make the biggest difference."
+            className="mb-8 lg:mb-10"
+          />
+        </ScrollReveal>
 
-      <div className="scrollbar-none flex snap-x snap-mandatory gap-2 overflow-x-auto pb-4 lg:pb-0">
+        <div className="scrollbar-none flex snap-x snap-mandatory gap-2 overflow-x-auto pb-4 lg:pb-0">
         {cards.map((card, index) => {
           const isHovered = hoveredId === card.id;
           const isFirst = index === 0;
@@ -171,6 +172,7 @@ export function CoreVerticalsSection({ industries }: Props) {
             </Link>
           );
         })}
+        </div>
       </div>
     </section>
   );

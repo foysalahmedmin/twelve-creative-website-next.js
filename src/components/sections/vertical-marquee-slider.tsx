@@ -137,7 +137,7 @@ export const VerticalMarqueeSlider: React.FC<VerticalMarqueeSliderProps> = ({
   };
 
   return (
-    <>
+    <section className="w-full py-12 sm:py-16">
       {/* Video Popup */}
       {popupUrl && (
         <VideoPopup url={popupUrl} onClose={() => setPopupUrl(null)} />
@@ -168,7 +168,7 @@ export const VerticalMarqueeSlider: React.FC<VerticalMarqueeSliderProps> = ({
           animation-play-state: paused !important;
         }
       `}</style>
-    </>
+    </section>
   );
 };
 

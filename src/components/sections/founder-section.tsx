@@ -11,7 +11,7 @@ export const FounderSection = ({
   imageSrc,
 }: FounderSectionProps) => {
   return (
-    <section className={cn("bg-background py-16 sm:py-24 lg:py-32", className)}>
+    <section className={cn("bg-background border-t border-border/40 py-16 sm:py-20 lg:py-24", className)}>
       <div className="container max-w-7xl">
         <div className="flex flex-col gap-12 lg:flex-row lg:items-center lg:gap-20">
           {/* Left: Name + Title + Bio */}

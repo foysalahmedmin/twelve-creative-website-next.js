@@ -22,8 +22,9 @@ export const AlternatingServicesSection = ({
   if (!data || data.length === 0) return null;
 
   return (
-    <div className={cn("container space-y-24 py-12 sm:space-y-32 md:py-16 lg:space-y-40", className)}>
-      {data.map((service, index) => {
+    <section className="w-full bg-background border-t border-border/40 py-16 sm:py-20 lg:py-24">
+      <div className={cn("container space-y-24 sm:space-y-32 lg:space-y-40", className)}>
+        {data.map((service, index) => {
         const isEven = index % 2 === 0;
 
         // Even rows: content on left → slides from left; image on right → slides from right.
@@ -132,6 +133,7 @@ export const AlternatingServicesSection = ({
           </section>
         );
       })}
-    </div>
+      </div>
+    </section>
   );
 };

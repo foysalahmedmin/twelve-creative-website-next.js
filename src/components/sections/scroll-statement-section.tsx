@@ -96,7 +96,8 @@ export function ScrollStatementSection({
       className={cn(
         // Always-dark statement block — matches the hero above it.
         "bg-[#131C20] text-[#EAEAE4]",
-        "py-24 sm:py-32 lg:py-40",
+        "border-y border-white/10",
+        "py-20 sm:py-24 lg:py-28",
         className,
       )}
     >

@@ -86,7 +86,7 @@ export const ProcessSection = ({
   const useStepImages = !processThumbnail && process_steps.length > 0;
 
   return (
-    <section className={cn("bg-background py-20 sm:py-24 lg:py-32", className)}>
+    <section className={cn("w-full border-t border-border/40 bg-background py-16 sm:py-20 lg:py-24", className)}>
       <div className="container">
         <CenteredSectionHeader
           label={label || "Our Process"}

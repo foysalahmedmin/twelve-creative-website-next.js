@@ -20,7 +20,7 @@ export const DifferenceSection = ({ className, howWeStructureImage }: Difference
 
   return (
     <section
-      className={cn("bg-background py-20 sm:py-24 lg:py-32", className)}
+      className={cn("bg-background border-t border-border/40 py-16 sm:py-20 lg:py-24", className)}
     >
       <div className="container">
         <ScrollReveal animation="fade-in-up" durationMs={800}>

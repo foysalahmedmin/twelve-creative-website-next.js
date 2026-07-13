@@ -37,7 +37,7 @@ export function StorySection({ contentSection }: StorySectionProps) {
   const overrideImage = contentSection?.image;
 
   return (
-    <section className="bg-background py-16 sm:py-24">
+    <section className="bg-background border-t border-border/40 py-16 sm:py-20 lg:py-24">
       <div className="container max-w-7xl">
         <CenteredSectionHeader
           title={contentSection?.title || "Merging Art and Science"}

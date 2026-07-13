@@ -132,7 +132,10 @@ export const ContactSection = ({
 
   return (
     <section
-      className={cn("bg-background py-8 md:py-16", className)}
+      className={cn(
+        "bg-background border-t border-border/40 py-16 sm:py-20 lg:py-24",
+        className,
+      )}
       id="contact"
     >
       <div className="container">

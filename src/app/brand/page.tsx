@@ -145,7 +145,7 @@ export default function BrandPage() {
               name="Energy Orange"
               hex="#E96A2C"
               className="bg-[#e96a2c]"
-              text="text-[#131c20]"
+              text="text-[#ffffff]"
             />
             <Swatch
               name="Cream"
@@ -271,7 +271,7 @@ export default function BrandPage() {
             </div>
             <div className="relative flex h-56 items-end overflow-hidden rounded-2xl bg-[#e96a2c] p-5">
               <div className="bg-brand-texture absolute inset-0 opacity-70" />
-              <span className="relative text-xs font-bold uppercase tracking-widest text-[#131c20]">
+              <span className="relative text-xs font-bold uppercase tracking-widest text-[#ffffff]">
                 Orange + texture
               </span>
             </div>

@@ -13,17 +13,15 @@ export const HomeCtaSection = ({ className }: { className?: string }) => {
   return (
     <section
       className={cn(
-        "bg-background relative overflow-hidden py-16 sm:py-20 lg:py-28",
+        "bg-brand-artefact relative w-full overflow-hidden py-20 sm:py-24 lg:py-28",
         className,
       )}
     >
-      <div className="container relative">
-        <ScrollReveal animation="fade-in-up" durationMs={800}>
-          {/* Bold brand CTA block */}
-          <div className="bg-brand-artefact relative overflow-hidden rounded-3xl p-8 sm:p-12 lg:p-16">
-            <BrandTexture opacity={35} />
+      <BrandTexture opacity={35} />
 
-            <div className="relative mx-auto max-w-3xl text-center z-10">
+      <div className="relative z-10 container">
+        <ScrollReveal animation="fade-in-up" durationMs={800}>
+          <div className="relative mx-auto max-w-3xl text-center">
               {/* Eyebrow Label */}
               <span className="inline-flex rounded-md border border-[#eaeae4]/40 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-[#eaeae4]">
                 {data.eyebrow}
@@ -60,7 +58,6 @@ export const HomeCtaSection = ({ className }: { className?: string }) => {
                 </Button>
               </div>
             </div>
-          </div>
         </ScrollReveal>
       </div>
     </section>

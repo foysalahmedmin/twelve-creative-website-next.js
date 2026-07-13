@@ -42,10 +42,9 @@ export const IndustriesSection = ({ className, data }: Props) => {
   const [activeId, setActiveId] = useState(industries[0].id);
 
   return (
-    <section className={cn("container mt-6 md:mt-10 lg:mt-12", className)}>
-      <ScrollReveal animation="fade-in-up" durationMs={800}>
-        {/* Background-gradient wrapper card exactly like Our Works & Testimonials */}
-        <div className="bg-muted relative overflow-hidden rounded-3xl py-10 lg:py-16">
+    <section className={cn("w-full bg-muted py-16 sm:py-20 lg:py-24", className)}>
+      <div className="container">
+        <ScrollReveal animation="fade-in-up" durationMs={800}>
           <div className="relative z-10 px-4 sm:px-8 lg:px-16">
             {/* Header styled exactly like Our Works */}
             <CenteredSectionHeader
@@ -169,8 +168,8 @@ export const IndustriesSection = ({ className, data }: Props) => {
               ))}
             </Tabs>
           </div>
-        </div>
-      </ScrollReveal>
+        </ScrollReveal>
+      </div>
     </section>
   );
 };
