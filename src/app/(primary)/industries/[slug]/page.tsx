@@ -2,6 +2,7 @@ import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { CenteredSectionHeader } from "@/components/common/section-label";
 import { BookingInlineSection } from "@/components/sections/booking-inline-section";
 import { BrandsStrip } from "@/components/sections/brands-strip";
+import { CTASection } from "@/components/sections/cta-section";
 import { PageHeader } from "@/components/sections/page-header-section";
 import { ProcessSection } from "@/components/sections/process-section";
 import { ScrollStatementSection } from "@/components/sections/scroll-statement-section";
@@ -9,6 +10,7 @@ import { TestimonialSection } from "@/components/sections/testimonial-section";
 import { ThumbnailWorkSection } from "@/components/sections/thumbnail-work-section";
 import { VerticalMarqueeSlider } from "@/components/sections/vertical-marquee-slider";
 import { WorkWithUsSection } from "@/components/sections/work-with-us-section";
+import { CTA_ABOUT } from "@/data/page-ctas.data";
 import { PROCESS_DATA } from "@/data/process.data";
 import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
 import { CANVAS_PORTFOLIO_DATA } from "@/data/thumbnail-work-section.data";
@@ -133,6 +135,9 @@ export default async function IndustryDetailPage({ params }: Props) {
 
       {/* ── Process ── */}
       <ProcessSection data={PROCESS_DATA} />
+
+      {/* CTA */}
+      <CTASection data={CTA_ABOUT} />
     </div>
   );
 }

@@ -32,7 +32,7 @@ export const HeroSection = ({
         {/* Brand texture depth */}
         <BrandTexture opacity={35} />
 
-        <div className="relative flex flex-col items-center justify-center gap-4 px-2 pt-16 pb-10 lg:gap-4 lg:pt-20">
+        <div className="relative flex flex-col items-center justify-center gap-4 px-2 pt-10 pb-10 lg:gap-4 lg:pt-16">
           {/* Center column for badge + headline + description + CTAs */}
           <div className="mx-auto flex max-w-195 flex-col items-center justify-center pt-10">
             {/* Headline */}
@@ -47,6 +47,26 @@ export const HeroSection = ({
               <p className="mt-6 text-center text-sm leading-[150%] font-normal text-[#eaeae4]/80 md:text-base">
                 {data.description}
               </p>
+            </ScrollReveal>
+
+            {/* Video showcase */}
+            <ScrollReveal
+              animation="zoom-in"
+              delayMs={500}
+              durationMs={900}
+              className="block w-full px-4 lg:hidden lg:px-12"
+            >
+              <div className="relative mx-auto mt-8 aspect-video w-full max-w-7xl overflow-hidden rounded-2xl border border-[#eaeae4]/10 shadow-sm lg:mt-10 lg:rounded-3xl">
+                <ReactPlayer
+                  src={data.video.src}
+                  controls
+                  width="100%"
+                  height="100%"
+                  playsInline
+                  light={data.video.poster || false}
+                  style={{ width: "100%", height: "100%" }}
+                />
+              </div>
             </ScrollReveal>
 
             {/* CTAs */}
@@ -81,7 +101,7 @@ export const HeroSection = ({
             animation="zoom-in"
             delayMs={500}
             durationMs={900}
-            className="w-full px-4 lg:px-12"
+            className="hidden w-full px-4 lg:block lg:px-12"
           >
             <div className="relative mx-auto mt-8 aspect-video w-full max-w-7xl overflow-hidden rounded-2xl border border-[#eaeae4]/10 shadow-sm lg:mt-10 lg:rounded-3xl">
               <ReactPlayer

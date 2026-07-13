@@ -60,7 +60,7 @@ export const PageHeader = ({
           {label && (
             <>
               <ScrollReveal animation="fade-in-down" durationMs={700}>
-                <span className="mb-6 inline-flex rounded-md border border-[#eaeae4]/40 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-[#eaeae4]">
+                <span className="mb-6 hidden rounded-md border border-[#eaeae4]/40 px-3 py-1 text-[11px] font-bold tracking-[0.12em] text-[#eaeae4] uppercase">
                   {label}
                 </span>
               </ScrollReveal>
@@ -74,7 +74,7 @@ export const PageHeader = ({
                 animation="fade-in-up"
                 delayMs={100}
                 durationMs={700}
-                className="mb-6 text-[#eaeae4]/70 [&_a:hover]:text-[#eaeae4] [&_a]:text-[#eaeae4]/60"
+                className="mb-6 text-[#eaeae4]/70 [&_a]:text-[#eaeae4]/60 [&_a:hover]:text-[#eaeae4]"
               >
                 <Breadcrumb>
                   <BreadcrumbList className="justify-center">
