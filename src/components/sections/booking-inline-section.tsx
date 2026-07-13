@@ -108,7 +108,7 @@ export function BookingInlineSection({
       <section className={cn("py-16 sm:py-20 lg:py-24", className)}>
         <div className="container">
           <div className="mb-10 text-center">
-            <span className="bg-primary/10 text-primary border-primary/20 mb-5 inline-flex rounded-full border px-4 py-1.5 text-xs font-bold tracking-widest uppercase">
+            <span className="border-foreground/25 text-foreground mb-5 inline-flex rounded-md border px-3 py-1 text-[11px] font-bold tracking-[0.12em] uppercase">
               Book a Call
             </span>
             <h2 className="font-heading text-foreground text-3xl leading-[115%] font-black tracking-tight sm:text-4xl">
@@ -121,19 +121,11 @@ export function BookingInlineSection({
           </div>
 
           <div className="border-border bg-card relative mx-auto max-w-xl overflow-hidden rounded-3xl border px-6 py-10 text-center md:px-12">
-            <div
-              aria-hidden
-              className="bg-primary/12 pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full blur-3xl"
-            />
-            <div
-              aria-hidden
-              className="bg-primary/8 pointer-events-none absolute -bottom-24 -left-24 h-64 w-64 rounded-full blur-3xl"
-            />
             <a
               href={calendlyUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="from-primary-from to-primary-to hover:shadow-primary text-primary-foreground group/cta relative z-10 inline-flex h-14 items-center justify-center gap-2 rounded-2xl bg-linear-to-br px-8 text-base font-semibold shadow-md transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]"
+              className="bg-primary text-primary-foreground group/cta relative z-10 inline-flex h-14 items-center justify-center gap-2 rounded-lg px-8 text-base font-semibold uppercase tracking-[0.05em] transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]"
             >
               Start Booking
               <HugeiconsIcon
@@ -153,7 +145,7 @@ export function BookingInlineSection({
         {/* Header */}
         {step < 4 && (
           <div className="mb-10 text-center">
-            <span className="bg-primary/10 text-primary border-primary/20 mb-5 inline-flex rounded-full border px-4 py-1.5 text-xs font-bold tracking-widest uppercase">
+            <span className="border-foreground/25 text-foreground mb-5 inline-flex rounded-md border px-3 py-1 text-[11px] font-bold tracking-[0.12em] uppercase">
               Book a Call
             </span>
             <h2 className="font-heading text-foreground text-3xl leading-[115%] font-black tracking-tight sm:text-4xl">
@@ -167,17 +159,7 @@ export function BookingInlineSection({
         )}
 
         {/* Content */}
-        <div className="relative w-full overflow-hidden rounded-3xl px-6 py-8 md:px-12 md:py-12">
-          {/* Ambient glows */}
-          <div
-            aria-hidden
-            className="bg-primary/12 pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full blur-3xl"
-          />
-          <div
-            aria-hidden
-            className="bg-primary/8 pointer-events-none absolute -bottom-24 -left-24 h-64 w-64 rounded-full blur-3xl"
-          />
-
+        <div className="border-border bg-card relative w-full overflow-hidden rounded-3xl border px-6 py-8 md:px-12 md:py-12">
           <AnimatePresence mode="wait">
             {/* STEP 1: Industry */}
             {step === 1 && (
@@ -193,7 +175,7 @@ export function BookingInlineSection({
                   <span className="bg-primary text-primary-foreground inline-flex h-7 w-7 items-center justify-center rounded-lg text-xs font-bold">
                     1
                   </span>
-                  <h3 className="font-heading text-foreground text-2xl font-semibold">
+                  <h3 className="font-heading text-foreground text-2xl font-black tracking-tight">
                     Which sector are we discussing?
                   </h3>
                 </div>
@@ -238,7 +220,7 @@ export function BookingInlineSection({
                   <span className="bg-primary text-primary-foreground inline-flex h-7 w-7 items-center justify-center rounded-lg text-xs font-bold">
                     2
                   </span>
-                  <h3 className="font-heading text-foreground text-2xl font-semibold">
+                  <h3 className="font-heading text-foreground text-2xl font-black tracking-tight">
                     Pick a date &amp; preferred time.
                   </h3>
                   <p className="text-muted-foreground text-sm">
@@ -260,7 +242,7 @@ export function BookingInlineSection({
                         preferredDate: e.target.value,
                       }))
                     }
-                    className="border-border bg-muted/50 text-foreground focus:border-primary w-full rounded-xl border px-4 py-3 text-sm transition-colors focus:outline-none"
+                    className="border-border bg-muted/50 text-foreground focus:border-primary w-full rounded-lg border px-4 py-3 text-sm transition-colors focus:outline-none"
                   />
                 </div>
 
@@ -308,7 +290,7 @@ export function BookingInlineSection({
                   type="button"
                   onClick={handleDateTime}
                   disabled={!formData.preferredDate || !formData.preferredTime}
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground w-full rounded-2xl py-4 text-sm font-bold tracking-wider uppercase transition-all active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground w-full rounded-lg py-4 text-sm font-bold tracking-wider uppercase transition-all active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   Continue →
                 </button>
@@ -335,7 +317,7 @@ export function BookingInlineSection({
                   <span className="bg-primary text-primary-foreground inline-flex h-7 w-7 items-center justify-center rounded-lg text-xs font-bold">
                     3
                   </span>
-                  <h3 className="font-heading text-foreground text-2xl font-semibold">
+                  <h3 className="font-heading text-foreground text-2xl font-black tracking-tight">
                     Great! Now let us know who you are.
                   </h3>
                 </div>
@@ -358,7 +340,7 @@ export function BookingInlineSection({
                             }))
                           }
                           placeholder={field === "firstName" ? "Jane" : "Smith"}
-                          className="border-border bg-muted/50 text-foreground placeholder:text-muted-foreground/50 focus:border-primary w-full rounded-xl border px-4 py-3 text-sm transition-colors focus:outline-none"
+                          className="border-border bg-muted/50 text-foreground placeholder:text-muted-foreground/50 focus:border-primary w-full rounded-lg border px-4 py-3 text-sm transition-colors focus:outline-none"
                         />
                       </div>
                     ))}
@@ -399,7 +381,7 @@ export function BookingInlineSection({
                           }))
                         }
                         placeholder={placeholder}
-                        className="border-border bg-muted/50 text-foreground placeholder:text-muted-foreground/50 focus:border-primary w-full rounded-xl border px-4 py-3 text-sm transition-colors focus:outline-none"
+                        className="border-border bg-muted/50 text-foreground placeholder:text-muted-foreground/50 focus:border-primary w-full rounded-lg border px-4 py-3 text-sm transition-colors focus:outline-none"
                       />
                     </div>
                   ))}
@@ -407,7 +389,7 @@ export function BookingInlineSection({
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="bg-primary hover:bg-primary/90 text-primary-foreground mt-2 w-full rounded-2xl py-4 text-sm font-bold tracking-wider uppercase transition-all active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground mt-2 w-full rounded-lg py-4 text-sm font-bold tracking-wider uppercase transition-all active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {submitting ? "Submitting…" : "Submit →"}
                   </button>
@@ -432,7 +414,7 @@ export function BookingInlineSection({
                   />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="font-heading text-foreground text-3xl font-bold">
+                  <h3 className="font-heading text-foreground text-3xl font-black tracking-tight">
                     Booking received!
                   </h3>
                   <p className="text-muted-foreground max-w-xs text-sm leading-relaxed">

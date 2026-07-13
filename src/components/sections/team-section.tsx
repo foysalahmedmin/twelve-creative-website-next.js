@@ -32,7 +32,7 @@ export function TeamSection({ data }: TeamSectionProps = {}) {
 
   return (
     <section className="container py-16 sm:py-24">
-      <div className="bg-primary/5 dark:bg-primary/[0.02] border-primary/10 rounded-[40px] border p-6 sm:p-10 lg:p-16">
+      <div className="bg-muted border-border rounded-3xl border p-6 sm:p-10 lg:p-16">
         <CenteredSectionHeader
           title="Inside Twelve Creative"
           description="Our office, our team, our everyday moments. The real people behind every edit, every thumbnail, and every deadline we hit for you."
@@ -42,7 +42,7 @@ export function TeamSection({ data }: TeamSectionProps = {}) {
         <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 lg:mt-16 lg:grid-cols-3">
           {members.slice(0, visibleCount).map((member, idx) => (
             <ScrollReveal key={idx} animation="fade-in-up" delayMs={idx * 100}>
-              <div className="group bg-card/60 border-primary/10 hover:border-primary/30 hover:bg-card flex flex-col rounded-3xl border p-4 backdrop-blur-md transition-all sm:p-5">
+              <div className="group bg-card border-border hover:border-foreground/25 flex flex-col rounded-2xl border p-4 transition-all sm:p-5">
                 <div className="bg-muted relative mb-5 aspect-[4/5] w-full overflow-hidden rounded-2xl">
                   <Image
                     src={member.photourl}
@@ -69,7 +69,7 @@ export function TeamSection({ data }: TeamSectionProps = {}) {
           <div className="mt-12 flex justify-center">
             <button
               onClick={handleToggle}
-              className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl px-8 py-3.5 text-sm font-semibold transition-colors"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg px-8 py-3.5 text-sm font-semibold tracking-[0.05em] uppercase transition-colors"
             >
               {isShowingAll ? "See Less" : "See More"}
             </button>

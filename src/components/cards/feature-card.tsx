@@ -35,19 +35,19 @@ export const FeatureCard = ({
   return (
     <div
       className={cn(
-        "group/feature hover:from-primary/8 hover:to-card hover:ring-primary/30 relative space-y-3 rounded-3xl p-6 transition-all duration-300 hover:bg-linear-to-br hover:shadow-md hover:ring-1",
+        "group/feature relative space-y-3 rounded-2xl border border-transparent p-6 transition-all duration-300 hover:border-border hover:bg-muted hover:shadow-sm",
         className,
       )}
     >
       <div
         className={cn(
-          "group-hover/feature:bg-primary text-primary group-hover/feature:text-primary-foreground inline-flex h-12 w-12 items-center justify-center rounded-2xl transition-transform duration-300 group-hover/feature:scale-110",
+          "group-hover/feature:bg-primary text-primary group-hover/feature:text-primary-foreground inline-flex h-12 w-12 items-center justify-center rounded-xl transition-transform duration-300 group-hover/feature:scale-110",
         )}
       >
         <HugeiconsIcon icon={Icon} className="h-6 w-6" />
       </div>
 
-      <h3 className="font-heading text-foreground text-lg font-semibold tracking-tight">
+      <h3 className="font-heading text-foreground text-lg font-black tracking-tight leading-tight">
         {feature.title}
       </h3>
       <p className="text-muted-foreground text-sm leading-relaxed">

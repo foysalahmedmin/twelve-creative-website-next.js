@@ -20,12 +20,12 @@ export const ComingSoon = ({
   return (
     <div className="flex min-h-[70vh] flex-col items-center justify-center px-4 text-center">
       {/* Icon */}
-      <div className="bg-primary/8 border-primary/15 mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border">
-        <HugeiconsIcon icon={Clock01Icon} className="text-primary h-8 w-8" />
+      <div className="bg-primary mb-6 flex h-16 w-16 items-center justify-center rounded-2xl">
+        <HugeiconsIcon icon={Clock01Icon} className="text-primary-foreground h-8 w-8" />
       </div>
 
       {/* Heading */}
-      <h1 className="text-foreground mb-2 text-2xl font-semibold tracking-tight">
+      <h1 className="text-foreground font-heading mb-2 text-2xl font-black tracking-tight">
         {title}
       </h1>
 
@@ -49,7 +49,7 @@ export const ComingSoon = ({
         </Button>
 
         <Link href="/">
-          <Button className="bg-primary hover:bg-primary/90 h-9 rounded-lg px-5 text-sm font-medium text-white">
+          <Button className="h-9 rounded-lg px-5 text-sm font-medium">
             <HugeiconsIcon icon={Home01Icon} className="mr-1.5 h-4 w-4" />
             Back to Home
           </Button>

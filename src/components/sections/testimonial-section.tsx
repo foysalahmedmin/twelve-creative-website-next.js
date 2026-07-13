@@ -228,9 +228,9 @@ function SliderArrow({
       className={cn(
         "z-10 hidden shrink-0 items-center justify-center lg:flex",
         "h-10 w-10 rounded-full",
-        "border-border/40 bg-card/50 border backdrop-blur-sm",
+        "border-border bg-card border",
         "text-foreground/60 transition-all duration-200",
-        "hover:border-primary/50 hover:bg-card/80 hover:text-foreground",
+        "hover:border-primary/50 hover:text-foreground",
         "focus-visible:ring-primary/50 focus-visible:ring-2 focus-visible:outline-none",
       )}
     >
@@ -286,16 +286,7 @@ export const TestimonialSection = ({
   return (
     <section className={cn("container mt-6 md:mt-10 lg:mt-12", className)}>
       <ScrollReveal animation="fade-in-up" durationMs={800}>
-        <div
-          className={cn(
-            "relative overflow-hidden rounded-[28px] py-10 lg:rounded-[40px] lg:py-16",
-            "from-primary/6 via-primary/3 to-primary/4 bg-linear-to-b",
-          )}
-        >
-          {/* Decorative blobs */}
-          <div className="bg-primary/5 absolute top-1/4 left-0 h-80 w-80 -translate-x-1/2 rounded-full blur-3xl" />
-          <div className="bg-primary/5 absolute right-0 bottom-1/4 h-80 w-80 translate-x-1/2 rounded-full blur-3xl" />
-
+        <div className="bg-muted relative overflow-hidden rounded-3xl py-10 lg:py-16">
           {/* Section header */}
           <CenteredSectionHeader
             label={label || "Testimonials"}
@@ -380,7 +371,7 @@ export const TestimonialSection = ({
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="bg-card/90 animate-zoom-in relative max-h-[85vh] w-auto max-w-[90vw] rounded-3xl border border-white/10 p-2 shadow-2xl"
+            className="bg-card animate-zoom-in relative max-h-[85vh] w-auto max-w-[90vw] rounded-3xl border border-border p-2 shadow-xl"
           >
             <button
               type="button"

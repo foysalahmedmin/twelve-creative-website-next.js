@@ -22,7 +22,7 @@ function IndustryMedia({ industry }: { industry: TIndustry }) {
   const poster = industry.thumbnailSrc || industry.image;
 
   return (
-    <div className="ring-foreground/10 relative aspect-4/3 w-full overflow-hidden rounded-[28px] shadow-xl ring-1 lg:aspect-16/11">
+    <div className="border-border relative aspect-4/3 w-full overflow-hidden rounded-2xl border shadow-sm lg:aspect-16/11">
       {industry.videoSrc ? (
         <ReactPlayer
           src={industry.videoSrc}
@@ -85,7 +85,7 @@ function IndustryRow({
           <span className="font-heading text-primary/25 text-4xl font-black tabular-nums sm:text-5xl">
             {pad(index + 1)}
           </span>
-          <span className="bg-primary/10 text-primary border-primary/20 rounded-full border px-3 py-1 text-xs font-bold tracking-widest uppercase">
+          <span className="border-foreground/25 text-foreground rounded-md border px-3 py-1 text-[11px] font-bold tracking-[0.12em] uppercase">
             {industry.name}
           </span>
         </div>
@@ -105,7 +105,7 @@ function IndustryRow({
             {industry.work.slice(0, 6).map((item) => (
               <li
                 key={item}
-                className="border-border/60 bg-muted/40 text-foreground/70 rounded-full border px-3 py-1 text-xs font-medium"
+                className="border-border bg-muted text-foreground/70 rounded-md border px-3 py-1 text-xs font-medium"
               >
                 {item}
               </li>
@@ -115,7 +115,7 @@ function IndustryRow({
 
         <Link
           href={href}
-          className="group from-primary-from to-primary-to text-primary-foreground focus-visible:ring-primary/50 mt-2 inline-flex items-center gap-2 rounded-md bg-linear-to-br px-6 py-3 text-sm font-semibold shadow-md transition-all duration-200 hover:shadow-lg focus-visible:ring-2 focus-visible:outline-none"
+          className="group bg-primary text-primary-foreground focus-visible:ring-primary/50 mt-2 inline-flex items-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold uppercase tracking-[0.05em] transition-transform duration-200 hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:outline-none"
         >
           Explore {industry.name}
           <HugeiconsIcon

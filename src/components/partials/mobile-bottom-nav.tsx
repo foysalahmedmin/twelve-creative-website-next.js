@@ -50,7 +50,7 @@ export const MobileBottomNav = () => {
               >
                 <div
                   className={cn(
-                    "flex flex-col items-center justify-center transition-all duration-300 py-1.5 px-3 rounded-[14px]",
+                    "flex flex-col items-center justify-center transition-all duration-300 py-1.5 px-3 rounded-lg",
                     isActive
                       ? "bg-primary/10 text-primary"
                       : "text-muted-foreground",

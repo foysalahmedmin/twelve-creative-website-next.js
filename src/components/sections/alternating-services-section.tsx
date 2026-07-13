@@ -46,10 +46,10 @@ export const AlternatingServicesSection = ({
                 className="order-2 lg:order-0 flex-1 space-y-6"
               >
                 <div className="space-y-3">
-                  <span className="bg-primary/10 text-primary border-primary/20 inline-flex rounded-full border px-3 py-1 text-xs font-bold tracking-widest uppercase">
+                  <span className="border-foreground/25 text-foreground inline-flex rounded-md border px-3 py-1 text-[11px] font-bold tracking-[0.12em] uppercase">
                     Service {index + 1}
                   </span>
-                  <h2 className="font-heading text-foreground text-3xl font-black tracking-tight sm:text-4xl">
+                  <h2 className="font-heading text-foreground text-3xl font-black tracking-tight leading-[1.05] sm:text-4xl">
                     {service.title}
                   </h2>
                   <p className="text-muted-foreground text-base leading-relaxed font-medium sm:text-lg">
@@ -112,8 +112,8 @@ export const AlternatingServicesSection = ({
               >
                 <div className="relative w-full">
                   {/* Main Premium Card holding the showcase image */}
-                  <div className="border-primary/15 bg-card/90 relative z-10 overflow-hidden rounded-[32px] border p-4">
-                    <div className="relative aspect-4/3 w-full overflow-hidden rounded-[24px]">
+                  <div className="border-border bg-card relative z-10 overflow-hidden rounded-3xl border p-4">
+                    <div className="relative aspect-4/3 w-full overflow-hidden rounded-2xl">
                       <img
                         src={service.thumbnail_src}
                         alt={service.title}
@@ -125,7 +125,7 @@ export const AlternatingServicesSection = ({
                   </div>
 
                   {/* 3D Offset layered bottom card peeking from the bottom */}
-                  <div className="bg-primary/15 dark:bg-primary/25 border-primary/10 pointer-events-none absolute right-[3%] -bottom-3 left-[3%] z-0 h-12 rounded-b-[28px] border-x border-b" />
+                  <div className="bg-muted border-border pointer-events-none absolute right-[3%] -bottom-3 left-[3%] z-0 h-12 rounded-b-3xl border-x border-b" />
                 </div>
               </ScrollReveal>
             </div>

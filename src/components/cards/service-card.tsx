@@ -35,19 +35,19 @@ export const ServiceCard = ({ service, className }: ServiceCardProps) => {
       {/* Front face — visible by default */}
       <div
         className={cn(
-          "bg-muted/60 text-foreground flex h-full flex-col items-start justify-start rounded-3xl px-5 py-6 w-full",
+          "bg-muted text-foreground flex h-full flex-col items-start justify-start rounded-2xl px-5 py-6 w-full",
           "transition-all duration-500 ease-out transform",
           "group-hover/service:opacity-0 group-hover/service:-translate-y-6",
         )}
       >
-        <h3 className="font-heading text-foreground text-xl font-semibold tracking-tight md:text-2xl">
+        <h3 className="font-heading text-foreground text-xl font-black tracking-tight leading-tight md:text-2xl">
           {service.title}
         </h3>
         <p className="text-foreground/80 mt-2 text-sm font-normal leading-[140%] md:text-base">
           {service.description}
         </p>
         <div className="mt-auto w-full">
-          <div className="relative mt-4 aspect-5/4 w-full overflow-hidden rounded-[13px] md:mt-8">
+          <div className="relative mt-4 aspect-5/4 w-full overflow-hidden rounded-2xl md:mt-8">
             <Image
               src={service.thumbnail_src}
               alt={service.title}
@@ -67,15 +67,15 @@ export const ServiceCard = ({ service, className }: ServiceCardProps) => {
           "group-hover/service:pointer-events-auto group-hover/service:opacity-100 group-hover/service:translate-y-0",
         )}
       >
-        {/* Gradient border wrapper */}
-        <div className="from-primary/70 to-card h-full w-full rounded-3xl bg-linear-to-br p-px">
-          <div className="from-card via-card to-primary/8 flex h-full w-full flex-col justify-between gap-6 rounded-3xl bg-linear-to-b px-5 py-6 md:py-6">
+        {/* Card surface */}
+        <div className="border-border bg-card h-full w-full rounded-2xl border p-px">
+          <div className="bg-card flex h-full w-full flex-col justify-between gap-6 rounded-2xl px-5 py-6 md:py-6">
             {/* Top: icon + title */}
             <div>
-              <div className="bg-primary/12 text-primary inline-flex h-11 w-11 items-center justify-center rounded-xl">
+              <div className="bg-primary/10 text-primary inline-flex h-11 w-11 items-center justify-center rounded-xl">
                 <HugeiconsIcon icon={Icon} className="h-5 w-5" />
               </div>
-              <h3 className="font-heading text-foreground mt-3 text-xl font-semibold tracking-tight md:text-2xl">
+              <h3 className="font-heading text-foreground mt-3 text-xl font-black tracking-tight leading-tight md:text-2xl">
                 {service.title}
               </h3>
             </div>
@@ -90,9 +90,8 @@ export const ServiceCard = ({ service, className }: ServiceCardProps) => {
               <Link
                 href={service.href}
                 className={cn(
-                  "from-primary-from to-primary-to text-primary-foreground rounded-lg bg-linear-to-br px-4 py-2 text-sm font-semibold transition-transform duration-200 ease-out",
+                  "bg-primary text-primary-foreground rounded-lg px-6 py-3 text-sm font-semibold uppercase tracking-[0.05em] transition-transform duration-200 ease-out",
                   "hover:scale-105 active:scale-95",
-                  "shadow-md",
                 )}
               >
                 Get Started

@@ -103,7 +103,7 @@ export const ProcessSection = ({
         >
           {/* ── Left: pinned parallax showcase (desktop only) ── */}
           <div className="hidden w-full shrink-0 lg:sticky lg:top-24 lg:block lg:h-[calc(100vh-8rem)] lg:max-w-130 lg:self-start">
-            <div className="ring-primary/15 relative h-full w-full overflow-hidden rounded-3xl ring-1">
+            <div className="border-border relative h-full w-full overflow-hidden rounded-3xl border">
               {/* Parallax image layer */}
               <motion.div
                 style={{ scale: imgScale, y: imgY }}
@@ -166,7 +166,7 @@ export const ProcessSection = ({
                 <div className="bg-foreground/15 mt-6 h-1 w-full overflow-hidden rounded-full">
                   <motion.div
                     style={{ scaleX: reduceMotion ? 1 : scrollYProgress }}
-                    className="from-primary-from to-primary-to h-full w-full origin-left rounded-full bg-linear-to-r"
+                    className="bg-primary h-full w-full origin-left rounded-full"
                   />
                 </div>
               </div>
@@ -189,10 +189,10 @@ export const ProcessSection = ({
                     onClick={() => scrollToStep(index)}
                     className={cn(
                       "group/step w-full text-left transition-all duration-300",
-                      "cursor-pointer rounded-3xl border p-6 sm:p-8",
+                      "cursor-pointer rounded-2xl border p-6 sm:p-8",
                       isActive
-                        ? "from-primary/10 to-card border-primary/30 ring-primary/10 scale-[102%] bg-linear-to-br shadow-xl ring-1"
-                        : "border-border/60 bg-card hover:border-primary/20 hover:bg-primary/2",
+                        ? "border-primary bg-card scale-[102%] shadow-sm"
+                        : "border-border bg-card hover:border-primary/40",
                     )}
                     aria-pressed={isActive}
                   >
@@ -201,7 +201,7 @@ export const ProcessSection = ({
                         className={cn(
                           "hidden h-12 w-12 shrink-0 items-center justify-center rounded-2xl transition-all duration-300 lg:flex",
                           isActive
-                            ? "bg-primary text-primary-foreground shadow-primary/20 scale-110 shadow-lg"
+                            ? "bg-primary text-primary-foreground scale-110 shadow-sm"
                             : "bg-primary/10 text-primary group-hover/step:scale-105",
                         )}
                       >
@@ -219,7 +219,7 @@ export const ProcessSection = ({
                           >
                             STEP {step.index}
                           </span>
-                          <h3 className="font-heading text-foreground text-lg font-bold tracking-tight sm:text-xl">
+                          <h3 className="font-heading text-foreground text-lg font-black tracking-tight sm:text-xl">
                             {step.title}
                           </h3>
                         </div>

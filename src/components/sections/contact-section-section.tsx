@@ -106,7 +106,7 @@ const ContactFormSection = () => {
             value={formData.name}
             onChange={handleChange}
             placeholder="John Doe"
-            className="border-primary/15 bg-card/50 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-13 w-full rounded-xl border px-4 transition-all focus:ring-1 focus:outline-none"
+            className="border-border bg-background text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-13 w-full rounded-lg border px-4 transition-all focus:ring-1 focus:outline-none"
           />
         </div>
 
@@ -125,7 +125,7 @@ const ContactFormSection = () => {
             value={formData.email}
             onChange={handleChange}
             placeholder="john@example.com"
-            className="border-primary/15 bg-card/50 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-13 w-full rounded-xl border px-4 transition-all focus:ring-1 focus:outline-none"
+            className="border-border bg-background text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-13 w-full rounded-lg border px-4 transition-all focus:ring-1 focus:outline-none"
           />
         </div>
 
@@ -143,7 +143,7 @@ const ContactFormSection = () => {
             value={formData.phone}
             onChange={handleChange}
             placeholder="+1 (234) 567-890"
-            className="border-primary/15 bg-card/50 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-13 w-full rounded-xl border px-4 transition-all focus:ring-1 focus:outline-none"
+            className="border-border bg-background text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-13 w-full rounded-lg border px-4 transition-all focus:ring-1 focus:outline-none"
           />
         </div>
 
@@ -161,7 +161,7 @@ const ContactFormSection = () => {
             value={formData.company}
             onChange={handleChange}
             placeholder="SparkLabs Inc"
-            className="border-primary/15 bg-card/50 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-13 w-full rounded-xl border px-4 transition-all focus:ring-1 focus:outline-none"
+            className="border-border bg-background text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-13 w-full rounded-lg border px-4 transition-all focus:ring-1 focus:outline-none"
           />
         </div>
 
@@ -179,7 +179,7 @@ const ContactFormSection = () => {
             value={formData.website}
             onChange={handleChange}
             placeholder="example.com"
-            className="border-primary/15 bg-card/50 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-13 w-full rounded-xl border px-4 transition-all focus:ring-1 focus:outline-none"
+            className="border-border bg-background text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-13 w-full rounded-lg border px-4 transition-all focus:ring-1 focus:outline-none"
           />
         </div>
 
@@ -195,7 +195,7 @@ const ContactFormSection = () => {
             name="industry"
             value={formData.industry}
             onChange={handleChange}
-            className="border-primary/15 bg-card/50 text-foreground focus:border-primary focus:ring-primary/20 h-13 w-full rounded-xl border px-4 transition-all focus:ring-1 focus:outline-none"
+            className="border-border bg-background text-foreground focus:border-primary focus:ring-primary/20 h-13 w-full rounded-lg border px-4 transition-all focus:ring-1 focus:outline-none"
           >
             <option value="" className="bg-card">
               Select Industry
@@ -232,7 +232,7 @@ const ContactFormSection = () => {
           value={formData.lookingFor}
           onChange={handleChange}
           placeholder="e.g. Creative Production, SaaS Video Editing, CRM Integrations..."
-          className="border-primary/15 bg-card/50 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-24 w-full resize-none rounded-xl border p-4 transition-all focus:ring-1 focus:outline-none"
+          className="border-border bg-background text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-24 w-full resize-none rounded-lg border p-4 transition-all focus:ring-1 focus:outline-none"
         />
       </div>
 
@@ -249,7 +249,7 @@ const ContactFormSection = () => {
           value={formData.notWorking}
           onChange={handleChange}
           placeholder="Describe your current bottleneck problems in detail..."
-          className="border-primary/15 bg-card/50 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-24 w-full resize-none rounded-xl border p-4 transition-all focus:ring-1 focus:outline-none"
+          className="border-border bg-background text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-24 w-full resize-none rounded-lg border p-4 transition-all focus:ring-1 focus:outline-none"
         />
       </div>
 
@@ -266,7 +266,7 @@ const ContactFormSection = () => {
             name="timeline"
             value={formData.timeline}
             onChange={handleChange}
-            className="border-primary/15 bg-card/50 text-foreground focus:border-primary focus:ring-primary/20 h-13 w-full rounded-xl border px-4 transition-all focus:ring-1 focus:outline-none"
+            className="border-border bg-background text-foreground focus:border-primary focus:ring-primary/20 h-13 w-full rounded-lg border px-4 transition-all focus:ring-1 focus:outline-none"
           >
             <option value="" className="bg-card">
               Select Timeline
@@ -298,7 +298,7 @@ const ContactFormSection = () => {
             name="budget"
             value={formData.budget}
             onChange={handleChange}
-            className="border-primary/15 bg-card/50 text-foreground focus:border-primary focus:ring-primary/20 h-13 w-full rounded-xl border px-4 transition-all focus:ring-1 focus:outline-none"
+            className="border-border bg-background text-foreground focus:border-primary focus:ring-primary/20 h-13 w-full rounded-lg border px-4 transition-all focus:ring-1 focus:outline-none"
           >
             <option value="" className="bg-card">
               Select Range
@@ -320,7 +320,7 @@ const ContactFormSection = () => {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="bg-primary mt-4 flex h-14 w-full items-center justify-center rounded-2xl font-semibold text-white transition-all duration-200 select-none hover:scale-105 active:scale-95 disabled:pointer-events-none disabled:opacity-50"
+        className="bg-primary text-primary-foreground mt-4 flex h-14 w-full items-center justify-center rounded-lg text-sm font-semibold uppercase tracking-[0.05em] transition-all duration-200 select-none hover:scale-105 active:scale-95 disabled:pointer-events-none disabled:opacity-50"
       >
         {isSubmitting ? "Submitting Inquiry..." : "Submit Inquiry"}
       </button>
@@ -334,10 +334,10 @@ export const PageContactSection = ({ className }: ContactSectionProps) => {
     <section className={cn("container py-16 sm:py-20 lg:py-24", className)}>
       <div className="relative w-full">
         {/* Layered peeking back card element */}
-        <div className="bg-primary/10 dark:bg-primary/20 border-primary/10 pointer-events-none absolute right-[2.5%] -bottom-3 left-[2.5%] z-0 h-12 rounded-b-[38px] border-x border-b" />
+        <div className="bg-muted border-border pointer-events-none absolute right-[2.5%] -bottom-3 left-[2.5%] z-0 h-12 rounded-b-3xl border-x border-b" />
 
         {/* Main box holding the form */}
-        <div className="border-primary/15 bg-card/95 relative z-10 space-y-10 rounded-[40px] border p-8 sm:p-10 lg:p-12">
+        <div className="border-border bg-card relative z-10 space-y-10 rounded-3xl border p-8 sm:p-10 lg:p-12">
           <ScrollReveal animation="fade-in-up" durationMs={800}>
             <CenteredSectionHeader
               label="Send an Inquiry"
@@ -351,7 +351,7 @@ export const PageContactSection = ({ className }: ContactSectionProps) => {
           <ScrollReveal
             animation="fade-in-up"
             delayMs={200}
-            className="border-primary/10 bg-primary/2 dark:bg-primary/4 w-full rounded-3xl border p-6 sm:p-8 lg:p-10"
+            className="border-border bg-muted/40 w-full rounded-3xl border p-6 sm:p-8 lg:p-10"
           >
             <ContactFormSection />
           </ScrollReveal>

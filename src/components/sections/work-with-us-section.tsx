@@ -58,10 +58,10 @@ export function WorkWithUsSection() {
             }}
           />
 
-          {/* Ambient orb */}
+          {/* Ambient brand glow */}
           <div
             aria-hidden
-            className="bg-primary/5 pointer-events-none absolute -top-40 -right-40 h-96 w-96 rounded-full blur-3xl"
+            className="bg-brand-glow pointer-events-none absolute inset-0"
           />
 
           {/* Content */}
@@ -71,14 +71,14 @@ export function WorkWithUsSection() {
               <div className="space-y-6">
                 {i === 0 ? (
                   /* First card: "Work With Us" in primary color */
-                  <h2 className="font-heading text-primary text-5xl leading-[105%] font-bold tracking-tight sm:text-6xl lg:text-7xl xl:text-8xl">
+                  <h2 className="font-heading text-primary text-5xl leading-[105%] font-black tracking-tight sm:text-6xl lg:text-7xl xl:text-8xl">
                     Work
                     <br />
                     With Us
                   </h2>
                 ) : (
                   /* Other cards: large transparent number */
-                  <span className="font-heading text-foreground/8 text-[9rem] leading-none font-bold select-none lg:text-[12rem]">
+                  <span className="font-heading text-foreground/8 text-[9rem] leading-none font-black select-none lg:text-[12rem]">
                     {card.number}
                   </span>
                 )}

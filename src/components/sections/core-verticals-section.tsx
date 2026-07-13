@@ -103,8 +103,8 @@ export function CoreVerticalsSection({ industries }: Props) {
                 isFirst ? "rounded-l-3xl" : "",
                 isLast ? "rounded-r-3xl" : "",
                 "rounded-2xl lg:rounded-none",
-                isFirst && "lg:rounded-l-[32px]",
-                isLast && "lg:rounded-r-[32px]",
+                isFirst && "lg:rounded-l-3xl",
+                isLast && "lg:rounded-r-3xl",
                 "cursor-pointer select-none",
               )}
               onMouseEnter={() => handleMouseEnter(card.id)}
@@ -144,7 +144,7 @@ export function CoreVerticalsSection({ industries }: Props) {
               {/* Content */}
               <div className="absolute inset-0 flex flex-col justify-between p-7 lg:p-8">
                 <div>
-                  <h3 className="font-heading text-3xl leading-none font-bold tracking-tight text-white lg:text-4xl">
+                  <h3 className="font-heading text-3xl leading-none font-black tracking-tight text-white lg:text-4xl">
                     {card.title}
                   </h3>
                 </div>

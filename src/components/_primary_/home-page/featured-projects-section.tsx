@@ -114,12 +114,7 @@ export const FeaturedProjectsSection = ({
   return (
     <section className={cn("container mt-6 md:mt-10 lg:mt-12", className)}>
       {/* Background-gradient wrapper card */}
-      <div
-        className={cn(
-          "relative overflow-hidden rounded-[28px] py-10 lg:rounded-[40px] lg:py-16",
-          "from-primary/6 via-primary/3 to-primary/4 bg-linear-to-b",
-        )}
-      >
+      <div className="bg-muted relative overflow-hidden rounded-3xl py-10 lg:py-16">
         {/* Header */}
         <CenteredSectionHeader
           label="Our Works"

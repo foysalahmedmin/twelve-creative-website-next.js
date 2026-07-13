@@ -18,7 +18,7 @@ export const TestimonialCard = ({
   return (
     <div
       className={cn(
-        "bg-card/25 border-border/40 hover:border-primary/30 flex w-96 flex-col justify-between rounded-3xl border p-6 ring-1 ring-black/5 backdrop-blur-md transition-all duration-300 select-none md:w-md md:p-8",
+        "bg-card border-border hover:border-primary/40 flex w-96 flex-col justify-between rounded-2xl border p-6 transition-all duration-300 select-none md:w-md md:p-8",
         className,
       )}
     >

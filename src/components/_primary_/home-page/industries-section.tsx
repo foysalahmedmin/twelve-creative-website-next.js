@@ -45,16 +45,7 @@ export const IndustriesSection = ({ className, data }: Props) => {
     <section className={cn("container mt-6 md:mt-10 lg:mt-12", className)}>
       <ScrollReveal animation="fade-in-up" durationMs={800}>
         {/* Background-gradient wrapper card exactly like Our Works & Testimonials */}
-        <div
-          className={cn(
-            "relative overflow-hidden rounded-[28px] py-10 lg:rounded-[40px] lg:py-16",
-            "from-primary/6 via-primary/3 to-primary/4 bg-linear-to-b",
-          )}
-        >
-          {/* Decorative backdrop shapes inside container */}
-          <div className="bg-primary/5 absolute top-1/4 left-0 h-80 w-80 -translate-x-1/2 rounded-full blur-3xl" />
-          <div className="bg-primary/5 absolute right-0 bottom-1/4 h-80 w-80 translate-x-1/2 rounded-full blur-3xl" />
-
+        <div className="bg-muted relative overflow-hidden rounded-3xl py-10 lg:py-16">
           <div className="relative z-10 px-4 sm:px-8 lg:px-16">
             {/* Header styled exactly like Our Works */}
             <CenteredSectionHeader
@@ -72,14 +63,14 @@ export const IndustriesSection = ({ className, data }: Props) => {
               {/* Tab Pills - Styled exactly like the old glass navigation bar */}
               <div className="mb-12 w-full overflow-x-auto scrollbar-none pb-2">
                 <div className="flex min-w-max justify-center px-4">
-                <TabsList className="border border-white/10 bg-card/45 backdrop-blur-md p-1.5 rounded-2xl flex gap-1">
+                <TabsList className="border border-border bg-card p-1.5 rounded-2xl flex gap-1">
                   {industries.map((industry) => {
                     const Icon = INDUSTRY_ICON_MAP[industry.icon];
                     return (
                       <TabsTrigger
                         key={industry.id}
                         value={industry.id}
-                        className="rounded-xl px-4 py-2.5 sm:px-6 text-sm font-semibold flex items-center gap-2 transition-all hover:bg-white/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                        className="rounded-lg px-4 py-2.5 sm:px-6 text-sm font-semibold flex items-center gap-2 transition-all hover:bg-muted data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
                       >
                         <HugeiconsIcon icon={Icon} className="size-4 shrink-0" />
                         {industry.name}
@@ -97,12 +88,12 @@ export const IndustriesSection = ({ className, data }: Props) => {
                   className="w-full max-w-5xl outline-none relative"
                 >
                   {/* Content Card with Glass shadow and premium layout */}
-                  <Card className="border border-primary/15 bg-card/90 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center rounded-[32px] p-6 sm:p-8 lg:p-10">
+                  <Card className="border border-border bg-card relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center rounded-3xl p-6 sm:p-8 lg:p-10">
                     
                     {/* Left: Content */}
                     <div className="space-y-6 flex flex-col justify-center lg:pr-4">
                       <div className="space-y-3">
-                        <h3 className="font-heading text-foreground text-3xl font-bold tracking-tight sm:text-4xl">
+                        <h3 className="font-heading text-foreground text-3xl font-black tracking-tight sm:text-4xl">
                           {industry.name}
                         </h3>
                         <p className="text-muted-foreground text-base leading-relaxed font-medium">
@@ -136,17 +127,17 @@ export const IndustriesSection = ({ className, data }: Props) => {
                       <div className="pt-2">
                         <Link
                           href={industry.href}
-                          className="inline-flex items-center gap-1.5 text-base font-semibold text-foreground hover:text-primary transition-colors group/cta"
+                          className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold uppercase tracking-[0.05em] text-primary-foreground transition-transform duration-200 hover:-translate-y-0.5 group/cta"
                         >
                           Book a Call
-                          <span className="transition-transform duration-200 group-hover/cta:translate-x-1 font-normal">&gt;</span>
+                          <span className="transition-transform duration-200 group-hover/cta:translate-x-1">&gt;</span>
                         </Link>
                       </div>
                     </div>
 
                     {/* Right: Visual Showcase — plays the industry video when set,
                         otherwise shows the thumbnail/image; appears first on mobile */}
-                    <div className="order-first lg:order-last relative overflow-hidden rounded-[24px] border border-white/10 aspect-4/3 w-full">
+                    <div className="order-first lg:order-last relative overflow-hidden rounded-2xl border border-border aspect-4/3 w-full">
                       {industry.videoSrc ? (
                         <ReactPlayer
                           src={industry.videoSrc}
@@ -173,7 +164,7 @@ export const IndustriesSection = ({ className, data }: Props) => {
                   </Card>
 
                   {/* 3D Offset layered bottom card peeking from the bottom exactly like the user's screenshot */}
-                  <div className="absolute -bottom-3 left-[3%] right-[3%] h-12 bg-primary/15 dark:bg-primary/25 rounded-b-[28px] z-0 border-x border-b border-primary/10 pointer-events-none" />
+                  <div className="absolute -bottom-3 left-[3%] right-[3%] h-12 bg-primary/15 dark:bg-primary/25 rounded-b-3xl z-0 border-x border-b border-border pointer-events-none" />
                 </TabsContent>
               ))}
             </Tabs>

@@ -38,10 +38,10 @@ export const Accordion: React.FC<AccordionProps> = ({ items, className }) => {
           <div
             key={index}
             className={cn(
-              "w-full rounded-[24px] border border-primary/10 transition-all duration-300 bg-card",
+              "w-full rounded-2xl border border-border transition-all duration-300 bg-card",
               isOpen
-                ? "bg-gradient-to-br from-white to-primary/5 dark:from-background dark:to-primary/10 border-primary/20"
-                : "hover:border-primary/20"
+                ? "bg-muted border-border"
+                : "hover:border-foreground/25"
             )}
           >
             <div className="overflow-hidden">
@@ -57,8 +57,8 @@ export const Accordion: React.FC<AccordionProps> = ({ items, className }) => {
                 
                 <span
                   className={cn(
-                    "flex items-center justify-center shrink-0 w-8 h-8 rounded-full border border-primary/20 text-foreground transition-transform duration-300",
-                    isOpen ? "rotate-180 bg-primary/10 text-primary border-primary/30" : ""
+                    "flex items-center justify-center shrink-0 w-8 h-8 rounded-full border border-border text-foreground transition-transform duration-300",
+                    isOpen ? "rotate-180 bg-primary text-primary-foreground border-primary" : ""
                   )}
                 >
                   <svg

@@ -58,9 +58,9 @@ export const Header = ({ className, calendlyUrl }: HeaderProps) => {
                   key={item.name}
                   href={item.href}
                   className={cn(
-                    "relative text-sm font-semibold whitespace-nowrap transition-colors",
+                    "relative text-[13px] font-semibold whitespace-nowrap uppercase tracking-[0.08em] transition-colors",
                     isActive
-                      ? "text-foreground"
+                      ? "text-primary"
                       : "text-foreground/60 hover:text-foreground",
                   )}
                 >
@@ -132,10 +132,10 @@ export const Header = ({ className, calendlyUrl }: HeaderProps) => {
                     href={item.href}
                     onClick={() => setIsMobileMenuOpen(false)}
                     className={cn(
-                      "rounded-xl px-4 py-3 text-sm font-semibold transition-all",
+                      "rounded-lg px-4 py-3 text-[13px] font-semibold uppercase tracking-[0.08em] transition-all",
                       isActive
                         ? "bg-primary/10 text-primary"
-                        : "text-foreground/70 hover:bg-muted hover:text-foreground",
+                        : "text-foreground/70 hover:bg-accent hover:text-foreground",
                     )}
                   >
                     {item.name}

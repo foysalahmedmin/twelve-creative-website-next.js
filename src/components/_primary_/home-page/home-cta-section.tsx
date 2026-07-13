@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { BrandTexture } from "@/components/common/brand";
 import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { HOME_CTA_DATA } from "@/data/home-cta.data";
 import { cn } from "@/lib/utils";
@@ -18,52 +19,40 @@ export const HomeCtaSection = ({ className }: { className?: string }) => {
     >
       <div className="container relative">
         <ScrollReveal animation="fade-in-up" durationMs={800}>
-          {/* Card container using primary opacity and premium gradients exactly as requested */}
-          <div className="relative overflow-hidden rounded-4xl bg-gradient-to-br from-primary/12 via-primary/5 to-primary/8 border border-primary/20 p-8 sm:p-12 lg:p-16 backdrop-blur-sm">
-            {/* Soft, modern ambient glow orbs inside the card */}
-            <div
-              aria-hidden
-              className="bg-primary/25 absolute -top-24 -right-24 h-96 w-96 rounded-full blur-[100px]"
-            />
-            <div
-              aria-hidden
-              className="bg-primary/15 absolute -bottom-36 -left-24 h-96 w-96 rounded-full blur-[100px]"
-            />
+          {/* Bold brand CTA block */}
+          <div className="bg-brand-artefact relative overflow-hidden rounded-3xl p-8 sm:p-12 lg:p-16">
+            <BrandTexture opacity={35} />
 
             <div className="relative mx-auto max-w-3xl text-center z-10">
               {/* Eyebrow Label */}
-              <span className="inline-flex px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-primary/10 text-primary border border-primary/20">
+              <span className="inline-flex rounded-md border border-[#eaeae4]/40 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-[#eaeae4]">
                 {data.eyebrow}
               </span>
 
               {/* Title */}
-              <h2 className="font-heading text-foreground mt-5 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+              <h2 className="font-heading mt-5 text-3xl font-black tracking-tight leading-[1.05] text-[#eaeae4] sm:text-4xl lg:text-5xl">
                 {data.title}
               </h2>
 
               {/* Description */}
-              <p className="text-muted-foreground mt-5 text-base leading-relaxed sm:text-lg font-medium">
+              <p className="mt-5 text-base leading-relaxed text-[#eaeae4]/75 sm:text-lg">
                 {data.description}
               </p>
 
               {/* Action Buttons */}
               <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
-                <Button
-                  asChild
-                  size="lg"
-                  className="h-12 bg-primary text-primary-foreground hover:bg-primary/90 px-6 text-sm font-semibold transition-all hover:scale-[1.02] active:scale-[0.98]"
-                >
+                <Button asChild variant="secondary" size="xl">
                   <Link href={data.primary_cta.href} className="inline-flex items-center gap-2">
                     {data.primary_cta.label}
                     <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" />
                   </Link>
                 </Button>
-                
+
                 <Button
                   asChild
-                  size="lg"
+                  size="xl"
                   variant="outline"
-                  className="border-primary/20 bg-primary/5 hover:bg-primary/10 hover:text-foreground text-foreground h-12 px-6 text-sm font-semibold transition-all hover:scale-[1.02] active:scale-[0.98]"
+                  className="border-[#eaeae4]/40 bg-transparent text-[#eaeae4] hover:bg-[#eaeae4]/10 hover:text-[#eaeae4]"
                 >
                   <Link href={data.secondary_cta.href}>
                     {data.secondary_cta.label}

@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import React from "react";
+import { BrandTexture } from "../common/brand";
 import { ScrollReveal } from "../common/scroll-reveal";
 
 const ReactPlayer = dynamic(() => import("react-player"), {
@@ -48,26 +49,18 @@ export const PageHeader = ({
       {/* Outer rounded card with background gradient inspired by Home Hero */}
       <div
         className={cn(
-          "relative overflow-hidden rounded-2xl px-4 py-16 sm:px-8 sm:py-20 lg:rounded-[40px] lg:py-28",
-          "from-primary/3 via-primary/8 to-primary/20 bg-linear-to-b",
+          "bg-brand-hero relative overflow-hidden rounded-3xl px-4 py-16 sm:px-8 sm:py-20 lg:py-28",
         )}
       >
-        {/* Soft modern ambient orbs */}
-        <div
-          aria-hidden
-          className="bg-primary/10 pointer-events-none absolute top-1/4 -right-32 h-80 w-80 rounded-full blur-3xl"
-        />
-        <div
-          aria-hidden
-          className="bg-primary/10 pointer-events-none absolute -bottom-32 -left-32 h-80 w-80 rounded-full blur-3xl"
-        />
+        {/* Symbol texture (brand device) */}
+        <BrandTexture opacity={35} />
 
         <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center justify-center text-center">
           {/* Eyebrow Label Capsule */}
           {label && (
             <>
               <ScrollReveal animation="fade-in-down" durationMs={700}>
-                <span className="bg-primary/10 text-primary border-primary/20 mb-6 inline-flex rounded-full border px-4 py-1.5 text-xs font-bold tracking-widest uppercase">
+                <span className="mb-6 inline-flex rounded-md border border-[#eaeae4]/40 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-[#eaeae4]">
                   {label}
                 </span>
               </ScrollReveal>
@@ -81,7 +74,7 @@ export const PageHeader = ({
                 animation="fade-in-up"
                 delayMs={100}
                 durationMs={700}
-                className="mb-6"
+                className="mb-6 text-[#eaeae4]/70 [&_a:hover]:text-[#eaeae4] [&_a]:text-[#eaeae4]/60"
               >
                 <Breadcrumb>
                   <BreadcrumbList className="justify-center">
@@ -121,7 +114,7 @@ export const PageHeader = ({
               delayMs={120}
               className="max-w-3xl space-y-4"
             >
-              <h1 className="text-foreground font-heading text-3xl leading-[115%] font-black tracking-tight sm:text-4xl md:text-5xl lg:text-6xl">
+              <h1 className="font-heading text-3xl leading-[1.05] font-black tracking-tight text-[#eaeae4] sm:text-4xl md:text-5xl lg:text-6xl">
                 {title}
               </h1>
             </ScrollReveal>
@@ -132,7 +125,7 @@ export const PageHeader = ({
                 delayMs={250}
                 className="max-w-3xl space-y-4"
               >
-                <p className="text-muted-foreground mx-auto text-base leading-relaxed font-medium sm:text-lg">
+                <p className="mx-auto text-base leading-relaxed font-medium text-[#eaeae4]/80 sm:text-lg">
                   {description}
                 </p>
               </ScrollReveal>
@@ -147,7 +140,7 @@ export const PageHeader = ({
               durationMs={900}
               className="w-full px-4 lg:px-12"
             >
-              <div className="ring-foreground/10 relative mx-auto mt-12 aspect-video w-full max-w-5xl overflow-hidden rounded-2xl ring-1 lg:mt-16 lg:rounded-[32px]">
+              <div className="relative mx-auto mt-12 aspect-video w-full max-w-5xl overflow-hidden rounded-2xl ring-1 ring-[#eaeae4]/15 lg:mt-16">
                 {videoSrc ? (
                   <ReactPlayer
                     src={videoSrc}

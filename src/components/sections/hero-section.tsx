@@ -1,5 +1,6 @@
 "use client";
 
+import { BrandTexture } from "@/components/common/brand";
 import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { buttonVariants } from "@/components/ui/button";
 import { HOME_HERO_DATA, type THomeHero } from "@/data/home-hero.data";
@@ -25,37 +26,25 @@ export const HeroSection = ({
       {/* Outer rounded hero card with artefact gradient */}
       <div
         className={cn(
-          "relative min-h-screen overflow-hidden rounded-2xl lg:rounded-[40px]",
-          "from-background via-primary/10 to-primary/35 bg-linear-to-br",
+          "bg-brand-hero relative min-h-screen overflow-hidden rounded-3xl",
         )}
       >
-        {/* Artefact orbs */}
-        <div
-          aria-hidden
-          className="bg-primary/30 pointer-events-none absolute -top-20 -right-20 h-125 w-125 rounded-full blur-[120px]"
-        />
-        <div
-          aria-hidden
-          className="bg-primary/20 pointer-events-none absolute -bottom-40 -left-20 h-100 w-100 rounded-full blur-[100px]"
-        />
-        <div
-          aria-hidden
-          className="bg-primary/15 pointer-events-none absolute right-1/4 bottom-1/4 h-72 w-72 rounded-full blur-[80px]"
-        />
+        {/* Brand texture depth */}
+        <BrandTexture opacity={35} />
 
         <div className="relative flex flex-col items-center justify-center gap-4 px-2 pt-16 pb-10 lg:gap-4 lg:pt-20">
           {/* Center column for badge + headline + description + CTAs */}
           <div className="mx-auto flex max-w-195 flex-col items-center justify-center pt-10">
             {/* Headline */}
             <ScrollReveal animation="fade-in-up" delayMs={120} durationMs={800}>
-              <h1 className="text-foreground font-heading mt-4 text-center text-[40px] leading-[110%] font-black tracking-tight lg:mt-5 lg:text-[70px]">
+              <h1 className="font-heading mt-4 text-center text-[40px] leading-[110%] font-black tracking-tight text-[#eaeae4] lg:mt-5 lg:text-[70px]">
                 {data.title}
               </h1>
             </ScrollReveal>
 
             {/* Description */}
             <ScrollReveal animation="fade-in-up" delayMs={250} durationMs={800}>
-              <p className="text-muted-foreground mt-6 text-center text-sm leading-[150%] font-normal md:text-base">
+              <p className="mt-6 text-center text-sm leading-[150%] font-normal text-[#eaeae4]/80 md:text-base">
                 {data.description}
               </p>
             </ScrollReveal>
@@ -78,6 +67,7 @@ export const HeroSection = ({
                   href={data.secondary_cta.href}
                   className={cn(
                     buttonVariants({ variant: "outline", size: "xl" }),
+                    "border-[#eaeae4]/40 text-[#eaeae4] hover:border-[#eaeae4]/60 hover:bg-[#eaeae4]/10 hover:text-[#eaeae4]",
                   )}
                 >
                   {data.secondary_cta.label}
@@ -93,7 +83,7 @@ export const HeroSection = ({
             durationMs={900}
             className="w-full px-4 lg:px-12"
           >
-            <div className="ring-foreground/10 relative mx-auto mt-8 aspect-video w-full max-w-7xl overflow-hidden rounded-2xl shadow-2xl ring-1 lg:mt-10 lg:rounded-[40px]">
+            <div className="relative mx-auto mt-8 aspect-video w-full max-w-7xl overflow-hidden rounded-2xl border border-[#eaeae4]/10 shadow-sm lg:mt-10 lg:rounded-3xl">
               <ReactPlayer
                 src={data.video.src}
                 controls

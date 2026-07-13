@@ -47,17 +47,17 @@ export const ServiceServicesSection = ({
     <div
       className={cn("group h-[500px] w-full", isSecondRow ? "col-span-3" : "")}
     >
-      <div className="from-primary/35 to-primary/5 dark:to-primary/2 flex h-full max-h-[482px] w-full max-w-full overflow-hidden rounded-[24px] bg-gradient-to-br p-[1px] transition-transform duration-300 hover:scale-[1.02]">
-        <div className="bg-card dark:bg-card/95 flex h-full max-h-[480px] w-full flex-col rounded-[23px] p-4">
+      <div className="border-border bg-card flex h-full max-h-[482px] w-full max-w-full overflow-hidden rounded-2xl border transition-transform duration-300 hover:scale-[1.02]">
+        <div className="flex h-full w-full flex-col p-4">
           <div className="flex-1">
-            <h3 className="text-foreground text-[24px] font-semibold">
+            <h3 className="text-foreground font-heading text-[24px] font-bold tracking-tight">
               {service.service_title}
             </h3>
             <p className="text-muted-foreground mt-2 line-clamp-3 text-[16px] leading-[140%] font-normal">
               {service.service_description}
             </p>
           </div>
-          <div className="relative mt-12 h-[276px] w-full overflow-hidden rounded-[13.5px]">
+          <div className="relative mt-12 h-[276px] w-full overflow-hidden rounded-xl">
             <Image
               src={service.image}
               alt={service.title}
@@ -121,8 +121,8 @@ export const ServiceServicesSection = ({
                 delayMs={100 * idx}
                 className={cn(isSmallCard ? "lg:col-span-1" : "lg:col-span-2")}
               >
-                <div className="from-primary/35 to-primary/5 dark:to-primary/2 group flex h-[466px] w-full overflow-hidden rounded-[24px] bg-gradient-to-br p-[1px] transition-transform duration-300 hover:scale-[1.02]">
-                  <div className="bg-card dark:bg-card/95 flex h-[464px] w-full flex-col rounded-[23px] p-4">
+                <div className="border-border bg-card group flex h-[466px] w-full overflow-hidden rounded-2xl border transition-transform duration-300 hover:scale-[1.02]">
+                  <div className="flex h-[464px] w-full flex-col rounded-2xl p-4">
                     <div className="flex-1">
                       <h2 className="text-foreground text-[24px] font-semibold">
                         {service.service_title}
@@ -131,7 +131,7 @@ export const ServiceServicesSection = ({
                         {service.service_description}
                       </p>
                     </div>
-                    <div className="relative mt-6 h-[276px] w-full overflow-hidden rounded-[13.5px]">
+                    <div className="relative mt-6 h-[276px] w-full overflow-hidden rounded-xl">
                       <Image
                         src={service.image}
                         alt={service.title || service.service_title}

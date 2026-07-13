@@ -5,7 +5,7 @@ import { ABOUT_MISSION_DATA } from "@/data/about.data";
 export function OurMissionSection() {
   return (
     <section className="container py-16 sm:py-24">
-      <div className="bg-primary/5 dark:bg-primary/[0.02] border-primary/10 relative overflow-hidden rounded-[40px] border p-6 sm:p-10 lg:p-16">
+      <div className="bg-muted border-border relative overflow-hidden rounded-3xl border p-6 sm:p-10 lg:p-16">
         <ScrollReveal animation="fade-in-up">
           <CenteredSectionHeader
             title="Built for Strategic Execution"
@@ -16,8 +16,8 @@ export function OurMissionSection() {
 
         <div className="relative z-10 mt-12 grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2 lg:mt-16">
           <ScrollReveal animation="fade-in-left" delayMs={150} className="h-full">
-            <div className="bg-card border-primary/10 hover:border-primary/20 h-full rounded-3xl border p-8 transition-colors sm:p-10">
-              <h3 className="font-heading text-foreground mb-4 text-2xl font-semibold">
+            <div className="bg-card border-border h-full rounded-2xl border p-8 shadow-sm transition-colors sm:p-10">
+              <h3 className="font-heading text-foreground mb-4 text-2xl font-black tracking-tight">
                 {ABOUT_MISSION_DATA.mission.title}
               </h3>
               <p className="text-muted-foreground text-sm leading-relaxed sm:text-base">
@@ -27,8 +27,8 @@ export function OurMissionSection() {
           </ScrollReveal>
 
           <ScrollReveal animation="fade-in-right" delayMs={300} className="h-full">
-            <div className="bg-card border-primary/10 hover:border-primary/20 h-full rounded-3xl border p-8 transition-colors sm:p-10">
-              <h3 className="font-heading text-foreground mb-4 text-2xl font-semibold">
+            <div className="bg-card border-border h-full rounded-2xl border p-8 shadow-sm transition-colors sm:p-10">
+              <h3 className="font-heading text-foreground mb-4 text-2xl font-black tracking-tight">
                 {ABOUT_MISSION_DATA.vision.title}
               </h3>
               <p className="text-muted-foreground text-sm leading-relaxed sm:text-base">

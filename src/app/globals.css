@@ -108,14 +108,15 @@
   --color-chart-2: var(--chart-2);
   --color-chart-1: var(--chart-1);
 
-  /* Radius */
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+  /* Radius — editorial/crisp brand scale (BRANDBOOK: chips ~8, controls ~12,
+     cards ~16-24). Capped so nothing reads as pillowy. */
+  --radius-sm: 0.5rem; /* 8px  — chips, tags, small controls */
+  --radius-md: 0.625rem; /* 10px — inputs */
+  --radius-lg: 0.75rem; /* 12px — buttons */
+  --radius-xl: 1rem; /* 16px — cards */
+  --radius-2xl: 1.25rem; /* 20px — large cards */
+  --radius-3xl: 1.5rem; /* 24px — hero/section cards */
+  --radius-4xl: 1.75rem; /* 28px — max */
 
   /* Shadow */
   --shadow-accent:
@@ -228,39 +229,45 @@
 }
 
 :root {
+  /*
+    TwelveCreative brand — Light "Cream" world.
+    Anchors from BRANDBOOK 2025/26 (p.18 Primary Palette):
+      Energy Orange #E96A2C · Cream #EAEAE4 · Teal-Black #131C20
+  */
+
   /* ── Surfaces ── */
-  --background: oklch(0.99 0 0);
-  --foreground: oklch(0.10 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.10 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.10 0 0);
+  --background: oklch(0.9354 0.008 106.55); /* #EAEAE4 Cream */
+  --foreground: oklch(0.2195 0.0153 226.96); /* #131C20 Teal-Black */
+  --card: oklch(0.9575 0.0067 97.35); /* #F2F1EC lifted cream */
+  --card-foreground: oklch(0.2195 0.0153 226.96); /* #131C20 */
+  --popover: oklch(0.9665 0.0067 97.35); /* #F5F4EF */
+  --popover-foreground: oklch(0.2195 0.0153 226.96); /* #131C20 */
 
   /* ── Accent (neutral hover/interactive surface) ── */
-  --accent: oklch(0.95 0 0);
-  --accent-foreground: oklch(0.10 0 0);
-  --accent-from: oklch(0.95 0 0);
-  --accent-to: oklch(0.90 0 0);
+  --accent: oklch(0.9083 0.0108 100.84); /* #E2E1D9 */
+  --accent-foreground: oklch(0.2195 0.0153 226.96); /* #131C20 */
+  --accent-from: oklch(0.9083 0.0108 100.84); /* #E2E1D9 */
+  --accent-to: oklch(0.8805 0.0122 101.5); /* #D9D8CF */
 
-  /* ── Primary: #ea692d → oklch(0.647 0.182 38.4) ── */
-  --primary: oklch(0.647 0.182 38.4);
-  --primary-foreground: oklch(1 0 0);
-  --primary-dark: oklch(0.45 0.14 38.4);
-  --primary-dark-foreground: oklch(1 0 0);
-  --primary-light: oklch(0.93 0.045 38.4);
-  --primary-light-foreground: oklch(0.10 0 0);
-  --primary-from: var(--primary);
-  --primary-to: oklch(0.54 0.16 38.4);
+  /* ── Primary: Energy Orange (dark text on orange, per brand CTAs) ── */
+  --primary: oklch(0.67 0.1734 43.52); /* #E96A2C */
+  --primary-foreground: oklch(0.2195 0.0153 226.96); /* #131C20 */
+  --primary-dark: oklch(0.5837 0.1561 43.25); /* #C4551E */
+  --primary-dark-foreground: oklch(0.9354 0.008 106.55); /* #EAEAE4 */
+  --primary-light: oklch(0.9122 0.0377 54.3); /* #F7DCCB */
+  --primary-light-foreground: oklch(0.2195 0.0153 226.96); /* #131C20 */
+  --primary-from: oklch(0.7059 0.1668 45.58); /* #F2793A */
+  --primary-to: oklch(0.6183 0.1702 42.29); /* #D65A1F */
 
-  /* ── Secondary: black/white achromatic (light mode = dark/black) ── */
-  --secondary: oklch(0.12 0 0);
-  --secondary-foreground: oklch(0.98 0 0);
-  --secondary-dark: oklch(0.06 0 0);
-  --secondary-dark-foreground: oklch(0.98 0 0);
-  --secondary-light: oklch(0.38 0 0);
-  --secondary-light-foreground: oklch(0.98 0 0);
-  --secondary-from: var(--secondary);
-  --secondary-to: oklch(0.25 0 0);
+  /* ── Secondary: Teal-Black block ── */
+  --secondary: oklch(0.2195 0.0153 226.96); /* #131C20 */
+  --secondary-foreground: oklch(0.9354 0.008 106.55); /* #EAEAE4 */
+  --secondary-dark: oklch(0.177 0.0136 233.58); /* #0B1216 */
+  --secondary-dark-foreground: oklch(0.9354 0.008 106.55); /* #EAEAE4 */
+  --secondary-light: oklch(0.3289 0.0236 238.65); /* #2A3740 */
+  --secondary-light-foreground: oklch(0.9354 0.008 106.55); /* #EAEAE4 */
+  --secondary-from: oklch(0.2195 0.0153 226.96); /* #131C20 */
+  --secondary-to: oklch(0.3132 0.0238 238.74); /* #26333C */
 
   /* ── Semantic Status ── */
   --success: oklch(0.593 0.148 143.9);
@@ -268,75 +275,80 @@
   --info: oklch(0.578 0.164 251.2);
   --info-foreground: oklch(1 0 0);
   --warning: oklch(0.817 0.174 79.5);
-  --warning-foreground: oklch(0.10 0 0);
+  --warning-foreground: oklch(0.2195 0.0153 226.96); /* #131C20 */
   --error: oklch(0.548 0.222 26.2);
   --error-foreground: oklch(1 0 0);
 
   /* ── Muted ── */
-  --muted: oklch(0.96 0 0);
-  --muted-foreground: oklch(0.45 0 0);
+  --muted: oklch(0.9116 0.0095 99.99); /* #E3E2DB */
+  --muted-foreground: oklch(0.4803 0.0093 139.44); /* #5B5F5A */
   --destructive: oklch(0.548 0.222 26.2);
   --destructive-foreground: oklch(1 0 0);
 
-  /* ── Borders & Inputs ── */
-  --border: oklch(0.90 0 0);
-  --input: oklch(0.90 0 0);
-  --ring: oklch(0.647 0.182 38.4);
+  /* ── Borders & Inputs (warm hairline) ── */
+  --border: oklch(0.8682 0.0123 101.51); /* #D5D4CB */
+  --input: oklch(0.8682 0.0123 101.51); /* #D5D4CB */
+  --ring: oklch(0.67 0.1734 43.52); /* #E96A2C */
 
   /* ── Charts ── */
-  --chart-1: oklch(0.647 0.182 38.4);
-  --chart-2: oklch(0.12 0 0);
-  --chart-3: oklch(0.93 0.045 38.4);
+  --chart-1: oklch(0.67 0.1734 43.52); /* #E96A2C */
+  --chart-2: oklch(0.2195 0.0153 226.96); /* #131C20 */
+  --chart-3: oklch(0.7059 0.1668 45.58); /* #F2793A */
   --chart-4: oklch(0.593 0.148 143.9);
   --chart-5: oklch(0.817 0.174 79.5);
 
   /* ── Sidebar ── */
-  --sidebar: oklch(0.98 0 0);
-  --sidebar-foreground: oklch(0.10 0 0);
-  --sidebar-primary: oklch(0.647 0.182 38.4);
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.95 0 0);
-  --sidebar-accent-foreground: oklch(0.10 0 0);
-  --sidebar-border: oklch(0.90 0 0);
-  --sidebar-ring: oklch(0.647 0.182 38.4);
+  --sidebar: oklch(0.9575 0.0067 97.35); /* #F2F1EC */
+  --sidebar-foreground: oklch(0.2195 0.0153 226.96); /* #131C20 */
+  --sidebar-primary: oklch(0.67 0.1734 43.52); /* #E96A2C */
+  --sidebar-primary-foreground: oklch(0.2195 0.0153 226.96); /* #131C20 */
+  --sidebar-accent: oklch(0.9083 0.0108 100.84); /* #E2E1D9 */
+  --sidebar-accent-foreground: oklch(0.2195 0.0153 226.96); /* #131C20 */
+  --sidebar-border: oklch(0.8682 0.0123 101.51); /* #D5D4CB */
+  --sidebar-ring: oklch(0.67 0.1734 43.52); /* #E96A2C */
 
-  --radius: 0.625rem;
+  --radius: 0.75rem;
 }
 
 .dark {
+  /*
+    TwelveCreative brand — Dark "Teal-Black" world (default theme).
+    Teal-Black #131C20 surfaces · Cream #EAEAE4 text · Energy Orange #E96A2C.
+  */
+
   /* ── Surfaces ── */
-  --background: oklch(0.10 0 0);
-  --foreground: oklch(0.96 0 0);
-  --card: oklch(0.14 0 0);
-  --card-foreground: oklch(0.96 0 0);
-  --popover: oklch(0.18 0 0);
-  --popover-foreground: oklch(0.96 0 0);
+  --background: oklch(0.2195 0.0153 226.96); /* #131C20 Teal-Black */
+  --foreground: oklch(0.9354 0.008 106.55); /* #EAEAE4 Cream */
+  --card: oklch(0.2568 0.0191 232.3); /* #1A252B lifted teal-navy */
+  --card-foreground: oklch(0.9354 0.008 106.55); /* #EAEAE4 */
+  --popover: oklch(0.277 0.021 234.11); /* #1E2A31 */
+  --popover-foreground: oklch(0.9354 0.008 106.55); /* #EAEAE4 */
 
   /* ── Accent (neutral hover/interactive surface) ── */
-  --accent: oklch(0.22 0 0);
-  --accent-foreground: oklch(0.96 0 0);
-  --accent-from: oklch(0.22 0 0);
-  --accent-to: oklch(0.18 0 0);
+  --accent: oklch(0.3053 0.0239 238.78); /* #24313A */
+  --accent-foreground: oklch(0.9354 0.008 106.55); /* #EAEAE4 */
+  --accent-from: oklch(0.3053 0.0239 238.78); /* #24313A */
+  --accent-to: oklch(0.2652 0.0224 237.89); /* #1B272F */
 
-  /* ── Primary: same orange in dark mode ── */
-  --primary: oklch(0.647 0.182 38.4);
-  --primary-foreground: oklch(1 0 0);
-  --primary-dark: oklch(0.45 0.14 38.4);
-  --primary-dark-foreground: oklch(1 0 0);
-  --primary-light: oklch(0.93 0.045 38.4);
-  --primary-light-foreground: oklch(0.10 0 0);
-  --primary-from: var(--primary);
-  --primary-to: oklch(0.54 0.16 38.4);
+  /* ── Primary: Energy Orange (dark text on orange, consistent with light) ── */
+  --primary: oklch(0.67 0.1734 43.52); /* #E96A2C */
+  --primary-foreground: oklch(0.2195 0.0153 226.96); /* #131C20 */
+  --primary-dark: oklch(0.5837 0.1561 43.25); /* #C4551E */
+  --primary-dark-foreground: oklch(0.9354 0.008 106.55); /* #EAEAE4 */
+  --primary-light: oklch(0.9122 0.0377 54.3); /* #F7DCCB */
+  --primary-light-foreground: oklch(0.2195 0.0153 226.96); /* #131C20 */
+  --primary-from: oklch(0.7059 0.1668 45.58); /* #F2793A */
+  --primary-to: oklch(0.6183 0.1702 42.29); /* #D65A1F */
 
-  /* ── Secondary: black/white achromatic (dark mode = light/white) ── */
-  --secondary: oklch(0.92 0 0);
-  --secondary-foreground: oklch(0.10 0 0);
-  --secondary-dark: oklch(0.70 0 0);
-  --secondary-dark-foreground: oklch(0.10 0 0);
-  --secondary-light: oklch(0.98 0 0);
-  --secondary-light-foreground: oklch(0.10 0 0);
-  --secondary-from: var(--secondary);
-  --secondary-to: oklch(0.80 0 0);
+  /* ── Secondary: Cream block (dark mode) ── */
+  --secondary: oklch(0.9354 0.008 106.55); /* #EAEAE4 */
+  --secondary-foreground: oklch(0.2195 0.0153 226.96); /* #131C20 */
+  --secondary-dark: oklch(0.8313 0.011 100.86); /* #C9C8C0 */
+  --secondary-dark-foreground: oklch(0.2195 0.0153 226.96); /* #131C20 */
+  --secondary-light: oklch(0.9665 0.0067 97.35); /* #F5F4EF */
+  --secondary-light-foreground: oklch(0.2195 0.0153 226.96); /* #131C20 */
+  --secondary-from: oklch(0.9354 0.008 106.55); /* #EAEAE4 */
+  --secondary-to: oklch(0.8651 0.0123 101.51); /* #D4D3CA */
 
   /* ── Semantic Status ── */
   --success: oklch(0.593 0.148 143.9);
@@ -344,37 +356,37 @@
   --info: oklch(0.578 0.164 251.2);
   --info-foreground: oklch(1 0 0);
   --warning: oklch(0.817 0.174 79.5);
-  --warning-foreground: oklch(0.10 0 0);
+  --warning-foreground: oklch(0.2195 0.0153 226.96); /* #131C20 */
   --error: oklch(0.548 0.222 26.2);
   --error-foreground: oklch(1 0 0);
 
   /* ── Muted ── */
-  --muted: oklch(0.20 0 0);
-  --muted-foreground: oklch(0.62 0 0);
+  --muted: oklch(0.2884 0.0218 231.99); /* #202D34 */
+  --muted-foreground: oklch(0.6785 0.0109 164.72); /* #929A96 */
   --destructive: oklch(0.548 0.222 26.2);
   --destructive-foreground: oklch(1 0 0);
 
-  /* ── Borders & Inputs ── */
-  --border: oklch(0.28 0 0);
-  --input: oklch(0.24 0 0);
-  --ring: oklch(0.647 0.182 38.4);
+  /* ── Borders & Inputs (subtle teal hairline) ── */
+  --border: oklch(0.325 0.0236 238.67); /* #29363F */
+  --input: oklch(0.2968 0.0228 235.57); /* #222F37 */
+  --ring: oklch(0.67 0.1734 43.52); /* #E96A2C */
 
   /* ── Charts ── */
-  --chart-1: oklch(0.647 0.182 38.4);
-  --chart-2: oklch(0.92 0 0);
-  --chart-3: oklch(0.93 0.045 38.4);
+  --chart-1: oklch(0.67 0.1734 43.52); /* #E96A2C */
+  --chart-2: oklch(0.9354 0.008 106.55); /* #EAEAE4 */
+  --chart-3: oklch(0.7059 0.1668 45.58); /* #F2793A */
   --chart-4: oklch(0.593 0.148 143.9);
   --chart-5: oklch(0.817 0.174 79.5);
 
   /* ── Sidebar ── */
-  --sidebar: oklch(0.12 0 0);
-  --sidebar-foreground: oklch(0.96 0 0);
-  --sidebar-primary: oklch(0.647 0.182 38.4);
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.20 0 0);
-  --sidebar-accent-foreground: oklch(0.96 0 0);
-  --sidebar-border: oklch(0.25 0 0);
-  --sidebar-ring: oklch(0.647 0.182 38.4);
+  --sidebar: oklch(0.2029 0.0143 229.95); /* #10181C */
+  --sidebar-foreground: oklch(0.9354 0.008 106.55); /* #EAEAE4 */
+  --sidebar-primary: oklch(0.67 0.1734 43.52); /* #E96A2C */
+  --sidebar-primary-foreground: oklch(0.2195 0.0153 226.96); /* #131C20 */
+  --sidebar-accent: oklch(0.2884 0.0218 231.99); /* #202D34 */
+  --sidebar-accent-foreground: oklch(0.9354 0.008 106.55); /* #EAEAE4 */
+  --sidebar-border: oklch(0.3132 0.0238 238.74); /* #26333C */
+  --sidebar-ring: oklch(0.67 0.1734 43.52); /* #E96A2C */
 }
 
 /* Utility for theme colors */
@@ -501,5 +513,48 @@
 
   .bg-secondary-linear {
     @apply from-secondary-from to-secondary-to bg-linear-to-t;
+  }
+
+  /* ── Brand gradients & textures (BRANDBOOK 2025/26) ─────────────────── */
+
+  /* Artefact gradient — rich orange glow rising into teal-black (p.20). */
+  .bg-brand-artefact {
+    background-image: radial-gradient(
+      120% 130% at 50% 118%,
+      oklch(0.67 0.1734 43.52) 0%,
+      /* #E96A2C */ oklch(0.5031 0.1413 39.45) 36%,
+      /* #A4401A */ oklch(0.2195 0.0153 226.96) 76% /* #131C20 */
+    );
+  }
+
+  /* Hero gradient — teal-black → burnt orange, top to bottom (cover, p.1). */
+  .bg-brand-hero {
+    background-image: linear-gradient(
+      180deg,
+      oklch(0.2195 0.0153 226.96) 0%,
+      /* #131C20 */ oklch(0.2173 0.0243 36.6) 46%,
+      /* #241612 */ oklch(0.5352 0.1458 41.42) 100% /* #B0491C */
+    );
+  }
+
+  /* Solid brand orange block. */
+  .bg-brand-orange {
+    background-color: oklch(0.67 0.1734 43.52); /* #E96A2C */
+  }
+
+  /* Ambient orange glow — richer than a flat wash, still subtle. */
+  .bg-brand-glow {
+    background-image: radial-gradient(
+      60% 60% at 50% 0%,
+      color-mix(in oklch, var(--primary), transparent 78%) 0%,
+      transparent 70%
+    );
+  }
+
+  /* Symbol line texture — subtle chevron echo of the mark; reads on orange
+     or teal-black. Placeholder for the exact T/C symbol tile. */
+  .bg-brand-texture {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='28' viewBox='0 0 56 28'%3E%3Cpath d='M0 28 L14 2 L28 28 L42 2 L56 28' fill='none' stroke='%23EAEAE4' stroke-opacity='0.1' stroke-width='1.5'/%3E%3C/svg%3E");
+    background-size: 56px 28px;
   }
 }

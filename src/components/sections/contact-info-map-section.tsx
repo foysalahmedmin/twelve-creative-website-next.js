@@ -70,9 +70,9 @@ export const ContactInfoMapSection = ({
                   href={card.href}
                   target={isExternal ? "_blank" : undefined}
                   rel={isExternal ? "noopener noreferrer" : undefined}
-                  className="group/contact-card from-primary/30 to-primary/5 dark:to-primary/2 flex h-full w-full rounded-[24px] bg-linear-to-br p-px transition-all duration-300 hover:scale-[1.02]"
+                  className="group/contact-card border-border bg-card hover:border-primary/40 flex h-full w-full rounded-2xl border transition-all duration-300 hover:scale-[1.02]"
                 >
-                  <div className="bg-background flex h-full w-full items-center justify-between gap-4 rounded-[23px] p-5">
+                  <div className="flex h-full w-full items-center justify-between gap-4 p-5">
                     {/* Texts */}
                     <div className="flex-1 space-y-1 truncate">
                       <h4 className="font-heading text-foreground group-hover/contact-card:text-primary flex items-center gap-1.5 truncate text-base font-semibold transition-colors sm:text-lg">
@@ -88,7 +88,7 @@ export const ContactInfoMapSection = ({
                     </div>
 
                     {/* Icon tile */}
-                    <div className="bg-primary/10 border-primary/20 text-primary flex size-11 shrink-0 items-center justify-center rounded-xl border">
+                    <div className="bg-primary/10 border-primary/20 text-primary flex size-11 shrink-0 items-center justify-center rounded-lg border">
                       <HugeiconsIcon icon={Icon} className="size-5" />
                     </div>
                   </div>
@@ -100,8 +100,8 @@ export const ContactInfoMapSection = ({
 
         {/* Right: Map */}
         <ScrollReveal animation="fade-in-up" delayMs={300} durationMs={800}>
-          <div className="from-primary/30 to-primary/5 dark:to-primary/2 relative h-full min-h-80 w-full rounded-[24px] bg-linear-to-br p-px">
-            <div className="bg-background relative h-full min-h-80 w-full overflow-hidden rounded-[23px]">
+          <div className="border-border bg-card relative h-full min-h-80 w-full rounded-2xl border p-px">
+            <div className="bg-background relative h-full min-h-80 w-full overflow-hidden rounded-2xl">
               {/* Address badge */}
               <div className="bg-card/95 border-border absolute top-4 left-4 z-10 inline-flex items-center gap-2 rounded-full border px-4 py-2 shadow-md backdrop-blur-md">
                 <div className="bg-primary/10 text-primary flex size-7 items-center justify-center rounded-full">

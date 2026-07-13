@@ -21,12 +21,12 @@ export const VideoTestimonialCard = ({
     <div
       onClick={() => onOpen(testimonial)}
       className={cn(
-        "bg-card/25 border-border/40 hover:border-primary/30 group flex w-80 cursor-pointer flex-col gap-4 rounded-2xl border p-2 ring-1 ring-black/5 backdrop-blur-md transition-all duration-300 select-none md:w-96",
+        "bg-card border-border hover:border-primary/40 group flex w-80 cursor-pointer flex-col gap-4 rounded-2xl border p-2 transition-all duration-300 select-none md:w-96",
         className,
       )}
     >
       {/* Video cover aspect-9/16 */}
-      <div className="relative aspect-9/16 w-full overflow-hidden rounded-xl bg-black">
+      <div className="relative aspect-9/16 w-full overflow-hidden rounded-2xl bg-black">
         {testimonial.thumbnail ? (
           <Image
             src={testimonial.thumbnail}
@@ -36,7 +36,7 @@ export const VideoTestimonialCard = ({
             draggable={false}
           />
         ) : (
-          <div className="from-primary/20 to-primary/5 h-full w-full bg-linear-to-br" />
+          <div className="bg-brand-artefact h-full w-full" />
         )}
 
         {/* Play button overlay */}

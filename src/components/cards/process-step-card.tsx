@@ -32,7 +32,7 @@ export const ProcessStepCard = ({ step, className }: ProcessStepCardProps) => {
     <Card
       className={cn(
         "group/step relative h-full gap-4 py-7 transition-all duration-300",
-        "hover:ring-primary/30 hover:shadow-primary",
+        "hover:border-border hover:shadow-sm",
         className,
       )}
     >
@@ -41,13 +41,13 @@ export const ProcessStepCard = ({ step, className }: ProcessStepCardProps) => {
           <div className="bg-primary/10 text-primary inline-flex h-12 w-12 items-center justify-center rounded-xl">
             <HugeiconsIcon icon={Icon} className="h-6 w-6" />
           </div>
-          <span className="text-primary/30 group-hover/step:text-primary/60 text-4xl font-bold tracking-tight transition-colors">
+          <span className="text-primary/30 group-hover/step:text-primary/60 text-4xl font-black tracking-tight transition-colors">
             {step.index}
           </span>
         </div>
 
         <div className="space-y-2">
-          <h3 className="font-heading text-foreground text-lg font-semibold tracking-tight">
+          <h3 className="font-heading text-foreground text-lg font-black tracking-tight leading-tight">
             {step.title}
           </h3>
           <p className="text-muted-foreground text-sm leading-relaxed">

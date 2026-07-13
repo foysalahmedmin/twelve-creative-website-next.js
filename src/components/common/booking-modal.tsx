@@ -174,12 +174,8 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.92, y: 24 }}
             transition={{ type: "spring", stiffness: 300, damping: 28 }}
-            className="bg-card ring-foreground/8 relative w-full max-w-lg overflow-hidden rounded-[28px] shadow-2xl ring-1"
+            className="bg-card border-border relative w-full max-w-lg overflow-hidden rounded-3xl border shadow-sm"
           >
-            {/* Ambient glows */}
-            <div className="bg-primary/15 pointer-events-none absolute -top-20 -right-20 h-60 w-60 rounded-full blur-[80px]" />
-            <div className="bg-primary/8 pointer-events-none absolute -bottom-20 -left-20 h-60 w-60 rounded-full blur-[80px]" />
-
             {/* Header */}
             <div className="relative flex items-center justify-between px-6 pt-6 pb-4">
               <div className="flex items-center gap-3">
@@ -218,7 +214,7 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
                       <span className="bg-primary inline-flex h-7 w-7 items-center justify-center rounded-lg text-xs font-bold text-primary-foreground">
                         1
                       </span>
-                      <h2 className="font-heading text-foreground text-2xl font-semibold">
+                      <h2 className="font-heading text-foreground text-2xl font-black tracking-tight">
                         Which sector are we discussing?
                       </h2>
                     </div>
@@ -255,7 +251,7 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
                       <span className="bg-primary inline-flex h-7 w-7 items-center justify-center rounded-lg text-xs font-bold text-primary-foreground">
                         2
                       </span>
-                      <h2 className="font-heading text-foreground text-2xl font-semibold">
+                      <h2 className="font-heading text-foreground text-2xl font-black tracking-tight">
                         Pick a date &amp; preferred time.
                       </h2>
                       <p className="text-muted-foreground text-sm">
@@ -275,7 +271,7 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
                         onChange={(e) =>
                           setFormData((d) => ({ ...d, preferredDate: e.target.value }))
                         }
-                        className="border-border bg-muted/50 text-foreground focus:border-primary w-full rounded-xl border px-4 py-3 text-sm transition-colors focus:outline-none"
+                        className="border-border bg-muted/50 text-foreground focus:border-primary w-full rounded-lg border px-4 py-3 text-sm transition-colors focus:outline-none"
                       />
                     </div>
 
@@ -315,7 +311,7 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
                       type="button"
                       onClick={handleDateTime}
                       disabled={!formData.preferredDate || !formData.preferredTime}
-                      className="bg-primary hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed mt-1 w-full rounded-2xl py-4 text-sm font-bold uppercase tracking-wider text-primary-foreground transition-all active:scale-[0.98]"
+                      className="bg-primary hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed mt-1 w-full rounded-lg py-4 text-sm font-bold uppercase tracking-wider text-primary-foreground transition-all active:scale-[0.98]"
                     >
                       Continue →
                     </button>
@@ -335,7 +331,7 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
                       <span className="bg-primary inline-flex h-7 w-7 items-center justify-center rounded-lg text-xs font-bold text-primary-foreground">
                         3
                       </span>
-                      <h2 className="font-heading text-foreground text-2xl font-semibold">
+                      <h2 className="font-heading text-foreground text-2xl font-black tracking-tight">
                         Great! Now let us know who you are.
                       </h2>
                     </div>
@@ -354,7 +350,7 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
                               value={formData[field]}
                               onChange={(e) => setFormData((d) => ({ ...d, [field]: e.target.value }))}
                               placeholder={field === "firstName" ? "Jane" : "Smith"}
-                              className="border-border bg-muted/50 text-foreground placeholder:text-muted-foreground/50 focus:border-primary w-full rounded-xl border px-4 py-3 text-sm transition-colors focus:outline-none"
+                              className="border-border bg-muted/50 text-foreground placeholder:text-muted-foreground/50 focus:border-primary w-full rounded-lg border px-4 py-3 text-sm transition-colors focus:outline-none"
                             />
                           </div>
                         ))}
@@ -374,7 +370,7 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
                             value={formData[field]}
                             onChange={(e) => setFormData((d) => ({ ...d, [field]: e.target.value }))}
                             placeholder={placeholder}
-                            className="border-border bg-muted/50 text-foreground placeholder:text-muted-foreground/50 focus:border-primary w-full rounded-xl border px-4 py-3 text-sm transition-colors focus:outline-none"
+                            className="border-border bg-muted/50 text-foreground placeholder:text-muted-foreground/50 focus:border-primary w-full rounded-lg border px-4 py-3 text-sm transition-colors focus:outline-none"
                           />
                         </div>
                       ))}
@@ -382,7 +378,7 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
                       <button
                         type="submit"
                         disabled={submitting}
-                        className="bg-primary hover:bg-primary/90 mt-2 w-full rounded-2xl py-4 text-sm font-bold tracking-wider text-white uppercase transition-all active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+                        className="bg-primary hover:bg-primary/90 mt-2 w-full rounded-lg py-4 text-sm font-bold tracking-wider text-primary-foreground uppercase transition-all active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
                       >
                         {submitting ? "Submitting…" : "Submit →"}
                       </button>
@@ -407,7 +403,7 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
                       />
                     </div>
                     <div className="space-y-2">
-                      <h2 className="font-heading text-foreground text-3xl font-bold">
+                      <h2 className="font-heading text-foreground text-3xl font-black tracking-tight">
                         Booking received!
                       </h2>
                       <p className="text-muted-foreground max-w-xs text-sm leading-relaxed">

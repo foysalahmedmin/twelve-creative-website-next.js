@@ -51,7 +51,7 @@ export function StorySection({ contentSection }: StorySectionProps) {
         >
           {/* Left - Sticky Image Container */}
           <div className="relative lg:w-1/2">
-            <div className="bg-muted border-primary/10 aspect-video w-full overflow-hidden rounded-[32px] border shadow-sm transition-all duration-500 lg:sticky lg:top-40 lg:aspect-square">
+            <div className="bg-muted border-border aspect-video w-full overflow-hidden rounded-3xl border shadow-sm transition-all duration-500 lg:sticky lg:top-40 lg:aspect-square">
               <Image
                 src={
                   contentSection?.image ||
@@ -65,14 +65,14 @@ export function StorySection({ contentSection }: StorySectionProps) {
                 className="object-cover transition-opacity duration-500"
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
-              <div className="border-primary/10 pointer-events-none absolute inset-0 rounded-[32px] border" />
+              <div className="border-border pointer-events-none absolute inset-0 rounded-3xl border" />
             </div>
           </div>
 
           {/* Right - Scrolling Cards */}
           <div className="relative space-y-8 pb-16 lg:w-1/2 lg:space-y-16 lg:pb-32 lg:pl-10">
             {/* Minimalist vertical tracker line for desktop */}
-            <div className="bg-primary/10 absolute top-0 bottom-0 left-2 hidden w-px lg:block" />
+            <div className="bg-border absolute top-0 bottom-0 left-2 hidden w-px lg:block" />
 
             {ABOUT_STORY_DATA.map((card, index) => {
               const isActive = activeIndex === index;
@@ -80,9 +80,9 @@ export function StorySection({ contentSection }: StorySectionProps) {
                 <div
                   key={index}
                   className={cn(
-                    "story-card relative rounded-[24px] border p-6 transition-all duration-500 sm:p-10",
+                    "story-card relative rounded-2xl border p-6 transition-all duration-500 sm:p-10",
                     isActive
-                      ? "bg-card border-primary/20 scale-100 opacity-100 shadow-lg"
+                      ? "bg-card border-border scale-100 opacity-100 shadow-sm"
                       : "scale-95 border-transparent bg-transparent opacity-50",
                   )}
                 >
@@ -96,7 +96,7 @@ export function StorySection({ contentSection }: StorySectionProps) {
                     )}
                   />
 
-                  <h3 className="font-heading text-foreground mb-4 text-2xl font-semibold md:text-3xl">
+                  <h3 className="font-heading text-foreground mb-4 text-2xl font-black tracking-tight md:text-3xl">
                     {card.title}
                   </h3>
                   <p className="text-muted-foreground text-base leading-relaxed sm:text-lg">

@@ -33,7 +33,7 @@ export const ThumbnailWorkSection = ({ works, slug = "all", className }: Thumbna
 
   return (
     <section className={cn("container py-16 sm:py-20 lg:py-24", className)}>
-      <div className="rounded-[40px] overflow-hidden bg-gradient-to-b from-[#fff5f0] to-[#fcece4] dark:from-primary/10 dark:to-primary/5 p-8 sm:p-12 lg:p-16 relative">
+      <div className="rounded-3xl overflow-hidden bg-card border border-border p-8 sm:p-12 lg:p-16 relative">
         <ScrollReveal animation="fade-in-up" durationMs={800} className="relative z-10">
           <CenteredSectionHeader
             label={label}
@@ -63,7 +63,7 @@ export const ThumbnailWorkSection = ({ works, slug = "all", className }: Thumbna
                 className="w-full"
               >
                 {hasVideo ? (
-                  <div className={cn("overflow-hidden rounded-xl", isShorts ? "aspect-[9/16]" : "aspect-auto")}>
+                  <div className={cn("overflow-hidden rounded-2xl", isShorts ? "aspect-[9/16]" : "aspect-auto")}>
                     <VideoPlayer
                       link={item.video_link!}
                       thumbnail={item.thumbnail}
@@ -71,7 +71,7 @@ export const ThumbnailWorkSection = ({ works, slug = "all", className }: Thumbna
                     />
                   </div>
                 ) : (
-                  <div className={cn("relative overflow-hidden w-full max-w-[410px] mx-auto rounded-[13px] transition-transform duration-300 hover:scale-105", isShorts ? "aspect-[9/16]" : "aspect-video max-h-[308px]")}>
+                  <div className={cn("relative overflow-hidden w-full max-w-[410px] mx-auto rounded-2xl transition-transform duration-300 hover:scale-105", isShorts ? "aspect-[9/16]" : "aspect-video max-h-[308px]")}>
                     <Image
                       src={item.thumbnail}
                       alt={item.title || "Graphic artwork"}
@@ -90,7 +90,7 @@ export const ThumbnailWorkSection = ({ works, slug = "all", className }: Thumbna
         <div className="mt-16 flex justify-center items-center relative z-10">
           <Link
             href={`/work?cat=${slug}`}
-            className="px-6 py-4 rounded-xl bg-primary text-white font-medium text-center hover:scale-105 active:scale-95 duration-200 transition-transform select-none"
+            className="px-6 py-3 rounded-lg bg-primary text-primary-foreground text-sm font-semibold uppercase tracking-[0.05em] text-center hover:scale-105 active:scale-95 duration-200 transition-transform select-none"
           >
             View More
           </Link>

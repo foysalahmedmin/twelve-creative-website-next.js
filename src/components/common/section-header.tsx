@@ -87,14 +87,14 @@ export const SectionHeader = ({
               centeredOnMobile && "justify-center sm:justify-start",
             )}
           >
-            <span className="border-primary text-primary border-l-[0.125em] pl-[0.5em] text-[0.75em] font-bold tracking-wider uppercase">
+            <span className="border-foreground/25 text-foreground inline-flex items-center rounded-md border px-[0.7em] py-[0.3em] text-[0.7em] font-bold uppercase tracking-[0.12em]">
               {label}
             </span>
           </motion.div>
         )}
         <motion.h2
           variants={childVariants}
-          className="text-foreground text-[1.5em] sm:leading-tight leading-none font-bold tracking-tight sm:text-[1.875em] lg:text-[2em]"
+          className="font-heading text-foreground text-[1.6em] leading-[1.05] font-black tracking-tight sm:text-[2em] lg:text-[2.25em]"
         >
           {title}
         </motion.h2>

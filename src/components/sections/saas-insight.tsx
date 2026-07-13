@@ -38,14 +38,14 @@ export const SaasInsight = ({ data = DEFAULT_SAAS_DATA, className }: SaasInsight
       {/* 3D layered offset card wrapper for the main box block */}
       <div className="relative w-full">
         {/* Peeking bottom layered element */}
-        <div className="absolute -bottom-3 left-[3%] right-[3%] h-12 bg-primary/10 dark:bg-primary/20 rounded-b-[38px] z-0 border-x border-b border-primary/10 pointer-events-none" />
+        <div className="absolute -bottom-3 left-[3%] right-[3%] h-12 bg-muted rounded-b-3xl z-0 border-x border-b border-border pointer-events-none" />
 
         {/* Main box holding card content */}
-        <div className="relative rounded-[40px] border border-primary/15 bg-card/95 p-8 sm:p-10 lg:p-12 z-10">
+        <div className="relative rounded-3xl border border-border bg-card p-8 sm:p-10 lg:p-12 z-10 shadow-sm">
           <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
             
             {/* Left Image Showcase Panel */}
-            <ScrollReveal animation="fade-in-left" durationMs={800} className="flex-1 w-full relative aspect-[4/3] rounded-[24px] overflow-hidden border border-primary/10">
+            <ScrollReveal animation="fade-in-left" durationMs={800} className="flex-1 w-full relative aspect-[4/3] rounded-2xl overflow-hidden border border-border">
               <Image
                 src={image}
                 alt="SaaS Insights Overview"
@@ -59,11 +59,11 @@ export const SaasInsight = ({ data = DEFAULT_SAAS_DATA, className }: SaasInsight
             {/* Right Information Details Column */}
             <ScrollReveal animation="fade-in-right" delayMs={150} durationMs={800} className="flex-1 w-full space-y-6">
               <div className="space-y-6">
-                <span className="inline-flex items-center justify-center w-[138px] h-[46px] rounded-3xl text-[14px] leading-[120%] font-normal text-primary bg-primary/10 border border-primary/20">
+                <span className="inline-flex items-center rounded-md border border-foreground/25 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-foreground">
                   {tag}
                 </span>
-                
-                <h2 className="font-heading text-foreground text-[40px] md:text-[56px] font-black leading-[110%] tracking-tight mt-6">
+
+                <h2 className="font-heading text-foreground text-[40px] md:text-[56px] font-black leading-[1.05] tracking-tight mt-6">
                   {heading}
                 </h2>
                 
@@ -76,14 +76,14 @@ export const SaasInsight = ({ data = DEFAULT_SAAS_DATA, className }: SaasInsight
               <div className="flex flex-col md:flex-row gap-3 mt-10">
                 <Link
                   href={primaryCtaLink}
-                  className="md:w-[205px] w-full h-12 rounded-2xl bg-primary text-white font-medium text-center flex items-center justify-center px-5 hover:scale-105 active:scale-95 duration-200 transition-transform select-none"
+                  className="md:w-[205px] w-full h-12 rounded-lg bg-primary text-primary-foreground text-sm font-semibold uppercase tracking-[0.05em] text-center flex items-center justify-center px-6 hover:opacity-90 active:scale-95 duration-200 transition-all select-none"
                 >
                   {primaryCtaText}
                 </Link>
 
                 <Link
                   href={secondaryCtaLink}
-                  className="md:w-[155px] w-full h-12 rounded-2xl border border-primary/20 text-foreground font-medium text-center flex items-center justify-center px-5 hover:scale-105 active:scale-95 duration-200 transition-transform bg-white/5 backdrop-blur-md"
+                  className="md:w-[155px] w-full h-12 rounded-lg border border-border text-foreground text-sm font-semibold uppercase tracking-[0.05em] text-center flex items-center justify-center px-6 hover:bg-muted active:scale-95 duration-200 transition-all"
                 >
                   {secondaryCtaText}
                 </Link>

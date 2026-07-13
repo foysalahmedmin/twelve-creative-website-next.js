@@ -114,7 +114,7 @@ export const VerticalMarqueeSlider: React.FC<VerticalMarqueeSliderProps> = ({
           {doubled.map((item, idx) => (
             <div
               key={idx}
-              className="relative w-40 sm:w-52 md:w-64 aspect-9/16 overflow-hidden rounded-xl cursor-pointer shrink-0"
+              className="relative w-40 sm:w-52 md:w-64 aspect-9/16 overflow-hidden rounded-2xl cursor-pointer shrink-0"
               onClick={() => setPopupUrl(item.video_url)}
             >
               <img

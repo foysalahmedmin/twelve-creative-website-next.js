@@ -33,7 +33,7 @@ export const DifferenceSection = ({ className, howWeStructureImage }: Difference
 
         {howWeStructureImage && (
           <ScrollReveal animation="fade-in-up" delayMs={100} durationMs={800}>
-            <div className="relative mt-10 aspect-video w-full overflow-hidden rounded-3xl lg:mt-12">
+            <div className="relative mt-10 aspect-video w-full overflow-hidden rounded-2xl lg:mt-12">
               <Image
                 src={howWeStructureImage}
                 alt="How we structure our work"
@@ -48,13 +48,13 @@ export const DifferenceSection = ({ className, howWeStructureImage }: Difference
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-2 mt-10 lg:mt-16">
           {/* Fragmented */}
           <ScrollReveal animation="fade-in-left" delayMs={100} durationMs={800} className="h-full">
-            <Card className="border-border/60 gap-5 py-8 h-full">
+            <Card className="border-border gap-5 py-8 h-full">
               <CardContent className="space-y-5">
                 <div className="flex items-center gap-3">
-                  <div className="bg-muted text-muted-foreground inline-flex h-11 w-11 items-center justify-center rounded-xl">
+                  <div className="bg-muted text-muted-foreground inline-flex h-11 w-11 items-center justify-center rounded-lg">
                     <HugeiconsIcon icon={Cancel01Icon} className="h-5 w-5" />
                   </div>
-                  <h3 className="font-heading text-foreground text-lg font-semibold tracking-tight">
+                  <h3 className="font-heading text-foreground text-lg font-black tracking-tight">
                     {data.fragmented.title}
                   </h3>
                 </div>
@@ -75,13 +75,13 @@ export const DifferenceSection = ({ className, howWeStructureImage }: Difference
 
           {/* Connected */}
           <ScrollReveal animation="fade-in-right" delayMs={200} durationMs={800} className="h-full">
-            <Card className="border-border/30 ring-primary/20 from-primary/10 to-card bg-linear-to-br gap-5 py-8 ring-1 shadow-lg h-full">
+            <Card className="bg-brand-artefact relative overflow-hidden border-transparent gap-5 py-8 shadow-sm h-full">
               <CardContent className="space-y-5">
                 <div className="flex items-center gap-3">
-                  <div className="bg-primary text-primary-foreground inline-flex h-11 w-11 items-center justify-center rounded-xl shadow-md shadow-primary/20">
+                  <div className="bg-[#eaeae4] text-[#131c20] inline-flex h-11 w-11 items-center justify-center rounded-lg">
                     <HugeiconsIcon icon={Tick02Icon} className="h-5 w-5" />
                   </div>
-                  <h3 className="font-heading text-foreground text-lg font-semibold tracking-tight">
+                  <h3 className="font-heading text-[#eaeae4] text-lg font-black tracking-tight">
                     {data.connected.title}
                   </h3>
                 </div>
@@ -89,11 +89,11 @@ export const DifferenceSection = ({ className, howWeStructureImage }: Difference
                   {data.connected.items.map((item) => (
                     <li
                       key={item}
-                      className="text-foreground/90 flex items-start gap-2.5 text-sm leading-relaxed font-medium"
+                      className="text-[#eaeae4]/85 flex items-start gap-2.5 text-sm leading-relaxed font-medium"
                     >
                       <HugeiconsIcon
                         icon={Tick02Icon}
-                        className="text-primary mt-0.5 h-4 w-4 shrink-0"
+                        className="text-[#eaeae4] mt-0.5 h-4 w-4 shrink-0"
                       />
                       {item}
                     </li>

@@ -199,7 +199,7 @@ export const ContactSection = ({
           </div>
 
           {/* Right Side: Contact Form */}
-          <div className="bg-muted/30 border-border/50 flex-1 rounded-2xl border p-4 shadow-sm lg:p-10">
+          <div className="bg-muted/30 border-border flex-1 rounded-2xl border p-4 shadow-sm lg:p-10">
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div className="grid gap-6 sm:grid-cols-2">
                 <div className="space-y-2">
@@ -211,7 +211,7 @@ export const ContactSection = ({
                     value={form.name}
                     onChange={(e) => handleChange("name", e.target.value)}
                     placeholder="John Doe"
-                    className={`bg-background placeholder:text-muted-foreground/40 focus:border-primary w-full rounded-xl border px-4 py-3 text-sm font-medium transition-all outline-none ${errors.name ? "border-destructive" : "border-border"}`}
+                    className={`bg-background placeholder:text-muted-foreground/40 focus:border-primary w-full rounded-lg border px-4 py-3 text-sm font-medium transition-all outline-none ${errors.name ? "border-destructive" : "border-border"}`}
                   />
                   {errors.name && (
                     <p className="text-destructive text-xs font-medium">
@@ -228,7 +228,7 @@ export const ContactSection = ({
                     value={form.email}
                     onChange={(e) => handleChange("email", e.target.value)}
                     placeholder="you@example.com"
-                    className={`bg-background placeholder:text-muted-foreground/40 focus:border-primary w-full rounded-xl border px-4 py-3 text-sm font-medium transition-all outline-none ${errors.email ? "border-destructive" : "border-border"}`}
+                    className={`bg-background placeholder:text-muted-foreground/40 focus:border-primary w-full rounded-lg border px-4 py-3 text-sm font-medium transition-all outline-none ${errors.email ? "border-destructive" : "border-border"}`}
                   />
                   {errors.email && (
                     <p className="text-destructive text-xs font-medium">
@@ -266,7 +266,7 @@ export const ContactSection = ({
                     value={form.subject}
                     onChange={(e) => handleChange("subject", e.target.value)}
                     placeholder="How can we help?"
-                    className={`bg-background placeholder:text-muted-foreground/40 focus:border-primary w-full rounded-xl border px-4 py-3 text-sm font-medium transition-all outline-none ${errors.subject ? "border-destructive" : "border-border"}`}
+                    className={`bg-background placeholder:text-muted-foreground/40 focus:border-primary w-full rounded-lg border px-4 py-3 text-sm font-medium transition-all outline-none ${errors.subject ? "border-destructive" : "border-border"}`}
                   />
                   {errors.subject && (
                     <p className="text-destructive text-xs font-medium">
@@ -285,7 +285,7 @@ export const ContactSection = ({
                   value={form.message}
                   onChange={(e) => handleChange("message", e.target.value)}
                   placeholder="Type your question here..."
-                  className={`bg-background placeholder:text-muted-foreground/40 focus:border-primary w-full rounded-xl border px-4 py-3 text-sm font-medium transition-all outline-none ${errors.message ? "border-destructive" : "border-border"}`}
+                  className={`bg-background placeholder:text-muted-foreground/40 focus:border-primary w-full rounded-lg border px-4 py-3 text-sm font-medium transition-all outline-none ${errors.message ? "border-destructive" : "border-border"}`}
                 />
                 {errors.message && (
                   <p className="text-destructive text-xs font-medium">
@@ -296,7 +296,7 @@ export const ContactSection = ({
 
               <Button
                 disabled={isSubmitting}
-                className="h-10 w-full rounded-xl text-base font-bold shadow-md transition-all active:scale-95"
+                className="h-11 w-full text-base transition-all active:scale-95"
               >
                 {isSubmitting ? (
                   <>

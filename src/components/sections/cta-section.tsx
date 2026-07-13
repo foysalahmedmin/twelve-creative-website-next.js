@@ -1,6 +1,9 @@
 "use client";
 
+import { BrandFrame } from "@/components/common/brand";
 import { Button } from "@/components/ui/button";
+import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -20,37 +23,42 @@ interface CTASectionProps {
 export const CTASection = ({ data, className = "" }: CTASectionProps) => {
   return (
     <section
-      className={`bg-muted/75 border-border/50 border-y py-12 lg:py-20 ${className}`}
+      className={`bg-brand-artefact relative overflow-hidden py-16 lg:py-24 ${className}`}
     >
       <div className="container mx-auto px-4 lg:px-8">
-        <div className="flex flex-col items-center gap-8 lg:flex-row lg:gap-16">
-          {/* Image Part */}
-          <div className="relative aspect-16/10 w-full overflow-hidden rounded-xl shadow-md transition-transform duration-500 hover:scale-[1.02] sm:max-w-md lg:max-w-lg">
-            <Link href={data.href} className="block h-full w-full">
-              <Image
-                src={data.image}
-                alt={data.title}
-                fill
-                className="object-cover"
-              />
-            </Link>
-          </div>
+        <div className="flex flex-col items-center gap-10 lg:flex-row lg:gap-16">
+          {/* Image — framed with the brand "box" device */}
+          <BrandFrame
+            inset
+            tone="cream"
+            className="w-full sm:max-w-md lg:max-w-lg"
+          >
+            <div className="relative aspect-16/10 w-full overflow-hidden rounded-2xl">
+              <Link href={data.href} className="block h-full w-full">
+                <Image
+                  src={data.image}
+                  alt={data.title}
+                  fill
+                  className="object-cover transition-transform duration-500 hover:scale-105"
+                />
+              </Link>
+            </div>
+          </BrandFrame>
 
-          {/* Content Part */}
+          {/* Content */}
           <div className="flex-1 space-y-6 text-center lg:text-left">
-            <h2 className="text-foreground text-3xl leading-tight font-bold tracking-tight lg:text-4xl">
+            <h2 className="font-heading text-3xl leading-[1.05] font-black tracking-tight text-[#eaeae4] lg:text-5xl">
               {data.title}
             </h2>
-            <p className="text-muted-foreground max-w-3xl text-base leading-relaxed font-medium sm:text-lg">
+            <p className="mx-auto max-w-2xl text-base leading-relaxed font-medium text-[#eaeae4]/75 sm:text-lg lg:mx-0">
               {data.description}
             </p>
             <div className="pt-2">
-              <Button
-                asChild
-                size="lg"
-                className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl px-10 py-6 text-base font-bold shadow-md transition-all active:scale-95"
-              >
-                <Link href={data.href}>{data.buttonText}</Link>
+              <Button asChild size="xl" variant="secondary">
+                <Link href={data.href}>
+                  {data.buttonText}
+                  <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" />
+                </Link>
               </Button>
             </div>
           </div>

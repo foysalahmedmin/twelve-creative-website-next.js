@@ -78,26 +78,16 @@ export const BookingSection = ({
       </ScrollReveal>
 
       <ScrollReveal animation="fade-in-up" delayMs={200} durationMs={800}>
-        <div className="from-primary/30 to-primary/5 dark:to-primary/3 relative w-full rounded-[28px] bg-linear-to-br p-px lg:rounded-[40px]">
-          <div className="bg-card relative overflow-hidden rounded-[27px] p-8 sm:p-10 lg:rounded-[39px] lg:p-12">
-            {/* Soft ambient glow */}
-            <div
-              aria-hidden
-              className="bg-primary/12 pointer-events-none absolute -top-32 -right-32 h-72 w-72 rounded-full blur-3xl"
-            />
-            <div
-              aria-hidden
-              className="bg-primary/8 pointer-events-none absolute -bottom-32 -left-32 h-72 w-72 rounded-full blur-3xl"
-            />
-
+        <div className="border-border bg-card relative w-full overflow-hidden rounded-3xl border">
+          <div className="relative p-8 sm:p-10 lg:p-12">
             <div className="relative grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-12">
               {/* Left: Steps preview */}
               <ScrollReveal animation="fade-in-left" durationMs={750} className="space-y-6">
-                <div className="space-y-2">
-                  <span className="text-primary text-xs font-bold tracking-widest uppercase">
+                <div className="space-y-3">
+                  <span className="border-foreground/25 text-foreground inline-block rounded-md border px-3 py-1 text-[11px] font-bold tracking-[0.12em] uppercase">
                     4-Step Booking
                   </span>
-                  <h3 className="font-heading text-foreground text-2xl font-semibold tracking-tight sm:text-3xl">
+                  <h3 className="font-heading text-foreground text-2xl font-black tracking-tight leading-tight sm:text-3xl">
                     A quick path from interest to conversation.
                   </h3>
                 </div>
@@ -106,9 +96,9 @@ export const BookingSection = ({
                   {BOOKING_STEPS.map((step) => (
                     <div
                       key={step.id}
-                      className="border-border/60 bg-background/50 flex items-start gap-4 rounded-2xl border p-4 backdrop-blur-sm"
+                      className="border-border bg-background flex items-start gap-4 rounded-2xl border p-4"
                     >
-                      <div className="bg-primary/10 text-primary flex size-11 shrink-0 items-center justify-center rounded-xl">
+                      <div className="bg-primary/10 text-primary flex size-11 shrink-0 items-center justify-center rounded-lg">
                         <HugeiconsIcon icon={step.icon} className="size-5" />
                       </div>
                       <div className="flex-1 space-y-0.5">
@@ -131,25 +121,25 @@ export const BookingSection = ({
 
               {/* Right: CTA card */}
               <ScrollReveal animation="fade-in-right" delayMs={150} durationMs={750} className="flex flex-col justify-center">
-                <div className="from-primary-from/10 to-primary-to/5 border-primary/20 space-y-6 rounded-3xl border bg-linear-to-br p-8 backdrop-blur-sm sm:p-10">
-                  <div className="space-y-3">
-                    <div className="bg-primary text-primary-foreground inline-flex size-12 items-center justify-center rounded-2xl shadow-md">
+                <div className="bg-brand-artefact relative space-y-6 overflow-hidden rounded-3xl p-8 sm:p-10">
+                  <div className="relative space-y-3">
+                    <div className="bg-primary text-primary-foreground inline-flex size-12 items-center justify-center rounded-lg">
                       <HugeiconsIcon icon={Calendar01Icon} className="size-6" />
                     </div>
-                    <h3 className="font-heading text-foreground text-2xl font-semibold tracking-tight sm:text-3xl">
+                    <h3 className="font-heading text-[#eaeae4] text-2xl font-black tracking-tight leading-tight sm:text-3xl">
                       Book a 30-minute call.
                     </h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed sm:text-base">
+                    <p className="text-[#eaeae4]/75 text-sm leading-relaxed sm:text-base">
                       Skip the form. Pick a sector, share your timeline and a
                       preferred slot — we&rsquo;ll reach out within 24 hours.
                     </p>
                   </div>
 
-                  <ul className="space-y-2.5">
+                  <ul className="relative space-y-2.5">
                     {BOOKING_BENEFITS.map((benefit) => (
                       <li
                         key={benefit}
-                        className="text-foreground/80 flex items-start gap-2.5 text-sm font-medium"
+                        className="text-[#eaeae4]/85 flex items-start gap-2.5 text-sm font-medium"
                       >
                         <HugeiconsIcon
                           icon={CheckmarkCircle02Icon}
@@ -165,7 +155,7 @@ export const BookingSection = ({
                       href={calendlyUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="from-primary-from to-primary-to hover:shadow-primary group/cta inline-flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-linear-to-br text-base font-semibold text-primary-foreground shadow-md transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                      className="bg-primary text-primary-foreground group/cta relative inline-flex h-14 w-full items-center justify-center gap-2 rounded-lg text-base font-semibold uppercase tracking-[0.05em] transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]"
                     >
                       Start Booking
                       <HugeiconsIcon
@@ -175,10 +165,11 @@ export const BookingSection = ({
                     </a>
                   ) : (
                     <Button
+                      variant="secondary"
                       size="lg"
                       type="button"
                       onClick={() => setIsBookingOpen(true)}
-                      className="from-primary-from to-primary-to hover:shadow-primary group/cta h-14 w-full rounded-2xl bg-linear-to-br text-base font-semibold shadow-md transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                      className="group/cta relative h-14 w-full"
                     >
                       Start Booking
                       <HugeiconsIcon
@@ -188,7 +179,7 @@ export const BookingSection = ({
                     </Button>
                   )}
 
-                  <p className="text-muted-foreground text-center text-xs">
+                  <p className="text-[#eaeae4]/60 relative text-center text-xs">
                     Or send a detailed inquiry using the form above.
                   </p>
                 </div>

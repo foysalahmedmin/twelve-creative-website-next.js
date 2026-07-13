@@ -17,7 +17,7 @@ export const FounderSection = ({
           {/* Left: Name + Title + Bio */}
           <div className="flex-1 space-y-8">
             {/* Eyebrow */}
-            <span className="border-primary/20 bg-primary/8 text-primary inline-flex items-center rounded-full border px-4 py-1.5 text-xs font-normal tracking-[0.075em] uppercase">
+            <span className="text-foreground inline-flex items-center rounded-md border border-foreground/25 px-3 py-1 text-[11px] font-bold tracking-[0.12em] uppercase">
               Founder & Owner
             </span>
 
@@ -37,7 +37,7 @@ export const FounderSection = ({
             </p>
 
             <div className="relative w-full max-w-sm shrink-0 lg:hidden">
-              <div className="border-primary/15 bg-card relative aspect-3/4 w-full overflow-hidden rounded-[32px] border">
+              <div className="border-border bg-card relative aspect-3/4 w-full overflow-hidden rounded-2xl border">
                 {imageSrc ? (
                   <Image
                     src={imageSrc}
@@ -48,8 +48,8 @@ export const FounderSection = ({
                     priority
                   />
                 ) : (
-                  <div className="from-primary/20 to-primary/5 absolute inset-0 flex flex-col items-center justify-center gap-4 bg-linear-to-br">
-                    <div className="bg-primary/20 flex h-24 w-24 items-center justify-center rounded-full">
+                  <div className="bg-muted absolute inset-0 flex flex-col items-center justify-center gap-4">
+                    <div className="bg-primary/15 flex h-24 w-24 items-center justify-center rounded-full">
                       <span className="font-heading text-primary text-4xl font-black">
                         CD
                       </span>
@@ -60,13 +60,10 @@ export const FounderSection = ({
                   </div>
                 )}
               </div>
-
-              {/* Accent decoration */}
-              <div className="bg-primary/20 pointer-events-none absolute -right-4 -bottom-4 h-48 w-48 rounded-full blur-[60px]" />
             </div>
 
             {/* Bio */}
-            <div className="border-primary/20 space-y-4 border-l-2 pl-6">
+            <div className="border-primary space-y-4 border-l-2 pl-6">
               <p className="text-foreground/80 text-base leading-[170%] font-medium sm:text-lg">
                 Carlos built Twelve Creative from the belief that most
                 businesses don't have a creative problem — they have a strategy
@@ -83,7 +80,7 @@ export const FounderSection = ({
 
           {/* Right: Photo */}
           <div className="relative hidden w-full max-w-sm shrink-0 lg:block lg:w-96">
-            <div className="border-primary/15 bg-card relative aspect-3/4 w-full overflow-hidden rounded-[32px] border">
+            <div className="border-border bg-card relative aspect-3/4 w-full overflow-hidden rounded-2xl border">
               {imageSrc ? (
                 <Image
                   src={imageSrc}
@@ -94,8 +91,8 @@ export const FounderSection = ({
                   priority
                 />
               ) : (
-                <div className="from-primary/20 to-primary/5 absolute inset-0 flex flex-col items-center justify-center gap-4 bg-gradient-to-br">
-                  <div className="bg-primary/20 flex h-24 w-24 items-center justify-center rounded-full">
+                <div className="bg-muted absolute inset-0 flex flex-col items-center justify-center gap-4">
+                  <div className="bg-primary/15 flex h-24 w-24 items-center justify-center rounded-full">
                     <span className="font-heading text-primary text-4xl font-black">
                       CD
                     </span>
@@ -106,9 +103,6 @@ export const FounderSection = ({
                 </div>
               )}
             </div>
-
-            {/* Accent decoration */}
-            <div className="bg-primary/20 pointer-events-none absolute -right-4 -bottom-4 h-48 w-48 rounded-full blur-[60px]" />
           </div>
         </div>
       </div>

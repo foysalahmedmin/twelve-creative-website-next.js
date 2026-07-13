@@ -112,7 +112,7 @@ function StagePanel({
 }) {
   return (
     <div>
-      <div className="border-border/60 relative aspect-[16/10] w-full overflow-hidden rounded-[24px] border shadow-xl">
+      <div className="border-border/60 relative aspect-[16/10] w-full overflow-hidden rounded-2xl border shadow-xl">
         <Image
           src={step.image}
           alt={step.title}

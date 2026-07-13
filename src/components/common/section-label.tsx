@@ -10,6 +10,8 @@ interface SectionLabelProps {
   withDot?: boolean;
 }
 
+// Signature brand device (BRANDBOOK): outlined rounded-rect chip — hairline
+// border, bold ALL-CAPS label. NOT a filled pill.
 export const SectionLabel = ({
   children,
   className,
@@ -18,13 +20,11 @@ export const SectionLabel = ({
   return (
     <span
       className={cn(
-        "border-primary/20 bg-primary/8 text-primary inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-normal uppercase tracking-[0.075em]",
+        "border-foreground/25 text-foreground inline-flex items-center gap-2 rounded-md border px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em]",
         className,
       )}
     >
-      {withDot && (
-        <span className="bg-primary h-1.5 w-1.5 animate-pulse rounded-full" />
-      )}
+      {withDot && <span className="bg-primary size-1.5 rounded-full" />}
       {children}
     </span>
   );
@@ -83,27 +83,23 @@ export const CenteredSectionHeader = ({
         className,
       )}
     >
-      {/* Glass pill label */}
+      {/* Outlined chip eyebrow (brand device) */}
       <motion.span
         variants={childVariants}
         className={cn(
-          "text-foreground/80 inline-flex items-center justify-center rounded-full px-5 py-2.5",
-          "bg-card/25 ring-foreground/10 ring-1 backdrop-blur-md",
-          "text-xs leading-[140%] font-normal uppercase tracking-[0.075em] gap-2",
-          "shadow-[inset_0_1px_0_var(--color-card),0_2px_6px_-2px_var(--color-foreground)/8%]",
+          "border-foreground/25 text-foreground inline-flex items-center justify-center gap-2 rounded-md border px-3 py-1",
+          "text-[11px] leading-none font-bold uppercase tracking-[0.12em]",
         )}
       >
-        {withDot && (
-          <span className="bg-primary h-1.5 w-1.5 animate-pulse rounded-full" />
-        )}
+        {withDot && <span className="bg-primary size-1.5 rounded-full" />}
         {label}
       </motion.span>
 
-      {/* Premium heading */}
+      {/* Heavy headline — tight leading (brandbook p.24) */}
       <motion.h2
         variants={childVariants}
         className={cn(
-          "font-heading text-foreground mt-3 text-center text-[36px] leading-[120%] font-black tracking-tight md:text-[56px] xl:mt-4",
+          "font-heading text-foreground mt-4 text-center text-[34px] leading-[1.05] font-black tracking-tight md:text-[56px] xl:mt-5",
           titleClassName,
         )}
       >
@@ -115,7 +111,7 @@ export const CenteredSectionHeader = ({
         <motion.p
           variants={childVariants}
           className={cn(
-            "text-foreground/75 mt-3 max-w-2xl text-center text-[16px] leading-[150%] md:text-[18px]",
+            "text-muted-foreground mt-4 max-w-2xl text-center text-[16px] leading-[150%] md:text-[18px]",
             descriptionClassName,
           )}
         >
