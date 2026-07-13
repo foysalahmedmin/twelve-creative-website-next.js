@@ -8,7 +8,7 @@ import { FaqSection } from "@/components/sections/faqs-section";
 import { GalleryMarqueeSection } from "@/components/sections/gallery-marquee-section";
 import { OurMissionSection } from "@/components/sections/our-mission-section";
 import { PageHeader } from "@/components/sections/page-header-section";
-import { PodcastInsight } from "@/components/sections/podcast-insight";
+import { GrowthSystemSection } from "@/components/sections/growth-system-section";
 import { ProcessSection } from "@/components/sections/process-section";
 import { SaasInsight } from "@/components/sections/saas-insight";
 import { ServiceServicesSection } from "@/components/sections/service-services-section";
@@ -22,7 +22,7 @@ import { WhyChooseUsSection } from "@/components/sections/why-choose-us-section"
 import { CONTACT_PAGE_DATA } from "@/data/contact.data";
 import { FAQS_DATA } from "@/data/faqs.data";
 import { CTA_PROCESS } from "@/data/page-ctas.data";
-import { CANVAS_PODCAST_INSIGHT_DATA } from "@/data/podcast-insight.data";
+import { GROWTH_SYSTEM_DATA } from "@/data/growth-system.data";
 import { PROCESS_DATA } from "@/data/process.data";
 import { SERVICE_SERVICES_DATA } from "@/data/service-services-section.data";
 import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
@@ -69,7 +69,7 @@ export default async function CanvasPage() {
 
       <ProcessSection data={PROCESS_DATA} />
 
-      <PodcastInsight data={CANVAS_PODCAST_INSIGHT_DATA} />
+      <GrowthSystemSection data={GROWTH_SYSTEM_DATA} />
 
       <SaasInsight />
 

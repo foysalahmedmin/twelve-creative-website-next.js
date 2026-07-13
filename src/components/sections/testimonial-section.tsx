@@ -47,7 +47,15 @@ interface MarqueeProps {
 }
 
 const Marquee = forwardRef<MarqueeHandle, MarqueeProps>(function Marquee(
-  { items, renderItem, pxPerSecond, initialLeftward, gap, itemWidthClass, className },
+  {
+    items,
+    renderItem,
+    pxPerSecond,
+    initialLeftward,
+    gap,
+    itemWidthClass,
+    className,
+  },
   ref,
 ) {
   const trackRef = useRef<HTMLDivElement>(null);
@@ -159,7 +167,9 @@ const Marquee = forwardRef<MarqueeHandle, MarqueeProps>(function Marquee(
     if (dragging.current) {
       dragging.current = false;
       try {
-        (e.currentTarget as HTMLElement).releasePointerCapture(pointerId.current);
+        (e.currentTarget as HTMLElement).releasePointerCapture(
+          pointerId.current,
+        );
       } catch {
         /* already released */
       }
@@ -216,15 +226,19 @@ const Marquee = forwardRef<MarqueeHandle, MarqueeProps>(function Marquee(
 function SliderArrow({
   direction,
   onClick,
+  className,
 }: {
   direction: "prev" | "next";
   onClick: () => void;
+  className?: string;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      aria-label={direction === "prev" ? "Scroll right to left" : "Scroll left to right"}
+      aria-label={
+        direction === "prev" ? "Scroll right to left" : "Scroll left to right"
+      }
       className={cn(
         "z-10 hidden shrink-0 items-center justify-center lg:flex",
         "h-10 w-10 rounded-full",
@@ -303,6 +317,7 @@ export const TestimonialSection = ({
             {videoTestimonials.length > 0 && (
               <div className="flex items-center gap-3 px-4 md:px-8 lg:px-12">
                 <SliderArrow
+                  className="hidden"
                   direction="prev"
                   onClick={() => videoMarquee.current?.setDirection(true)}
                 />
@@ -313,7 +328,7 @@ export const TestimonialSection = ({
                   initialLeftward={false}
                   pxPerSecond={30}
                   gap={14}
-                  itemWidthClass="w-[162px] sm:w-[180px] lg:w-[202px] xl:w-[218px]"
+                  itemWidthClass="w-[180px] lg:w-[200px] xl:w-[240px]"
                   renderItem={(testimonial) => (
                     <VideoTestimonialCard
                       testimonial={testimonial}
@@ -324,6 +339,7 @@ export const TestimonialSection = ({
                 />
 
                 <SliderArrow
+                  className="hidden"
                   direction="next"
                   onClick={() => videoMarquee.current?.setDirection(false)}
                 />
@@ -334,6 +350,7 @@ export const TestimonialSection = ({
             {textTestimonials.length > 0 && (
               <div className="flex items-center gap-3 px-4 md:px-8 lg:px-12">
                 <SliderArrow
+                  className="hidden"
                   direction="prev"
                   onClick={() => textMarquee.current?.setDirection(true)}
                 />
@@ -354,6 +371,7 @@ export const TestimonialSection = ({
                 />
 
                 <SliderArrow
+                  className="hidden"
                   direction="next"
                   onClick={() => textMarquee.current?.setDirection(false)}
                 />
@@ -371,7 +389,7 @@ export const TestimonialSection = ({
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="bg-card animate-zoom-in relative max-h-[85vh] w-auto max-w-[90vw] rounded-3xl border border-border p-2 shadow-xl"
+            className="bg-card animate-zoom-in border-border relative max-h-[85vh] w-auto max-w-[90vw] rounded-3xl border p-2 shadow-xl"
           >
             <button
               type="button"

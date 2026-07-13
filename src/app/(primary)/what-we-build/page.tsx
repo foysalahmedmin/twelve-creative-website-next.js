@@ -3,11 +3,11 @@ import { AlternatingServicesSection } from "@/components/sections/alternating-se
 import { CoreVerticalsSection } from "@/components/sections/core-verticals-section";
 import { CTASection } from "@/components/sections/cta-section";
 import { PageHeader } from "@/components/sections/page-header-section";
-import { PodcastInsight } from "@/components/sections/podcast-insight";
+import { GrowthSystemSection } from "@/components/sections/growth-system-section";
 import { ProcessSection } from "@/components/sections/process-section";
 import { WhyChooseUsSection } from "@/components/sections/why-choose-us-section";
 import { CTA_WHAT_WE_BUILD } from "@/data/page-ctas.data";
-import { CANVAS_PODCAST_INSIGHT_DATA } from "@/data/podcast-insight.data";
+import { GROWTH_SYSTEM_DATA } from "@/data/growth-system.data";
 import { PROCESS_DATA } from "@/data/process.data";
 import { SERVICES_DATA } from "@/data/services.data";
 import { WHY_CHOOSE_US_DATA } from "@/data/why-choose-us.data";
@@ -56,7 +56,7 @@ export default async function WhatWeBuildPage() {
       <AlternatingServicesSection data={serviceItems} />
 
       {/* Growth system end-to-end deep dive */}
-      <PodcastInsight data={CANVAS_PODCAST_INSIGHT_DATA} />
+      <GrowthSystemSection data={GROWTH_SYSTEM_DATA} />
 
       {/* The Twelve Creative Difference */}
       <DifferenceSection howWeStructureImage={settings.how_we_structure_image || undefined} />

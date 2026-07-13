@@ -7,6 +7,7 @@ import { LiveServicesSection } from "@/components/_primary_/home-page/services-s
 import { BrandsStrip } from "@/components/sections/brands-strip";
 import FaqSection from "@/components/sections/faqs-section";
 import { ProcessSection } from "@/components/sections/process-section";
+import { ScrollStatementSection } from "@/components/sections/scroll-statement-section";
 import { TestimonialSection } from "@/components/sections/testimonial-section";
 import { WhyChooseUsSection } from "@/components/sections/why-choose-us-section";
 import { SITE } from "@/config/site";
@@ -55,6 +56,7 @@ export default async function HomePage() {
     <div className="flex flex-col">
       <LiveHeroSection />
       <BrandsStrip />
+      <ScrollStatementSection />
       <LiveFeaturedProjectsSection />
       <LiveServicesSection />
       <TestimonialSection data={testimonialsData} />

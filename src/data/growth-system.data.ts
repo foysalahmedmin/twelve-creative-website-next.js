@@ -1,15 +1,22 @@
-export interface IInsightStep {
+export interface IGrowthStage {
   title: string;
   description: string;
   image: string;
   items: string[];
 }
 
+export interface GrowthSystemData {
+  tag: string;
+  heading_title: string;
+  paragraph: string;
+  steps: IGrowthStage[];
+}
+
 /**
- * Variable name preserved for legacy imports. Content adapted to Twelve Creative —
- * a deep-dive into how we structure a growth system end-to-end.
+ * A deep-dive into how Twelve Creative structures a growth system end-to-end —
+ * positioning, creative, distribution, and conversion as one connected build.
  */
-export const CANVAS_PODCAST_INSIGHT_DATA = {
+export const GROWTH_SYSTEM_DATA: GrowthSystemData = {
   tag: "Inside the Build",
   heading_title: "How we structure a growth system end-to-end.",
   paragraph:
@@ -63,5 +70,5 @@ export const CANVAS_PODCAST_INSIGHT_DATA = {
         "Tracking and reporting",
       ],
     },
-  ] as IInsightStep[],
+  ],
 };

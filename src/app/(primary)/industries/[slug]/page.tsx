@@ -2,9 +2,9 @@ import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { CenteredSectionHeader } from "@/components/common/section-label";
 import { BookingInlineSection } from "@/components/sections/booking-inline-section";
 import { BrandsStrip } from "@/components/sections/brands-strip";
-import { CoreVerticalsSection } from "@/components/sections/core-verticals-section";
 import { PageHeader } from "@/components/sections/page-header-section";
 import { ProcessSection } from "@/components/sections/process-section";
+import { ScrollStatementSection } from "@/components/sections/scroll-statement-section";
 import { TestimonialSection } from "@/components/sections/testimonial-section";
 import { ThumbnailWorkSection } from "@/components/sections/thumbnail-work-section";
 import { VerticalMarqueeSlider } from "@/components/sections/vertical-marquee-slider";
@@ -50,23 +50,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function IndustryDetailPage({ params }: Props) {
   const { slug } = await params;
 
-  const [industries, showcaseVideos, livePortfolio, testimonialsData, settings] =
-    await Promise.all([
-      getPublicIndustries(),
-      getPublicShowcaseVideosForMarquee(),
-      getPublicShowcaseVideosForThumbnailGrid({
-        label: CANVAS_PORTFOLIO_DATA.label,
-        title: CANVAS_PORTFOLIO_DATA.title,
-        description: CANVAS_PORTFOLIO_DATA.description,
-        type: CANVAS_PORTFOLIO_DATA.type,
-      }),
-      getPublicTestimonialsForSection({
-        label: TESTIMONIALS_DATA.label,
-        title: TESTIMONIALS_DATA.title,
-        description: TESTIMONIALS_DATA.description,
-      }),
-      getPublicSiteSetting(),
-    ]);
+  const [
+    industries,
+    showcaseVideos,
+    livePortfolio,
+    testimonialsData,
+    settings,
+  ] = await Promise.all([
+    getPublicIndustries(),
+    getPublicShowcaseVideosForMarquee(),
+    getPublicShowcaseVideosForThumbnailGrid({
+      label: CANVAS_PORTFOLIO_DATA.label,
+      title: CANVAS_PORTFOLIO_DATA.title,
+      description: CANVAS_PORTFOLIO_DATA.description,
+      type: CANVAS_PORTFOLIO_DATA.type,
+    }),
+    getPublicTestimonialsForSection({
+      label: TESTIMONIALS_DATA.label,
+      title: TESTIMONIALS_DATA.title,
+      description: TESTIMONIALS_DATA.description,
+    }),
+    getPublicSiteSetting(),
+  ]);
 
   const industry = industries.find((i) => i.slug === slug);
   if (!industry) notFound();
@@ -98,8 +103,8 @@ export default async function IndustryDetailPage({ params }: Props) {
       {/* ── Brands ── */}
       <BrandsStrip />
 
-      {/* ── Core Verticals ── */}
-      <CoreVerticalsSection industries={industries} />
+      {/* ── Scroll-reveal statement ── */}
+      <ScrollStatementSection />
 
       {/* ── Inline Booking ── */}
       <BookingInlineSection calendlyUrl={settings.calendly_url || undefined} />

@@ -1,6 +1,6 @@
 "use client";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CenteredSectionHeader } from "@/components/common/section-label";
 import {
   Carousel,
   CarouselContent,
@@ -9,7 +9,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { CenteredSectionHeader } from "@/components/common/section-label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   FEATURED_CATEGORIES,
   type TFeaturedAspect,
@@ -39,7 +39,7 @@ const ProjectCard = ({
       <div
         className={cn(
           "relative overflow-hidden rounded-lg",
-          aspect === "reel" ? "aspect-[9/16]" : "aspect-video",
+          aspect === "reel" ? "aspect-9/16" : "aspect-video",
         )}
       >
         {!isPlaying ? (
@@ -131,7 +131,7 @@ export const FeaturedProjectsSection = ({
             className="mt-5 flex w-full flex-col items-center"
           >
             {/* Horizontally scrollable on mobile */}
-            <div className="w-full overflow-x-auto scrollbar-none pb-1">
+            <div className="scrollbar-none w-full overflow-x-auto pb-1">
               <div className="flex min-w-max justify-center px-2">
                 <TabsList>
                   {categories.map((category) => (
@@ -164,8 +164,8 @@ export const FeaturedProjectsSection = ({
                         className={cn(
                           "pl-2",
                           category.aspect === "reel"
-                            ? "basis-1/2 sm:basis-1/3 lg:basis-1/4"
-                            : "basis-full sm:basis-1/2 lg:basis-1/3",
+                            ? "basis-full sm:basis-1/2 lg:basis-1/4"
+                            : "basis-full sm:basis-1/2 lg:basis-1/4",
                         )}
                       >
                         <ProjectCard
