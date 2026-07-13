@@ -27,7 +27,7 @@ const DEFAULT_SAAS_DATA = {
   primaryCtaText: "Get an Estimate",
   primaryCtaLink: "/contact",
   secondaryCtaText: "Our Works",
-  secondaryCtaLink: "/work",
+  secondaryCtaLink: "/works",
 };
 
 export const SaasInsight = ({ data = DEFAULT_SAAS_DATA, className }: SaasInsightProps) => {

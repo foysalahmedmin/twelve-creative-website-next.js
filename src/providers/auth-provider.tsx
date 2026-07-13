@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setCredentials, setLoading } from "@/redux/slices/auth-slice";
 import { CONSTANT } from "@/config/constant";
@@ -9,7 +9,6 @@ import { getCookie } from "cookies-next";
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch();
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     const hydrate = async () => {
@@ -30,17 +29,15 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         console.error("Failed to hydrate auth state:", error);
       } finally {
         dispatch(setLoading(false));
-        setMounted(true);
       }
     };
 
     hydrate();
   }, [dispatch]);
 
-  // Prevent hydration mismatch by only rendering after mount
-  if (!mounted) {
-    return null; // Or a full page loader
-  }
-
+  // Always render children so the app renders on the server (SSR/SEO). Auth is
+  // hydrated client-side in the effect above; the server HTML and the initial
+  // client render both show the unauthenticated state, so there is no
+  // hydration mismatch — auth-dependent UI updates after mount.
   return <>{children}</>;
 }

@@ -115,7 +115,7 @@ export async function getPublicFeaturedProjectsGrouped(): Promise<
       id: item._id,
       title: item.title,
       thumbnail_src: item.thumbnail,
-      video_src: item.video.value,
+      video_src: item.video?.value ?? "",
     });
   }
 

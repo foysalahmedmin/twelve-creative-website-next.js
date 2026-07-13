@@ -1,5 +1,6 @@
 import { apiFetch } from "@/lib/admin/api-client";
 import type { VideoRef } from "@/lib/admin/types";
+import { extractYouTubeId } from "@/lib/media/video";
 import { PAGE_HERO_TAG } from "./page-heroes.constants";
 import type { PageKey } from "./page-heroes.constants";
 export { PAGE_HERO_TAG, PAGE_KEYS, PAGE_LABELS } from "./page-heroes.constants";
@@ -63,14 +64,6 @@ export function resolveVideoSrc(
   video: (VideoRef & { poster?: string }) | null | undefined,
 ): string | undefined {
   return video?.value || undefined;
-}
-
-/** Extracts a YouTube video ID from various YouTube URL formats. */
-function extractYouTubeId(url: string): string | null {
-  const match = url.match(
-    /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([A-Za-z0-9_-]{11})/,
-  );
-  return match?.[1] ?? null;
 }
 
 /**

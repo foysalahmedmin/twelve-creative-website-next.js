@@ -89,7 +89,7 @@ export const ThumbnailWorkSection = ({ works, slug = "all", className }: Thumbna
         {/* Redirect trigger */}
         <div className="mt-16 flex justify-center items-center relative z-10">
           <Link
-            href={`/work?cat=${slug}`}
+            href={`/works?cat=${slug}`}
             className="px-6 py-3 rounded-lg bg-primary text-primary-foreground text-sm font-semibold uppercase tracking-[0.05em] text-center hover:scale-105 active:scale-95 duration-200 transition-transform select-none"
           >
             View More

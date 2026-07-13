@@ -179,7 +179,7 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
             {/* Header */}
             <div className="relative flex items-center justify-between px-6 pt-6 pb-4">
               <div className="flex items-center gap-3">
-                {step > 1 && step < 3 && (
+                {step > 1 && step < 4 && (
                   <button
                     onClick={() => setStep(step - 1)}
                     className="text-muted-foreground hover:bg-muted flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:text-foreground"

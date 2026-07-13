@@ -111,7 +111,7 @@ export async function getPublicShowcaseVideosForThumbnailGrid(
   const work: IPortfolioItem[] = items.map((item) => ({
     id: item._id,
     thumbnail: resolvePoster(item.video, item.thumbnail),
-    video_link: item.video.value,
+    video_link: item.video?.value ?? "",
     title: item.alt,
   }));
   return { ...defaults, work };
@@ -120,14 +120,14 @@ export async function getPublicShowcaseVideosForThumbnailGrid(
 function adaptForMarquee(item: ShowcaseVideo): IMarqueeItem {
   return {
     image_url: resolvePoster(item.video, item.thumbnail),
-    video_url: item.video.value,
+    video_url: item.video?.value ?? "",
     alt: item.alt,
   };
 }
 
-function resolvePoster(video: VideoRef, thumbnail?: string): string {
+function resolvePoster(video: VideoRef | undefined, thumbnail?: string): string {
   if (thumbnail) return thumbnail;
-  if (video.source === "youtube") {
+  if (video?.source === "youtube") {
     const id = extractYouTubeId(video.value);
     if (id) return `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
   }

@@ -16,15 +16,16 @@ import { ApiError, type ApiErrorPayload, type ApiResponse } from "./types";
 
 /**
  * When the backend returns 401 for an admin-authenticated call, the access
- * cookie is expired or has been invalidated. Clear both cookies so middleware
- * routes the user back to login (with a callbackUrl pointing to where they were).
- * Calls `redirect()` which throws — control never returns to the caller.
+ * cookie is expired or has been invalidated. This runs during an RSC/layout
+ * render where cookie mutation is forbidden, so we redirect to a Route Handler
+ * that clears the cookies (the proxy skips `/api/*`) and then sends the user to
+ * login. Clearing the cookie there is essential: the proxy bounces
+ * `/admin/signin` back to the dashboard while the access cookie is present, so
+ * a redirect straight to login would loop. Calls `redirect()`, which throws —
+ * control never returns to the caller.
  */
-async function handleExpiredSession(): Promise<never> {
-  const jar = await cookies();
-  jar.delete(ADMIN_CONFIG.cookies.access);
-  jar.delete(ADMIN_CONFIG.cookies.user);
-  redirect(ADMIN_CONFIG.loginPath);
+function handleExpiredSession(): never {
+  redirect("/api/admin/session-expired");
 }
 
 interface ApiRequestOptions {
@@ -102,7 +103,7 @@ export async function apiFetch<T = unknown>(
 
   // 401 = expired or invalid session — clear cookies and redirect to sign-in.
   if (res.status === 401) {
-    await handleExpiredSession();
+    handleExpiredSession();
   }
 
   // 204 No Content or caller opted out of JSON — return a bare success shell.

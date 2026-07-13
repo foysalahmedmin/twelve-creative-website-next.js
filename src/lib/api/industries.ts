@@ -11,6 +11,7 @@
 import type { TIndustry, TIndustryIconKey } from "@/data/industries.data";
 import { apiFetch } from "@/lib/admin/api-client";
 import type { VideoRef } from "@/lib/admin/types";
+import { extractYouTubeId } from "@/lib/media/video";
 
 export const INDUSTRIES_TAG = "industries";
 
@@ -37,13 +38,6 @@ export interface ApiIndustry {
 /** Resolves an industry VideoRef to a plain URL string for react-player. */
 export function resolveIndustryVideoSrc(video: VideoRef | null | undefined): string | undefined {
   return video?.value || undefined;
-}
-
-function extractYouTubeId(url: string): string | null {
-  const match = url.match(
-    /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([A-Za-z0-9_-]{11})/,
-  );
-  return match?.[1] ?? null;
 }
 
 /** Resolves thumbnail with priority: manual thumbnail > YouTube auto > undefined */
