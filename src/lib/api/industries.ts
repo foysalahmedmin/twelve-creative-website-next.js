@@ -15,6 +15,18 @@ import { extractYouTubeId } from "@/lib/media/video";
 
 export const INDUSTRIES_TAG = "industries";
 
+/**
+ * The populated Industry shape returned by resources that belong to an
+ * Industry (for example Featured Projects and Showcase Videos).
+ */
+export interface IndustrySummary {
+  _id: string;
+  name: string;
+  slug: string;
+  order: number;
+  is_active: boolean;
+}
+
 export interface ApiIndustry {
   _id: string;
   slug: string;
@@ -36,7 +48,9 @@ export interface ApiIndustry {
 }
 
 /** Resolves an industry VideoRef to a plain URL string for react-player. */
-export function resolveIndustryVideoSrc(video: VideoRef | null | undefined): string | undefined {
+export function resolveIndustryVideoSrc(
+  video: VideoRef | null | undefined,
+): string | undefined {
   return video?.value || undefined;
 }
 
@@ -96,6 +110,15 @@ export async function getAdminIndustries(
   };
 }
 
+/** Lightweight Industry list for authenticated relational selectors. */
+export async function getAdminIndustryOptions(): Promise<IndustrySummary[]> {
+  const res = await apiFetch<IndustrySummary[]>("/api/industry/options");
+  if (!res.success || !Array.isArray(res.data)) {
+    throw new Error("Unable to load Industry options");
+  }
+  return res.data;
+}
+
 export async function getIndustryById(id: string): Promise<ApiIndustry> {
   const res = await apiFetch<ApiIndustry>(`/api/industry/${id}`);
   return res.data;
@@ -115,7 +138,8 @@ export function toLegacyIndustries(items: ApiIndustry[]): TIndustry[] {
     description: i.description,
     image: i.image,
     work: i.work ?? [],
-    href: i.cta_href && i.cta_href.trim() ? i.cta_href : `/industries#${i.slug}`,
+    href:
+      i.cta_href && i.cta_href.trim() ? i.cta_href : `/industries#${i.slug}`,
     videoSrc: resolveIndustryVideoSrc(i.video),
     thumbnailSrc: resolveIndustryThumbnail(i.thumbnail, i.video),
   }));

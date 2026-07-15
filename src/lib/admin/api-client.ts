@@ -90,15 +90,18 @@ export async function apiFetch<T = unknown>(
         body === undefined
           ? undefined
           : body instanceof FormData
-          ? body
-          : JSON.stringify(body),
+            ? body
+            : JSON.stringify(body),
       cache: revalidate === undefined && !tags ? "no-store" : undefined,
       next: Object.keys(nextOptions).length ? nextOptions : undefined,
     });
   } catch (err) {
     console.error("Network error while fetching", url, err);
-    // Return a safe failure response; callers can handle .success === false
-    return { success: false, data: undefined as T };
+    throw new ApiError(
+      503,
+      "The API is temporarily unreachable. Please try again.",
+      null,
+    );
   }
 
   // 401 = expired or invalid session — clear cookies and redirect to sign-in.

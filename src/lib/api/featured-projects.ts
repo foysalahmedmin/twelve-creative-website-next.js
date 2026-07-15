@@ -1,17 +1,14 @@
 /**
  * Public + admin readers for Featured Projects.
  *
- * The home page renders these in tabbed groups, one tab per `category`.
- * Free-form category strings let the admin create new tabs without touching
- * code — "Brand Films", "Hospitality", "Aviation", whatever they need.
+ * The home page renders these in tabbed groups, one tab per populated
+ * Industry relation.
  */
 
-import type {
-  TFeaturedAspect,
-  TFeaturedCategory,
-} from "@/data/featured-projects.data";
+import type { TFeaturedIndustryGroup } from "@/data/featured-projects.data";
 import { apiFetch } from "@/lib/admin/api-client";
 import type { VideoRef } from "@/lib/admin/types";
+import { INDUSTRIES_TAG, type IndustrySummary } from "@/lib/api/industries";
 
 export const FEATURED_PROJECTS_TAG = "featured-projects";
 
@@ -20,7 +17,7 @@ export type FeaturedProjectAspect = "reel" | "landscape";
 export interface FeaturedProject {
   _id: string;
   title: string;
-  category: string;
+  industry: IndustrySummary;
   aspect: FeaturedProjectAspect;
   thumbnail: string;
   video: VideoRef;
@@ -30,29 +27,46 @@ export interface FeaturedProject {
   updated_at?: string;
 }
 
-export async function getPublicFeaturedProjects(): Promise<FeaturedProject[]> {
+export interface PublicFeaturedProjectQuery {
+  industrySlug?: string;
+}
+
+export async function getPublicFeaturedProjects(
+  query: PublicFeaturedProjectQuery = {},
+): Promise<FeaturedProject[]> {
   try {
+    const params = new URLSearchParams();
+    if (query.industrySlug) {
+      params.set("industry_slug", query.industrySlug);
+    }
+    const qs = params.toString();
     const res = await apiFetch<FeaturedProject[]>(
-      "/api/featured-project/public",
+      `/api/featured-project/public${qs ? `?${qs}` : ""}`,
       {
         method: "GET",
         auth: false,
         revalidate: 60,
-        tags: [FEATURED_PROJECTS_TAG],
+        tags: [FEATURED_PROJECTS_TAG, INDUSTRIES_TAG],
       },
     );
-    return res.data ?? [];
+    return (res.data ?? []).filter(
+      (item) => item.industry?._id && item.industry.is_active === true,
+    );
   } catch {
     return [];
   }
 }
 
-export async function getAdminFeaturedProjects(query: {
-  search?: string;
-  page?: number;
-  limit?: number;
-  filter?: "active" | "inactive";
-} = {}): Promise<{
+export async function getAdminFeaturedProjects(
+  query: {
+    search?: string;
+    page?: number;
+    limit?: number;
+    filter?: "active" | "inactive";
+    industry?: string;
+    aspect?: FeaturedProjectAspect;
+  } = {},
+): Promise<{
   data: FeaturedProject[];
   meta?: { total: number; page: number; limit: number; total_pages: number };
 }> {
@@ -61,6 +75,8 @@ export async function getAdminFeaturedProjects(query: {
   if (query.page) params.set("page", String(query.page));
   if (query.limit) params.set("limit", String(query.limit));
   if (query.filter) params.set("filter", query.filter);
+  if (query.industry) params.set("industry", query.industry);
+  if (query.aspect) params.set("aspect", query.aspect);
 
   const qs = params.toString();
   const res = await apiFetch<FeaturedProject[]>(
@@ -82,50 +98,44 @@ export async function getFeaturedProjectById(
 }
 
 /**
- * Groups public featured projects into the legacy `TFeaturedCategory[]` shape
- * the home page's `FeaturedProjectsSection` already consumes — one tab per
- * unique category string, preserving the admin-defined order across tabs.
+ * Groups projects by stable Industry ObjectId. Industry order controls tab
+ * order and each project's own order/aspect controls its card within the tab.
  */
 export async function getPublicFeaturedProjectsGrouped(): Promise<
-  TFeaturedCategory[]
+  TFeaturedIndustryGroup[]
 > {
   const items = await getPublicFeaturedProjects();
   if (!items.length) return [];
 
-  // Preserve admin-defined order; first occurrence of a category determines
-  // its tab position; within each tab, items keep their global order.
-  const groups = new Map<string, TFeaturedCategory>();
+  const groups = new Map<string, TFeaturedIndustryGroup>();
 
-  for (const item of items) {
-    const id = slugifyCategory(item.category);
-    let group = groups.get(id);
+  for (const item of [...items].sort((a, b) => a.order - b.order)) {
+    const industry = item.industry;
+    // Protect the public render from an old/orphaned document during rollout.
+    if (!industry?._id || !industry.name || industry.is_active !== true) {
+      continue;
+    }
+
+    let group = groups.get(industry._id);
     if (!group) {
-      // Tab aspect = aspect of the first project in this category.
-      // Mixed-aspect categories aren't blocked at the schema level, but the
-      // legacy grid layout depends on a single aspect per tab, so we lock it.
       group = {
-        id,
-        label: item.category,
-        aspect: item.aspect as TFeaturedAspect,
+        id: industry._id,
+        label: industry.name,
+        order: industry.order ?? Number.MAX_SAFE_INTEGER,
         projects: [],
       };
-      groups.set(id, group);
+      groups.set(industry._id, group);
     }
     group.projects.push({
       id: item._id,
       title: item.title,
+      aspect: item.aspect,
       thumbnail_src: item.thumbnail,
       video_src: item.video?.value ?? "",
     });
   }
 
-  return Array.from(groups.values());
-}
-
-function slugifyCategory(c: string): string {
-  return c
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
+  return Array.from(groups.values()).sort(
+    (a, b) => a.order - b.order || a.label.localeCompare(b.label),
+  );
 }

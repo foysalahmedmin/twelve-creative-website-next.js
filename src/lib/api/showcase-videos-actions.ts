@@ -1,19 +1,22 @@
 "use server";
 
 import { revalidatePath, updateTag } from "next/cache";
+import { unstable_rethrow } from "next/navigation";
 import { apiFetch } from "@/lib/admin/api-client";
 import { ApiError } from "@/lib/admin/types";
 import type { VideoRef } from "@/lib/admin/types";
 import {
   SHOWCASE_VIDEOS_TAG,
+  type ShowcaseAspect,
   type ShowcaseVideo,
 } from "./showcase-videos";
 
 export interface ShowcaseVideoInput {
+  industry: string;
   video: VideoRef;
   thumbnail?: string;
   alt: string;
-  aspect?: "reel" | "landscape";
+  aspect: ShowcaseAspect;
   order?: number;
   is_active?: boolean;
 }
@@ -27,6 +30,9 @@ export interface ActionResult<T = unknown> {
 const invalidate = () => {
   updateTag(SHOWCASE_VIDEOS_TAG);
   revalidatePath("/admin/videos");
+  revalidatePath("/works");
+  revalidatePath("/industries/[slug]", "page");
+  revalidatePath("/marketing/industries/[slug]", "page");
 };
 
 export async function createShowcaseVideoAction(
@@ -110,6 +116,7 @@ function sanitize<T extends Partial<ShowcaseVideoInput>>(input: T): T {
 }
 
 function errorMessage(e: unknown): string {
+  unstable_rethrow(e);
   if (e instanceof ApiError) {
     const sources = e.body?.errorSources;
     if (sources && sources.length) {

@@ -22,13 +22,15 @@ export interface ThumbnailWorkSectionProps {
     type?: "standard" | "shortsreels-editing";
     work: IPortfolioItem[];
   };
+  /** @deprecated Showcase filtering is relational; the Works page has no category query. */
   slug?: string;
+  showViewMore?: boolean;
   className?: string;
 }
 
 export const ThumbnailWorkSection = ({
   works,
-  slug = "all",
+  showViewMore = true,
   className,
 }: ThumbnailWorkSectionProps) => {
   const {
@@ -40,6 +42,7 @@ export const ThumbnailWorkSection = ({
   } = works || {};
 
   const isShorts = type === "shortsreels-editing";
+  if (!work.length) return null;
 
   return (
     <section
@@ -119,14 +122,16 @@ export const ThumbnailWorkSection = ({
           </div>
 
           {/* Redirect trigger */}
-          <div className="relative z-10 mt-16 flex items-center justify-center">
-            <Link
-              href={`/works?cat=${slug}`}
-              className="bg-primary text-primary-foreground rounded-lg px-6 py-3 text-center text-sm font-semibold tracking-[0.05em] uppercase transition-transform duration-200 select-none hover:scale-105 active:scale-95"
-            >
-              View More
-            </Link>
-          </div>
+          {showViewMore && (
+            <div className="relative z-10 mt-16 flex items-center justify-center">
+              <Link
+                href="/works"
+                className="bg-primary text-primary-foreground rounded-lg px-6 py-3 text-center text-sm font-semibold tracking-[0.05em] uppercase transition-transform duration-200 select-none hover:scale-105 active:scale-95"
+              >
+                View More
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </section>

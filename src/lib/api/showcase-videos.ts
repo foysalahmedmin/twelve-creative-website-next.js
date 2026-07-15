@@ -16,6 +16,7 @@ import type {
 } from "@/data/thumbnail-work-section.data";
 import { apiFetch } from "@/lib/admin/api-client";
 import type { VideoRef } from "@/lib/admin/types";
+import { INDUSTRIES_TAG, type IndustrySummary } from "@/lib/api/industries";
 import { extractYouTubeId } from "@/lib/media/video";
 
 export const SHOWCASE_VIDEOS_TAG = "showcase-videos";
@@ -24,6 +25,7 @@ export type ShowcaseAspect = "reel" | "landscape";
 
 export interface ShowcaseVideo {
   _id: string;
+  industry: IndustrySummary;
   video: VideoRef;
   thumbnail?: string;
   alt: string;
@@ -34,32 +36,53 @@ export interface ShowcaseVideo {
   updated_at?: string;
 }
 
+export interface PublicShowcaseVideoQuery {
+  aspect?: ShowcaseAspect;
+  industrySlug?: string;
+}
+
 export async function getPublicShowcaseVideos(
-  aspect?: ShowcaseAspect,
+  query: PublicShowcaseVideoQuery = {},
 ): Promise<ShowcaseVideo[]> {
   try {
-    const qs = aspect ? `?aspect=${aspect}` : "";
+    const params = new URLSearchParams();
+    if (query.aspect) params.set("aspect", query.aspect);
+    if (query.industrySlug) {
+      params.set("industry_slug", query.industrySlug);
+    }
+    const qs = params.toString();
     const res = await apiFetch<ShowcaseVideo[]>(
-      `/api/showcase-video/public${qs}`,
+      `/api/showcase-video/public${qs ? `?${qs}` : ""}`,
       {
         method: "GET",
         auth: false,
         revalidate: 60,
-        tags: [SHOWCASE_VIDEOS_TAG],
+        tags: [SHOWCASE_VIDEOS_TAG, INDUSTRIES_TAG],
       },
     );
-    return res.data ?? [];
+    return (res.data ?? [])
+      .filter((item) => item.industry?._id && item.industry.is_active === true)
+      .sort(
+        (left, right) =>
+          left.industry.order - right.industry.order ||
+          left.order - right.order ||
+          left._id.localeCompare(right._id),
+      );
   } catch {
     return [];
   }
 }
 
-export async function getAdminShowcaseVideos(query: {
-  search?: string;
-  page?: number;
-  limit?: number;
-  filter?: "active" | "inactive";
-} = {}): Promise<{
+export async function getAdminShowcaseVideos(
+  query: {
+    search?: string;
+    page?: number;
+    limit?: number;
+    filter?: "active" | "inactive";
+    industry?: string;
+    aspect?: ShowcaseAspect;
+  } = {},
+): Promise<{
   data: ShowcaseVideo[];
   meta?: { total: number; page: number; limit: number; total_pages: number };
 }> {
@@ -68,6 +91,8 @@ export async function getAdminShowcaseVideos(query: {
   if (query.page) params.set("page", String(query.page));
   if (query.limit) params.set("limit", String(query.limit));
   if (query.filter) params.set("filter", query.filter);
+  if (query.industry) params.set("industry", query.industry);
+  if (query.aspect) params.set("aspect", query.aspect);
 
   const qs = params.toString();
   const res = await apiFetch<ShowcaseVideo[]>(
@@ -81,9 +106,7 @@ export async function getAdminShowcaseVideos(query: {
   };
 }
 
-export async function getShowcaseVideoById(
-  id: string,
-): Promise<ShowcaseVideo> {
+export async function getShowcaseVideoById(id: string): Promise<ShowcaseVideo> {
   const res = await apiFetch<ShowcaseVideo>(`/api/showcase-video/${id}`);
   return res.data;
 }
@@ -92,11 +115,14 @@ export async function getShowcaseVideoById(
  * Adapts active reel-aspect videos to the legacy `IMarqueeItem` shape so
  * `VerticalMarqueeSlider` (Visual Library) consumes them with no changes.
  */
-export async function getPublicShowcaseVideosForMarquee(): Promise<
-  IMarqueeItem[]
-> {
-  const items = await getPublicShowcaseVideos("reel");
-  return items.map(adaptForMarquee);
+export async function getPublicShowcaseVideosForMarquee(
+  query: Pick<PublicShowcaseVideoQuery, "industrySlug"> = {},
+): Promise<IMarqueeItem[]> {
+  const items = await getPublicShowcaseVideos({ ...query, aspect: "reel" });
+  return items.flatMap((item) => {
+    const adapted = adaptForMarquee(item);
+    return adapted.image_url && adapted.video_url ? [adapted] : [];
+  });
 }
 
 /**
@@ -106,14 +132,26 @@ export async function getPublicShowcaseVideosForMarquee(): Promise<
  */
 export async function getPublicShowcaseVideosForThumbnailGrid(
   defaults: Omit<TPortfolioData, "work">,
+  query: Pick<PublicShowcaseVideoQuery, "industrySlug"> = {},
 ): Promise<TPortfolioData> {
-  const items = await getPublicShowcaseVideos("landscape");
-  const work: IPortfolioItem[] = items.map((item) => ({
-    id: item._id,
-    thumbnail: resolvePoster(item.video, item.thumbnail),
-    video_link: item.video?.value ?? "",
-    title: item.alt,
-  }));
+  const items = await getPublicShowcaseVideos({
+    ...query,
+    aspect: "landscape",
+  });
+  const work: IPortfolioItem[] = items.flatMap((item) => {
+    const thumbnail = resolvePoster(item.video, item.thumbnail);
+    const videoLink = item.video?.value ?? "";
+    return thumbnail && videoLink
+      ? [
+          {
+            id: item._id,
+            thumbnail,
+            video_link: videoLink,
+            title: item.alt,
+          },
+        ]
+      : [];
+  });
   return { ...defaults, work };
 }
 
@@ -125,7 +163,10 @@ function adaptForMarquee(item: ShowcaseVideo): IMarqueeItem {
   };
 }
 
-function resolvePoster(video: VideoRef | undefined, thumbnail?: string): string {
+function resolvePoster(
+  video: VideoRef | undefined,
+  thumbnail?: string,
+): string {
   if (thumbnail) return thumbnail;
   if (video?.source === "youtube") {
     const id = extractYouTubeId(video.value);

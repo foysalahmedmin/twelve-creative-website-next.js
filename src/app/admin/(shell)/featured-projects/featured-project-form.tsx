@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
+import { IndustrySelect } from "@/components/admin/industry-select";
 import { ImageInput } from "@/components/admin/inputs/image-input";
 import { VideoInput } from "@/components/admin/inputs/video-input";
 import { Button } from "@/components/ui/button";
@@ -28,29 +29,27 @@ import type {
   FeaturedProject,
   FeaturedProjectAspect,
 } from "@/lib/api/featured-projects";
+import type { IndustrySummary } from "@/lib/api/industries";
 import type { VideoRef } from "@/lib/admin/types";
-
-const INDUSTRY_CATEGORIES = [
-  "Hospitality",
-  "Real Estate",
-  "Aviation",
-  "Professional Services",
-] as const;
 
 interface Props {
   mode: "create" | "edit";
   initial?: FeaturedProject;
+  industries: IndustrySummary[];
+  industriesError?: string;
 }
 
 export function FeaturedProjectForm({
   mode,
   initial,
+  industries,
+  industriesError,
 }: Props) {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
 
   const [title, setTitle] = useState(initial?.title ?? "");
-  const [category, setCategory] = useState(initial?.category ?? "Hospitality");
+  const [industryId, setIndustryId] = useState(initial?.industry?._id ?? "");
   const [aspect, setAspect] = useState<FeaturedProjectAspect>(
     initial?.aspect ?? "reel",
   );
@@ -61,14 +60,14 @@ export function FeaturedProjectForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !category || !thumbnail || !video) {
-      toast.error("Title, category, thumbnail, and video are required");
+    if (!title.trim() || !industryId || !thumbnail || !video) {
+      toast.error("Title, Industry, thumbnail, and video are required");
       return;
     }
     setSaving(true);
     const payload: FeaturedProjectInput = {
       title: title.trim(),
-      category: category.trim(),
+      industry: industryId,
       aspect,
       thumbnail,
       video,
@@ -90,9 +89,14 @@ export function FeaturedProjectForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="container max-w-2xl space-y-6 py-8">
+    <form
+      onSubmit={handleSubmit}
+      className="container max-w-2xl space-y-6 py-8"
+    >
       <AdminPageHeader
-        title={mode === "create" ? "New featured project" : "Edit featured project"}
+        title={
+          mode === "create" ? "New featured project" : "Edit featured project"
+        }
         breadcrumb={[
           { label: "Admin", href: "/admin/dashboard" },
           { label: "Featured Projects", href: "/admin/featured-projects" },
@@ -116,30 +120,15 @@ export function FeaturedProjectForm({
             />
           </div>
 
-          <div className="space-y-2">
-            <Label>
-              Category <span className="text-destructive">*</span>
-            </Label>
-            <Select
-              value={category}
-              onValueChange={setCategory}
-              required
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select industry category" />
-              </SelectTrigger>
-              <SelectContent>
-                {INDUSTRY_CATEGORIES.map((c) => (
-                  <SelectItem key={c} value={c}>
-                    {c}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <p className="text-muted-foreground text-xs">
-              Each category maps to an industry tab on the public Featured Projects section.
-            </p>
-          </div>
+          <IndustrySelect
+            industries={industries}
+            currentIndustry={initial?.industry}
+            value={industryId}
+            onValueChange={setIndustryId}
+            loadError={industriesError}
+            disabled={saving}
+            description="Creates the Industry tab that contains this project on the public home page."
+          />
 
           <div className="space-y-2">
             <Label>
@@ -158,8 +147,7 @@ export function FeaturedProjectForm({
               </SelectContent>
             </Select>
             <p className="text-muted-foreground text-xs">
-              The first project added to a category locks the tab&apos;s
-              aspect — keep all projects in one category the same shape.
+              Each project keeps its own display aspect inside the Industry tab.
             </p>
           </div>
 
@@ -220,7 +208,15 @@ export function FeaturedProjectForm({
         >
           Cancel
         </Button>
-        <Button type="submit" disabled={saving}>
+        <Button
+          type="submit"
+          disabled={
+            saving ||
+            Boolean(industriesError) ||
+            (!initial?.industry && industries.length === 0) ||
+            !industryId
+          }
+        >
           {saving && <Loader2 className="size-4 animate-spin" />}
           {mode === "create" ? "Add project" : "Save changes"}
         </Button>

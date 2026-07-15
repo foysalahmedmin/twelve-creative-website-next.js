@@ -3,7 +3,7 @@
 import { GripVertical, Loader2, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/admin/confirm-dialog";
 import { EmptyState } from "@/components/admin/empty-state";
@@ -24,11 +24,16 @@ import {
   reorderShowcaseVideosAction,
   toggleShowcaseVideoActiveAction,
 } from "@/lib/api/showcase-videos-actions";
-import type { ShowcaseVideo } from "@/lib/api/showcase-videos";
+import type { ShowcaseAspect, ShowcaseVideo } from "@/lib/api/showcase-videos";
 import { cn } from "@/lib/utils";
 
 interface Props {
   items: ShowcaseVideo[];
+  reorderScope?: {
+    industry: string;
+    aspect: ShowcaseAspect;
+  };
+  reorderDisabledReason?: string;
 }
 
 const SOURCE_TONE = {
@@ -37,7 +42,11 @@ const SOURCE_TONE = {
   upload: "positive" as const,
 };
 
-export function ShowcaseVideosTable({ items: propItems }: Props) {
+export function ShowcaseVideosTable({
+  items: propItems,
+  reorderScope,
+  reorderDisabledReason,
+}: Props) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [deleteTarget, setDeleteTarget] = useState<ShowcaseVideo | null>(null);
@@ -45,11 +54,6 @@ export function ShowcaseVideosTable({ items: propItems }: Props) {
   const [dirty, setDirty] = useState(false);
   const [saving, setSaving] = useState(false);
   const [dragId, setDragId] = useState<string | null>(null);
-
-  useEffect(() => {
-    setItems(propItems);
-    setDirty(false);
-  }, [propItems]);
 
   const handleToggle = (item: ShowcaseVideo, next: boolean) => {
     startTransition(async () => {
@@ -76,7 +80,7 @@ export function ShowcaseVideosTable({ items: propItems }: Props) {
   };
 
   const handleDrop = (targetId: string) => {
-    if (!dragId || dragId === targetId) return;
+    if (!reorderScope || !dragId || dragId === targetId) return;
     const from = items.findIndex((i) => i._id === dragId);
     const to = items.findIndex((i) => i._id === targetId);
     if (from === -1 || to === -1) return;
@@ -89,6 +93,10 @@ export function ShowcaseVideosTable({ items: propItems }: Props) {
   };
 
   const handleSaveOrder = async () => {
+    if (!reorderScope) {
+      toast.error("Select one Industry and aspect before reordering");
+      return;
+    }
     setSaving(true);
     const res = await reorderShowcaseVideosAction(
       items.map((item, i) => ({ _id: item._id, order: i + 1 })),
@@ -106,8 +114,8 @@ export function ShowcaseVideosTable({ items: propItems }: Props) {
   if (items.length === 0) {
     return (
       <EmptyState
-        title="No videos yet"
-        description="Add your first one to populate the Visual Library marquee on the Works page."
+        title="No showcase videos found"
+        description="Add a video or change the Industry and aspect filters."
         action={{ label: "Add video", href: "/admin/videos/new" }}
       />
     );
@@ -115,14 +123,25 @@ export function ShowcaseVideosTable({ items: propItems }: Props) {
 
   return (
     <>
+      {!reorderScope ? (
+        <div className="bg-muted/30 border-b px-4 py-2.5">
+          <p className="text-muted-foreground text-xs">
+            {reorderDisabledReason ??
+              "Select one Industry and one aspect to reorder videos within that group."}
+          </p>
+        </div>
+      ) : null}
       {dirty && (
-        <div className="flex items-center justify-between border-b px-4 py-2 bg-muted/40">
-          <p className="text-xs text-muted-foreground">Unsaved order changes</p>
+        <div className="bg-muted/40 flex items-center justify-between border-b px-4 py-2">
+          <p className="text-muted-foreground text-xs">Unsaved order changes</p>
           <div className="flex gap-2">
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => { setItems(propItems); setDirty(false); }}
+              onClick={() => {
+                setItems(propItems);
+                setDirty(false);
+              }}
             >
               Discard
             </Button>
@@ -136,9 +155,10 @@ export function ShowcaseVideosTable({ items: propItems }: Props) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[40px]" />
+            <TableHead className="w-[60px]">Order</TableHead>
             <TableHead className="w-[100px]">Poster</TableHead>
             <TableHead>Alt</TableHead>
+            <TableHead>Industry</TableHead>
             <TableHead>Aspect</TableHead>
             <TableHead>Source</TableHead>
             <TableHead className="w-[100px]">Active</TableHead>
@@ -151,25 +171,36 @@ export function ShowcaseVideosTable({ items: propItems }: Props) {
             return (
               <TableRow
                 key={item._id}
-                draggable
-                onDragStart={() => setDragId(item._id)}
-                onDragOver={(e) => e.preventDefault()}
-                onDrop={() => handleDrop(item._id)}
+                draggable={Boolean(reorderScope) && !saving}
+                onDragStart={() =>
+                  reorderScope && !saving && setDragId(item._id)
+                }
+                onDragOver={(e) =>
+                  reorderScope && !saving && e.preventDefault()
+                }
+                onDrop={() => reorderScope && !saving && handleDrop(item._id)}
                 onDragEnd={() => setDragId(null)}
                 className={cn(dragId === item._id && "opacity-40")}
               >
                 <TableCell>
-                  <GripVertical className="text-muted-foreground size-4 cursor-grab active:cursor-grabbing" />
+                  {reorderScope ? (
+                    <GripVertical className="text-muted-foreground size-4 cursor-grab active:cursor-grabbing" />
+                  ) : (
+                    <span className="text-muted-foreground text-xs tabular-nums">
+                      {item.order}
+                    </span>
+                  )}
                 </TableCell>
                 <TableCell>
                   <div
                     className={cn(
                       "border-border/60 bg-muted relative w-12 overflow-hidden rounded",
-                      item.aspect === "landscape" ? "aspect-video" : "aspect-[9/16]",
+                      item.aspect === "landscape"
+                        ? "aspect-video"
+                        : "aspect-[9/16]",
                     )}
                   >
                     {preview?.posterUrl ? (
-                      // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={preview.posterUrl}
                         alt={item.alt}
@@ -182,6 +213,16 @@ export function ShowcaseVideosTable({ items: propItems }: Props) {
                   <p className="text-foreground line-clamp-2 max-w-md text-sm font-medium">
                     {item.alt}
                   </p>
+                </TableCell>
+                <TableCell>
+                  <p className="text-foreground text-sm font-medium">
+                    {item.industry?.name ?? "Unassigned"}
+                  </p>
+                  {item.industry && !item.industry.is_active ? (
+                    <p className="text-xs text-amber-600 dark:text-amber-400">
+                      Industry inactive
+                    </p>
+                  ) : null}
                 </TableCell>
                 <TableCell>
                   <StatusBadge
@@ -198,14 +239,22 @@ export function ShowcaseVideosTable({ items: propItems }: Props) {
                 <TableCell>
                   <Switch
                     checked={item.is_active}
-                    disabled={pending}
+                    disabled={pending || dirty || saving}
                     onCheckedChange={(next) => handleToggle(item, next)}
                   />
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-1">
-                    <Button asChild variant="ghost" size="icon">
-                      <Link href={`/admin/videos/${item._id}/edit`}>
+                    <Button
+                      asChild
+                      variant="ghost"
+                      size="icon"
+                      className={cn(dirty && "pointer-events-none opacity-50")}
+                    >
+                      <Link
+                        href={`/admin/videos/${item._id}/edit`}
+                        aria-disabled={dirty}
+                      >
                         <Pencil className="size-4" />
                         <span className="sr-only">Edit</span>
                       </Link>
@@ -213,6 +262,7 @@ export function ShowcaseVideosTable({ items: propItems }: Props) {
                     <Button
                       variant="ghost"
                       size="icon"
+                      disabled={dirty || saving}
                       onClick={() => setDeleteTarget(item)}
                       className="text-destructive hover:text-destructive"
                     >
@@ -231,7 +281,7 @@ export function ShowcaseVideosTable({ items: propItems }: Props) {
         open={!!deleteTarget}
         onOpenChange={(open) => !open && setDeleteTarget(null)}
         title="Delete this video?"
-        description="This removes it from the public Visual Library marquee. It can be restored later from soft-delete."
+        description="This removes it from public showcase surfaces. It can be restored later from soft-delete."
         confirmLabel="Delete"
         destructive
         onConfirm={handleDelete}

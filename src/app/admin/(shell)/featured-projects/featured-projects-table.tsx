@@ -87,7 +87,7 @@ export function FeaturedProjectsTable({ items }: Props) {
             <TableHead className="w-[60px]">Order</TableHead>
             <TableHead className="w-[100px]">Poster</TableHead>
             <TableHead>Title</TableHead>
-            <TableHead>Category</TableHead>
+            <TableHead>Industry</TableHead>
             <TableHead>Aspect</TableHead>
             <TableHead>Source</TableHead>
             <TableHead className="w-[100px]">Active</TableHead>
@@ -108,7 +108,6 @@ export function FeaturedProjectsTable({ items }: Props) {
                   }
                 >
                   {item.thumbnail ? (
-                    // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={item.thumbnail}
                       alt={item.title}
@@ -125,8 +124,15 @@ export function FeaturedProjectsTable({ items }: Props) {
                   {item.title}
                 </Link>
               </TableCell>
-              <TableCell className="text-muted-foreground text-xs">
-                {item.category}
+              <TableCell>
+                <p className="text-foreground text-sm font-medium">
+                  {item.industry?.name ?? "Unassigned"}
+                </p>
+                {item.industry && !item.industry.is_active ? (
+                  <p className="text-xs text-amber-600 dark:text-amber-400">
+                    Industry inactive
+                  </p>
+                ) : null}
               </TableCell>
               <TableCell>
                 <StatusBadge

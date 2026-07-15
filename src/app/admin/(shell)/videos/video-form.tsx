@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
+import { IndustrySelect } from "@/components/admin/industry-select";
 import { ImageInput } from "@/components/admin/inputs/image-input";
 import { VideoInput } from "@/components/admin/inputs/video-input";
 import { Button } from "@/components/ui/button";
@@ -24,22 +25,31 @@ import {
   updateShowcaseVideoAction,
   type ShowcaseVideoInput,
 } from "@/lib/api/showcase-videos-actions";
-import type { ShowcaseVideo } from "@/lib/api/showcase-videos";
+import type { ShowcaseAspect, ShowcaseVideo } from "@/lib/api/showcase-videos";
+import type { IndustrySummary } from "@/lib/api/industries";
 import type { VideoRef } from "@/lib/admin/types";
 
 interface VideoFormProps {
   mode: "create" | "edit";
   initial?: ShowcaseVideo;
+  industries: IndustrySummary[];
+  industriesError?: string;
 }
 
-export function VideoForm({ mode, initial }: VideoFormProps) {
+export function VideoForm({
+  mode,
+  initial,
+  industries,
+  industriesError,
+}: VideoFormProps) {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
 
+  const [industryId, setIndustryId] = useState(initial?.industry?._id ?? "");
   const [video, setVideo] = useState<VideoRef | null>(initial?.video ?? null);
   const [thumbnail, setThumbnail] = useState<string>(initial?.thumbnail ?? "");
   const [alt, setAlt] = useState<string>(initial?.alt ?? "");
-  const [aspect, setAspect] = useState<"reel" | "landscape">(
+  const [aspect, setAspect] = useState<ShowcaseAspect>(
     initial?.aspect ?? "reel",
   );
   const [order, setOrder] = useState<number>(initial?.order ?? 0);
@@ -47,13 +57,21 @@ export function VideoForm({ mode, initial }: VideoFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!video) {
-      toast.error("Video is required");
+    if (
+      !industryId ||
+      !video ||
+      !alt.trim() ||
+      (video.source !== "youtube" && !thumbnail.trim())
+    ) {
+      toast.error(
+        "Industry, video, alt text, and a thumbnail for non-YouTube video are required",
+      );
       return;
     }
     setSaving(true);
 
     const payload: ShowcaseVideoInput = {
+      industry: industryId,
       video,
       thumbnail: thumbnail || undefined,
       alt: alt.trim(),
@@ -79,24 +97,37 @@ export function VideoForm({ mode, initial }: VideoFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="container max-w-3xl space-y-6 py-8">
+    <form
+      onSubmit={handleSubmit}
+      className="container max-w-3xl space-y-6 py-8"
+    >
       <AdminPageHeader
-        title={mode === "create" ? "New video" : "Edit video"}
+        title={mode === "create" ? "New showcase video" : "Edit showcase video"}
         breadcrumb={[
           { label: "Admin", href: "/admin/dashboard" },
-          { label: "Visual Library", href: "/admin/videos" },
+          { label: "Showcase Videos", href: "/admin/videos" },
           { label: mode === "create" ? "New" : "Edit" },
         ]}
       />
 
       <Card>
         <CardContent className="space-y-6 pt-6">
+          <IndustrySelect
+            industries={industries}
+            currentIndustry={initial?.industry}
+            value={industryId}
+            onValueChange={setIndustryId}
+            loadError={industriesError}
+            disabled={saving}
+            description="Lets public Industry pages request only videos that belong to this Industry."
+          />
+
           <VideoInput
             label="Video"
             required
             value={video}
             onChange={setVideo}
-            description="YouTube, direct URL, or upload. Best as a portrait clip (9:16) for the marquee."
+            description="YouTube, direct URL, or upload. Use media that matches the selected aspect."
           />
 
           <div className="space-y-2">
@@ -105,14 +136,14 @@ export function VideoForm({ mode, initial }: VideoFormProps) {
             </Label>
             <Select
               value={aspect}
-              onValueChange={(v) => setAspect(v as "reel" | "landscape")}
+              onValueChange={(v) => setAspect(v as ShowcaseAspect)}
             >
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="reel">
-                  Reel (9:16) — appears in Visual Library marquee
+                  Reel (9:16) — appears in the vertical showcase
                 </SelectItem>
                 <SelectItem value="landscape">
                   Landscape (16:9) — appears in Work Showcase grid
@@ -125,7 +156,10 @@ export function VideoForm({ mode, initial }: VideoFormProps) {
           </div>
 
           <ImageInput
-            label="Thumbnail (optional)"
+            label={
+              video?.source === "youtube" ? "Thumbnail (optional)" : "Thumbnail"
+            }
+            required={Boolean(video && video.source !== "youtube")}
             description={
               aspect === "reel"
                 ? "Used as the poster in the marquee. For YouTube, leave blank to auto-derive from the video."
@@ -164,7 +198,8 @@ export function VideoForm({ mode, initial }: VideoFormProps) {
                 onChange={(e) => setOrder(Number(e.target.value))}
               />
               <p className="text-muted-foreground text-xs">
-                Lower numbers appear first.
+                Lower numbers appear first within the selected Industry and
+                aspect.
               </p>
             </div>
             <div className="space-y-2">
@@ -176,7 +211,7 @@ export function VideoForm({ mode, initial }: VideoFormProps) {
                   onCheckedChange={setIsActive}
                 />
                 <span className="text-muted-foreground text-sm">
-                  {isActive ? "Visible in the marquee" : "Hidden"}
+                  {isActive ? "Visible publicly" : "Hidden"}
                 </span>
               </div>
             </div>
@@ -193,7 +228,15 @@ export function VideoForm({ mode, initial }: VideoFormProps) {
         >
           Cancel
         </Button>
-        <Button type="submit" disabled={saving}>
+        <Button
+          type="submit"
+          disabled={
+            saving ||
+            Boolean(industriesError) ||
+            (!initial?.industry && industries.length === 0) ||
+            !industryId
+          }
+        >
           {saving && <Loader2 className="size-4 animate-spin" />}
           {mode === "create" ? "Add video" : "Save changes"}
         </Button>

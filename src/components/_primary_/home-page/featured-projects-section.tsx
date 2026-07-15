@@ -11,9 +11,7 @@ import {
 } from "@/components/ui/carousel";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  FEATURED_CATEGORIES,
-  type TFeaturedAspect,
-  type TFeaturedCategory,
+  type TFeaturedIndustryGroup,
   type TFeaturedProject,
 } from "@/data/featured-projects.data";
 import { cn } from "@/lib/utils";
@@ -25,13 +23,7 @@ import { useState } from "react";
 
 const ReactPlayer = dynamic(() => import("react-player"), { ssr: false });
 
-const ProjectCard = ({
-  project,
-  aspect,
-}: {
-  project: TFeaturedProject;
-  aspect: TFeaturedAspect;
-}) => {
+const ProjectCard = ({ project }: { project: TFeaturedProject }) => {
   const [isPlaying, setIsPlaying] = useState(false);
 
   return (
@@ -39,7 +31,7 @@ const ProjectCard = ({
       <div
         className={cn(
           "relative overflow-hidden rounded-lg",
-          aspect === "reel" ? "aspect-9/16" : "aspect-video",
+          project.aspect === "reel" ? "aspect-9/16" : "aspect-video",
         )}
       >
         {!isPlaying ? (
@@ -98,22 +90,23 @@ const ProjectCard = ({
 
 interface FeaturedProjectsSectionProps {
   className?: string;
-  /** Categories to render. Defaults to the static FEATURED_CATEGORIES. */
-  data?: TFeaturedCategory[];
+  data: TFeaturedIndustryGroup[];
 }
 
 export const FeaturedProjectsSection = ({
   className,
   data,
 }: FeaturedProjectsSectionProps) => {
-  const categories = data && data.length ? data : FEATURED_CATEGORIES;
-  const [activeId, setActiveId] = useState(categories[0]?.id ?? "");
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const activeId = data.some((group) => group.id === selectedId)
+    ? selectedId!
+    : (data[0]?.id ?? "");
 
-  if (!categories.length) return null;
+  if (!data.length) return null;
 
   return (
     <section
-      className={cn("w-full bg-muted py-16 sm:py-20 lg:py-24", className)}
+      className={cn("bg-muted w-full py-16 sm:py-20 lg:py-24", className)}
     >
       <div className="container">
         {/* Header */}
@@ -128,26 +121,26 @@ export const FeaturedProjectsSection = ({
         <div className="px-4">
           <Tabs
             value={activeId}
-            onValueChange={setActiveId}
+            onValueChange={setSelectedId}
             className="mt-5 flex w-full flex-col items-center"
           >
             {/* Horizontally scrollable on mobile */}
             <div className="scrollbar-none w-full overflow-x-auto pb-1">
               <div className="flex min-w-max justify-center px-2">
                 <TabsList>
-                  {categories.map((category) => (
-                    <TabsTrigger key={category.id} value={category.id}>
-                      {category.label}
+                  {data.map((industry) => (
+                    <TabsTrigger key={industry.id} value={industry.id}>
+                      {industry.label}
                     </TabsTrigger>
                   ))}
                 </TabsList>
               </div>
             </div>
 
-            {categories.map((category) => (
+            {data.map((industry) => (
               <TabsContent
-                key={category.id}
-                value={category.id}
+                key={industry.id}
+                value={industry.id}
                 className="mt-10 w-full lg:mt-16"
               >
                 {/* Carousel instead of a grid: on mobile the projects sit
@@ -159,20 +152,12 @@ export const FeaturedProjectsSection = ({
                   className="mx-auto max-w-7xl px-4 lg:px-14"
                 >
                   <CarouselContent className="-ml-2">
-                    {category.projects.map((project) => (
+                    {industry.projects.map((project) => (
                       <CarouselItem
                         key={project.id}
-                        className={cn(
-                          "pl-2",
-                          category.aspect === "reel"
-                            ? "basis-full sm:basis-1/2 lg:basis-1/4"
-                            : "basis-full sm:basis-1/2 lg:basis-1/4",
-                        )}
+                        className="basis-full pl-2 sm:basis-1/2 lg:basis-1/4"
                       >
-                        <ProjectCard
-                          project={project}
-                          aspect={category.aspect}
-                        />
+                        <ProjectCard project={project} />
                       </CarouselItem>
                     ))}
                   </CarouselContent>

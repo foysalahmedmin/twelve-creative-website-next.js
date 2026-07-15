@@ -50,9 +50,13 @@ export const ADMIN_NAV: AdminNavEntry[] = [
   { label: "Page Heroes", href: "/admin/page-heroes", icon: ImagePlay },
   { label: "Services", href: "/admin/services", icon: Sparkles },
   { label: "Industries", href: "/admin/industries", icon: Layers },
-  { label: "Testimonials", href: "/admin/testimonials", icon: MessageSquareQuote },
-  { label: "Visual Library", href: "/admin/videos", icon: Film },
   { label: "Featured Projects", href: "/admin/featured-projects", icon: Star },
+  { label: "Showcase Videos", href: "/admin/videos", icon: Film },
+  {
+    label: "Testimonials",
+    href: "/admin/testimonials",
+    icon: MessageSquareQuote,
+  },
   { label: "Bookings", href: "/admin/bookings", icon: CalendarCheck },
   { label: "Messages", href: "/admin/messages", icon: Mail },
   { label: "Works", href: "/admin/works", icon: Newspaper },
@@ -61,10 +65,24 @@ export const ADMIN_NAV: AdminNavEntry[] = [
   { label: "FAQs", href: "/admin/faqs", icon: HelpCircle },
   { label: "Team", href: "/admin/team", icon: UsersRound },
   { label: "Users", href: "/admin/users", icon: Users, roles: ["admin"] },
-  { label: "Settings", href: "/admin/settings", icon: Settings, roles: ["admin"] },
+  {
+    label: "Settings",
+    href: "/admin/settings",
+    icon: Settings,
+    roles: ["admin"],
+  },
   // Tech Ops section
   { type: "section", label: "Tech Ops", href: "", icon: ScrollText },
-  { label: "System Logs", href: "/admin/tech-ops/system-logs", icon: ScrollText, roles: ["admin"] },
-  { label: "Support Tickets", href: "/admin/tech-ops/support-tickets", icon: TicketCheck },
+  {
+    label: "System Logs",
+    href: "/admin/tech-ops/system-logs",
+    icon: ScrollText,
+    roles: ["admin"],
+  },
+  {
+    label: "Support Tickets",
+    href: "/admin/tech-ops/support-tickets",
+    icon: TicketCheck,
+  },
   { label: "Tasks", href: "/admin/tech-ops/tasks", icon: ClipboardList },
 ];

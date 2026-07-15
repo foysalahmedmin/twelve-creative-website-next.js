@@ -14,7 +14,6 @@ import { CTA_ABOUT } from "@/data/page-ctas.data";
 import { PROCESS_DATA } from "@/data/process.data";
 import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
 import { CANVAS_PORTFOLIO_DATA } from "@/data/thumbnail-work-section.data";
-import { CANVAS_MARQUEE_DATA } from "@/data/vertical-marquee.data";
 import {
   getPublicIndustries,
   resolveIndustryThumbnail,
@@ -60,13 +59,16 @@ export default async function IndustryMarketingPage({ params }: Props) {
     settings,
   ] = await Promise.all([
     getPublicIndustries(),
-    getPublicShowcaseVideosForMarquee(),
-    getPublicShowcaseVideosForThumbnailGrid({
-      label: CANVAS_PORTFOLIO_DATA.label,
-      title: CANVAS_PORTFOLIO_DATA.title,
-      description: CANVAS_PORTFOLIO_DATA.description,
-      type: CANVAS_PORTFOLIO_DATA.type,
-    }),
+    getPublicShowcaseVideosForMarquee({ industrySlug: slug }),
+    getPublicShowcaseVideosForThumbnailGrid(
+      {
+        label: CANVAS_PORTFOLIO_DATA.label,
+        title: CANVAS_PORTFOLIO_DATA.title,
+        description: CANVAS_PORTFOLIO_DATA.description,
+        type: CANVAS_PORTFOLIO_DATA.type,
+      },
+      { industrySlug: slug },
+    ),
     getPublicTestimonialsForSection({
       label: TESTIMONIALS_DATA.label,
       title: TESTIMONIALS_DATA.title,
@@ -77,13 +79,6 @@ export default async function IndustryMarketingPage({ params }: Props) {
 
   const industry = industries.find((i) => i.slug === slug);
   if (!industry) notFound();
-
-  const marqueeData = showcaseVideos.length
-    ? showcaseVideos
-    : CANVAS_MARQUEE_DATA;
-  const portfolioData = livePortfolio.work.length
-    ? livePortfolio
-    : CANVAS_PORTFOLIO_DATA;
 
   const videoSrc = resolveIndustryVideoSrc(industry.video);
   const thumbnailSrc = resolveIndustryThumbnail(
@@ -115,23 +110,31 @@ export default async function IndustryMarketingPage({ params }: Props) {
       <TestimonialSection data={testimonialsData} />
 
       {/* ── Visual Library ── */}
-      <section className="py-16 sm:py-20 lg:py-24">
-        <ScrollReveal animation="fade-in-up" durationMs={800}>
-          <CenteredSectionHeader
-            label="Visual Library"
-            title="A live look at the work."
-            description={`Frames from recent ${industry.name.toLowerCase()} campaigns — content, ads, and brand assets built to perform.`}
-            className="mb-10 lg:mb-12"
+      {showcaseVideos.length > 0 && (
+        <section className="py-16 sm:py-20 lg:py-24">
+          <ScrollReveal animation="fade-in-up" durationMs={800}>
+            <CenteredSectionHeader
+              label="Visual Library"
+              title="A live look at the work."
+              description={`Frames from recent ${industry.name.toLowerCase()} campaigns — content, ads, and brand assets built to perform.`}
+              className="mb-10 lg:mb-12"
+            />
+          </ScrollReveal>
+          <VerticalMarqueeSlider
+            data={showcaseVideos}
+            speed={30}
+            pauseOnHover
           />
-        </ScrollReveal>
-        <VerticalMarqueeSlider data={marqueeData} speed={30} pauseOnHover />
-      </section>
+        </section>
+      )}
 
       {/* ── Work With Us ── */}
       <WorkWithUsSection />
 
       {/* ── Work Showcase ── */}
-      <ThumbnailWorkSection works={portfolioData} slug={slug} />
+      {livePortfolio.work.length > 0 && (
+        <ThumbnailWorkSection works={livePortfolio} />
+      )}
 
       {/* ── Process ── */}
       <ProcessSection data={PROCESS_DATA} />

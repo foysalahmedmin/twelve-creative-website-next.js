@@ -16,7 +16,6 @@ import { PROCESS_DATA } from "@/data/process.data";
 import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
 import { WHY_CHOOSE_US_DATA } from "@/data/why-choose-us.data";
 import { getPublicFaqsForSection } from "@/lib/api/faqs";
-import { getPublicIndustries } from "@/lib/api/industries";
 import { getPublicSiteSetting } from "@/lib/api/site-setting";
 import { getPublicTestimonialsForSection } from "@/lib/api/testimonials";
 import type { Metadata } from "next";
@@ -33,7 +32,7 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const [testimonialsData, faqsData, industries, settings] = await Promise.all([
+  const [testimonialsData, faqsData, settings] = await Promise.all([
     getPublicTestimonialsForSection({
       label: TESTIMONIALS_DATA.label,
       title: TESTIMONIALS_DATA.title,
@@ -48,7 +47,6 @@ export default async function HomePage() {
       position: FAQS_DATA.position,
       contact_link: FAQS_DATA.contact_link,
     }),
-    getPublicIndustries(),
     getPublicSiteSetting(),
   ]);
 
