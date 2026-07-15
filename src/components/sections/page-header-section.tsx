@@ -17,7 +17,7 @@ import { ScrollReveal } from "../common/scroll-reveal";
 
 const ReactPlayer = dynamic(() => import("react-player"), {
   ssr: false,
-}) as any;
+});
 
 interface BreadcrumbItemType {
   label: string;
@@ -47,7 +47,7 @@ export const PageHeader = ({
   return (
     <section
       className={cn(
-        "bg-brand-hero relative w-full overflow-hidden py-20 sm:py-24 lg:py-28",
+        "bg-brand-hero relative w-full overflow-hidden pt-36 pb-20 sm:pt-40 sm:pb-24 lg:pt-48 lg:pb-28",
         className,
       )}
     >

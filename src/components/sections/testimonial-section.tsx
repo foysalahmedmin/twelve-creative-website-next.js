@@ -24,7 +24,7 @@ import {
 
 const ReactPlayer = dynamic(() => import("react-player"), {
   ssr: false,
-}) as any;
+});
 
 // ── Continuous rAF marquee ──────────────────────────────────────────────────
 // A hand-rolled ticker: the track's translateX is advanced every animation
@@ -198,18 +198,21 @@ const Marquee = forwardRef<MarqueeHandle, MarqueeProps>(function Marquee(
       onPointerCancel={onPointerUp}
       onClickCapture={onClickCapture}
     >
-      <div ref={trackRef} className="flex w-max will-change-transform">
+      <div
+        ref={trackRef}
+        className="flex w-max items-stretch will-change-transform"
+      >
         {[0, 1].map((copy) => (
           <div
             key={copy}
             ref={copy === 0 ? copyRef : undefined}
-            className="flex shrink-0"
+            className="flex shrink-0 items-stretch"
             aria-hidden={copy === 1}
           >
             {items.map((item, i) => (
               <div
                 key={`${item.id}-${i}`}
-                className={cn("shrink-0", itemWidthClass)}
+                className={cn("flex shrink-0 self-stretch", itemWidthClass)}
                 style={{ marginRight: gap }}
               >
                 {renderItem(item, i)}
@@ -246,6 +249,7 @@ function SliderArrow({
         "text-foreground/60 transition-all duration-200",
         "hover:border-primary/50 hover:text-foreground",
         "focus-visible:ring-primary/50 focus-visible:ring-2 focus-visible:outline-none",
+        className,
       )}
     >
       {direction === "prev" ? (
@@ -335,7 +339,7 @@ export const TestimonialSection = ({
                     <VideoTestimonialCard
                       testimonial={testimonial}
                       onOpen={setActiveVideo}
-                      className="w-full md:w-full"
+                      className="h-full w-full md:w-full"
                     />
                   )}
                 />
@@ -367,7 +371,7 @@ export const TestimonialSection = ({
                   renderItem={(testimonial) => (
                     <TestimonialCard
                       testimonial={testimonial}
-                      className="w-full md:w-full"
+                      className="h-full w-full md:w-full"
                     />
                   )}
                 />
@@ -409,7 +413,7 @@ export const TestimonialSection = ({
                 controls
                 width="100%"
                 height="100%"
-                playsinline
+                playsInline
               />
             </div>
           </div>

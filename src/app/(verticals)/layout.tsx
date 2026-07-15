@@ -5,8 +5,8 @@ import React from "react";
 export default function VerticalsLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="relative flex min-h-screen flex-col">
-      {/* Logo-only sticky header */}
-      <header className="sticky top-0 z-50 flex h-16 items-center border-b border-white/10 bg-black/60 backdrop-blur-xl lg:h-20">
+      {/* Logo-only fixed header */}
+      <header className="fixed inset-x-0 top-0 z-50 flex h-16 items-center border-b border-white/10 bg-black/60 backdrop-blur-xl lg:h-20">
         <div className="container flex items-center justify-between">
           <Link href="/" className="flex items-center">
             <Image

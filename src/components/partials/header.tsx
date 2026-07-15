@@ -30,7 +30,7 @@ export const Header = ({ className, calendlyUrl }: HeaderProps) => {
     <>
       <header
         className={cn(
-          "sticky top-0 z-50 w-full transition-all duration-300",
+          "fixed inset-x-0 top-0 z-50 w-full transition-all duration-300",
           className,
         )}
       >
@@ -42,12 +42,12 @@ export const Header = ({ className, calendlyUrl }: HeaderProps) => {
             )}
           >
           {/* Logo */}
-          <Link href="/" className="flex shrink-0 items-center gap-2">
-            <LogoIcon className="h-8 w-auto md:h-10" />
+          <Link href="/" className="flex shrink-0 items-center">
+            <LogoIcon compact className="h-8 w-auto md:h-10" />
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden items-center gap-7 lg:flex">
+          <nav className="hidden items-center gap-5 lg:flex">
             {SITE.nav.map((item) => {
               const isActive =
                 item.href === "/"
@@ -58,15 +58,15 @@ export const Header = ({ className, calendlyUrl }: HeaderProps) => {
                   key={item.name}
                   href={item.href}
                   className={cn(
-                    "relative text-[13px] font-semibold whitespace-nowrap uppercase tracking-[0.08em] transition-colors",
+                    "relative text-xs font-normal whitespace-nowrap uppercase tracking-[0.04em] transition-colors",
                     isActive
-                      ? "text-primary"
-                      : "text-foreground/60 hover:text-foreground",
+                      ? "text-foreground"
+                      : "text-foreground/70 hover:text-foreground",
                   )}
                 >
                   {item.name}
                   {isActive && (
-                    <span className="bg-primary absolute -bottom-1.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full" />
+                    <span className="bg-foreground/70 absolute -bottom-1.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full" />
                   )}
                 </Link>
               );
@@ -119,7 +119,7 @@ export const Header = ({ className, calendlyUrl }: HeaderProps) => {
 
           {/* Mobile Menu */}
           {isMobileMenuOpen && (
-            <div className="bg-card/80 ring-foreground/8 mt-2 rounded-2xl p-2 ring-1 backdrop-blur-xl shadow-lg lg:hidden">
+            <div className="bg-card/80 ring-foreground/8 mt-2 max-h-[calc(100dvh-5rem)] overflow-y-auto rounded-2xl p-2 ring-1 backdrop-blur-xl shadow-lg lg:hidden">
               <nav className="flex flex-col gap-1 p-2">
               {SITE.nav.map((item) => {
                 const isActive =
@@ -132,9 +132,9 @@ export const Header = ({ className, calendlyUrl }: HeaderProps) => {
                     href={item.href}
                     onClick={() => setIsMobileMenuOpen(false)}
                     className={cn(
-                      "rounded-lg px-4 py-3 text-[13px] font-semibold uppercase tracking-[0.08em] transition-all",
+                      "rounded-lg px-4 py-3 text-xs font-normal uppercase tracking-[0.04em] transition-all",
                       isActive
-                        ? "bg-primary/10 text-primary"
+                        ? "bg-foreground/10 text-foreground"
                         : "text-foreground/70 hover:bg-accent hover:text-foreground",
                     )}
                   >

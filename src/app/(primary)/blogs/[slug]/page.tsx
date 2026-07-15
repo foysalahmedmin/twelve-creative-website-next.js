@@ -35,7 +35,7 @@ export default async function InsightDetailPage({ params }: PageProps) {
 
   return (
     <main className="bg-background min-h-screen">
-      <article className="container max-w-3xl py-16 sm:py-20 lg:py-24">
+      <article className="container max-w-3xl pt-24 pb-16 sm:pt-28 sm:pb-20 lg:pt-32 lg:pb-24">
         <header className="mb-10 space-y-5">
           <div className="text-muted-foreground flex flex-wrap items-center gap-2 text-xs font-medium">
             <Link

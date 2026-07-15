@@ -18,15 +18,17 @@ export const VideoTestimonialCard = ({
   className,
 }: VideoTestimonialCardProps) => {
   return (
-    <div
+    <button
+      type="button"
       onClick={() => onOpen(testimonial)}
+      aria-label={`Play video testimonial from ${testimonial.name}`}
       className={cn(
-        "bg-card border-border hover:border-primary/40 group flex w-80 cursor-pointer flex-col gap-4 rounded-2xl border p-2 transition-all duration-300 select-none md:w-96",
+        "bg-card border-border hover:border-primary/40 focus-visible:ring-primary/50 group flex h-full w-80 cursor-pointer flex-col gap-4 rounded-2xl border p-2 text-left transition-all duration-300 select-none focus-visible:ring-2 focus-visible:outline-none md:w-96",
         className,
       )}
     >
       {/* Video cover aspect-9/16 */}
-      <div className="relative aspect-9/16 w-full overflow-hidden rounded-2xl bg-black">
+      <div className="relative aspect-9/16 w-full shrink-0 overflow-hidden rounded-2xl bg-black">
         {testimonial.thumbnail ? (
           <Image
             src={testimonial.thumbnail}
@@ -52,7 +54,7 @@ export const VideoTestimonialCard = ({
       </div>
 
       {/* User Info */}
-      <div className="flex items-center gap-2 px-1">
+      <div className="mt-auto flex min-h-10 items-center gap-2 px-1">
         <div className="border-border/50 relative h-8 w-8 shrink-0 overflow-hidden rounded-full border">
           <Image
             src={testimonial.image}
@@ -63,7 +65,7 @@ export const VideoTestimonialCard = ({
             draggable={false}
           />
         </div>
-        <div className="flex flex-col">
+        <div className="flex min-w-0 flex-col break-words">
           <h5 className="text-foreground poppins text-sm leading-tight font-bold">
             {testimonial.name}
           </h5>
@@ -72,6 +74,6 @@ export const VideoTestimonialCard = ({
           </p>
         </div>
       </div>
-    </div>
+    </button>
   );
 };

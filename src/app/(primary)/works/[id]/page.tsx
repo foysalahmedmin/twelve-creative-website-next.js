@@ -45,7 +45,7 @@ export default async function WorksDetailsPage({ params }: WorksDetailsPageProps
     <main className="bg-background min-h-screen">
       
       {/* HERO SECTION */}
-      <header className="relative pt-32 lg:pt-40 pb-8 lg:pb-16 px-4 sm:px-6 overflow-hidden bg-primary/5 dark:bg-primary/10">
+      <header className="relative pt-48 lg:pt-60 pb-8 lg:pb-16 px-4 sm:px-6 overflow-hidden bg-primary/5 dark:bg-primary/10">
         <div className="absolute -right-20 -top-20 w-96 h-96 rounded-full opacity-[0.03] dark:opacity-[0.05] bg-primary pointer-events-none" />
         
         <div className="flex flex-col justify-center items-center relative z-10 max-w-7xl mx-auto">

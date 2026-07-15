@@ -18,7 +18,7 @@ export const TestimonialCard = ({
   return (
     <div
       className={cn(
-        "bg-card border-border hover:border-primary/40 flex w-96 flex-col justify-between rounded-2xl border p-6 transition-all duration-300 select-none md:w-md md:p-8",
+        "bg-card border-border hover:border-primary/40 flex h-full w-96 flex-col justify-between rounded-2xl border p-6 transition-all duration-300 select-none md:w-md md:p-8",
         className,
       )}
     >
@@ -47,7 +47,7 @@ export const TestimonialCard = ({
             draggable={false}
           />
         </div>
-        <div className="flex flex-col">
+        <div className="flex min-w-0 flex-col break-words">
           <h4 className="text-foreground poppins text-sm leading-tight font-bold">
             {testimonial.name}
           </h4>

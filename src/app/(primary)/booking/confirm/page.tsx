@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 export default function BookingConfirmPage() {
   return (
     <div className="bg-background min-h-screen">
-      <section className="container mt-6 mb-16 md:mt-10 lg:mb-24">
+      <section className="container mb-16 pt-24 sm:pt-28 lg:mb-24 lg:pt-32">
         <div
           className={cn(
             "relative overflow-hidden rounded-[28px] px-4 py-16 sm:px-8 sm:py-20 lg:rounded-[40px] lg:py-28",
