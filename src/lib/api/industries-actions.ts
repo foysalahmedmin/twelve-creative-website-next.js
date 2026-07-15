@@ -19,6 +19,8 @@ export interface IndustryInput {
   tagline?: string;
   thumbnail?: string | null;
   video?: VideoRef | null;
+  reel_thumbnail?: string | null;
+  reel_video?: VideoRef | null;
   order?: number;
   is_active?: boolean;
 }

@@ -38,7 +38,10 @@ const ICON_OPTIONS: { value: TIndustryIconKey; label: string }[] = [
   { value: "hospitality", label: "Hospitality (Restaurant)" },
   { value: "real-estate", label: "Real Estate (Building)" },
   { value: "aviation", label: "Aviation (Airplane)" },
-  { value: "professional-services", label: "Professional Services (Briefcase)" },
+  {
+    value: "professional-services",
+    label: "Professional Services (Briefcase)",
+  },
 ];
 
 const MAX_WORK = 12;
@@ -73,6 +76,12 @@ export function IndustryForm({ mode, initial }: Props) {
   const [tagline, setTagline] = useState(initial?.tagline ?? "");
   const [thumbnail, setThumbnail] = useState(initial?.thumbnail ?? "");
   const [video, setVideo] = useState<VideoRef | null>(initial?.video ?? null);
+  const [reelThumbnail, setReelThumbnail] = useState(
+    initial?.reel_thumbnail ?? "",
+  );
+  const [reelVideo, setReelVideo] = useState<VideoRef | null>(
+    initial?.reel_video ?? null,
+  );
   const [order, setOrder] = useState(initial?.order ?? 0);
   const [isActive, setIsActive] = useState(initial?.is_active ?? true);
 
@@ -124,6 +133,8 @@ export function IndustryForm({ mode, initial }: Props) {
       tagline: tagline.trim() || undefined,
       thumbnail: thumbnail.trim() || null,
       video: video ?? null,
+      reel_thumbnail: reelThumbnail.trim() || null,
+      reel_video: reelVideo ?? null,
       order,
       is_active: isActive,
     };
@@ -142,7 +153,10 @@ export function IndustryForm({ mode, initial }: Props) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="container max-w-2xl space-y-6 py-8">
+    <form
+      onSubmit={handleSubmit}
+      className="container max-w-2xl space-y-6 py-8"
+    >
       <AdminPageHeader
         title={mode === "create" ? "New industry" : "Edit industry"}
         breadcrumb={[
@@ -184,7 +198,8 @@ export function IndustryForm({ mode, initial }: Props) {
               }}
             />
             <p className="text-muted-foreground text-xs">
-              Used as the anchor on the public page: /industries#{slug || "<slug>"}
+              Used as the anchor on the public page: /industries#
+              {slug || "<slug>"}
             </p>
           </div>
 
@@ -319,7 +334,8 @@ export function IndustryForm({ mode, initial }: Props) {
                 onChange={(e) => setCtaLabel(e.target.value)}
               />
               <p className="text-muted-foreground text-xs">
-                Reserved for future use — home tab currently shows &ldquo;Book a Call&rdquo;.
+                Reserved for future use — home tab currently shows &ldquo;Book a
+                Call&rdquo;.
               </p>
             </div>
             <div className="space-y-2">
@@ -351,20 +367,60 @@ export function IndustryForm({ mode, initial }: Props) {
             </p>
           </div>
 
-          <ImageInput
-            label="Thumbnail"
-            description="Shown before the hero video plays on the detail page."
-            value={thumbnail}
-            onChange={setThumbnail}
-            previewAspect="16/9"
-          />
+          <div className="border-border/60 bg-muted/20 space-y-5 rounded-lg border p-4">
+            <div className="space-y-1">
+              <h3 className="text-foreground text-sm font-semibold">
+                Industry reel media
+              </h3>
+              <p className="text-muted-foreground text-xs">
+                Dedicated portrait media for the Home Industry and Core
+                Verticals sections. These assets are separate from the
+                detail-page hero media below.
+              </p>
+            </div>
 
-          <VideoInput
-            label="Hero video"
-            description="Plays on the /industries/[slug] detail page hero."
-            value={video}
-            onChange={setVideo}
-          />
+            <ImageInput
+              label="Reel thumbnail (optional)"
+              description="Poster image for the Industry reel. Use a 9:16 portrait crop and keep key content centered; Home displays it in a bounded 4:5 frame."
+              value={reelThumbnail}
+              onChange={setReelThumbnail}
+              previewAspect="9/16"
+            />
+
+            <VideoInput
+              label="Reel video (optional)"
+              description="Short-form video used by the Home Industry and Core Verticals sections."
+              value={reelVideo}
+              onChange={setReelVideo}
+            />
+          </div>
+
+          <div className="border-border/60 space-y-5 rounded-lg border p-4">
+            <div className="space-y-1">
+              <h3 className="text-foreground text-sm font-semibold">
+                Industry detail page hero media
+              </h3>
+              <p className="text-muted-foreground text-xs">
+                Used only on the individual /industries/[slug] page. The hero
+                video remains independent from the Industry reel video.
+              </p>
+            </div>
+
+            <ImageInput
+              label="Hero thumbnail (optional)"
+              description="Shown before the detail-page hero video plays."
+              value={thumbnail}
+              onChange={setThumbnail}
+              previewAspect="16/9"
+            />
+
+            <VideoInput
+              label="Hero video (optional)"
+              description="Plays on the /industries/[slug] detail page hero."
+              value={video}
+              onChange={setVideo}
+            />
+          </div>
 
           <div className="space-y-2">
             <Label htmlFor="is_active">Active</Label>

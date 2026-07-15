@@ -1,9 +1,10 @@
 /**
  * Public + admin readers for Industries.
  *
- * Industries drive two UI surfaces:
+ * Industries drive three UI surfaces:
  *  - Home page `IndustriesSection` (tabbed pills + showcase card)
  *  - `/industries` `IndustriesDetailSection` (2-col grid with slug anchors)
+ *  - `CoreVerticalsSection` cards on selected public pages
  *
  * Anchor links use the slug as a fragment: `/industries#<slug>`.
  */
@@ -11,7 +12,21 @@
 import type { TIndustry, TIndustryIconKey } from "@/data/industries.data";
 import { apiFetch } from "@/lib/admin/api-client";
 import type { VideoRef } from "@/lib/admin/types";
-import { extractYouTubeId } from "@/lib/media/video";
+import {
+  resolveIndustryReelMedia,
+  resolveIndustryThumbnail,
+  resolveIndustryVideoSrc,
+} from "@/lib/media/industry";
+
+export {
+  resolveIndustryReelMedia,
+  resolveIndustryThumbnail,
+  resolveIndustryVideoSrc,
+} from "@/lib/media/industry";
+export type {
+  IndustryReelMedia,
+  IndustryReelMediaInput,
+} from "@/lib/media/industry";
 
 export const INDUSTRIES_TAG = "industries";
 
@@ -39,32 +54,14 @@ export interface ApiIndustry {
   cta_label?: string;
   cta_href?: string;
   tagline?: string;
-  thumbnail?: string;
-  video?: VideoRef;
+  thumbnail?: string | null;
+  video?: VideoRef | null;
+  reel_thumbnail?: string | null;
+  reel_video?: VideoRef | null;
   order: number;
   is_active: boolean;
   created_at?: string;
   updated_at?: string;
-}
-
-/** Resolves an industry VideoRef to a plain URL string for react-player. */
-export function resolveIndustryVideoSrc(
-  video: VideoRef | null | undefined,
-): string | undefined {
-  return video?.value || undefined;
-}
-
-/** Resolves thumbnail with priority: manual thumbnail > YouTube auto > undefined */
-export function resolveIndustryThumbnail(
-  thumbnail: string | undefined,
-  video: VideoRef | null | undefined,
-): string | undefined {
-  if (thumbnail) return thumbnail;
-  if (video?.source === "youtube") {
-    const id = extractYouTubeId(video.value);
-    if (id) return `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
-  }
-  return undefined;
 }
 
 export async function getPublicIndustries(): Promise<ApiIndustry[]> {
@@ -125,24 +122,30 @@ export async function getIndustryById(id: string): Promise<ApiIndustry> {
 }
 
 /**
- * Adapts API shape into the legacy `TIndustry[]` the existing
- * `IndustriesSection` / `IndustriesDetailSection` already consume, so the
- * swap requires no component refactor.
+ * Adapts API shape into the legacy `TIndustry[]`. Existing `videoSrc` and
+ * `thumbnailSrc` intentionally remain tied to the detail/overview film; the
+ * separate reel fields are consumed only by short-form home cards.
  */
 export function toLegacyIndustries(items: ApiIndustry[]): TIndustry[] {
-  return items.map((i) => ({
-    id: i.slug,
-    icon: i.icon,
-    name: i.name,
-    headline: i.headline,
-    description: i.description,
-    image: i.image,
-    work: i.work ?? [],
-    href:
-      i.cta_href && i.cta_href.trim() ? i.cta_href : `/industries#${i.slug}`,
-    videoSrc: resolveIndustryVideoSrc(i.video),
-    thumbnailSrc: resolveIndustryThumbnail(i.thumbnail, i.video),
-  }));
+  return items.map((i) => {
+    const reelMedia = resolveIndustryReelMedia(i);
+
+    return {
+      id: i.slug,
+      icon: i.icon,
+      name: i.name,
+      headline: i.headline,
+      description: i.description,
+      image: i.image,
+      work: i.work ?? [],
+      href:
+        i.cta_href && i.cta_href.trim() ? i.cta_href : `/industries#${i.slug}`,
+      videoSrc: resolveIndustryVideoSrc(i.video),
+      thumbnailSrc: resolveIndustryThumbnail(i.thumbnail, i.video),
+      reelVideoSrc: reelMedia.videoSrc,
+      reelThumbnailSrc: reelMedia.thumbnailSrc,
+    };
+  });
 }
 
 export async function getPublicIndustriesAsLegacy(): Promise<TIndustry[]> {
