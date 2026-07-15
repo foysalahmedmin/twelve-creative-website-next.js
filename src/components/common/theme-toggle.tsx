@@ -1,10 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import {
-  Moon01Icon,
-  Sun01Icon,
-} from "@hugeicons/core-free-icons";
+import { Moon01Icon, Sun01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
@@ -20,7 +17,12 @@ export function ThemeToggle({ className }: { className?: string }) {
 
   if (!mounted) {
     return (
-      <div className={cn("border-border bg-muted/20 h-9 w-9 md:h-11 md:w-11 animate-pulse rounded-xl border", className)} />
+      <div
+        className={cn(
+          "border-border bg-muted/20 h-9 w-9 animate-pulse rounded-xl border md:h-11 md:w-11",
+          className,
+        )}
+      />
     );
   }
 
@@ -33,14 +35,14 @@ export function ThemeToggle({ className }: { className?: string }) {
   return (
     <button
       onClick={toggleTheme}
+      type="button"
       className={cn(
-        "border-border text-muted-foreground hover:bg-muted hover:text-primary flex h-9 w-9 md:h-11 md:w-11 items-center justify-center rounded-xl border transition-all active:scale-95",
-        (theme === "light" || theme === "dark") && "bg-muted/50 text-primary",
-        className
+        "border-primary text-primary hover:border-primary hover:text-primary flex h-9 w-9 items-center justify-center rounded-lg border transition-all active:scale-95",
+        className,
       )}
       aria-label="Toggle theme"
     >
-      <HugeiconsIcon icon={currentIcon} className="h-5 w-5 md:h-6 md:w-6" />
+      <HugeiconsIcon icon={currentIcon} className="h-5 w-5" />
     </button>
   );
 }

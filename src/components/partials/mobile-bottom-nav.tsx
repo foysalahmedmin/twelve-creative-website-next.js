@@ -31,8 +31,8 @@ export const MobileBottomNav = () => {
       <div className="container px-3 pb-3">
         <div
           className={cn(
-            "bg-card/60 ring-foreground/8 flex h-[64px] items-center justify-around rounded-2xl px-2 backdrop-blur-xl ring-1",
-            "shadow-[0_8px_30px_-8px] shadow-foreground/15",
+            "bg-card/50 ring-foreground/25 flex h-[64px] items-center justify-around rounded-2xl px-2 ring-1 backdrop-blur-md",
+            "shadow-foreground/15 shadow-[0_8px_30px_-8px]",
           )}
         >
           {MAIN_NAV_ITEMS.map((item) => {
@@ -46,11 +46,11 @@ export const MobileBottomNav = () => {
                 key={item.href}
                 href={item.href}
                 aria-current={isActive ? "page" : undefined}
-                className="flex flex-1 flex-col items-center justify-center h-full"
+                className="flex h-full flex-1 flex-col items-center justify-center"
               >
                 <div
                   className={cn(
-                    "flex flex-col items-center justify-center transition-all duration-300 py-1.5 px-3 rounded-lg",
+                    "flex flex-col items-center justify-center rounded-lg px-3 py-1.5 transition-all duration-300",
                     isActive
                       ? "bg-primary/10 text-primary"
                       : "text-muted-foreground",
@@ -74,4 +74,3 @@ export const MobileBottomNav = () => {
     </nav>
   );
 };
-
