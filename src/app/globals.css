@@ -4,36 +4,37 @@
 @plugin "@tailwindcss/typography";
 
 @font-face {
-  font-family: "PPObjectSans";
-  src: url("/fonts/PPObjectSans-Regular.otf") format("opentype");
+  font-style: normal;
   font-weight: 400;
-  font-style: normal;
+  src: url("/fonts/PPObjectSans-Regular.otf") format("opentype");
+  font-family: "PPObjectSans";
   font-display: swap;
 }
 
 @font-face {
-  font-family: "PPObjectSans";
-  src: url("/fonts/PPObjectSans-Bold.otf") format("opentype");
+  font-style: normal;
   font-weight: 700;
-  font-style: normal;
+  src: url("/fonts/PPObjectSans-Bold.otf") format("opentype");
+  font-family: "PPObjectSans";
   font-display: swap;
 }
 
 @font-face {
-  font-family: "PPObjectSans";
-  src: url("/fonts/PPObjectSans-Heavy.otf") format("opentype");
-  font-weight: 900;
   font-style: normal;
+  font-weight: 900;
+  src: url("/fonts/PPObjectSans-Heavy.otf") format("opentype");
+  font-family: "PPObjectSans";
   font-display: swap;
 }
 
 /* Hide native cursor on desktop — custom cursor handles it */
 @media (min-width: 1024px) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     cursor: none !important;
   }
 }
-
 
 @custom-variant dark (&:is(.dark *));
 
@@ -194,7 +195,6 @@
   }
 
   @keyframes pulse-subtle {
-
     0%,
     100% {
       transform: scale(1);
@@ -308,6 +308,14 @@
   --sidebar-ring: oklch(0.67 0.1734 43.52); /* #E96A2C */
 
   --radius: 0.75rem;
+
+  /* ── Brand Gradients (Theme-aware) ── */
+  --brand-hero: linear-gradient(
+    180deg,
+    oklch(0.9354 0.008 106.55) 0%, /* Cream #EAEAE4 */
+    oklch(0.85 0.04 70) 50%,
+    oklch(0.70 0.15 45) 100% /* Orange #E96A2C */
+  );
 }
 
 .dark {
@@ -387,6 +395,14 @@
   --sidebar-accent-foreground: oklch(0.9354 0.008 106.55); /* #EAEAE4 */
   --sidebar-border: oklch(0.3132 0.0238 238.74); /* #26333C */
   --sidebar-ring: oklch(0.67 0.1734 43.52); /* #E96A2C */
+
+  /* ── Brand Gradients (Theme-aware) ── */
+  --brand-hero: linear-gradient(
+    180deg,
+    oklch(0.2195 0.0153 226.96) 0%, /* Teal-Black #131C20 */
+    oklch(0.2173 0.0243 36.6) 46%,
+    oklch(0.5352 0.1458 41.42) 100% /* Burnt Orange #B0491C */
+  );
 }
 
 /* Utility for theme colors */
@@ -407,6 +423,19 @@
 @utility secondary {
   --accent: var(--secondary);
   --accent-foreground: var(--secondary-foreground);
+}
+
+@utility bg-brand-artefact {
+  background-image: radial-gradient(
+    120% 130% at 50% 118%,
+    oklch(0.67 0.1734 43.52) 0%,
+    oklch(0.5031 0.1413 39.45) 36%,
+    oklch(0.2195 0.0153 226.96) 76%
+  );
+}
+
+@utility bg-brand-hero {
+  background-image: var(--brand-hero);
 }
 
 @utility container {
@@ -442,11 +471,11 @@
   }
 
   html {
-    @apply scroll-smooth font-sans overflow-x-clip;
+    @apply overflow-x-clip scroll-smooth font-sans;
   }
 
   body {
-    @apply overflow-x-clip bg-background text-foreground has-[div[data-variant='inset']]:bg-sidebar font-sans;
+    @apply bg-background text-foreground has-[div[data-variant='inset']]:bg-sidebar overflow-x-clip font-sans;
   }
 
   body[data-scroll-locked] {
@@ -474,32 +503,44 @@
 
 /* Reel (9:16 video) testimonial slides */
 .tc-swiper-reel .swiper-slide {
-  width: 162px;
   flex-shrink: 0;
+  width: 162px;
 }
 @media (min-width: 640px) {
-  .tc-swiper-reel .swiper-slide { width: 180px; }
+  .tc-swiper-reel .swiper-slide {
+    width: 180px;
+  }
 }
 @media (min-width: 1024px) {
-  .tc-swiper-reel .swiper-slide { width: 202px; }
+  .tc-swiper-reel .swiper-slide {
+    width: 202px;
+  }
 }
 @media (min-width: 1280px) {
-  .tc-swiper-reel .swiper-slide { width: 218px; }
+  .tc-swiper-reel .swiper-slide {
+    width: 218px;
+  }
 }
 
 /* Text testimonial slides */
 .tc-swiper-text .swiper-slide {
-  width: 272px;
   flex-shrink: 0;
+  width: 272px;
 }
 @media (min-width: 640px) {
-  .tc-swiper-text .swiper-slide { width: 310px; }
+  .tc-swiper-text .swiper-slide {
+    width: 310px;
+  }
 }
 @media (min-width: 1024px) {
-  .tc-swiper-text .swiper-slide { width: 348px; }
+  .tc-swiper-text .swiper-slide {
+    width: 348px;
+  }
 }
 @media (min-width: 1280px) {
-  .tc-swiper-text .swiper-slide { width: 384px; }
+  .tc-swiper-text .swiper-slide {
+    width: 384px;
+  }
 }
 
 @layer utilities {
@@ -522,19 +563,14 @@
     background-image: radial-gradient(
       120% 130% at 50% 118%,
       oklch(0.67 0.1734 43.52) 0%,
-      /* #E96A2C */ oklch(0.5031 0.1413 39.45) 36%,
-      /* #A4401A */ oklch(0.2195 0.0153 226.96) 76% /* #131C20 */
+      oklch(0.5031 0.1413 39.45) 36%,
+      oklch(0.2195 0.0153 226.96) 76%
     );
   }
 
   /* Hero gradient — teal-black → burnt orange, top to bottom (cover, p.1). */
   .bg-brand-hero {
-    background-image: linear-gradient(
-      180deg,
-      oklch(0.2195 0.0153 226.96) 0%,
-      /* #131C20 */ oklch(0.2173 0.0243 36.6) 46%,
-      /* #241612 */ oklch(0.5352 0.1458 41.42) 100% /* #B0491C */
-    );
+    background-image: var(--brand-hero);
   }
 
   /* Solid brand orange block. */

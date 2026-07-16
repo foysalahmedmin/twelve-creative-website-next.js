@@ -59,7 +59,7 @@ export const PageHeader = ({
           {label && (
             <>
               <ScrollReveal animation="fade-in-down" durationMs={700}>
-                <span className="mb-6 hidden rounded-md border border-[#eaeae4]/40 px-3 py-1 text-[11px] font-bold tracking-[0.12em] text-[#eaeae4] uppercase">
+                <span className="mb-6 hidden rounded-md border border-foreground/40 px-3 py-1 text-[11px] font-bold tracking-[0.12em] text-foreground uppercase">
                   {label}
                 </span>
               </ScrollReveal>
@@ -73,7 +73,7 @@ export const PageHeader = ({
                 animation="fade-in-up"
                 delayMs={100}
                 durationMs={700}
-                className="mb-6 text-[#eaeae4]/70 [&_a]:text-[#eaeae4]/60 [&_a:hover]:text-[#eaeae4]"
+                className="mb-6 text-foreground/70 [&_a]:text-foreground/60 [&_a:hover]:text-foreground"
               >
                 <Breadcrumb>
                   <BreadcrumbList className="justify-center">
@@ -113,7 +113,7 @@ export const PageHeader = ({
               delayMs={120}
               className="max-w-3xl space-y-4"
             >
-              <h1 className="font-heading text-3xl leading-[1.05] font-black tracking-tight text-[#eaeae4] sm:text-4xl md:text-5xl lg:text-6xl">
+              <h1 className="font-heading text-3xl leading-[1.05] font-black tracking-tight text-foreground sm:text-4xl md:text-5xl lg:text-6xl">
                 {title}
               </h1>
             </ScrollReveal>
@@ -124,7 +124,7 @@ export const PageHeader = ({
                 delayMs={250}
                 className="max-w-3xl space-y-4"
               >
-                <p className="mx-auto text-base leading-relaxed font-medium text-[#eaeae4]/80 sm:text-lg">
+                <p className="mx-auto text-base leading-relaxed font-medium text-foreground/80 sm:text-lg">
                   {description}
                 </p>
               </ScrollReveal>
@@ -139,7 +139,7 @@ export const PageHeader = ({
               durationMs={900}
               className="w-full px-4 lg:px-12"
             >
-              <div className="relative mx-auto mt-12 aspect-video w-full max-w-5xl overflow-hidden rounded-2xl ring-1 ring-[#eaeae4]/15 lg:mt-16">
+              <div className="relative mx-auto mt-12 aspect-video w-full max-w-5xl overflow-hidden rounded-2xl ring-1 ring-foreground/15 lg:mt-16">
                 {videoSrc ? (
                   <ReactPlayer
                     src={videoSrc}

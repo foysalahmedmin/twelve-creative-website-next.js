@@ -33,14 +33,14 @@ export const HeroSection = ({
         <div className="mx-auto flex max-w-195 flex-col items-center justify-center pt-10">
           {/* Headline */}
           <ScrollReveal animation="fade-in-up" delayMs={120} durationMs={800}>
-            <h1 className="font-heading mt-4 text-center text-[40px] leading-[110%] font-black tracking-tight text-[#eaeae4] lg:mt-5 lg:text-[70px]">
+            <h1 className="font-heading mt-4 text-center text-[40px] leading-[110%] font-black tracking-tight text-foreground lg:mt-5 lg:text-[70px]">
               {data.title}
             </h1>
           </ScrollReveal>
 
           {/* Description */}
           <ScrollReveal animation="fade-in-up" delayMs={250} durationMs={800}>
-            <p className="mt-6 text-center text-sm leading-[150%] font-normal text-[#eaeae4]/80 md:text-base">
+            <p className="mt-6 text-center text-sm leading-[150%] font-normal text-foreground/80 md:text-base">
               {data.description}
             </p>
           </ScrollReveal>
@@ -52,7 +52,7 @@ export const HeroSection = ({
             durationMs={900}
             className="block w-full px-4 lg:hidden lg:px-12"
           >
-            <div className="relative mx-auto mt-8 aspect-video w-full max-w-7xl overflow-hidden rounded-2xl border border-[#eaeae4]/10 shadow-sm lg:mt-10 lg:rounded-3xl">
+            <div className="relative mx-auto mt-8 aspect-video w-full max-w-7xl overflow-hidden rounded-2xl border border-foreground/10 shadow-sm lg:mt-10 lg:rounded-3xl">
               <ReactPlayer
                 src={data.video.src}
                 controls
@@ -83,7 +83,7 @@ export const HeroSection = ({
                 href={data.secondary_cta.href}
                 className={cn(
                   buttonVariants({ variant: "outline", size: "xl" }),
-                  "border-[#eaeae4]/40 text-[#eaeae4] hover:border-[#eaeae4]/60 hover:bg-[#eaeae4]/10 hover:text-[#eaeae4]",
+                  "border-foreground/40 text-foreground hover:border-foreground/60 hover:bg-foreground/10 hover:text-foreground",
                 )}
               >
                 {data.secondary_cta.label}
@@ -99,7 +99,7 @@ export const HeroSection = ({
           durationMs={900}
           className="hidden w-full px-4 lg:block lg:px-12"
         >
-          <div className="relative mx-auto mt-8 aspect-video w-full max-w-7xl overflow-hidden rounded-2xl border border-[#eaeae4]/10 shadow-sm lg:mt-10 lg:rounded-3xl">
+          <div className="relative mx-auto mt-8 aspect-video w-full max-w-7xl overflow-hidden rounded-2xl border border-foreground/10 shadow-sm lg:mt-10 lg:rounded-3xl">
             <ReactPlayer
               src={data.video.src}
               controls
