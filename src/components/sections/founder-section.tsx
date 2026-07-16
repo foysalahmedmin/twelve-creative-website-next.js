@@ -11,22 +11,27 @@ export const FounderSection = ({
   imageSrc,
 }: FounderSectionProps) => {
   return (
-    <section className={cn("bg-background border-t border-border/40 py-16 sm:py-20 lg:py-24", className)}>
+    <section
+      className={cn(
+        "bg-background border-border/40 border-t py-16 sm:py-20 lg:py-24",
+        className,
+      )}
+    >
       <div className="container max-w-7xl">
         <div className="flex flex-col gap-12 lg:flex-row lg:items-center lg:gap-20">
           {/* Left: Name + Title + Bio */}
           <div className="flex-1 space-y-8">
             {/* Eyebrow */}
-            <span className="text-foreground inline-flex items-center rounded-md border border-foreground/25 px-3 py-1 text-[11px] font-bold tracking-[0.12em] uppercase">
+            {/* <span className="text-foreground border-foreground/25 inline-flex items-center rounded-md border px-3 py-1 text-[11px] font-bold tracking-[0.12em] uppercase">
               Founder & Owner
-            </span>
+            </span> */}
 
             {/* Large name — PP Object Sans Heavy */}
-            <div className="space-y-2">
-              <h2 className="font-heading text-foreground text-[56px] leading-[100%] font-black tracking-tight sm:text-[72px] lg:text-[90px]">
+            <div className="space-y-2 space-x-1">
+              <h2 className="font-heading text-foreground inline-block text-[56px] leading-[100%] font-black tracking-tight sm:text-[72px] lg:text-[90px]">
                 Carlos
-              </h2>
-              <h2 className="font-heading text-primary text-[56px] leading-[100%] font-black tracking-tight sm:text-[72px] lg:text-[90px]">
+              </h2>{" "}
+              <h2 className="font-heading text-primary inline-block text-[56px] leading-[100%] font-black tracking-tight sm:text-[72px] lg:text-[90px]">
                 Doce.
               </h2>
             </div>
@@ -37,13 +42,13 @@ export const FounderSection = ({
             </p>
 
             <div className="relative w-full max-w-sm shrink-0 lg:hidden">
-              <div className="border-border bg-card relative aspect-3/4 w-full overflow-hidden rounded-2xl border">
+              <div className="border-border bg-card relative aspect-square w-full overflow-hidden rounded-2xl border">
                 {imageSrc ? (
                   <Image
                     src={imageSrc}
                     alt="Carlos Doce — Founder, Twelve Creative"
                     fill
-                    sizes="(max-width: 1024px) 100vw, 384px"
+                    sizes="(max-width: 1024px) 100vw, 320px"
                     className="object-cover"
                     priority
                   />
