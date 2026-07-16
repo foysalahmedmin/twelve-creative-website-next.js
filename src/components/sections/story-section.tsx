@@ -17,20 +17,52 @@ export function StorySection({ contentSection }: StorySectionProps) {
 
   useEffect(() => {
     const handleScroll = () => {
+      const isDesktop = window.innerWidth >= 1024;
+
+      if (isDesktop && containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        const topOffset = window.innerHeight * 0.08; // 8vh
+        const stickyHeight = window.innerHeight * 0.84; // 84vh
+        const totalScrollRange = rect.height - stickyHeight;
+
+        if (totalScrollRange > 0) {
+          const scrolled = topOffset - rect.top;
+          const progress = Math.max(0, Math.min(1, scrolled / totalScrollRange));
+          const index = Math.min(
+            Math.floor(progress * ABOUT_STORY_DATA.length),
+            ABOUT_STORY_DATA.length - 1
+          );
+          setActiveIndex(Math.max(0, index));
+          return;
+        }
+      }
+
+      // Mobile/tablet fallback: closest to viewport center
       if (!containerRef.current) return;
       const cards = containerRef.current.querySelectorAll(".story-card");
-      const centerPoint = window.innerHeight / 2;
+      const mid = window.innerHeight / 2;
+      let closestIndex = 0;
+      let minDistance = Infinity;
+
       cards.forEach((card, index) => {
         const rect = card.getBoundingClientRect();
-        // The card whose body is crossing the vertical centre of the screen.
-        if (rect.top <= centerPoint && rect.bottom >= centerPoint) {
-          setActiveIndex(index);
+        const cardCenter = rect.top + rect.height / 2;
+        const distance = Math.abs(cardCenter - mid);
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestIndex = index;
         }
       });
+      setActiveIndex(closestIndex);
     };
-    window.addEventListener("scroll", handleScroll, { passive: true });
+
     handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+    };
   }, []);
 
   // A single admin-provided image (if set) overrides the per-card images.
@@ -95,7 +127,14 @@ export function StorySection({ contentSection }: StorySectionProps) {
           {/* ── Right: scrolling cards ──
               Desktop gets vertical runway so every card reaches centre while
               the image is already pinned — no drift. Mobile has no runway. */}
-          <div className="lg:w-1/2 lg:py-[34vh]">
+          <div
+            className="lg:w-1/2 lg:py-[var(--story-padding)]"
+            style={
+              {
+                "--story-padding": "calc((84vh - min(600px, 72vh)) / 2)",
+              } as React.CSSProperties
+            }
+          >
             <div className="relative lg:pl-10">
               {/* Minimalist vertical tracker line — desktop, spans the cards */}
               <div className="bg-border absolute top-0 bottom-0 left-2 hidden w-px lg:block" />
