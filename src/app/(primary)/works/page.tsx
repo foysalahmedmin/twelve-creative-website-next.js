@@ -1,25 +1,20 @@
 import { WorksCard } from "@/components/cards/works-card";
 import { ScrollReveal } from "@/components/common/scroll-reveal";
-import { CenteredSectionHeader } from "@/components/common/section-label";
 import { BrandsStrip } from "@/components/sections/brands-strip";
+import { CoreVerticalsSection } from "@/components/sections/core-verticals-section";
 import { CTASection } from "@/components/sections/cta-section";
 import { PageHeader } from "@/components/sections/page-header-section";
 import { ThumbnailWorkSection } from "@/components/sections/thumbnail-work-section";
-import { VerticalMarqueeSlider } from "@/components/sections/vertical-marquee-slider";
 import { CTA_WORKS } from "@/data/page-ctas.data";
 import { CANVAS_PORTFOLIO_DATA } from "@/data/thumbnail-work-section.data";
-import {
-  getPublicShowcaseVideosForMarquee,
-  getPublicShowcaseVideosForThumbnailGrid,
-} from "@/lib/api/showcase-videos";
-import { CoreVerticalsSection } from "@/components/sections/core-verticals-section";
+import { getPublicIndustries } from "@/lib/api/industries";
 import {
   getPublicPageHero,
-  resolveVideoSrc,
   resolveThumbnail,
+  resolveVideoSrc,
 } from "@/lib/api/page-heroes";
+import { getPublicShowcaseVideosForThumbnailGrid } from "@/lib/api/showcase-videos";
 import { adaptWorkToLegacy, getPublicWorks } from "@/lib/api/works";
-import { getPublicIndustries } from "@/lib/api/industries";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -29,19 +24,17 @@ export const metadata: Metadata = {
 };
 
 export default async function WorksPage() {
-  const [showcaseVideos, liveWorks, livePortfolio, hero, industries] =
-    await Promise.all([
-      getPublicShowcaseVideosForMarquee(),
-      getPublicWorks(),
-      getPublicShowcaseVideosForThumbnailGrid({
-        label: CANVAS_PORTFOLIO_DATA.label,
-        title: CANVAS_PORTFOLIO_DATA.title,
-        description: CANVAS_PORTFOLIO_DATA.description,
-        type: CANVAS_PORTFOLIO_DATA.type,
-      }),
-      getPublicPageHero("works"),
-      getPublicIndustries(),
-    ]);
+  const [liveWorks, livePortfolio, hero, industries] = await Promise.all([
+    getPublicWorks(),
+    getPublicShowcaseVideosForThumbnailGrid({
+      label: CANVAS_PORTFOLIO_DATA.label,
+      title: CANVAS_PORTFOLIO_DATA.title,
+      description: CANVAS_PORTFOLIO_DATA.description,
+      type: CANVAS_PORTFOLIO_DATA.type,
+    }),
+    getPublicPageHero("works"),
+    getPublicIndustries(),
+  ]);
   const works = liveWorks.map(adaptWorkToLegacy);
 
   return (
@@ -75,25 +68,6 @@ export default async function WorksPage() {
               </ScrollReveal>
             ))}
           </div>
-        </section>
-      )}
-
-      {/* Vertical marquee — visual asset showcase */}
-      {showcaseVideos.length > 0 && (
-        <section className="py-16 sm:py-20 lg:py-24">
-          <ScrollReveal animation="fade-in-up" durationMs={800}>
-            <CenteredSectionHeader
-              label="Visual Library"
-              title="A live look at the work."
-              description="Frames from recent hospitality, real estate, aviation, and professional service campaigns. Hover to pause, click any tile to play."
-              className="mb-10 lg:mb-12"
-            />
-          </ScrollReveal>
-          <VerticalMarqueeSlider
-            data={showcaseVideos}
-            speed={30}
-            pauseOnHover
-          />
         </section>
       )}
 

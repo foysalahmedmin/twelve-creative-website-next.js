@@ -62,17 +62,52 @@ export const ProcessSection = ({
 
   useEffect(() => {
     const handleScroll = () => {
+      const isDesktop = window.innerWidth >= 1024;
+
+      if (isDesktop && rowRef.current) {
+        const rect = rowRef.current.getBoundingClientRect();
+        const topOffset = window.innerHeight * 0.08; // 8vh
+        const stickyHeight = window.innerHeight * 0.84; // 84vh
+        const totalScrollRange = rect.height - stickyHeight;
+
+        if (totalScrollRange > 0) {
+          const scrolled = topOffset - rect.top;
+          const progress = Math.max(0, Math.min(1, scrolled / totalScrollRange));
+          const index = Math.min(
+            Math.floor(progress * process_steps.length),
+            process_steps.length - 1
+          );
+          setActiveIndex(Math.max(0, index));
+          return;
+        }
+      }
+
+      // Mobile/tablet fallback: closest to viewport center
       const cards = document.querySelectorAll(".process-story-card");
       const mid = window.innerHeight / 2;
+      let closestIndex = 0;
+      let minDistance = Infinity;
+
       cards.forEach((card, index) => {
         const rect = card.getBoundingClientRect();
-        if (rect.top < mid && rect.bottom > mid) setActiveIndex(index);
+        const cardCenter = rect.top + rect.height / 2;
+        const distance = Math.abs(cardCenter - mid);
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestIndex = index;
+        }
       });
+      setActiveIndex(closestIndex);
     };
+
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    window.addEventListener("resize", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+    };
+  }, [process_steps.length]);
 
   const scrollToStep = (index: number) => {
     const cards = document.querySelectorAll(".process-story-card");
@@ -86,7 +121,12 @@ export const ProcessSection = ({
   const useStepImages = !processThumbnail && process_steps.length > 0;
 
   return (
-    <section className={cn("w-full border-t border-border/40 bg-background py-16 sm:py-20 lg:py-24", className)}>
+    <section
+      className={cn(
+        "border-border/40 bg-background w-full border-t py-16 sm:py-20 lg:py-24",
+        className,
+      )}
+    >
       <div className="container">
         <CenteredSectionHeader
           label={label || "Our Process"}
@@ -182,7 +222,14 @@ export const ProcessSection = ({
               The vertical runway (desktop only) gives the sticky media a large
               enough pinned window that every card reaches centre while the
               image is already fixed — so the image never drifts up or down. */}
-          <div className="flex-1 space-y-6 lg:py-[38vh]">
+          <div
+            className="flex-1 space-y-6 lg:py-[var(--steps-padding)]"
+            style={
+              {
+                "--steps-padding": "calc((84vh - min(650px, 72vh)) / 2)",
+              } as React.CSSProperties
+            }
+          >
             {process_steps?.map((step, index) => {
               const Icon = PROCESS_ICON_MAP[step.icon];
               const isActive = index === activeIndex;

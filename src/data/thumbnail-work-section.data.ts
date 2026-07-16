@@ -3,6 +3,7 @@ export interface IPortfolioItem {
   thumbnail: string;
   video_link?: string | null;
   title?: string;
+  aspect?: "reel" | "landscape";
 }
 
 export type TPortfolioData = {

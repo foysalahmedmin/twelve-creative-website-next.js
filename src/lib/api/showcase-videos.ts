@@ -9,11 +9,11 @@
  * Public reader is tagged so admin mutations invalidate it.
  */
 
-import type { IMarqueeItem } from "@/data/vertical-marquee.data";
 import type {
   IPortfolioItem,
   TPortfolioData,
 } from "@/data/thumbnail-work-section.data";
+import type { IMarqueeItem } from "@/data/vertical-marquee.data";
 import { apiFetch } from "@/lib/admin/api-client";
 import type { VideoRef } from "@/lib/admin/types";
 import { INDUSTRIES_TAG, type IndustrySummary } from "@/lib/api/industries";
@@ -136,7 +136,6 @@ export async function getPublicShowcaseVideosForThumbnailGrid(
 ): Promise<TPortfolioData> {
   const items = await getPublicShowcaseVideos({
     ...query,
-    aspect: "landscape",
   });
   const work: IPortfolioItem[] = items.flatMap((item) => {
     const thumbnail = resolvePoster(item.video, item.thumbnail);
@@ -148,6 +147,7 @@ export async function getPublicShowcaseVideosForThumbnailGrid(
             thumbnail,
             video_link: videoLink,
             title: item.alt,
+            aspect: item.aspect,
           },
         ]
       : [];
