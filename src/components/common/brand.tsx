@@ -33,34 +33,10 @@ export function BrandFrame({
         aria-hidden
         className={cn(
           "pointer-events-none absolute rounded-[18px] border-2",
-          inset ? "inset-3" : "top-6 left-6 -right-3 -bottom-3",
+          inset ? "inset-3" : "top-6 -right-3 -bottom-3 left-6",
           stroke,
         )}
       />
     </div>
-  );
-}
-
-/**
- * BrandTexture — subtle symbol line-pattern overlay (BRANDBOOK p.13/30/38).
- * Place inside a `relative` container; sits behind content.
- */
-export function BrandTexture({
-  className,
-  opacity = 60,
-}: {
-  className?: string;
-  /** 0–100; default 60. */
-  opacity?: number;
-}) {
-  return (
-    <div
-      aria-hidden
-      className={cn(
-        "bg-brand-texture pointer-events-none absolute inset-0",
-        className,
-      )}
-      style={{ opacity: opacity / 100 }}
-    />
   );
 }

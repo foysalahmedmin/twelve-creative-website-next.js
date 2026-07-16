@@ -1,7 +1,11 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { ArrowRight01Icon, Moon02Icon, Sun03Icon } from "@hugeicons/core-free-icons";
+import {
+  ArrowRight01Icon,
+  Moon02Icon,
+  Sun03Icon,
+} from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
@@ -17,7 +21,7 @@ function Eyebrow({
   return (
     <span
       className={cn(
-        "border-foreground/30 text-foreground inline-flex items-center rounded-md border px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em]",
+        "border-foreground/30 text-foreground inline-flex items-center rounded-md border px-3 py-1 text-[11px] font-bold tracking-[0.14em] uppercase",
         className,
       )}
     >
@@ -40,10 +44,12 @@ function Swatch({
   return (
     <div className="border-border overflow-hidden rounded-xl border">
       <div className={cn("flex h-32 items-end p-3", className)}>
-        <span className={cn("font-heading text-sm font-bold", text)}>{name}</span>
+        <span className={cn("font-heading text-sm font-bold", text)}>
+          {name}
+        </span>
       </div>
       <div className="bg-card flex items-center justify-between px-3 py-2">
-        <span className="text-muted-foreground text-xs font-bold uppercase tracking-widest">
+        <span className="text-muted-foreground text-xs font-bold tracking-widest uppercase">
           {hex}
         </span>
       </div>
@@ -92,7 +98,7 @@ export default function BrandPage() {
       <button
         type="button"
         onClick={() => setTheme(isDark ? "light" : "dark")}
-        className="border-border bg-card fixed right-5 top-5 z-50 flex h-11 items-center gap-2 rounded-lg border px-4 text-xs font-bold uppercase tracking-widest"
+        className="border-border bg-card fixed top-5 right-5 z-50 flex h-11 items-center gap-2 rounded-lg border px-4 text-xs font-bold tracking-widest uppercase"
       >
         {mounted && (
           <>
@@ -107,21 +113,22 @@ export default function BrandPage() {
 
       {/* ── Hero: the target look ── */}
       <header className="bg-brand-hero relative overflow-hidden">
-        <div className="bg-brand-texture pointer-events-none absolute inset-0 opacity-60" />
         <div className="relative z-10 mx-auto max-w-6xl px-6 py-24 sm:py-32">
-          <span className="inline-flex items-center rounded-md border border-[#eaeae4]/40 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-[#eaeae4]">
+          <span className="inline-flex items-center rounded-md border border-[#eaeae4]/40 px-3 py-1 text-[11px] font-bold tracking-[0.14em] text-[#eaeae4] uppercase">
             Brand System · 2025 / 26
           </span>
-          <h1 className="font-heading mt-6 max-w-4xl text-5xl font-black leading-[1.02] tracking-tight text-[#eaeae4] sm:text-7xl">
+          <h1 className="font-heading mt-6 max-w-4xl text-5xl leading-[1.02] font-black tracking-tight text-[#eaeae4] sm:text-7xl">
             The TwelveCreative design system, on brand.
           </h1>
-          <p className="mt-5 max-w-xl text-base font-medium leading-relaxed text-[#eaeae4]/80 sm:text-lg">
+          <p className="mt-5 max-w-xl text-base leading-relaxed font-medium text-[#eaeae4]/80 sm:text-lg">
             Energy orange used with confidence, warm cream and teal-black
             backgrounds, editorial radii, and Object Sans throughout — straight
             from the brandbook.
           </p>
           <div className="mt-9 flex flex-wrap gap-3">
-            <button className={cn(btnBase, "bg-primary text-primary-foreground")}>
+            <button
+              className={cn(btnBase, "bg-primary text-primary-foreground")}
+            >
               Explore our world
               <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" />
             </button>
@@ -139,7 +146,10 @@ export default function BrandPage() {
 
       <div className="mx-auto max-w-6xl px-6">
         {/* ── Palette ── */}
-        <Section eyebrow="Primary Palette" title="Three colors carry the brand.">
+        <Section
+          eyebrow="Primary Palette"
+          title="Three colors carry the brand."
+        >
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <Swatch
               name="Energy Orange"
@@ -161,25 +171,50 @@ export default function BrandPage() {
             />
           </div>
           <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
-            <Swatch name="background" hex="token" className="bg-background border" text="text-foreground" />
-            <Swatch name="card" hex="token" className="bg-card" text="text-foreground" />
-            <Swatch name="muted" hex="token" className="bg-muted" text="text-foreground" />
-            <Swatch name="primary" hex="token" className="bg-primary" text="text-primary-foreground" />
+            <Swatch
+              name="background"
+              hex="token"
+              className="bg-background border"
+              text="text-foreground"
+            />
+            <Swatch
+              name="card"
+              hex="token"
+              className="bg-card"
+              text="text-foreground"
+            />
+            <Swatch
+              name="muted"
+              hex="token"
+              className="bg-muted"
+              text="text-foreground"
+            />
+            <Swatch
+              name="primary"
+              hex="token"
+              className="bg-primary"
+              text="text-primary-foreground"
+            />
           </div>
         </Section>
 
         {/* ── Typography ── */}
-        <Section eyebrow="Typography" title="PP Object Sans — Heavy, Bold, Regular.">
+        <Section
+          eyebrow="Typography"
+          title="PP Object Sans — Heavy, Bold, Regular."
+        >
           <div className="space-y-8">
             <div>
               <Eyebrow className="mb-3">Headline · Heavy · tight</Eyebrow>
-              <p className="font-heading text-foreground text-4xl font-black leading-[1.03] tracking-tight sm:text-6xl">
+              <p className="font-heading text-foreground text-4xl leading-[1.03] font-black tracking-tight sm:text-6xl">
                 We help brands stand out with bold, refined visuals.
               </p>
             </div>
             <div>
-              <Eyebrow className="mb-3">Subheading · Regular · ALL CAPS</Eyebrow>
-              <p className="text-muted-foreground text-lg font-normal uppercase tracking-[0.12em]">
+              <Eyebrow className="mb-3">
+                Subheading · Regular · ALL CAPS
+              </Eyebrow>
+              <p className="text-muted-foreground text-lg font-normal tracking-[0.12em] uppercase">
                 From automation to content, systems that scale
               </p>
             </div>
@@ -200,10 +235,14 @@ export default function BrandPage() {
             <div className="flex flex-wrap items-center gap-3">
               <Eyebrow>Visual Identity</Eyebrow>
               <Eyebrow>Primary Palette</Eyebrow>
-              <Eyebrow className="border-primary/40 text-primary">Hospitality</Eyebrow>
+              <Eyebrow className="border-primary/40 text-primary">
+                Hospitality
+              </Eyebrow>
             </div>
             <div className="flex flex-wrap items-center gap-3">
-              <button className={cn(btnBase, "bg-primary text-primary-foreground")}>
+              <button
+                className={cn(btnBase, "bg-primary text-primary-foreground")}
+              >
                 Book a call
                 <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" />
               </button>
@@ -232,7 +271,7 @@ export default function BrandPage() {
               </p>
             </div>
             <div className="rounded-2xl bg-[#131c20] p-6 ring-1 ring-white/10">
-              <span className="mb-4 inline-flex items-center rounded-md border border-[#eaeae4]/30 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-[#eaeae4]">
+              <span className="mb-4 inline-flex items-center rounded-md border border-[#eaeae4]/30 px-3 py-1 text-[11px] font-bold tracking-[0.14em] text-[#eaeae4] uppercase">
                 Dark
               </span>
               <h3 className="font-heading text-xl font-black tracking-tight text-[#eaeae4]">
@@ -243,36 +282,38 @@ export default function BrandPage() {
               </p>
             </div>
             <div className="rounded-2xl bg-[#e96a2c] p-6">
-              <span className="mb-4 inline-flex items-center rounded-md border border-[#131c20]/40 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-[#131c20]">
+              <span className="mb-4 inline-flex items-center rounded-md border border-[#131c20]/40 px-3 py-1 text-[11px] font-bold tracking-[0.14em] text-[#131c20] uppercase">
                 Orange
               </span>
               <h3 className="font-heading text-xl font-black tracking-tight text-[#131c20]">
                 Distribution with intent
               </h3>
-              <p className="mt-2 text-sm font-medium leading-relaxed text-[#131c20]/80">
+              <p className="mt-2 text-sm leading-relaxed font-medium text-[#131c20]/80">
                 Bold solid orange — used with confidence, not as a wash.
               </p>
             </div>
           </div>
         </Section>
 
-        {/* ── Gradients & texture ── */}
-        <Section eyebrow="Gradients & Texture" title="Rich dark → orange, not faint washes.">
+        {/* ── Gradients ── */}
+        <Section
+          eyebrow="Gradients"
+          title="Rich dark → orange, not faint washes."
+        >
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div className="bg-brand-artefact flex h-56 items-end rounded-2xl p-5">
-              <span className="text-xs font-bold uppercase tracking-widest text-[#eaeae4]">
+              <span className="text-xs font-bold tracking-widest text-[#eaeae4] uppercase">
                 Artefact
               </span>
             </div>
             <div className="bg-brand-hero flex h-56 items-end rounded-2xl p-5">
-              <span className="text-xs font-bold uppercase tracking-widest text-[#eaeae4]">
+              <span className="text-xs font-bold tracking-widest text-[#eaeae4] uppercase">
                 Hero
               </span>
             </div>
-            <div className="relative flex h-56 items-end overflow-hidden rounded-2xl bg-[#e96a2c] p-5">
-              <div className="bg-brand-texture absolute inset-0 opacity-70" />
-              <span className="relative text-xs font-bold uppercase tracking-widest text-[#ffffff]">
-                Orange + texture
+            <div className="flex h-56 items-end rounded-2xl bg-[#e96a2c] p-5">
+              <span className="text-xs font-bold tracking-widest text-[#ffffff] uppercase">
+                Solid orange
               </span>
             </div>
           </div>
@@ -296,7 +337,7 @@ export default function BrandPage() {
                     r,
                   )}
                 />
-                <span className="text-muted-foreground text-[11px] font-bold uppercase tracking-widest">
+                <span className="text-muted-foreground text-[11px] font-bold tracking-widest uppercase">
                   {label}
                 </span>
               </div>

@@ -46,33 +46,26 @@ export const Footer = ({
 
   const renderSocialIcon = (platform: string) => {
     switch (platform) {
-      case "facebook":  return Facebook01Icon;
-      case "twitter":   return NewTwitterIcon;
-      case "linkedin":  return Linkedin01Icon;
-      case "instagram": return InstagramIcon;
-      case "youtube":   return YoutubeIcon;
-      default:          return Globe02Icon;
+      case "facebook":
+        return Facebook01Icon;
+      case "twitter":
+        return NewTwitterIcon;
+      case "linkedin":
+        return Linkedin01Icon;
+      case "instagram":
+        return InstagramIcon;
+      case "youtube":
+        return YoutubeIcon;
+      default:
+        return Globe02Icon;
     }
   };
 
   return (
     <footer
-      className={cn(
-        "relative overflow-hidden",
-        "bg-brand-artefact",
-        className,
-      )}
+      className={cn("relative overflow-hidden", "bg-brand-artefact", className)}
     >
-      {/* ── Decorative texture / glows ── */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage:
-            "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='28' viewBox='0 0 56 28'%3E%3Cpath d='M0 28 L14 2 L28 28 L42 2 L56 28' fill='none' stroke='%23EAEAE4' stroke-opacity='0.06' stroke-width='1.5'/%3E%3C/svg%3E\")",
-          backgroundSize: "56px 28px",
-        }}
-      />
+      {/* ── Decorative glows ── */}
       <span
         aria-hidden
         className="pointer-events-none absolute -top-56 -right-56 h-[36rem] w-[36rem] rounded-full bg-white/[0.05] blur-3xl"
@@ -113,7 +106,6 @@ export const Footer = ({
         {/* ── Main grid ── */}
         <div className="container pt-14 pb-12">
           <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-12 lg:gap-8">
-
             {/* Brand column — spans 4 */}
             <ScrollReveal
               animation="fade-in-left"
@@ -160,7 +152,7 @@ export const Footer = ({
               durationMs={700}
               className="flex flex-col gap-5 lg:col-span-2"
             >
-              <h4 className="text-[11px] font-bold uppercase tracking-[0.18em] text-white">
+              <h4 className="text-[11px] font-bold tracking-[0.18em] text-white uppercase">
                 Navigation
               </h4>
               <ul className="flex flex-col gap-2.5">
@@ -185,7 +177,7 @@ export const Footer = ({
               durationMs={700}
               className="flex flex-col gap-5 lg:col-span-2"
             >
-              <h4 className="text-[11px] font-bold uppercase tracking-[0.18em] text-white">
+              <h4 className="text-[11px] font-bold tracking-[0.18em] text-white uppercase">
                 Industries
               </h4>
               <ul className="flex flex-col gap-2.5">
@@ -210,7 +202,7 @@ export const Footer = ({
               durationMs={700}
               className="flex flex-col gap-5 lg:col-span-3"
             >
-              <h4 className="text-[11px] font-bold uppercase tracking-[0.18em] text-white">
+              <h4 className="text-[11px] font-bold tracking-[0.18em] text-white uppercase">
                 Contact
               </h4>
               <div className="flex flex-col gap-4">
@@ -219,13 +211,19 @@ export const Footer = ({
                   className="group flex items-start gap-3 text-sm text-white/70 transition-colors hover:text-white"
                 >
                   <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white/10 transition-colors group-hover:bg-white/20">
-                    <HugeiconsIcon icon={Mail01Icon} className="h-4 w-4 text-white" />
+                    <HugeiconsIcon
+                      icon={Mail01Icon}
+                      className="h-4 w-4 text-white"
+                    />
                   </span>
                   <span className="break-all">{email}</span>
                 </a>
                 <div className="group flex items-start gap-3 text-sm text-white/70">
                   <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white/10">
-                    <HugeiconsIcon icon={Call02Icon} className="h-4 w-4 text-white" />
+                    <HugeiconsIcon
+                      icon={Call02Icon}
+                      className="h-4 w-4 text-white"
+                    />
                   </span>
                   <p>{address}</p>
                 </div>
@@ -255,7 +253,9 @@ export const Footer = ({
               </Link>
               <span className="text-xs text-white/30">
                 Built by{" "}
-                <span className="font-semibold text-white/60">Twelve Creative</span>
+                <span className="font-semibold text-white/60">
+                  Twelve Creative
+                </span>
               </span>
             </div>
           </div>

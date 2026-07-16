@@ -1,7 +1,6 @@
 "use client";
 
 import { BrandFrame } from "@/components/common/brand";
-import { BrandTexture } from "@/components/common/brand";
 import { Button } from "@/components/ui/button";
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -28,8 +27,6 @@ export const CTASection = ({ data, className = "" }: CTASectionProps) => {
       <div className="container">
         {/* ── Contained CTA card ── */}
         <div className="bg-brand-artefact relative overflow-hidden rounded-3xl px-8 py-14 sm:px-12 lg:rounded-[2rem] lg:px-16 lg:py-20">
-          <BrandTexture opacity={25} />
-
           {/* Decorative glow */}
           <span
             aria-hidden
@@ -42,7 +39,11 @@ export const CTASection = ({ data, className = "" }: CTASectionProps) => {
 
           <div className="relative z-10 flex flex-col items-center gap-10 lg:flex-row lg:items-stretch lg:gap-14">
             {/* Image — framed with the brand "box" device */}
-            <BrandFrame inset tone="cream" className="w-full shrink-0 sm:max-w-sm lg:max-w-[40%]">
+            <BrandFrame
+              inset
+              tone="cream"
+              className="w-full shrink-0 sm:max-w-sm lg:max-w-[40%]"
+            >
               {/* Mobile: fixed aspect ratio. Desktop: stretches to match content height */}
               <div className="relative aspect-16/10 w-full overflow-hidden rounded-2xl lg:aspect-auto lg:h-full lg:min-h-[260px]">
                 <Link href={data.href} className="block h-full w-full">

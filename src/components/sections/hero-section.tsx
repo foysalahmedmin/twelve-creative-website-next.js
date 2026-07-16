@@ -1,6 +1,5 @@
 "use client";
 
-import { BrandTexture } from "@/components/common/brand";
 import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { buttonVariants } from "@/components/ui/button";
 import { HOME_HERO_DATA, type THomeHero } from "@/data/home-hero.data";
@@ -25,22 +24,19 @@ export const HeroSection = ({
     <section
       className={cn("bg-brand-hero relative w-full overflow-hidden", className)}
     >
-      {/* Brand texture depth */}
-      <BrandTexture opacity={35} />
-
       <div className="relative container flex min-h-screen flex-col items-center justify-center gap-4 px-4 pt-28 pb-16 sm:pt-32 lg:gap-4 lg:pt-36 lg:pb-24">
         {/* Center column for badge + headline + description + CTAs */}
         <div className="mx-auto flex max-w-195 flex-col items-center justify-center pt-10">
           {/* Headline */}
           <ScrollReveal animation="fade-in-up" delayMs={120} durationMs={800}>
-            <h1 className="font-heading mt-4 text-center text-[40px] leading-[110%] font-black tracking-tight text-foreground lg:mt-5 lg:text-[70px]">
+            <h1 className="font-heading text-foreground mt-4 text-center text-[40px] leading-[110%] font-black tracking-tight lg:mt-5 lg:text-[70px]">
               {data.title}
             </h1>
           </ScrollReveal>
 
           {/* Description */}
           <ScrollReveal animation="fade-in-up" delayMs={250} durationMs={800}>
-            <p className="mt-6 text-center text-sm leading-[150%] font-normal text-foreground/80 md:text-base">
+            <p className="text-foreground/80 mt-6 text-center text-sm leading-[150%] font-normal md:text-base">
               {data.description}
             </p>
           </ScrollReveal>
@@ -52,7 +48,7 @@ export const HeroSection = ({
             durationMs={900}
             className="block w-full px-4 lg:hidden lg:px-12"
           >
-            <div className="relative mx-auto mt-8 aspect-video w-full max-w-7xl overflow-hidden rounded-2xl border border-foreground/10 shadow-sm lg:mt-10 lg:rounded-3xl">
+            <div className="border-foreground/10 relative mx-auto mt-8 aspect-video w-full max-w-7xl overflow-hidden rounded-2xl border shadow-sm lg:mt-10 lg:rounded-3xl">
               <ReactPlayer
                 src={data.video.src}
                 controls
@@ -99,7 +95,7 @@ export const HeroSection = ({
           durationMs={900}
           className="hidden w-full px-4 lg:block lg:px-12"
         >
-          <div className="relative mx-auto mt-8 aspect-video w-full max-w-7xl overflow-hidden rounded-2xl border border-foreground/10 shadow-sm lg:mt-10 lg:rounded-3xl">
+          <div className="border-foreground/10 relative mx-auto mt-8 aspect-video w-full max-w-7xl overflow-hidden rounded-2xl border shadow-sm lg:mt-10 lg:rounded-3xl">
             <ReactPlayer
               src={data.video.src}
               controls

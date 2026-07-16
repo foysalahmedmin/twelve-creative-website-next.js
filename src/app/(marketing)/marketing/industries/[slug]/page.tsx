@@ -133,7 +133,7 @@ export default async function IndustryMarketingPage({ params }: Props) {
 
       {/* ── Work Showcase ── */}
       {livePortfolio.work.length > 0 && (
-        <ThumbnailWorkSection works={livePortfolio} />
+        <ThumbnailWorkSection works={livePortfolio} showViewMore={false} />
       )}
 
       {/* ── Process ── */}

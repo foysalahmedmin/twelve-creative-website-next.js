@@ -68,9 +68,6 @@ export const ServiceCard = ({ service, className }: ServiceCardProps) => {
       >
         {/* Orange gradient surface — brand primary, dark-on-orange content */}
         <div className="from-primary-from to-primary-to shadow-primary/50 relative h-full w-full overflow-hidden rounded-2xl bg-linear-to-br shadow-[0_12px_25px_-18px]">
-          {/* Subtle symbol texture for depth over the orange */}
-          <div className="bg-brand-texture pointer-events-none absolute inset-0 opacity-40" />
-
           <div className="relative flex h-full w-full flex-col justify-between gap-6 px-5 py-6 md:py-6">
             {/* Top: icon + title */}
             <div>

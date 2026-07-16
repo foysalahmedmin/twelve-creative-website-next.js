@@ -1,4 +1,3 @@
-import { BrandTexture } from "@/components/common/brand";
 import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { Button } from "@/components/ui/button";
 import { HOME_CTA_DATA } from "@/data/home-cta.data";
@@ -12,18 +11,12 @@ export const HomeCtaSection = ({ className }: { className?: string }) => {
 
   return (
     <section
-      className={cn(
-        "bg-background w-full py-16 sm:py-20 lg:py-24",
-        className,
-      )}
+      className={cn("bg-background w-full py-16 sm:py-20 lg:py-24", className)}
     >
       <div className="container">
         <ScrollReveal animation="fade-in-up" durationMs={800}>
           {/* ── Contained CTA card ── */}
           <div className="bg-brand-artefact relative overflow-hidden rounded-3xl px-8 py-16 sm:px-12 sm:py-20 lg:rounded-[2rem] lg:px-20 lg:py-24">
-            {/* Texture overlay */}
-            <BrandTexture opacity={30} />
-
             {/* Decorative glow orbs */}
             <span
               aria-hidden
@@ -31,7 +24,7 @@ export const HomeCtaSection = ({ className }: { className?: string }) => {
             />
             <span
               aria-hidden
-              className="pointer-events-none absolute -bottom-32 -right-32 h-96 w-96 rounded-full bg-white/5 blur-3xl"
+              className="pointer-events-none absolute -right-32 -bottom-32 h-96 w-96 rounded-full bg-white/5 blur-3xl"
             />
             <span
               aria-hidden
@@ -41,12 +34,12 @@ export const HomeCtaSection = ({ className }: { className?: string }) => {
             {/* Content */}
             <div className="relative z-10 mx-auto max-w-3xl text-center">
               {/* Eyebrow */}
-              <span className="inline-flex rounded-full border border-[#eaeae4]/30 bg-[#eaeae4]/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-[#eaeae4]/90 backdrop-blur-sm">
+              <span className="inline-flex rounded-full border border-[#eaeae4]/30 bg-[#eaeae4]/10 px-4 py-1.5 text-[11px] font-bold tracking-[0.14em] text-[#eaeae4]/90 uppercase backdrop-blur-sm">
                 {data.eyebrow}
               </span>
 
               {/* Title */}
-              <h2 className="font-heading mt-6 text-3xl font-black leading-[1.05] tracking-tight text-[#eaeae4] sm:text-4xl lg:text-[3.25rem]">
+              <h2 className="font-heading mt-6 text-3xl leading-[1.05] font-black tracking-tight text-[#eaeae4] sm:text-4xl lg:text-[3.25rem]">
                 {data.title}
               </h2>
 
