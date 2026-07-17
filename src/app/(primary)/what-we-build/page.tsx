@@ -59,7 +59,7 @@ export default async function WhatWeBuildPage() {
       />
 
       {/* Core Verticals */}
-      <CoreVerticalsSection industries={industries} tone="brand" />
+      <CoreVerticalsSection industries={industries} />
 
       {/* Detailed alternating service breakdowns */}
       <AlternatingServicesSection data={serviceItems} />
@@ -79,7 +79,7 @@ export default async function WhatWeBuildPage() {
       />
 
       {/* Why operators choose us */}
-      <WhyChooseUsSection data={WHY_CHOOSE_US_DATA} />
+      <WhyChooseUsSection data={WHY_CHOOSE_US_DATA} tone="brand" />
 
       {/* CTA */}
       <CTASection data={CTA_WHAT_WE_BUILD} />

@@ -66,7 +66,7 @@ export default async function HomePage() {
         howWeStructureImage={settings.how_we_structure_image || undefined}
       />
       <LiveIndustriesSection />
-      <WhyChooseUsSection data={WHY_CHOOSE_US_DATA} />
+      <WhyChooseUsSection data={WHY_CHOOSE_US_DATA} tone="brand" />
       <FaqSection data={faqsData} />
       <HomeCtaSection />
     </div>

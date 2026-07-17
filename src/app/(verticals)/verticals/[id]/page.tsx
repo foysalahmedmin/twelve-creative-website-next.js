@@ -95,11 +95,11 @@ export default async function VerticalDetailPage({ params }: Props) {
         </div>
       </section>
 
-      {/* ── Testimonials ── */}
-      <TestimonialSection data={testimonialsData} />
-
       {/* ── Work With Us ── */}
       <WorkWithUsSection />
+
+      {/* ── Testimonials ── */}
+      <TestimonialSection data={testimonialsData} />
 
       {/* ── Inline Booking ── */}
       <BookingInlineSection calendlyUrl={settings.calendly_url || undefined} />

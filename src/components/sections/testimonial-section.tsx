@@ -304,7 +304,7 @@ export const TestimonialSection = ({
   return (
     <section
       className={cn(
-        "border-primary-foreground/15 bg-primary w-full border-y py-16 sm:py-20 lg:py-24",
+        "bg-brand-artefact border-primary-foreground/15 w-full border-y py-16 sm:py-20 lg:py-24 dark:border-[#eaeae4]/10",
         className,
       )}
     >

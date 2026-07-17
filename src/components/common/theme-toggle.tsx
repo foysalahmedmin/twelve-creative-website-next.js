@@ -1,13 +1,5 @@
 "use client";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import {
   ComputerIcon,
@@ -51,33 +43,23 @@ export function ThemeToggle({ className }: { className?: string }) {
   const currentTheme = THEME_OPTIONS.find(
     (option) => option.value === activeTheme,
   )!;
+  const currentIndex = THEME_OPTIONS.findIndex(
+    (option) => option.value === activeTheme,
+  );
+  const nextTheme = THEME_OPTIONS[(currentIndex + 1) % THEME_OPTIONS.length];
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button
-          type="button"
-          className={cn(
-            "border-primary text-primary hover:bg-primary hover:text-primary-foreground flex h-9 w-9 items-center justify-center rounded-lg border transition-all active:scale-95",
-            className,
-          )}
-          aria-label={`Color mode: ${currentTheme.label}`}
-          title={`Color mode: ${currentTheme.label}`}
-        >
-          <HugeiconsIcon icon={currentTheme.icon} className="h-5 w-5" />
-        </button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="min-w-40">
-        <DropdownMenuLabel>Color mode</DropdownMenuLabel>
-        <DropdownMenuRadioGroup value={activeTheme} onValueChange={setTheme}>
-          {THEME_OPTIONS.map((option) => (
-            <DropdownMenuRadioItem key={option.value} value={option.value}>
-              <HugeiconsIcon icon={option.icon} className="size-4" />
-              {option.label}
-            </DropdownMenuRadioItem>
-          ))}
-        </DropdownMenuRadioGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <button
+      type="button"
+      onClick={() => setTheme(nextTheme.value)}
+      className={cn(
+        "border-primary text-primary hover:bg-primary hover:text-primary-foreground flex h-9 w-9 items-center justify-center rounded-lg border transition-all active:scale-95",
+        className,
+      )}
+      aria-label={`Color mode: ${currentTheme.label}. Switch to ${nextTheme.label}`}
+      title={`${currentTheme.label} mode · Click for ${nextTheme.label}`}
+    >
+      <HugeiconsIcon icon={currentTheme.icon} className="h-5 w-5" />
+    </button>
   );
 }

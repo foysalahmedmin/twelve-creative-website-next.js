@@ -77,7 +77,7 @@ export default async function WorksPage() {
       )}
 
       {/* Core Verticals */}
-      <CoreVerticalsSection industries={industries} />
+      <CoreVerticalsSection industries={industries} tone="brand" />
 
       {/* CTA */}
       <CTASection data={CTA_WORKS} />

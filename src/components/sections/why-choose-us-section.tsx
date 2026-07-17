@@ -6,11 +6,13 @@ import { cn } from "@/lib/utils";
 
 export interface PageWhyChooseUsProps {
   data: TWhyChooseUsData;
+  tone?: "default" | "brand";
   className?: string;
 }
 
 export const WhyChooseUsSection = ({
   data,
+  tone = "default",
   className,
 }: PageWhyChooseUsProps) => {
   const {
@@ -21,13 +23,22 @@ export const WhyChooseUsSection = ({
   } = data || {};
 
   return (
-    <section className={cn("bg-background py-20 sm:py-24 lg:py-32", className)}>
+    <section
+      className={cn(
+        "py-20 sm:py-24 lg:py-32",
+        tone === "brand"
+          ? "bg-brand-artefact border-primary-foreground/15 border-y dark:border-[#eaeae4]/10"
+          : "bg-background",
+        className,
+      )}
+    >
       <div className="container">
         <ScrollReveal animation="fade-in-up" durationMs={800}>
           <CenteredSectionHeader
             label={tag}
             title={heading_part1}
             description={paragraph}
+            tone={tone === "brand" ? "inverse" : "default"}
           />
         </ScrollReveal>
 
@@ -40,7 +51,7 @@ export const WhyChooseUsSection = ({
               durationMs={800}
               className="h-full"
             >
-              <FeatureCard feature={feature} />
+              <FeatureCard feature={feature} tone={tone} />
             </ScrollReveal>
           ))}
         </div>

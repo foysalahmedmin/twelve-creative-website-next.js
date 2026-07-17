@@ -1,14 +1,12 @@
-import { ScrollReveal } from "@/components/common/scroll-reveal";
-import { CenteredSectionHeader } from "@/components/common/section-label";
 import { BookingInlineSection } from "@/components/sections/booking-inline-section";
 import { BrandsStrip } from "@/components/sections/brands-strip";
 import { CTASection } from "@/components/sections/cta-section";
+import { IndustryVisualLibrarySection } from "@/components/sections/industry-visual-library-section";
 import { PageHeader } from "@/components/sections/page-header-section";
 import { ProcessSection } from "@/components/sections/process-section";
 import ScrollStatementSection from "@/components/sections/scroll-statement-section";
 import { TestimonialSection } from "@/components/sections/testimonial-section";
 import { ThumbnailWorkSection } from "@/components/sections/thumbnail-work-section";
-import { VerticalMarqueeSlider } from "@/components/sections/vertical-marquee-slider";
 import { WorkWithUsSection } from "@/components/sections/work-with-us-section";
 import { CTA_ABOUT } from "@/data/page-ctas.data";
 import { PROCESS_DATA } from "@/data/process.data";
@@ -109,27 +107,14 @@ export default async function IndustryMarketingPage({ params }: Props) {
       {/* ── Testimonials ── */}
       <TestimonialSection data={testimonialsData} />
 
-      {/* ── Visual Library ── */}
-      {showcaseVideos.length > 0 && (
-        <section className="py-16 sm:py-20 lg:py-24">
-          <ScrollReveal animation="fade-in-up" durationMs={800}>
-            <CenteredSectionHeader
-              label="Visual Library"
-              title="A live look at the work."
-              description={`Frames from recent ${industry.name.toLowerCase()} campaigns — content, ads, and brand assets built to perform.`}
-              className="mb-10 lg:mb-12"
-            />
-          </ScrollReveal>
-          <VerticalMarqueeSlider
-            data={showcaseVideos}
-            speed={30}
-            pauseOnHover
-          />
-        </section>
-      )}
-
       {/* ── Work With Us ── */}
       <WorkWithUsSection />
+
+      {/* ── Visual Library — permanent cinema-black brand block ── */}
+      <IndustryVisualLibrarySection
+        industryName={industry.name}
+        videos={showcaseVideos}
+      />
 
       {/* ── Work Showcase ── */}
       {livePortfolio.work.length > 0 && (

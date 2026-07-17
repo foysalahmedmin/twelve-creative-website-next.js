@@ -21,13 +21,13 @@ const FEATURE_ICON_MAP: Record<TFeatureIconKey, typeof BulbIcon> = {
 
 interface FeatureCardProps {
   feature: TFeature;
-  featured?: boolean;
+  tone?: "default" | "brand";
   className?: string;
 }
 
 export const FeatureCard = ({
   feature,
-  featured = false,
+  tone = "default",
   className,
 }: FeatureCardProps) => {
   const Icon = FEATURE_ICON_MAP[feature.icon];
@@ -35,7 +35,10 @@ export const FeatureCard = ({
   return (
     <div
       className={cn(
-        "group/feature relative space-y-3 rounded-2xl border border-transparent p-6 transition-all duration-300 hover:border-border hover:bg-muted hover:shadow-sm",
+        "group/feature relative space-y-3 rounded-2xl border p-6 transition-all duration-300",
+        tone === "brand"
+          ? "border-[#131C20]/10 bg-[#EAEAE4] shadow-[0_18px_50px_rgba(19,28,32,0.12)] hover:border-[#131C20]/25 hover:bg-[#F2F1EC]"
+          : "hover:border-border hover:bg-muted border-transparent hover:shadow-sm",
         className,
       )}
     >
@@ -47,10 +50,20 @@ export const FeatureCard = ({
         <HugeiconsIcon icon={Icon} className="h-6 w-6" />
       </div>
 
-      <h3 className="font-heading text-foreground text-lg font-black tracking-tight leading-tight">
+      <h3
+        className={cn(
+          "font-heading text-lg leading-tight font-black tracking-tight",
+          tone === "brand" ? "text-[#131C20]" : "text-foreground",
+        )}
+      >
         {feature.title}
       </h3>
-      <p className="text-muted-foreground text-sm leading-relaxed">
+      <p
+        className={cn(
+          "text-sm leading-relaxed",
+          tone === "brand" ? "text-[#131C20]/65" : "text-muted-foreground",
+        )}
+      >
         {feature.description}
       </p>
     </div>

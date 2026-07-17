@@ -91,7 +91,7 @@ export function CoreVerticalsSection({
       className={cn(
         "w-full border-t py-16 sm:py-20 lg:py-24",
         tone === "brand"
-          ? "border-primary-foreground/15 bg-primary"
+          ? "bg-brand-artefact border-primary-foreground/15 dark:border-[#eaeae4]/10"
           : "border-border/40 bg-background",
         className,
       )}
