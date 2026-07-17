@@ -3,10 +3,7 @@ import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { Card, CardContent } from "@/components/ui/card";
 import { DIFFERENCE_DATA } from "@/data/difference.data";
 import { cn } from "@/lib/utils";
-import {
-  Cancel01Icon,
-  Tick02Icon,
-} from "@hugeicons/core-free-icons";
+import { Cancel01Icon, Tick02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import Image from "next/image";
 
@@ -15,12 +12,18 @@ interface DifferenceSectionProps {
   howWeStructureImage?: string;
 }
 
-export const DifferenceSection = ({ className, howWeStructureImage }: DifferenceSectionProps) => {
+export const DifferenceSection = ({
+  className,
+  howWeStructureImage,
+}: DifferenceSectionProps) => {
   const data = DIFFERENCE_DATA;
 
   return (
     <section
-      className={cn("bg-background border-t border-border/40 py-16 sm:py-20 lg:py-24", className)}
+      className={cn(
+        "bg-background border-border/40 border-t py-16 sm:py-20 lg:py-24",
+        className,
+      )}
     >
       <div className="container">
         <ScrollReveal animation="fade-in-up" durationMs={800}>
@@ -45,10 +48,15 @@ export const DifferenceSection = ({ className, howWeStructureImage }: Difference
           </ScrollReveal>
         )}
 
-        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2 mt-10 lg:mt-16">
+        <div className="mt-10 grid grid-cols-1 gap-5 lg:mt-16 lg:grid-cols-2">
           {/* Fragmented */}
-          <ScrollReveal animation="fade-in-left" delayMs={100} durationMs={800} className="h-full">
-            <Card className="border-border gap-5 py-8 h-full">
+          <ScrollReveal
+            animation="fade-in-left"
+            delayMs={100}
+            durationMs={800}
+            className="h-full"
+          >
+            <Card className="border-border h-full gap-5 py-8">
               <CardContent className="space-y-5">
                 <div className="flex items-center gap-3">
                   <div className="bg-muted text-muted-foreground inline-flex h-11 w-11 items-center justify-center rounded-lg">
@@ -74,14 +82,19 @@ export const DifferenceSection = ({ className, howWeStructureImage }: Difference
           </ScrollReveal>
 
           {/* Connected */}
-          <ScrollReveal animation="fade-in-right" delayMs={200} durationMs={800} className="h-full">
-            <Card className="bg-brand-artefact relative overflow-hidden border-transparent gap-5 py-8 shadow-sm h-full">
+          <ScrollReveal
+            animation="fade-in-right"
+            delayMs={200}
+            durationMs={800}
+            className="h-full"
+          >
+            <Card className="bg-brand-artefact relative h-full gap-5 overflow-hidden border-transparent py-8 shadow-sm">
               <CardContent className="space-y-5">
                 <div className="flex items-center gap-3">
-                  <div className="bg-[#eaeae4] text-[#131c20] inline-flex h-11 w-11 items-center justify-center rounded-lg">
+                  <div className="bg-primary-foreground text-primary dark:bg-secondary dark:text-secondary-foreground inline-flex h-11 w-11 items-center justify-center rounded-lg">
                     <HugeiconsIcon icon={Tick02Icon} className="h-5 w-5" />
                   </div>
-                  <h3 className="font-heading text-[#eaeae4] text-lg font-black tracking-tight">
+                  <h3 className="font-heading text-primary-foreground text-lg font-black tracking-tight dark:text-[#eaeae4]">
                     {data.connected.title}
                   </h3>
                 </div>
@@ -89,11 +102,11 @@ export const DifferenceSection = ({ className, howWeStructureImage }: Difference
                   {data.connected.items.map((item) => (
                     <li
                       key={item}
-                      className="text-[#eaeae4]/85 flex items-start gap-2.5 text-sm leading-relaxed font-medium"
+                      className="text-primary-foreground/85 flex items-start gap-2.5 text-sm leading-relaxed font-medium dark:text-[#eaeae4]/85"
                     >
                       <HugeiconsIcon
                         icon={Tick02Icon}
-                        className="text-[#eaeae4] mt-0.5 h-4 w-4 shrink-0"
+                        className="text-primary-foreground mt-0.5 h-4 w-4 shrink-0 dark:text-[#eaeae4]"
                       />
                       {item}
                     </li>

@@ -63,9 +63,9 @@ function TabsTrigger({
     <TabsPrimitive.Trigger
       data-slot="tabs-trigger"
       className={cn(
-        "relative inline-flex items-center justify-center gap-2 rounded-lg px-5 py-4 text-sm font-semibold whitespace-nowrap text-foreground/70 transition-all hover:text-foreground hover:bg-accent focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
-        // Solid orange active pill (brandbook), dark text.
-        "data-active:bg-primary data-active:text-primary-foreground data-active:shadow-sm data-active:font-semibold",
+        "text-foreground/70 hover:text-foreground hover:bg-accent relative inline-flex items-center justify-center gap-2 rounded-lg px-5 py-4 text-sm font-semibold whitespace-nowrap transition-all focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
+        // Solid orange active pill with the brand's white foreground.
+        "data-active:bg-primary data-active:text-primary-foreground data-active:font-semibold data-active:shadow-sm",
         className,
       )}
       {...props}
@@ -87,4 +87,3 @@ function TabsContent({
 }
 
 export { Tabs, TabsContent, TabsList, tabsListVariants, TabsTrigger };
-

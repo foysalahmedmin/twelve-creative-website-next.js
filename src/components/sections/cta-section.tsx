@@ -27,21 +27,21 @@ export const CTASection = ({ data, className = "" }: CTASectionProps) => {
       <div className="container">
         {/* ── Contained CTA card ── */}
         <div className="bg-brand-artefact relative overflow-hidden rounded-3xl px-8 py-14 sm:px-12 lg:rounded-[2rem] lg:px-16 lg:py-20">
-          {/* Decorative glow */}
+          {/* Dark-mode decorative glow */}
           <span
             aria-hidden
-            className="pointer-events-none absolute -top-40 -right-40 h-[28rem] w-[28rem] rounded-full bg-white/[0.06] blur-3xl"
+            className="pointer-events-none absolute -top-40 -right-40 hidden h-[28rem] w-[28rem] rounded-full bg-white/[0.06] blur-3xl dark:block"
           />
           <span
             aria-hidden
-            className="pointer-events-none absolute -bottom-32 -left-32 h-80 w-80 rounded-full bg-white/[0.04] blur-3xl"
+            className="pointer-events-none absolute -bottom-32 -left-32 hidden h-80 w-80 rounded-full bg-white/[0.04] blur-3xl dark:block"
           />
 
           <div className="relative z-10 flex flex-col items-center gap-10 lg:flex-row lg:items-stretch lg:gap-14">
             {/* Image — framed with the brand "box" device */}
             <BrandFrame
               inset
-              tone="cream"
+              tone="primary-foreground"
               className="w-full shrink-0 sm:max-w-sm lg:max-w-[40%]"
             >
               {/* Mobile: fixed aspect ratio. Desktop: stretches to match content height */}
@@ -59,14 +59,19 @@ export const CTASection = ({ data, className = "" }: CTASectionProps) => {
 
             {/* Content */}
             <div className="flex flex-1 flex-col justify-center gap-5 text-center lg:text-left">
-              <h2 className="font-heading text-2xl leading-[1.1] font-black tracking-tight text-[#eaeae4] sm:text-3xl lg:text-4xl">
+              <h2 className="font-heading text-primary-foreground text-2xl leading-[1.1] font-black tracking-tight sm:text-3xl lg:text-4xl dark:text-[#eaeae4]">
                 {data.title}
               </h2>
-              <p className="mx-auto max-w-xl text-sm leading-relaxed font-medium text-[#eaeae4]/70 sm:text-base lg:mx-0">
+              <p className="text-primary-foreground/80 mx-auto max-w-xl text-sm leading-relaxed font-medium sm:text-base lg:mx-0 dark:text-[#eaeae4]/70">
                 {data.description}
               </p>
               <div className="pt-2">
-                <Button asChild size="default" variant="secondary">
+                <Button
+                  asChild
+                  size="default"
+                  variant="secondary"
+                  className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 dark:bg-secondary dark:text-secondary-foreground dark:hover:bg-secondary"
+                >
                   <Link href={data.href}>
                     {data.buttonText}
                     <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" />

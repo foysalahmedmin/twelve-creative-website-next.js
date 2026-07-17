@@ -14,7 +14,7 @@ export function BrandFrame({
 }: {
   children: React.ReactNode;
   /** Stroke color of the frame. */
-  tone?: "primary" | "cream" | "foreground";
+  tone?: "primary" | "primary-foreground" | "cream" | "foreground";
   /** true → clean inner frame; false (default) → offset frame peeking out. */
   inset?: boolean;
   className?: string;
@@ -22,9 +22,11 @@ export function BrandFrame({
   const stroke =
     tone === "primary"
       ? "border-primary"
-      : tone === "cream"
-        ? "border-[#eaeae4]"
-        : "border-foreground";
+      : tone === "primary-foreground"
+        ? "border-primary-foreground"
+        : tone === "cream"
+          ? "border-[#eaeae4]"
+          : "border-foreground";
 
   return (
     <div className={cn("relative", className)}>

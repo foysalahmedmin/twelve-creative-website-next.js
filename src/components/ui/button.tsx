@@ -10,7 +10,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        // Primary CTA — solid Energy Orange, dark text (brandbook p.23/24).
+        // Primary CTA — solid Energy Orange with a white foreground.
         default:
           "bg-primary text-primary-foreground uppercase tracking-[0.05em] shadow-sm transition-all duration-200 hover:shadow-primary hover:-translate-y-0.5",
         // Contrast — teal-black on cream / cream on teal-black.

@@ -114,13 +114,13 @@ export default function BrandPage() {
       {/* ── Hero: the target look ── */}
       <header className="bg-brand-hero relative overflow-hidden">
         <div className="relative z-10 mx-auto max-w-6xl px-6 py-24 sm:py-32">
-          <span className="inline-flex items-center rounded-md border border-[#eaeae4]/40 px-3 py-1 text-[11px] font-bold tracking-[0.14em] text-[#eaeae4] uppercase">
+          <span className="border-foreground/40 text-foreground inline-flex items-center rounded-md border px-3 py-1 text-[11px] font-bold tracking-[0.14em] uppercase">
             Brand System · 2025 / 26
           </span>
-          <h1 className="font-heading mt-6 max-w-4xl text-5xl leading-[1.02] font-black tracking-tight text-[#eaeae4] sm:text-7xl">
+          <h1 className="font-heading text-foreground mt-6 max-w-4xl text-5xl leading-[1.02] font-black tracking-tight sm:text-7xl">
             The TwelveCreative design system, on brand.
           </h1>
-          <p className="mt-5 max-w-xl text-base leading-relaxed font-medium text-[#eaeae4]/80 sm:text-lg">
+          <p className="text-foreground/80 mt-5 max-w-xl text-base leading-relaxed font-medium sm:text-lg">
             Energy orange used with confidence, warm cream and teal-black
             backgrounds, editorial radii, and Object Sans throughout — straight
             from the brandbook.
@@ -135,7 +135,7 @@ export default function BrandPage() {
             <button
               className={cn(
                 btnBase,
-                "border border-[#eaeae4]/35 text-[#eaeae4]",
+                "border-foreground/35 text-foreground border",
               )}
             >
               View work
@@ -282,13 +282,13 @@ export default function BrandPage() {
               </p>
             </div>
             <div className="rounded-2xl bg-[#e96a2c] p-6">
-              <span className="mb-4 inline-flex items-center rounded-md border border-[#131c20]/40 px-3 py-1 text-[11px] font-bold tracking-[0.14em] text-[#131c20] uppercase">
+              <span className="border-primary-foreground/40 text-primary-foreground mb-4 inline-flex items-center rounded-md border px-3 py-1 text-[11px] font-bold tracking-[0.14em] uppercase">
                 Orange
               </span>
-              <h3 className="font-heading text-xl font-black tracking-tight text-[#131c20]">
+              <h3 className="font-heading text-primary-foreground text-xl font-black tracking-tight">
                 Distribution with intent
               </h3>
-              <p className="mt-2 text-sm leading-relaxed font-medium text-[#131c20]/80">
+              <p className="text-primary-foreground/80 mt-2 text-sm leading-relaxed font-medium">
                 Bold solid orange — used with confidence, not as a wash.
               </p>
             </div>
@@ -298,21 +298,21 @@ export default function BrandPage() {
         {/* ── Gradients ── */}
         <Section
           eyebrow="Gradients"
-          title="Rich dark → orange, not faint washes."
+          title="Solid orange in light; rich dark → orange in dark."
         >
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div className="bg-brand-artefact flex h-56 items-end rounded-2xl p-5">
-              <span className="text-xs font-bold tracking-widest text-[#eaeae4] uppercase">
+              <span className="text-primary-foreground text-xs font-bold tracking-widest uppercase dark:text-[#eaeae4]">
                 Artefact
               </span>
             </div>
             <div className="bg-brand-hero flex h-56 items-end rounded-2xl p-5">
-              <span className="text-xs font-bold tracking-widest text-[#eaeae4] uppercase">
+              <span className="text-foreground text-xs font-bold tracking-widest uppercase">
                 Hero
               </span>
             </div>
             <div className="flex h-56 items-end rounded-2xl bg-[#e96a2c] p-5">
-              <span className="text-xs font-bold tracking-widest text-[#ffffff] uppercase">
+              <span className="text-primary-foreground text-xs font-bold tracking-widest uppercase">
                 Solid orange
               </span>
             </div>

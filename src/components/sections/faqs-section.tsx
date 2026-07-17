@@ -30,7 +30,7 @@ export const FaqSection = ({ data, className }: FaqsSectionProps) => {
     <section
       id="faq"
       className={cn(
-        "w-full bg-background border-t border-border/40 py-16 sm:py-20 lg:py-24",
+        "bg-background border-border/40 w-full border-t py-16 sm:py-20 lg:py-24",
         className,
       )}
     >
@@ -60,7 +60,7 @@ export const FaqSection = ({ data, className }: FaqsSectionProps) => {
             <div className="bg-brand-artefact mx-auto flex h-full w-full max-w-105 rounded-3xl transition-all duration-300 hover:scale-[102%]">
               <div className="flex h-full w-full flex-col items-center space-y-6 rounded-3xl p-8 text-center sm:p-10">
                 {/* Profile Image with dual ring */}
-                <div className="relative size-28 shrink-0 overflow-hidden rounded-full border-2 border-[#eaeae4]/40 bg-[#131c20] p-1">
+                <div className="border-primary-foreground/40 relative size-28 shrink-0 overflow-hidden rounded-full border-2 bg-[#131c20] p-1 dark:border-[#eaeae4]/40">
                   <div className="relative h-full w-full overflow-hidden rounded-full">
                     <Image
                       src={image || "/default-avatar.png"}
@@ -75,20 +75,20 @@ export const FaqSection = ({ data, className }: FaqsSectionProps) => {
 
                 {/* Title & Description */}
                 <div className="space-y-2">
-                  <h3 className="font-heading text-xl font-black tracking-tight text-[#eaeae4] sm:text-2xl">
+                  <h3 className="font-heading text-primary-foreground text-xl font-black tracking-tight sm:text-2xl dark:text-[#eaeae4]">
                     {heading}
                   </h3>
-                  <p className="text-sm leading-relaxed text-[#eaeae4]/75 sm:text-base">
+                  <p className="text-primary-foreground/80 text-sm leading-relaxed sm:text-base dark:text-[#eaeae4]/75">
                     {description}
                   </p>
                 </div>
 
                 {/* Coordinator Metadata */}
                 <div className="space-y-1">
-                  <h4 className="font-heading text-lg font-black tracking-tight text-[#eaeae4]">
+                  <h4 className="font-heading text-primary-foreground text-lg font-black tracking-tight dark:text-[#eaeae4]">
                     {name}
                   </h4>
-                  <p className="text-xs font-semibold tracking-wide text-[#eaeae4]/70 uppercase sm:text-sm">
+                  <p className="text-primary-foreground/75 text-xs font-semibold tracking-wide uppercase sm:text-sm dark:text-[#eaeae4]/70">
                     {position}
                   </p>
                 </div>
@@ -96,7 +96,7 @@ export const FaqSection = ({ data, className }: FaqsSectionProps) => {
                 {/* Action Button */}
                 <Link
                   href={contact_link || "/contact"}
-                  className="bg-primary text-primary-foreground w-full rounded-lg px-6 py-3 text-center text-sm font-semibold tracking-[0.05em] uppercase transition-transform duration-200 select-none hover:scale-105 active:scale-95"
+                  className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/90 w-full rounded-lg px-6 py-3 text-center text-sm font-semibold tracking-[0.05em] uppercase transition-all duration-200 select-none hover:scale-105 active:scale-95"
                 >
                   Book a Call
                 </Link>

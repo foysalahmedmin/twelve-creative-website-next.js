@@ -65,26 +65,26 @@ export const Footer = ({
     <footer
       className={cn("relative overflow-hidden", "bg-brand-artefact", className)}
     >
-      {/* ── Decorative glows ── */}
+      {/* ── Dark-mode decorative glows ── */}
       <span
         aria-hidden
-        className="pointer-events-none absolute -top-56 -right-56 h-[36rem] w-[36rem] rounded-full bg-white/[0.05] blur-3xl"
+        className="pointer-events-none absolute -top-56 -right-56 hidden h-[36rem] w-[36rem] rounded-full bg-white/[0.05] blur-3xl dark:block"
       />
       <span
         aria-hidden
-        className="pointer-events-none absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-black/10 blur-3xl"
+        className="pointer-events-none absolute -bottom-40 -left-40 hidden h-80 w-80 rounded-full bg-black/10 blur-3xl dark:block"
       />
 
       <div className="relative z-10">
         {/* ── Top micro-CTA strip ── */}
-        <div className="border-b border-white/20">
+        <div className="border-primary-foreground/20 border-b">
           <div className="container flex flex-col items-center justify-between gap-4 py-6 sm:flex-row">
-            <p className="text-sm font-semibold text-white/80">
+            <p className="text-primary-foreground/80 text-sm font-semibold">
               Ready to build the structure behind your growth?
             </p>
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 rounded-full bg-white/15 px-5 py-2 text-sm font-bold text-white backdrop-blur-sm transition-all hover:bg-white hover:text-[#E96A2C]"
+              className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-bold transition-all dark:bg-white/15 dark:text-white dark:backdrop-blur-sm dark:hover:bg-white dark:hover:text-[#E96A2C]"
             >
               Start a conversation
               <svg
@@ -116,7 +116,7 @@ export const Footer = ({
                 <LogoIcon className="h-8 w-auto brightness-0 invert lg:h-10" />
               </Link>
 
-              <p className="max-w-xs text-sm leading-relaxed text-white/75">
+              <p className="text-primary-foreground/75 max-w-xs text-sm leading-relaxed">
                 Twelve Creative builds positioning, creative, distribution,
                 websites, CRM, and automation systems for businesses that need a
                 clearer path from attention to revenue.
@@ -128,7 +128,7 @@ export const Footer = ({
                   <Link
                     key={social.platform}
                     href={social.href}
-                    className="group flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur-sm transition-all duration-200 hover:scale-110 hover:border-white hover:bg-white hover:text-[#E96A2C]"
+                    className="border-primary-foreground bg-primary-foreground text-primary hover:bg-primary-foreground/90 group flex h-9 w-9 items-center justify-center rounded-full border transition-all duration-200 hover:scale-110 dark:border-white/20 dark:bg-white/10 dark:text-white dark:backdrop-blur-sm dark:hover:border-white dark:hover:bg-white dark:hover:text-[#E96A2C]"
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={social.platform}
@@ -152,7 +152,7 @@ export const Footer = ({
               durationMs={700}
               className="flex flex-col gap-5 lg:col-span-2"
             >
-              <h4 className="text-[11px] font-bold tracking-[0.18em] text-white uppercase">
+              <h4 className="text-primary-foreground text-[11px] font-bold tracking-[0.18em] uppercase">
                 Navigation
               </h4>
               <ul className="flex flex-col gap-2.5">
@@ -160,9 +160,9 @@ export const Footer = ({
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="group inline-flex items-center gap-1.5 text-sm text-white/70 transition-colors hover:text-white"
+                      className="text-primary-foreground/70 hover:text-primary-foreground group inline-flex items-center gap-1.5 text-sm transition-colors"
                     >
-                      <span className="h-px w-0 bg-white transition-all duration-200 group-hover:w-3" />
+                      <span className="bg-primary-foreground h-px w-0 transition-all duration-200 group-hover:w-3" />
                       {link.label}
                     </Link>
                   </li>
@@ -177,7 +177,7 @@ export const Footer = ({
               durationMs={700}
               className="flex flex-col gap-5 lg:col-span-2"
             >
-              <h4 className="text-[11px] font-bold tracking-[0.18em] text-white uppercase">
+              <h4 className="text-primary-foreground text-[11px] font-bold tracking-[0.18em] uppercase">
                 Industries
               </h4>
               <ul className="flex flex-col gap-2.5">
@@ -185,9 +185,9 @@ export const Footer = ({
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="group inline-flex items-center gap-1.5 text-sm text-white/70 transition-colors hover:text-white"
+                      className="text-primary-foreground/70 hover:text-primary-foreground group inline-flex items-center gap-1.5 text-sm transition-colors"
                     >
-                      <span className="h-px w-0 bg-white transition-all duration-200 group-hover:w-3" />
+                      <span className="bg-primary-foreground h-px w-0 transition-all duration-200 group-hover:w-3" />
                       {link.label}
                     </Link>
                   </li>
@@ -202,27 +202,27 @@ export const Footer = ({
               durationMs={700}
               className="flex flex-col gap-5 lg:col-span-3"
             >
-              <h4 className="text-[11px] font-bold tracking-[0.18em] text-white uppercase">
+              <h4 className="text-primary-foreground text-[11px] font-bold tracking-[0.18em] uppercase">
                 Contact
               </h4>
               <div className="flex flex-col gap-4">
                 <a
                   href={`mailto:${email}`}
-                  className="group flex items-start gap-3 text-sm text-white/70 transition-colors hover:text-white"
+                  className="text-primary-foreground/70 hover:text-primary-foreground group flex items-start gap-3 text-sm transition-colors"
                 >
-                  <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white/10 transition-colors group-hover:bg-white/20">
+                  <span className="bg-primary-foreground/10 group-hover:bg-primary-foreground/20 mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg transition-colors">
                     <HugeiconsIcon
                       icon={Mail01Icon}
-                      className="h-4 w-4 text-white"
+                      className="text-primary-foreground h-4 w-4"
                     />
                   </span>
                   <span className="break-all">{email}</span>
                 </a>
-                <div className="group flex items-start gap-3 text-sm text-white/70">
-                  <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white/10">
+                <div className="text-primary-foreground/70 group flex items-start gap-3 text-sm">
+                  <span className="bg-primary-foreground/10 mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg">
                     <HugeiconsIcon
                       icon={Call02Icon}
-                      className="h-4 w-4 text-white"
+                      className="text-primary-foreground h-4 w-4"
                     />
                   </span>
                   <p>{address}</p>
@@ -233,27 +233,27 @@ export const Footer = ({
         </div>
 
         {/* ── Bottom bar ── */}
-        <div className="border-t border-white/15">
+        <div className="border-primary-foreground/15 border-t">
           <div className="container flex flex-col items-center justify-between gap-4 py-6 md:flex-row">
-            <p className="text-xs text-white/50">
+            <p className="text-primary-foreground/50 text-xs">
               © {new Date().getFullYear()} Twelve Creative. All rights reserved.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
               <Link
                 href="/privacy-policy"
-                className="text-xs text-white/50 transition-colors hover:text-white"
+                className="text-primary-foreground/50 hover:text-primary-foreground text-xs transition-colors"
               >
                 Privacy Policy
               </Link>
               <Link
                 href="/terms-and-conditions"
-                className="text-xs text-white/50 transition-colors hover:text-white"
+                className="text-primary-foreground/50 hover:text-primary-foreground text-xs transition-colors"
               >
                 Terms of Use
               </Link>
-              <span className="text-xs text-white/30">
+              <span className="text-primary-foreground/30 text-xs">
                 Built by{" "}
-                <span className="font-semibold text-white/60">
+                <span className="text-primary-foreground/60 font-semibold">
                   Twelve Creative
                 </span>
               </span>

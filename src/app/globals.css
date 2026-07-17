@@ -311,6 +311,10 @@
 
   /* ── Brand Hero (Theme-aware) ── */
   --brand-hero: oklch(0.9354 0.008 106.55); /* #EAEAE4 Cream */
+
+  /* ── Brand Artefact Surface (Theme-aware) ── */
+  --brand-artefact: var(--primary); /* #E96A2C Energy Orange */
+  --brand-artefact-foreground: var(--primary-foreground); /* #FFFFFF */
 }
 
 .dark {
@@ -398,6 +402,15 @@
     /* Teal-Black #131C20 */ oklch(0.2173 0.0243 36.6) 46%,
     oklch(0.5352 0.1458 41.42) 100% /* Burnt Orange #B0491C */
   );
+
+  /* ── Brand Artefact Surface (Theme-aware) ── */
+  --brand-artefact: radial-gradient(
+    120% 130% at 50% 118%,
+    oklch(0.67 0.1734 43.52) 0%,
+    oklch(0.5031 0.1413 39.45) 36%,
+    oklch(0.2195 0.0153 226.96) 76%
+  );
+  --brand-artefact-foreground: oklch(0.9354 0.008 106.55); /* #EAEAE4 */
 }
 
 /* Utility for theme colors */
@@ -421,12 +434,8 @@
 }
 
 @utility bg-brand-artefact {
-  background-image: radial-gradient(
-    120% 130% at 50% 118%,
-    oklch(0.67 0.1734 43.52) 0%,
-    oklch(0.5031 0.1413 39.45) 36%,
-    oklch(0.2195 0.0153 226.96) 76%
-  );
+  background: var(--brand-artefact);
+  color: var(--brand-artefact-foreground);
 }
 
 @utility bg-brand-hero {
@@ -553,14 +562,10 @@
 
   /* ── Brand gradients (BRANDBOOK 2025/26) ───────────────────────────── */
 
-  /* Artefact gradient — rich orange glow rising into teal-black (p.20). */
+  /* Artefact surface — orange in light mode; dark-to-orange in dark mode. */
   .bg-brand-artefact {
-    background-image: radial-gradient(
-      120% 130% at 50% 118%,
-      oklch(0.67 0.1734 43.52) 0%,
-      oklch(0.5031 0.1413 39.45) 36%,
-      oklch(0.2195 0.0153 226.96) 76%
-    );
+    background: var(--brand-artefact);
+    color: var(--brand-artefact-foreground);
   }
 
   /* Hero background — cream in light mode; dark-to-orange gradient in dark. */
