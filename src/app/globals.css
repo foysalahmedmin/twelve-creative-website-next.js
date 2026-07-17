@@ -309,13 +309,8 @@
 
   --radius: 0.75rem;
 
-  /* ── Brand Gradients (Theme-aware) ── */
-  --brand-hero: linear-gradient(
-    180deg,
-    oklch(0.9354 0.008 106.55) 0%,
-    /* Cream #EAEAE4 */ oklch(0.85 0.04 70) 50%,
-    oklch(0.7 0.15 45) 100% /* Orange #E96A2C */
-  );
+  /* ── Brand Hero (Theme-aware) ── */
+  --brand-hero: oklch(0.9354 0.008 106.55); /* #EAEAE4 Cream */
 }
 
 .dark {
@@ -435,7 +430,7 @@
 }
 
 @utility bg-brand-hero {
-  background-image: var(--brand-hero);
+  background: var(--brand-hero);
 }
 
 @utility container {
@@ -568,9 +563,9 @@
     );
   }
 
-  /* Hero gradient — teal-black → burnt orange, top to bottom (cover, p.1). */
+  /* Hero background — cream in light mode; dark-to-orange gradient in dark. */
   .bg-brand-hero {
-    background-image: var(--brand-hero);
+    background: var(--brand-hero);
   }
 
   /* Solid brand orange block. */
