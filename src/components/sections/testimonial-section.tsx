@@ -187,7 +187,7 @@ const Marquee = forwardRef<MarqueeHandle, MarqueeProps>(function Marquee(
   return (
     <div
       className={cn(
-        "min-w-0 flex-1 cursor-grab overflow-hidden select-none active:cursor-grabbing",
+        "-my-3 min-w-0 flex-1 cursor-grab overflow-hidden py-3 select-none active:cursor-grabbing",
         className,
       )}
       onMouseEnter={() => (hover.current = true)}
@@ -303,7 +303,10 @@ export const TestimonialSection = ({
 
   return (
     <section
-      className={cn("w-full bg-muted py-16 sm:py-20 lg:py-24", className)}
+      className={cn(
+        "border-primary-foreground/15 bg-primary w-full border-y py-16 sm:py-20 lg:py-24",
+        className,
+      )}
     >
       <ScrollReveal animation="fade-in-up" durationMs={800}>
         <div className="container">
@@ -314,6 +317,7 @@ export const TestimonialSection = ({
             description={
               description || "1,000+ creators trust us to edit their videos."
             }
+            tone="inverse"
             className="relative z-10 mb-0 lg:mb-0"
           />
 

@@ -1,16 +1,11 @@
 "use client";
 
 import { formatDistanceToNow } from "date-fns";
-import {
-  Bell,
-  CalendarCheck,
-  ChevronDown,
-  LogOut,
-  Mail,
-} from "lucide-react";
+import { Bell, CalendarCheck, ChevronDown, LogOut, Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/common/theme-toggle";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -42,8 +37,8 @@ function relativeTime(date: string) {
 }
 
 const TYPE_ICON: Record<string, React.ReactNode> = {
-  booking: <CalendarCheck className="text-primary size-3.5 shrink-0 mt-0.5" />,
-  contact: <Mail className="text-primary size-3.5 shrink-0 mt-0.5" />,
+  booking: <CalendarCheck className="text-primary mt-0.5 size-3.5 shrink-0" />,
+  contact: <Mail className="text-primary mt-0.5 size-3.5 shrink-0" />,
 };
 
 export function AdminTopbar({
@@ -95,6 +90,8 @@ export function AdminTopbar({
       <div />
 
       <div className="flex items-center gap-2">
+        <ThemeToggle />
+
         {/* Notification bell */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -106,7 +103,7 @@ export function AdminTopbar({
             >
               <Bell className="size-5" />
               {unreadCount > 0 && (
-                <span className="bg-destructive text-destructive-foreground absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-bold leading-none">
+                <span className="bg-destructive text-destructive-foreground absolute -top-0.5 -right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] leading-none font-bold">
                   {unreadCount > 9 ? "9+" : unreadCount}
                 </span>
               )}
@@ -144,7 +141,7 @@ export function AdminTopbar({
                 {notifications.map((n) => (
                   <div
                     key={n._id}
-                    className={`flex cursor-pointer items-start gap-2.5 px-3 py-2.5 transition-colors hover:bg-accent ${
+                    className={`hover:bg-accent flex cursor-pointer items-start gap-2.5 px-3 py-2.5 transition-colors ${
                       !n.is_read ? "bg-primary/3" : ""
                     }`}
                     onClick={() => {
@@ -231,7 +228,7 @@ export function AdminTopbar({
                 {initials || "?"}
               </span>
               <span className="hidden flex-col items-start sm:flex">
-                <span className="text-foreground text-sm font-medium leading-tight">
+                <span className="text-foreground text-sm leading-tight font-medium">
                   {user.name}
                 </span>
                 <span className="text-muted-foreground text-[11px] leading-tight capitalize">

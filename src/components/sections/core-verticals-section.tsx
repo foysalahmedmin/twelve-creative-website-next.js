@@ -60,9 +60,15 @@ function fromVertical(v: (typeof VERTICALS_DATA)[0]): CardItem {
 
 interface Props {
   industries?: IndustryCardData[];
+  tone?: "default" | "brand";
+  className?: string;
 }
 
-export function CoreVerticalsSection({ industries }: Props) {
+export function CoreVerticalsSection({
+  industries,
+  tone = "default",
+  className,
+}: Props) {
   const cards: CardItem[] = industries?.length
     ? industries.map(fromIndustry)
     : VERTICALS_DATA.map(fromVertical);
@@ -81,13 +87,22 @@ export function CoreVerticalsSection({ industries }: Props) {
   };
 
   return (
-    <section className="bg-background border-border/40 w-full border-t py-16 sm:py-20 lg:py-24">
+    <section
+      className={cn(
+        "w-full border-t py-16 sm:py-20 lg:py-24",
+        tone === "brand"
+          ? "border-primary-foreground/15 bg-primary"
+          : "border-border/40 bg-background",
+        className,
+      )}
+    >
       <div className="container">
         <ScrollReveal animation="fade-in-up" durationMs={700}>
           <CenteredSectionHeader
             label="Industries"
             title="Core Verticals"
             description="We work across a focused set of industries where marketing structure, creative execution, and conversion systems make the biggest difference."
+            tone={tone === "brand" ? "inverse" : "default"}
             className="mb-8 lg:mb-10"
           />
         </ScrollReveal>

@@ -1,10 +1,28 @@
 "use client";
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { Moon01Icon, Sun01Icon } from "@hugeicons/core-free-icons";
+import {
+  ComputerIcon,
+  Moon01Icon,
+  Sun01Icon,
+} from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
+
+const THEME_OPTIONS = [
+  { value: "system", label: "System", icon: ComputerIcon },
+  { value: "light", label: "White", icon: Sun01Icon },
+  { value: "dark", label: "Dark", icon: Moon01Icon },
+] as const;
 
 export function ThemeToggle({ className }: { className?: string }) {
   const [mounted, setMounted] = useState(false);
@@ -19,30 +37,47 @@ export function ThemeToggle({ className }: { className?: string }) {
     return (
       <div
         className={cn(
-          "border-border bg-muted/20 h-9 w-9 animate-pulse rounded-xl border md:h-11 md:w-11",
+          "border-border bg-muted/20 h-9 w-9 animate-pulse rounded-xl border",
           className,
         )}
       />
     );
   }
 
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  };
-
-  const currentIcon = theme === "dark" ? Moon01Icon : Sun01Icon;
+  const activeTheme =
+    theme === "light" || theme === "dark" || theme === "system"
+      ? theme
+      : "system";
+  const currentTheme = THEME_OPTIONS.find(
+    (option) => option.value === activeTheme,
+  )!;
 
   return (
-    <button
-      onClick={toggleTheme}
-      type="button"
-      className={cn(
-        "border-primary text-primary hover:border-primary hover:text-primary flex h-9 w-9 items-center justify-center rounded-lg border transition-all active:scale-95",
-        className,
-      )}
-      aria-label="Toggle theme"
-    >
-      <HugeiconsIcon icon={currentIcon} className="h-5 w-5" />
-    </button>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          type="button"
+          className={cn(
+            "border-primary text-primary hover:bg-primary hover:text-primary-foreground flex h-9 w-9 items-center justify-center rounded-lg border transition-all active:scale-95",
+            className,
+          )}
+          aria-label={`Color mode: ${currentTheme.label}`}
+          title={`Color mode: ${currentTheme.label}`}
+        >
+          <HugeiconsIcon icon={currentTheme.icon} className="h-5 w-5" />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="min-w-40">
+        <DropdownMenuLabel>Color mode</DropdownMenuLabel>
+        <DropdownMenuRadioGroup value={activeTheme} onValueChange={setTheme}>
+          {THEME_OPTIONS.map((option) => (
+            <DropdownMenuRadioItem key={option.value} value={option.value}>
+              <HugeiconsIcon icon={option.icon} className="size-4" />
+              {option.label}
+            </DropdownMenuRadioItem>
+          ))}
+        </DropdownMenuRadioGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

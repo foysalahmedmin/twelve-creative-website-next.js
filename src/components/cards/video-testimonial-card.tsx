@@ -23,7 +23,7 @@ export const VideoTestimonialCard = ({
       onClick={() => onOpen(testimonial)}
       aria-label={`Play video testimonial from ${testimonial.name}`}
       className={cn(
-        "bg-card border-border hover:border-primary/40 focus-visible:ring-primary/50 group flex h-full w-80 cursor-pointer flex-col gap-4 rounded-2xl border p-2 text-left transition-all duration-300 select-none focus-visible:ring-2 focus-visible:outline-none md:w-96",
+        "group flex h-full w-80 cursor-pointer flex-col gap-4 rounded-2xl border border-[#131C20]/10 bg-[#EAEAE4] p-2 text-left shadow-[0_18px_50px_rgba(19,28,32,0.12)] transition-all duration-300 select-none hover:border-[#131C20]/25 focus-visible:ring-2 focus-visible:ring-[#131C20]/25 focus-visible:outline-none md:w-96",
         className,
       )}
     >
@@ -38,7 +38,7 @@ export const VideoTestimonialCard = ({
             draggable={false}
           />
         ) : (
-          <div className="bg-brand-artefact h-full w-full" />
+          <div className="h-full w-full bg-[#131C20]" />
         )}
 
         {/* Play button overlay */}
@@ -55,7 +55,7 @@ export const VideoTestimonialCard = ({
 
       {/* User Info */}
       <div className="mt-auto flex min-h-10 items-center gap-2 px-1">
-        <div className="border-border/50 relative h-8 w-8 shrink-0 overflow-hidden rounded-full border">
+        <div className="relative h-8 w-8 shrink-0 overflow-hidden rounded-full border border-[#131C20]/10">
           <Image
             src={testimonial.image}
             alt={testimonial.name}
@@ -66,10 +66,10 @@ export const VideoTestimonialCard = ({
           />
         </div>
         <div className="flex min-w-0 flex-col break-words">
-          <h5 className="text-foreground poppins text-sm leading-tight font-bold">
+          <h5 className="poppins text-sm leading-tight font-bold text-[#131C20]">
             {testimonial.name}
           </h5>
-          <p className="text-muted-foreground opensans mt-0.5 text-xs font-normal">
+          <p className="opensans mt-0.5 text-xs font-normal text-[#131C20]/60">
             {testimonial.designation}
           </p>
         </div>

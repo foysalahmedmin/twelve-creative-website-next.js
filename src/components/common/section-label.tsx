@@ -20,7 +20,7 @@ export const SectionLabel = ({
   return (
     <span
       className={cn(
-        "border-foreground/25 text-foreground inline-flex items-center gap-2 rounded-md border px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em]",
+        "border-foreground/25 text-foreground inline-flex items-center gap-2 rounded-md border px-3 py-1 text-[11px] font-bold tracking-[0.12em] uppercase",
         className,
       )}
     >
@@ -35,6 +35,7 @@ interface CenteredSectionHeaderProps {
   title: string;
   description?: string;
   withDot?: boolean;
+  tone?: "default" | "inverse";
   className?: string;
   titleClassName?: string;
   descriptionClassName?: string;
@@ -66,6 +67,7 @@ export const CenteredSectionHeader = ({
   title,
   description,
   withDot,
+  tone = "default",
   className,
   titleClassName,
   descriptionClassName,
@@ -88,10 +90,19 @@ export const CenteredSectionHeader = ({
         variants={childVariants}
         className={cn(
           "border-foreground/25 text-foreground inline-flex items-center justify-center gap-2 rounded-md border px-3 py-1",
-          "text-[11px] leading-none font-bold uppercase tracking-[0.12em]",
+          "text-[11px] leading-none font-bold tracking-[0.12em] uppercase",
+          tone === "inverse" &&
+            "border-primary-foreground/40 text-primary-foreground",
         )}
       >
-        {withDot && <span className="bg-primary size-1.5 rounded-full" />}
+        {withDot && (
+          <span
+            className={cn(
+              "size-1.5 rounded-full",
+              tone === "inverse" ? "bg-primary-foreground" : "bg-primary",
+            )}
+          />
+        )}
         {label}
       </motion.span>
 
@@ -100,6 +111,7 @@ export const CenteredSectionHeader = ({
         variants={childVariants}
         className={cn(
           "font-heading text-foreground mt-4 text-center text-[34px] leading-[1.05] font-black tracking-tight md:text-[56px] xl:mt-5",
+          tone === "inverse" && "text-primary-foreground",
           titleClassName,
         )}
       >
@@ -112,6 +124,7 @@ export const CenteredSectionHeader = ({
           variants={childVariants}
           className={cn(
             "text-muted-foreground mt-4 max-w-2xl text-center text-[16px] leading-[150%] md:text-[18px]",
+            tone === "inverse" && "text-primary-foreground font-medium",
             descriptionClassName,
           )}
         >

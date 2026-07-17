@@ -144,12 +144,6 @@ export const Header = ({ className, calendlyUrl }: HeaderProps) => {
                     </Link>
                   );
                 })}
-                <div className="mt-1 flex items-center justify-between rounded-xl px-4 py-2">
-                  <span className="text-muted-foreground text-sm font-semibold">
-                    Theme
-                  </span>
-                  <ThemeToggle />
-                </div>
                 {calendlyUrl ? (
                   <a
                     href={calendlyUrl}

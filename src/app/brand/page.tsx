@@ -1,14 +1,9 @@
 "use client";
 
+import { ThemeToggle } from "@/components/common/theme-toggle";
 import { cn } from "@/lib/utils";
-import {
-  ArrowRight01Icon,
-  Moon02Icon,
-  Sun03Icon,
-} from "@hugeicons/core-free-icons";
+import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
 
 /* ── Signature brand device: outlined rounded-rect chip (BRANDBOOK) ── */
 function Eyebrow({
@@ -84,32 +79,10 @@ const btnBase =
   "inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-sm font-bold uppercase tracking-[0.05em] transition-transform duration-200 active:scale-[0.98]";
 
 export default function BrandPage() {
-  const { resolvedTheme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    const id = requestAnimationFrame(() => setMounted(true));
-    return () => cancelAnimationFrame(id);
-  }, []);
-  const isDark = resolvedTheme === "dark";
-
   return (
     <main className="bg-background text-foreground min-h-screen">
       {/* Theme toggle */}
-      <button
-        type="button"
-        onClick={() => setTheme(isDark ? "light" : "dark")}
-        className="border-border bg-card fixed top-5 right-5 z-50 flex h-11 items-center gap-2 rounded-lg border px-4 text-xs font-bold tracking-widest uppercase"
-      >
-        {mounted && (
-          <>
-            <HugeiconsIcon
-              icon={isDark ? Sun03Icon : Moon02Icon}
-              className="text-primary size-4"
-            />
-            {isDark ? "Cream" : "Dark"}
-          </>
-        )}
-      </button>
+      <ThemeToggle className="border-border bg-card fixed top-5 right-5 z-50 h-11 w-11 rounded-lg" />
 
       {/* ── Hero: the target look ── */}
       <header className="bg-brand-hero relative overflow-hidden">

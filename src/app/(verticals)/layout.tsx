@@ -1,8 +1,13 @@
+import { ThemeToggle } from "@/components/common/theme-toggle";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-export default function VerticalsLayout({ children }: { children: React.ReactNode }) {
+export default function VerticalsLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <div className="relative flex min-h-screen flex-col">
       {/* Logo-only fixed header */}
@@ -18,12 +23,15 @@ export default function VerticalsLayout({ children }: { children: React.ReactNod
               priority
             />
           </Link>
-          <Link
-            href="/"
-            className="text-white/60 hover:text-white text-sm font-medium tracking-wide transition-colors"
-          >
-            ← Back to site
-          </Link>
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            <Link
+              href="/"
+              className="text-sm font-medium tracking-wide text-white/60 transition-colors hover:text-white"
+            >
+              ← Back to site
+            </Link>
+          </div>
         </div>
       </header>
 
