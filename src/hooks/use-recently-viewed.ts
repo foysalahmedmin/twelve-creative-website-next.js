@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useCallback, useMemo, useSyncExternalStore } from "react";
 
 const MAX_ITEMS = 6;
 const UPDATE_EVENT = "recently-viewed-updated";
@@ -12,11 +12,19 @@ export type RecentlyViewedKey =
   (typeof RECENTLY_VIEWED_KEYS)[keyof typeof RECENTLY_VIEWED_KEYS];
 
 function readStorage<T extends { id: string }>(key: string): T[] {
-  if (typeof window === "undefined") return [];
   try {
-    return JSON.parse(localStorage.getItem(key) || "[]");
+    return JSON.parse(readStorageSnapshot(key)) as T[];
   } catch {
     return [];
+  }
+}
+
+function readStorageSnapshot(key: string): string {
+  if (typeof window === "undefined") return "[]";
+  try {
+    return localStorage.getItem(key) || "[]";
+  } catch {
+    return "[]";
   }
 }
 
@@ -43,29 +51,42 @@ export function clearRecentlyViewed(key: string): void {
 export function useRecentlyViewed<T extends { id: string }>(
   key: string,
 ): { items: T[]; clear: () => void } {
-  const [items, setItems] = useState<T[]>([]);
+  const subscribe = useCallback(
+    (onChange: () => void) => {
+      const handler = (e: Event) => {
+        if ((e as CustomEvent).detail === key) {
+          onChange();
+        }
+      };
 
-  useEffect(() => {
-    setItems(readStorage<T>(key));
+      // cross-tab sync
+      const storageHandler = (e: StorageEvent) => {
+        if (e.key === key) onChange();
+      };
 
-    const handler = (e: Event) => {
-      if ((e as CustomEvent).detail === key) {
-        setItems(readStorage<T>(key));
-      }
-    };
+      window.addEventListener(UPDATE_EVENT, handler);
+      window.addEventListener("storage", storageHandler);
+      return () => {
+        window.removeEventListener(UPDATE_EVENT, handler);
+        window.removeEventListener("storage", storageHandler);
+      };
+    },
+    [key],
+  );
 
-    // cross-tab sync
-    const storageHandler = (e: StorageEvent) => {
-      if (e.key === key) setItems(readStorage<T>(key));
-    };
-
-    window.addEventListener(UPDATE_EVENT, handler);
-    window.addEventListener("storage", storageHandler);
-    return () => {
-      window.removeEventListener(UPDATE_EVENT, handler);
-      window.removeEventListener("storage", storageHandler);
-    };
-  }, [key]);
+  const getSnapshot = useCallback(() => readStorageSnapshot(key), [key]);
+  const serializedItems = useSyncExternalStore(
+    subscribe,
+    getSnapshot,
+    () => "[]",
+  );
+  const items = useMemo(() => {
+    try {
+      return JSON.parse(serializedItems) as T[];
+    } catch {
+      return [];
+    }
+  }, [serializedItems]);
 
   const clear = useCallback(() => clearRecentlyViewed(key), [key]);
 

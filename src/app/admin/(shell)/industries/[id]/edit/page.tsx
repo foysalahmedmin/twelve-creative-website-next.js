@@ -11,11 +11,14 @@ interface PageProps {
 
 export default async function EditIndustryPage({ params }: PageProps) {
   const { id } = await params;
+
+  let industry: Awaited<ReturnType<typeof getIndustryById>>;
   try {
-    const industry = await getIndustryById(id);
-    return <IndustryForm mode="edit" initial={industry} />;
+    industry = await getIndustryById(id);
   } catch (e) {
     if (e instanceof ApiError && e.status === 404) notFound();
     throw e;
   }
+
+  return <IndustryForm mode="edit" initial={industry} />;
 }

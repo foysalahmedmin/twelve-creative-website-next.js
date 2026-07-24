@@ -11,11 +11,14 @@ interface PageProps {
 
 export default async function EditTeamMemberPage({ params }: PageProps) {
   const { id } = await params;
+
+  let member: Awaited<ReturnType<typeof getTeamMemberById>>;
   try {
-    const member = await getTeamMemberById(id);
-    return <TeamForm mode="edit" initial={member} />;
+    member = await getTeamMemberById(id);
   } catch (e) {
     if (e instanceof ApiError && e.status === 404) notFound();
     throw e;
   }
+
+  return <TeamForm mode="edit" initial={member} />;
 }

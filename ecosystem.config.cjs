@@ -3,8 +3,10 @@ module.exports = {
     {
       name: 'tc-website',
       script: 'node',
-      args: 'node_modules/next/dist/bin/next start',
-      cwd: '/var/www/websites/twelve-creative-website',
+      // Only Nginx should reach Next.js directly in production.
+      args: 'node_modules/next/dist/bin/next start --hostname 127.0.0.1',
+      // Resolve from this tracked config so the checkout can live anywhere.
+      cwd: __dirname,
       exec_mode: 'fork',
       instances: 1,
       autorestart: true,
@@ -14,8 +16,7 @@ module.exports = {
         NODE_ENV: 'production',
         PORT: 5005,
       },
-      error_file: '/root/.pm2/logs/tc-website-error.log',
-      out_file: '/root/.pm2/logs/tc-website-out.log',
+      // PM2's defaults keep logs under the account running the process.
       merge_logs: true,
       log_date_format: 'YYYY-MM-DD HH:mm:ss',
     },

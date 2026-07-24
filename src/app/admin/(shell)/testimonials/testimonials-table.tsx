@@ -3,7 +3,7 @@
 import { GripVertical, Loader2, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/admin/confirm-dialog";
 import { EmptyState } from "@/components/admin/empty-state";
@@ -38,11 +38,6 @@ export function TestimonialsTable({ items: propItems }: Props) {
   const [dirty, setDirty] = useState(false);
   const [saving, setSaving] = useState(false);
   const [dragId, setDragId] = useState<string | null>(null);
-
-  useEffect(() => {
-    setItems(propItems);
-    setDirty(false);
-  }, [propItems]);
 
   const handleToggle = (item: Testimonial, next: boolean) => {
     startTransition(async () => {
@@ -109,13 +104,16 @@ export function TestimonialsTable({ items: propItems }: Props) {
   return (
     <>
       {dirty && (
-        <div className="flex items-center justify-between border-b px-4 py-2 bg-muted/40">
-          <p className="text-xs text-muted-foreground">Unsaved order changes</p>
+        <div className="bg-muted/40 flex items-center justify-between border-b px-4 py-2">
+          <p className="text-muted-foreground text-xs">Unsaved order changes</p>
           <div className="flex gap-2">
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => { setItems(propItems); setDirty(false); }}
+              onClick={() => {
+                setItems(propItems);
+                setDirty(false);
+              }}
             >
               Discard
             </Button>
@@ -164,7 +162,7 @@ export function TestimonialsTable({ items: propItems }: Props) {
                     <div className="bg-muted size-9 rounded-full" />
                   )}
                   <div className="space-y-0.5">
-                    <p className="text-foreground text-sm font-medium leading-tight">
+                    <p className="text-foreground text-sm leading-tight font-medium">
                       {item.name}
                     </p>
                     <p className="text-muted-foreground text-xs leading-tight">

@@ -3,7 +3,7 @@
 import { GripVertical, Loader2, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/admin/confirm-dialog";
 import { EmptyState } from "@/components/admin/empty-state";
@@ -37,11 +37,6 @@ export function BrandsTable({ items: propItems }: Props) {
   const [dirty, setDirty] = useState(false);
   const [saving, setSaving] = useState(false);
   const [dragId, setDragId] = useState<string | null>(null);
-
-  useEffect(() => {
-    setItems(propItems);
-    setDirty(false);
-  }, [propItems]);
 
   const handleToggle = (item: Brand, next: boolean) => {
     startTransition(async () => {
@@ -108,13 +103,16 @@ export function BrandsTable({ items: propItems }: Props) {
   return (
     <>
       {dirty && (
-        <div className="flex items-center justify-between border-b px-4 py-2 bg-muted/40">
-          <p className="text-xs text-muted-foreground">Unsaved order changes</p>
+        <div className="bg-muted/40 flex items-center justify-between border-b px-4 py-2">
+          <p className="text-muted-foreground text-xs">Unsaved order changes</p>
           <div className="flex gap-2">
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => { setItems(propItems); setDirty(false); }}
+              onClick={() => {
+                setItems(propItems);
+                setDirty(false);
+              }}
             >
               Discard
             </Button>

@@ -11,11 +11,14 @@ interface PageProps {
 
 export default async function EditFaqPage({ params }: PageProps) {
   const { id } = await params;
+
+  let faq: Awaited<ReturnType<typeof getFaqById>>;
   try {
-    const faq = await getFaqById(id);
-    return <FaqForm mode="edit" initial={faq} />;
+    faq = await getFaqById(id);
   } catch (e) {
     if (e instanceof ApiError && e.status === 404) notFound();
     throw e;
   }
+
+  return <FaqForm mode="edit" initial={faq} />;
 }

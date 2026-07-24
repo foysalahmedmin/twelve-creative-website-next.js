@@ -11,11 +11,14 @@ interface PageProps {
 
 export default async function EditInsightPage({ params }: PageProps) {
   const { id } = await params;
+
+  let article: Awaited<ReturnType<typeof getInsightById>>;
   try {
-    const article = await getInsightById(id);
-    return <InsightForm mode="edit" initial={article} />;
+    article = await getInsightById(id);
   } catch (e) {
     if (e instanceof ApiError && e.status === 404) notFound();
     throw e;
   }
+
+  return <InsightForm mode="edit" initial={article} />;
 }

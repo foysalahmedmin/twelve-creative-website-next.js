@@ -11,11 +11,14 @@ interface PageProps {
 
 export default async function EditBrandPage({ params }: PageProps) {
   const { id } = await params;
+
+  let brand: Awaited<ReturnType<typeof getBrandById>>;
   try {
-    const brand = await getBrandById(id);
-    return <BrandForm mode="edit" initial={brand} />;
+    brand = await getBrandById(id);
   } catch (e) {
     if (e instanceof ApiError && e.status === 404) notFound();
     throw e;
   }
+
+  return <BrandForm mode="edit" initial={brand} />;
 }

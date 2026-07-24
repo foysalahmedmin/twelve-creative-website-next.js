@@ -16,6 +16,12 @@ export const ADMIN_CONFIG = {
   /** Backend API base URL, server-side only. */
   apiUrl: required("API_URL", process.env.API_URL, "http://localhost:5000"),
 
+  /**
+   * Production admin sessions are served over HTTPS even when the server uses
+   * an internal HTTP URL to reach the backend.
+   */
+  secureCookies: process.env.NODE_ENV === "production",
+
   /** httpOnly cookie holding the JWT access token used to call the backend. */
   cookies: {
     access: "tc_admin_access",

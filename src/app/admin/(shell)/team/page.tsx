@@ -25,6 +25,12 @@ export default async function TeamPage({ searchParams }: PageProps) {
         ? params.filter
         : undefined,
   });
+  const tableVersion = data
+    .map(
+      (item) =>
+        `${item._id}:${item.order}:${item.is_active}:${item.updated_at ?? ""}`,
+    )
+    .join("|");
 
   return (
     <div className="container max-w-5xl space-y-6 py-8">
@@ -49,8 +55,8 @@ export default async function TeamPage({ searchParams }: PageProps) {
         <AdminSearch placeholder="Search team members…" />
       </Suspense>
 
-      <Card className="p-0 overflow-hidden">
-        <TeamTable items={data} />
+      <Card className="overflow-hidden p-0">
+        <TeamTable key={tableVersion} items={data} />
       </Card>
     </div>
   );

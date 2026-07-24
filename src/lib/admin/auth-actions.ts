@@ -75,13 +75,12 @@ export async function signinAction(
   }
 
   const jar = await cookies();
-  const isProd = ADMIN_CONFIG.apiUrl.startsWith("https");
 
   jar.set({
     name: ADMIN_CONFIG.cookies.access,
     value: token,
     httpOnly: true,
-    secure: isProd,
+    secure: ADMIN_CONFIG.secureCookies,
     sameSite: "lax",
     path: "/",
     maxAge: ADMIN_CONFIG.accessCookieMaxAgeSeconds,
@@ -97,7 +96,7 @@ export async function signinAction(
       ...(info.image && { image: info.image }),
     }),
     httpOnly: true,
-    secure: isProd,
+    secure: ADMIN_CONFIG.secureCookies,
     sameSite: "lax",
     path: "/",
     maxAge: ADMIN_CONFIG.accessCookieMaxAgeSeconds,

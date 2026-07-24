@@ -55,7 +55,10 @@ function composeRefs<T>(...refs: PossibleRef<T>[]): React.RefCallback<T> {
  * Accepts callback refs and RefObject(s)
  */
 function useComposedRefs<T>(...refs: PossibleRef<T>[]): React.RefCallback<T> {
-  // biome-ignore lint/correctness/useExhaustiveDependencies: we want to memoize by all values
+  // A ref composer has a dynamic dependency list by definition. Keeping the
+  // callback stable until one of those refs changes prevents unnecessary ref
+  // detach/attach cycles.
+  // eslint-disable-next-line react-hooks/use-memo, react-hooks/exhaustive-deps
   return React.useCallback(composeRefs(...refs), refs);
 }
 

@@ -11,11 +11,14 @@ interface PageProps {
 
 export default async function EditWorkPage({ params }: PageProps) {
   const { id } = await params;
+
+  let work: Awaited<ReturnType<typeof getWorkById>>;
   try {
-    const work = await getWorkById(id);
-    return <WorkForm mode="edit" initial={work} />;
+    work = await getWorkById(id);
   } catch (e) {
     if (e instanceof ApiError && e.status === 404) notFound();
     throw e;
   }
+
+  return <WorkForm mode="edit" initial={work} />;
 }

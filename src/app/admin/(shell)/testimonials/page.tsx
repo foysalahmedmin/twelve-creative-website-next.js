@@ -25,13 +25,22 @@ export default async function TestimonialsPage({ searchParams }: PageProps) {
         ? params.filter
         : undefined,
   });
+  const tableVersion = data
+    .map(
+      (item) =>
+        `${item._id}:${item.order}:${item.is_active}:${item.updated_at ?? ""}`,
+    )
+    .join("|");
 
   return (
     <div className="container max-w-6xl space-y-6 py-8">
       <AdminPageHeader
         title="Testimonials"
         description={`${meta?.total ?? data.length} total · public site only renders items toggled active.`}
-        breadcrumb={[{ label: "Admin", href: "/admin/dashboard" }, { label: "Testimonials" }]}
+        breadcrumb={[
+          { label: "Admin", href: "/admin/dashboard" },
+          { label: "Testimonials" },
+        ]}
         action={
           <Button asChild>
             <Link href="/admin/testimonials/new">
@@ -46,8 +55,8 @@ export default async function TestimonialsPage({ searchParams }: PageProps) {
         <AdminSearch placeholder="Search testimonials…" />
       </Suspense>
 
-      <Card className="p-0 overflow-hidden">
-        <TestimonialsTable items={data} />
+      <Card className="overflow-hidden p-0">
+        <TestimonialsTable key={tableVersion} items={data} />
       </Card>
     </div>
   );

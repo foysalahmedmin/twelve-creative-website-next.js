@@ -11,11 +11,14 @@ interface PageProps {
 
 export default async function EditServicePage({ params }: PageProps) {
   const { id } = await params;
+
+  let service: Awaited<ReturnType<typeof getServiceById>>;
   try {
-    const service = await getServiceById(id);
-    return <ServiceForm mode="edit" initial={service} />;
+    service = await getServiceById(id);
   } catch (e) {
     if (e instanceof ApiError && e.status === 404) notFound();
     throw e;
   }
+
+  return <ServiceForm mode="edit" initial={service} />;
 }

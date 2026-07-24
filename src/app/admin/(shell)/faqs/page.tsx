@@ -25,6 +25,12 @@ export default async function FaqsPage({ searchParams }: PageProps) {
         ? params.filter
         : undefined,
   });
+  const tableVersion = data
+    .map(
+      (item) =>
+        `${item._id}:${item.order}:${item.is_active}:${item.updated_at ?? ""}`,
+    )
+    .join("|");
 
   return (
     <div className="container max-w-5xl space-y-6 py-8">
@@ -49,8 +55,8 @@ export default async function FaqsPage({ searchParams }: PageProps) {
         <AdminSearch placeholder="Search FAQs…" />
       </Suspense>
 
-      <Card className="p-0 overflow-hidden">
-        <FaqsTable items={data} />
+      <Card className="overflow-hidden p-0">
+        <FaqsTable key={tableVersion} items={data} />
       </Card>
     </div>
   );

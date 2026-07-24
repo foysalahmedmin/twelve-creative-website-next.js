@@ -11,11 +11,14 @@ interface PageProps {
 
 export default async function EditTestimonialPage({ params }: PageProps) {
   const { id } = await params;
+
+  let testimonial: Awaited<ReturnType<typeof getTestimonialById>>;
   try {
-    const testimonial = await getTestimonialById(id);
-    return <TestimonialForm mode="edit" initial={testimonial} />;
+    testimonial = await getTestimonialById(id);
   } catch (e) {
     if (e instanceof ApiError && e.status === 404) notFound();
     throw e;
   }
+
+  return <TestimonialForm mode="edit" initial={testimonial} />;
 }
