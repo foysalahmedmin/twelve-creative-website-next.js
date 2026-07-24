@@ -66,6 +66,10 @@ export async function apiFetch<T = unknown>(
 
   const finalHeaders: Record<string, string> = { ...headers };
 
+  if (ADMIN_CONFIG.serverApiKey) {
+    finalHeaders["X-Server-Api-Key"] = ADMIN_CONFIG.serverApiKey;
+  }
+
   if (body !== undefined && !(body instanceof FormData)) {
     finalHeaders["Content-Type"] = "application/json";
   }

@@ -42,13 +42,19 @@ export async function POST(req: NextRequest) {
   const name = incoming.get("name");
   if (typeof name === "string" && name) forwarded.append("name", name);
   const category = incoming.get("category");
-  if (typeof category === "string" && category) forwarded.append("category", category);
+  if (typeof category === "string" && category)
+    forwarded.append("category", category);
 
   let backendRes: Response;
   try {
     backendRes = await fetch(`${ADMIN_CONFIG.apiUrl}/api/file`, {
       method: "POST",
-      headers: { Authorization: token },
+      headers: {
+        Authorization: token,
+        ...(ADMIN_CONFIG.serverApiKey && {
+          "X-Server-Api-Key": ADMIN_CONFIG.serverApiKey,
+        }),
+      },
       body: forwarded,
       cache: "no-store",
     });

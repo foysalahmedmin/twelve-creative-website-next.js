@@ -3,10 +3,16 @@
  * code never reads `process.env` directly.
  */
 
-const required = (name: string, value: string | undefined, fallback?: string): string => {
+const required = (
+  name: string,
+  value: string | undefined,
+  fallback?: string,
+): string => {
   if (value === undefined || value === "") {
     if (fallback !== undefined) return fallback;
-    console.warn(`Warning: Missing env var ${name}, using empty string fallback.`);
+    console.warn(
+      `Warning: Missing env var ${name}, using empty string fallback.`,
+    );
     return "";
   }
   return value;
@@ -15,6 +21,9 @@ const required = (name: string, value: string | undefined, fallback?: string): s
 export const ADMIN_CONFIG = {
   /** Backend API base URL, server-side only. */
   apiUrl: required("API_URL", process.env.API_URL, "http://localhost:5000"),
+
+  /** Private credential for trusted Next.js-to-backend requests. */
+  serverApiKey: process.env.SERVER_API_KEY?.trim() ?? "",
 
   /**
    * Production admin sessions are served over HTTPS even when the server uses

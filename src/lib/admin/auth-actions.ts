@@ -11,6 +11,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { ADMIN_CONFIG } from "./config";
+import { getTrustedClientForwardingHeaders } from "./trusted-request-headers";
 import { ApiError, type ApiResponse } from "./types";
 import type { AdminUser } from "./types";
 
@@ -29,7 +30,9 @@ export async function signinAction(
   _prevState: SigninActionResult | undefined,
   formData: FormData,
 ): Promise<SigninActionResult> {
-  const email = String(formData.get("email") ?? "").trim().toLowerCase();
+  const email = String(formData.get("email") ?? "")
+    .trim()
+    .toLowerCase();
   const password = String(formData.get("password") ?? "");
   const callbackUrl = String(formData.get("callbackUrl") ?? "").trim();
 
@@ -39,9 +42,10 @@ export async function signinAction(
 
   let result: ApiResponse<SigninResponse>;
   try {
+    const forwardingHeaders = await getTrustedClientForwardingHeaders();
     const res = await fetch(`${ADMIN_CONFIG.apiUrl}/api/auth/signin`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", ...forwardingHeaders },
       body: JSON.stringify({ email, password }),
       cache: "no-store",
     });
@@ -65,7 +69,10 @@ export async function signinAction(
     result = json as ApiResponse<SigninResponse>;
   } catch (err) {
     if (err instanceof ApiError) return { ok: false, error: err.message };
-    return { ok: false, error: "Could not reach the server. Check your connection." };
+    return {
+      ok: false,
+      error: "Could not reach the server. Check your connection.",
+    };
   }
 
   const { token, info } = result.data;
@@ -104,9 +111,10 @@ export async function signinAction(
 
   return {
     ok: true,
-    redirectTo: callbackUrl && callbackUrl.startsWith("/admin")
-      ? callbackUrl
-      : ADMIN_CONFIG.dashboardPath,
+    redirectTo:
+      callbackUrl && callbackUrl.startsWith("/admin")
+        ? callbackUrl
+        : ADMIN_CONFIG.dashboardPath,
   };
 }
 
@@ -119,7 +127,12 @@ export async function signoutAction(): Promise<void> {
     try {
       await fetch(`${ADMIN_CONFIG.apiUrl}/api/auth/logout`, {
         method: "POST",
-        headers: { Authorization: token },
+        headers: {
+          Authorization: token,
+          ...(ADMIN_CONFIG.serverApiKey && {
+            "X-Server-Api-Key": ADMIN_CONFIG.serverApiKey,
+          }),
+        },
         cache: "no-store",
       });
     } catch {

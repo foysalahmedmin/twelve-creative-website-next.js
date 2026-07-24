@@ -4,6 +4,7 @@ import { revalidatePath, updateTag } from "next/cache";
 import { apiFetch } from "@/lib/admin/api-client";
 import { ADMIN_CONFIG } from "@/lib/admin/config";
 import { ApiError, type ApiResponse } from "@/lib/admin/types";
+import { getTrustedClientForwardingHeaders } from "@/lib/admin/trusted-request-headers";
 import {
   CONTACT_MESSAGES_TAG,
   type ContactMessage,
@@ -26,11 +27,12 @@ export async function submitContactMessageAction(
   payload: PublicContactMessagePayload,
 ): Promise<ActionResult> {
   try {
+    const forwardingHeaders = await getTrustedClientForwardingHeaders();
     const res = await fetch(
       `${ADMIN_CONFIG.apiUrl}/api/contact-message/public`,
       {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...forwardingHeaders },
         body: JSON.stringify(payload),
         cache: "no-store",
       },
@@ -62,13 +64,10 @@ export async function updateContactMessageAction(
   payload: { is_read?: boolean; is_archived?: boolean },
 ): Promise<ActionResult<ContactMessage>> {
   try {
-    const res = await apiFetch<ContactMessage>(
-      `/api/contact-message/${id}`,
-      {
-        method: "PATCH",
-        body: payload,
-      },
-    );
+    const res = await apiFetch<ContactMessage>(`/api/contact-message/${id}`, {
+      method: "PATCH",
+      body: payload,
+    });
     invalidate();
     return { ok: true, data: res.data };
   } catch (e) {

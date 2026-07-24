@@ -4,6 +4,7 @@ import { revalidatePath, updateTag } from "next/cache";
 import { apiFetch } from "@/lib/admin/api-client";
 import { ADMIN_CONFIG } from "@/lib/admin/config";
 import { ApiError, type ApiResponse } from "@/lib/admin/types";
+import { getTrustedClientForwardingHeaders } from "@/lib/admin/trusted-request-headers";
 import {
   BOOKINGS_TAG,
   type Booking,
@@ -28,9 +29,10 @@ export async function submitBookingAction(
   payload: PublicBookingPayload,
 ): Promise<ActionResult> {
   try {
+    const forwardingHeaders = await getTrustedClientForwardingHeaders();
     const res = await fetch(`${ADMIN_CONFIG.apiUrl}/api/booking/public`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", ...forwardingHeaders },
       body: JSON.stringify(payload),
       cache: "no-store",
     });
@@ -58,7 +60,11 @@ export async function submitBookingAction(
 
 export async function updateBookingAction(
   id: string,
-  payload: { status?: BookingStatus; internal_note?: string; lead_source?: LeadSource | null },
+  payload: {
+    status?: BookingStatus;
+    internal_note?: string;
+    lead_source?: LeadSource | null;
+  },
 ): Promise<ActionResult<Booking>> {
   try {
     const res = await apiFetch<Booking>(`/api/booking/${id}`, {
@@ -72,9 +78,7 @@ export async function updateBookingAction(
   }
 }
 
-export async function deleteBookingAction(
-  id: string,
-): Promise<ActionResult> {
+export async function deleteBookingAction(id: string): Promise<ActionResult> {
   try {
     await apiFetch(`/api/booking/${id}`, { method: "DELETE" });
     invalidate();
