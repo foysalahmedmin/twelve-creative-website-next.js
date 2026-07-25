@@ -23,12 +23,12 @@ import { CONTACT_PAGE_DATA } from "@/data/contact.data";
 import { FAQS_DATA } from "@/data/faqs.data";
 import { CTA_PROCESS } from "@/data/page-ctas.data";
 import { GROWTH_SYSTEM_DATA } from "@/data/growth-system.data";
-import { PROCESS_DATA } from "@/data/process.data";
 import { SERVICE_SERVICES_DATA } from "@/data/service-services-section.data";
 import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
 import { CANVAS_PORTFOLIO_DATA } from "@/data/thumbnail-work-section.data";
 import { CANVAS_MARQUEE_DATA } from "@/data/vertical-marquee.data";
 import { WHY_CHOOSE_US_DATA } from "@/data/why-choose-us.data";
+import { getPublicProcessSection } from "@/lib/api/process-section";
 import { getPublicTestimonialsForSection } from "@/lib/api/testimonials";
 import type { Metadata } from "next";
 
@@ -39,11 +39,14 @@ export const metadata: Metadata = {
 };
 
 export default async function CanvasPage() {
-  const testimonialsData = await getPublicTestimonialsForSection({
-    label: TESTIMONIALS_DATA.label,
-    title: TESTIMONIALS_DATA.title,
-    description: TESTIMONIALS_DATA.description,
-  });
+  const [testimonialsData, processData] = await Promise.all([
+    getPublicTestimonialsForSection({
+      label: TESTIMONIALS_DATA.label,
+      title: TESTIMONIALS_DATA.title,
+      description: TESTIMONIALS_DATA.description,
+    }),
+    getPublicProcessSection(),
+  ]);
 
   return (
     <main className="bg-background min-h-screen space-y-12 pb-20 sm:space-y-16">
@@ -67,7 +70,7 @@ export default async function CanvasPage() {
 
       <ServiceServicesSection data={SERVICE_SERVICES_DATA} />
 
-      <ProcessSection data={PROCESS_DATA} />
+      <ProcessSection data={processData} />
 
       <GrowthSystemSection data={GROWTH_SYSTEM_DATA} />
 

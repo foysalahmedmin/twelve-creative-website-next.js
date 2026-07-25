@@ -3,9 +3,12 @@ import { CTASection } from "@/components/sections/cta-section";
 import { PageHeader } from "@/components/sections/page-header-section";
 import { ProcessSection } from "@/components/sections/process-section";
 import { CTA_PROCESS } from "@/data/page-ctas.data";
-import { PROCESS_DATA } from "@/data/process.data";
-import { getPublicPageHero, resolveVideoSrc, resolveThumbnail } from "@/lib/api/page-heroes";
-import { getPublicSiteSetting } from "@/lib/api/site-setting";
+import {
+  getPublicPageHero,
+  resolveThumbnail,
+  resolveVideoSrc,
+} from "@/lib/api/page-heroes";
+import { getPublicProcessSection } from "@/lib/api/process-section";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -15,9 +18,9 @@ export const metadata: Metadata = {
 };
 
 export default async function ProcessPage() {
-  const [hero, settings] = await Promise.all([
+  const [hero, processData] = await Promise.all([
     getPublicPageHero("process"),
-    getPublicSiteSetting(),
+    getPublicProcessSection(),
   ]);
 
   return (
@@ -25,13 +28,19 @@ export default async function ProcessPage() {
       <PageHeader
         label={hero?.label ?? "Our Process"}
         title={hero?.title ?? "Our process is built around clarity first."}
-        description={hero?.description ?? "We do not begin by making random assets. We begin by understanding what the business is trying to move, where the friction is, and what structure needs to be built."}
+        description={
+          hero?.description ??
+          "We do not begin by making random assets. We begin by understanding what the business is trying to move, where the friction is, and what structure needs to be built."
+        }
         videoSrc={resolveVideoSrc(hero?.video)}
         thumbnailSrc={resolveThumbnail(hero?.thumbnail, hero?.video)}
       />
 
       {/* Interactive step overview */}
-      <ProcessSection data={PROCESS_DATA} processThumbnail={settings.process_thumbnail || undefined} />
+      <ProcessSection
+        data={processData}
+        processThumbnail={processData.thumbnail}
+      />
 
       {/* The Twelve Creative Difference */}
       <DifferenceSection />

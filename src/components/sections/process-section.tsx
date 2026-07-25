@@ -1,7 +1,11 @@
 "use client";
 
 import { CenteredSectionHeader } from "@/components/common/section-label";
-import { TProcessData, type TProcessIconKey } from "@/data/process.data";
+import {
+  PROCESS_DATA,
+  TProcessData,
+  type TProcessIconKey,
+} from "@/data/process.data";
 import { cn } from "@/lib/utils";
 import {
   Compass01Icon,
@@ -45,7 +49,18 @@ export const ProcessSection = ({
   className,
   processThumbnail,
 }: Partial<PageProcessSectionProps>) => {
-  const { label, title, description, process_steps = [] } = data || {};
+  const candidateSteps = Array.isArray(data?.process_steps)
+    ? data.process_steps.filter((step) =>
+        Boolean(step?.id && step?.title && step?.image),
+      )
+    : [];
+  const process_steps = candidateSteps.length
+    ? candidateSteps
+    : PROCESS_DATA.process_steps;
+  const label = data?.label || PROCESS_DATA.label;
+  const title = data?.title || PROCESS_DATA.title;
+  const description = data?.description || PROCESS_DATA.description;
+  const safeProcessThumbnail = processThumbnail?.trim() || undefined;
   const [activeIndex, setActiveIndex] = useState(0);
   const reduceMotion = useReducedMotion();
   const rowRef = useRef<HTMLDivElement>(null);
@@ -72,10 +87,13 @@ export const ProcessSection = ({
 
         if (totalScrollRange > 0) {
           const scrolled = topOffset - rect.top;
-          const progress = Math.max(0, Math.min(1, scrolled / totalScrollRange));
+          const progress = Math.max(
+            0,
+            Math.min(1, scrolled / totalScrollRange),
+          );
           const index = Math.min(
             Math.floor(progress * process_steps.length),
-            process_steps.length - 1
+            process_steps.length - 1,
           );
           setActiveIndex(Math.max(0, index));
           return;
@@ -118,7 +136,7 @@ export const ProcessSection = ({
   };
 
   const activeStep = process_steps[activeIndex];
-  const useStepImages = !processThumbnail && process_steps.length > 0;
+  const useStepImages = !safeProcessThumbnail;
 
   return (
     <section
@@ -129,12 +147,9 @@ export const ProcessSection = ({
     >
       <div className="container">
         <CenteredSectionHeader
-          label={label || "Our Process"}
-          title={title || "A clear path from understanding to execution."}
-          description={
-            description ||
-            "A tight process. Zero confusion. Real results — built around what the business actually needs to move."
-          }
+          label={label}
+          title={title}
+          description={description}
         />
 
         <div
@@ -175,7 +190,7 @@ export const ProcessSection = ({
                   ))
                 ) : (
                   <Image
-                    src={processThumbnail || process_steps[0]?.image || ""}
+                    src={safeProcessThumbnail || process_steps[0].image}
                     alt="Our process"
                     fill
                     sizes="(min-width: 1024px) 520px, 100vw"
@@ -231,7 +246,7 @@ export const ProcessSection = ({
             }
           >
             {process_steps?.map((step, index) => {
-              const Icon = PROCESS_ICON_MAP[step.icon];
+              const Icon = PROCESS_ICON_MAP[step.icon] ?? Search01Icon;
               const isActive = index === activeIndex;
 
               return (

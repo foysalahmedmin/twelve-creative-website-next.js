@@ -38,7 +38,6 @@ export function SettingsForm({ initial }: Props) {
     faq_position: initial.faq_section?.position ?? "",
     faq_contact_link: initial.faq_section?.contact_link ?? "",
     calendly_url: initial.calendly_url ?? "",
-    process_thumbnail: initial.process_thumbnail ?? "",
     how_we_structure_image: initial.how_we_structure_image ?? "",
     meeting_scene_image: initial.meeting_scene_image ?? "",
     cs_title: initial.content_section?.title ?? "",
@@ -75,7 +74,6 @@ export function SettingsForm({ initial }: Props) {
         contact_link: form.faq_contact_link || undefined,
       },
       calendly_url: form.calendly_url || undefined,
-      process_thumbnail: form.process_thumbnail || undefined,
       how_we_structure_image: form.how_we_structure_image || undefined,
       meeting_scene_image: form.meeting_scene_image || undefined,
       content_section: {
@@ -135,9 +133,12 @@ export function SettingsForm({ initial }: Props) {
 
       <section className="space-y-4">
         <div>
-          <h3 className="text-foreground text-sm font-semibold">Notifications</h3>
+          <h3 className="text-foreground text-sm font-semibold">
+            Notifications
+          </h3>
           <p className="text-muted-foreground text-xs">
-            Where booking and contact submissions get emailed. Defaults to the SMTP user.
+            Where booking and contact submissions get emailed. Defaults to the
+            SMTP user.
           </p>
         </div>
         <div className="space-y-2">
@@ -287,13 +288,6 @@ export function SettingsForm({ initial }: Props) {
             built-in placeholder images.
           </p>
         </div>
-        <ImageInput
-          label="Process section thumbnail (C4)"
-          description="Shown in the sticky left column of the Process section. Portrait / 3:4 works best."
-          value={form.process_thumbnail}
-          onChange={(v) => update("process_thumbnail", v)}
-          previewAspect="3/4"
-        />
         <ImageInput
           label="How we structure — section image (C5)"
           description="Visual asset displayed in The Twelve Creative Difference section. Landscape 16:9 works best."

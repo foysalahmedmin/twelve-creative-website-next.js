@@ -1,10 +1,13 @@
-export type TProcessIconKey =
-  | "understand"
-  | "position"
-  | "build"
-  | "launch"
-  | "install"
-  | "improve";
+export const PROCESS_ICON_KEYS = [
+  "understand",
+  "position",
+  "build",
+  "launch",
+  "install",
+  "improve",
+] as const;
+
+export type TProcessIconKey = (typeof PROCESS_ICON_KEYS)[number];
 
 export type TProcessStep = {
   id: string;
@@ -19,7 +22,7 @@ export type TProcessData = {
   label: string;
   title: string;
   description: string;
-  image: string;
+  thumbnail: string;
   process_steps: TProcessStep[];
 };
 
@@ -91,7 +94,7 @@ export const PROCESS_DATA: TProcessData = {
   title: "A clear path from understanding to execution.",
   description:
     "We do not begin by making random assets. We begin by understanding what the business is trying to move, where the friction is, and what structure needs to be built.",
-  image:
+  thumbnail:
     "https://images.unsplash.com/photo-1552664730-d307ca884978?w=768&h=898&fit=crop&auto=format",
   process_steps: PROCESS_STEPS,
 };

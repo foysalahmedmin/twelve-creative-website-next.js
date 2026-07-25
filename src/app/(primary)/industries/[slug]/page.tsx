@@ -9,7 +9,6 @@ import { TestimonialSection } from "@/components/sections/testimonial-section";
 import { ThumbnailWorkSection } from "@/components/sections/thumbnail-work-section";
 import { WorkWithUsSection } from "@/components/sections/work-with-us-section";
 import { CTA_ABOUT } from "@/data/page-ctas.data";
-import { PROCESS_DATA } from "@/data/process.data";
 import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
 import { CANVAS_PORTFOLIO_DATA } from "@/data/thumbnail-work-section.data";
 import {
@@ -17,6 +16,7 @@ import {
   resolveIndustryThumbnail,
   resolveIndustryVideoSrc,
 } from "@/lib/api/industries";
+import { getPublicProcessSection } from "@/lib/api/process-section";
 import {
   getPublicShowcaseVideosForMarquee,
   getPublicShowcaseVideosForThumbnailGrid,
@@ -55,6 +55,7 @@ export default async function IndustryDetailPage({ params }: Props) {
     livePortfolio,
     testimonialsData,
     settings,
+    processData,
   ] = await Promise.all([
     getPublicIndustries(),
     getPublicShowcaseVideosForMarquee({ industrySlug: slug }),
@@ -73,6 +74,7 @@ export default async function IndustryDetailPage({ params }: Props) {
       description: TESTIMONIALS_DATA.description,
     }),
     getPublicSiteSetting(),
+    getPublicProcessSection(),
   ]);
 
   const industry = industries.find((i) => i.slug === slug);
@@ -122,7 +124,7 @@ export default async function IndustryDetailPage({ params }: Props) {
       )}
 
       {/* ── Process ── */}
-      <ProcessSection data={PROCESS_DATA} />
+      <ProcessSection data={processData} />
 
       {/* CTA */}
       <CTASection data={CTA_ABOUT} />

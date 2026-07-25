@@ -21,6 +21,10 @@ interface ImageInputProps {
   value: string;
   /** Called when the URL changes (typed, uploaded, or cleared). */
   onChange: (value: string) => void;
+  /** Reports upload lifecycle so parent forms can prevent stale saves. */
+  onUploadingChange?: (uploading: boolean) => void;
+  /** Allow a root-relative path such as /uploads/file.jpg in URL mode. */
+  allowRelative?: boolean;
   /** Aspect ratio hint for the preview frame, e.g. "1/1", "16/9". Defaults to 1/1. */
   previewAspect?: string;
   /** Hidden input name — used by native form submission if needed. */
@@ -73,6 +77,8 @@ export function ImageInput({
   required,
   value,
   onChange,
+  onUploadingChange,
+  allowRelative = false,
   previewAspect = "1/1",
   name,
   className,
@@ -90,6 +96,7 @@ export function ImageInput({
     setError(null);
     setWarning(null);
     setUploading(true);
+    onUploadingChange?.(true);
     try {
       const expected = parseAspect(previewAspect);
       if (expected) {
@@ -102,6 +109,7 @@ export function ImageInput({
       setError(e instanceof Error ? e.message : "Upload failed");
     } finally {
       setUploading(false);
+      onUploadingChange?.(false);
       if (fileRef.current) fileRef.current.value = "";
     }
   };
@@ -144,8 +152,9 @@ export function ImageInput({
         <Input
           id={id}
           name={name}
-          type="url"
-          placeholder="https://…"
+          type={allowRelative ? "text" : "url"}
+          inputMode="url"
+          placeholder={allowRelative ? "https://… or /uploads/…" : "https://…"}
           value={value}
           required={required}
           onChange={(e) => onChange(e.target.value)}
@@ -177,7 +186,11 @@ export function ImageInput({
             ) : (
               <Upload className="size-4" />
             )}
-            {uploading ? "Uploading…" : value ? "Replace image" : "Upload image"}
+            {uploading
+              ? "Uploading…"
+              : value
+                ? "Replace image"
+                : "Upload image"}
           </Button>
           {value && (
             <span className="text-muted-foreground truncate text-xs">
@@ -187,13 +200,12 @@ export function ImageInput({
         </div>
       )}
 
-      {error && (
-        <p className="text-destructive text-xs font-medium">{error}</p>
-      )}
+      {error && <p className="text-destructive text-xs font-medium">{error}</p>}
 
       {warning && !error && (
-        <p className="border-amber-500/30 bg-amber-500/5 text-amber-700 dark:text-amber-400 rounded-md border px-2.5 py-1.5 text-xs font-medium">
-          ⚠ {warning} The image will still upload — crop/resize for a tighter fit if needed.
+        <p className="rounded-md border border-amber-500/30 bg-amber-500/5 px-2.5 py-1.5 text-xs font-medium text-amber-700 dark:text-amber-400">
+          ⚠ {warning} The image will still upload — crop/resize for a tighter
+          fit if needed.
         </p>
       )}
 
@@ -211,7 +223,7 @@ export function ImageInput({
           <button
             type="button"
             onClick={() => onChange("")}
-            className="bg-background/90 hover:bg-background absolute right-2 top-2 rounded-full p-1 shadow"
+            className="bg-background/90 hover:bg-background absolute top-2 right-2 rounded-full p-1 shadow"
             aria-label="Clear image"
           >
             <X className="size-3.5" />

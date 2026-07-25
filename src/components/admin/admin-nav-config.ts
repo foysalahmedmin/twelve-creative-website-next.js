@@ -18,6 +18,7 @@ import {
   TicketCheck,
   Users,
   UsersRound,
+  Workflow,
   type LucideIcon,
 } from "lucide-react";
 import type { AdminRole } from "@/lib/admin/types";
@@ -48,6 +49,7 @@ export type AdminNavEntry = AdminNavItem | AdminNavSection;
 export const ADMIN_NAV: AdminNavEntry[] = [
   { label: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
   { label: "Page Heroes", href: "/admin/page-heroes", icon: ImagePlay },
+  { label: "Process Section", href: "/admin/process-section", icon: Workflow },
   { label: "Services", href: "/admin/services", icon: Sparkles },
   { label: "Industries", href: "/admin/industries", icon: Layers },
   { label: "Featured Projects", href: "/admin/featured-projects", icon: Star },

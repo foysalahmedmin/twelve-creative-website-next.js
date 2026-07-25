@@ -8,7 +8,6 @@ import { ProcessSection } from "@/components/sections/process-section";
 import { WhyChooseUsSection } from "@/components/sections/why-choose-us-section";
 import { CTA_WHAT_WE_BUILD } from "@/data/page-ctas.data";
 import { GROWTH_SYSTEM_DATA } from "@/data/growth-system.data";
-import { PROCESS_DATA } from "@/data/process.data";
 import { SERVICES_DATA } from "@/data/services.data";
 import { WHY_CHOOSE_US_DATA } from "@/data/why-choose-us.data";
 import {
@@ -17,6 +16,7 @@ import {
   resolveThumbnail,
 } from "@/lib/api/page-heroes";
 import { getPublicIndustries } from "@/lib/api/industries";
+import { getPublicProcessSection } from "@/lib/api/process-section";
 import { getPublicSiteSetting } from "@/lib/api/site-setting";
 import { getPublicServicesAsLegacy } from "@/lib/api/services";
 import type { Metadata } from "next";
@@ -28,11 +28,12 @@ export const metadata: Metadata = {
 };
 
 export default async function WhatWeBuildPage() {
-  const [live, hero, industries, settings] = await Promise.all([
+  const [live, hero, industries, settings, processData] = await Promise.all([
     getPublicServicesAsLegacy(),
     getPublicPageHero("what-we-build"),
     getPublicIndustries(),
     getPublicSiteSetting(),
+    getPublicProcessSection(),
   ]);
   const source = live.length ? live : SERVICES_DATA;
   const serviceItems = source.map((service) => ({
@@ -74,8 +75,8 @@ export default async function WhatWeBuildPage() {
 
       {/* How we approach the work */}
       <ProcessSection
-        data={PROCESS_DATA}
-        processThumbnail={settings.process_thumbnail || undefined}
+        data={processData}
+        processThumbnail={processData.thumbnail}
       />
 
       {/* Why operators choose us */}
