@@ -78,6 +78,7 @@
     "prettier": "^3.8.1",
     "prettier-plugin-css-order": "^2.2.0",
     "prettier-plugin-tailwindcss": "^0.7.2",
+    "shadcn": "^4.15.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
