@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath, updateTag } from "next/cache";
+import { unstable_rethrow } from "next/navigation";
 import type { TServiceIconKey } from "@/data/services.data";
 import { apiFetch } from "@/lib/admin/api-client";
 import { ApiError } from "@/lib/admin/types";
@@ -104,6 +105,7 @@ export async function reorderServicesAction(
 }
 
 function errorMessage(e: unknown): string {
+  unstable_rethrow(e);
   if (e instanceof ApiError) {
     const sources = e.body?.errorSources;
     if (sources && sources.length) {

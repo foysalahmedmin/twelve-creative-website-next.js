@@ -1,6 +1,7 @@
 import type { IWorkItem } from "@/data/works.data";
 import { apiFetch } from "@/lib/admin/api-client";
-import type { VideoRef } from "@/lib/admin/types";
+import { ApiError, type VideoRef } from "@/lib/admin/types";
+import { INDUSTRIES_TAG, type IndustrySummary } from "@/lib/api/industries";
 import { extractYouTubeId } from "@/lib/media/video";
 
 export const WORKS_TAG = "works";
@@ -44,8 +45,19 @@ export interface WorkTestimonial {
   role: string;
 }
 
+/**
+ * Admin/detail responses populate Industry, while transitional/lean responses
+ * may still return the ObjectId. The optional ordering fields keep reads
+ * tolerant of a minimal `{ _id, name, slug }` populate projection.
+ */
+export type WorkIndustry =
+  | string
+  | (Pick<IndustrySummary, "_id" | "name" | "slug"> &
+      Partial<Pick<IndustrySummary, "order" | "is_active">>);
+
 export interface Work {
   _id: string;
+  industry?: WorkIndustry | null;
   slug: string;
   type: string;
   title: string;
@@ -55,59 +67,85 @@ export interface Work {
   metrics: Metric[];
   tag_slugs: string[];
   hero_stats?: HeroStat[];
-  client?: WorkClient;
-  situation_intro?: string;
-  challenge_intro?: string;
+  client?: WorkClient | null;
+  situation_intro?: string | null;
+  challenge_intro?: string | null;
   challenge_items?: ChallengeItem[];
-  solution_intro?: string;
+  solution_intro?: string | null;
   solution_phases?: SolutionPhase[];
-  outcome_desc?: string;
-  outcome_video?: VideoRef;
-  outcome_video_thumbnail?: string;
-  testimonial?: WorkTestimonial;
-  calendly_url?: string;
+  outcome_desc?: string | null;
+  outcome_video?: VideoRef | null;
+  outcome_video_thumbnail?: string | null;
+  testimonial?: WorkTestimonial | null;
+  calendly_url?: string | null;
   order: number;
   is_published: boolean;
   created_at: string;
   updated_at: string;
 }
 
-export async function getPublicWorks(): Promise<Work[]> {
+export interface PublicWorksQuery {
+  industrySlug?: string;
+}
+
+export async function getPublicWorks(
+  query: PublicWorksQuery = {},
+): Promise<Work[]> {
   try {
-    const res = await apiFetch<Work[]>("/api/work/public", {
-      method: "GET",
-      auth: false,
-      revalidate: 60,
-      tags: [WORKS_TAG],
-    });
+    const params = new URLSearchParams();
+    if (query.industrySlug) {
+      params.set("industry_slug", query.industrySlug);
+    }
+    const qs = params.toString();
+    const res = await apiFetch<Work[]>(
+      `/api/work/public${qs ? `?${qs}` : ""}`,
+      {
+        method: "GET",
+        auth: false,
+        revalidate: 60,
+        tags: [WORKS_TAG, INDUSTRIES_TAG],
+      },
+    );
     return res.data ?? [];
   } catch {
     return [];
   }
 }
 
-export async function getPublicWorkBySlug(
-  slug: string,
-): Promise<Work | null> {
+export async function getPublicWorkBySlug(slug: string): Promise<Work | null> {
   try {
-    const res = await apiFetch<Work>(`/api/work/public/${slug}`, {
-      method: "GET",
-      auth: false,
-      revalidate: 60,
-      tags: [WORKS_TAG, `work:${slug}`],
-    });
-    return res.data ?? null;
-  } catch {
-    return null;
+    const res = await apiFetch<Work>(
+      `/api/work/public/${encodeURIComponent(slug)}`,
+      {
+        method: "GET",
+        auth: false,
+        revalidate: 60,
+        tags: [WORKS_TAG, INDUSTRIES_TAG, `work:${slug}`],
+      },
+    );
+    if (!res.data) {
+      throw new ApiError(
+        502,
+        "The API returned an empty work payload.",
+        null,
+      );
+    }
+    return res.data;
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 404) return null;
+    throw error;
   }
 }
 
-export async function getAdminWorks(query: {
-  search?: string;
-  page?: number;
-  limit?: number;
-  filter?: "published" | "draft";
-} = {}): Promise<{
+export async function getAdminWorks(
+  query: {
+    search?: string;
+    page?: number;
+    limit?: number;
+    filter?: "published" | "draft";
+    industry?: string;
+  } = {},
+): Promise<{
   data: Work[];
   meta?: { total: number; page: number; limit: number; total_pages: number };
 }> {
@@ -116,6 +154,7 @@ export async function getAdminWorks(query: {
   if (query.page) params.set("page", String(query.page));
   if (query.limit) params.set("limit", String(query.limit));
   if (query.filter) params.set("filter", query.filter);
+  if (query.industry) params.set("industry", query.industry);
 
   const qs = params.toString();
   const res = await apiFetch<Work[]>(`/api/work${qs ? `?${qs}` : ""}`);
@@ -160,20 +199,23 @@ export function adaptWorkToLegacy(work: Work): IWorkItem {
           logo: work.client.logo ?? "",
         }
       : undefined,
-    situation_intro: work.situation_intro,
-    challenge_intro: work.challenge_intro,
+    situation_intro: work.situation_intro ?? undefined,
+    challenge_intro: work.challenge_intro ?? undefined,
     challenge_items: work.challenge_items,
-    solution_intro: work.solution_intro,
+    solution_intro: work.solution_intro ?? undefined,
     solution_phases: work.solution_phases,
-    outcome_desc: work.outcome_desc,
+    outcome_desc: work.outcome_desc ?? undefined,
     outcome_video: resolveOutcomeVideo(work.outcome_video),
-    outcome_video_thumbnail: resolveOutcomeThumbnail(work.outcome_video, work.outcome_video_thumbnail),
-    testimonial: work.testimonial,
-    calendly_url: work.calendly_url,
+    outcome_video_thumbnail: resolveOutcomeThumbnail(
+      work.outcome_video,
+      work.outcome_video_thumbnail ?? undefined,
+    ),
+    testimonial: work.testimonial ?? undefined,
+    calendly_url: work.calendly_url ?? undefined,
   };
 }
 
-function resolveOutcomeVideo(ref?: VideoRef): string | undefined {
+function resolveOutcomeVideo(ref?: VideoRef | null): string | undefined {
   if (!ref?.value) return undefined;
   if (ref.source === "youtube") {
     const id = extractYouTubeId(ref.value);
@@ -182,7 +224,10 @@ function resolveOutcomeVideo(ref?: VideoRef): string | undefined {
   return ref.value;
 }
 
-function resolveOutcomeThumbnail(ref?: VideoRef, thumbnail?: string): string | undefined {
+function resolveOutcomeThumbnail(
+  ref?: VideoRef | null,
+  thumbnail?: string,
+): string | undefined {
   if (thumbnail) return thumbnail;
   if (ref?.source === "youtube") {
     const id = extractYouTubeId(ref.value);

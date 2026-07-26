@@ -1,21 +1,27 @@
 "use client";
 
 import { CenteredSectionHeader } from "@/components/common/section-label";
-import { ABOUT_STORY_DATA } from "@/data/about.data";
-import type { ContentSection } from "@/lib/api/site-setting";
+import { CmsMediaDisplay } from "@/components/common/cms-media-display";
+import type { AboutSectionHeader, AboutStoryCard } from "@/lib/api/about-page";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 interface StorySectionProps {
-  contentSection?: ContentSection;
+  section: AboutSectionHeader | null;
+  cards: AboutStoryCard[];
 }
 
-export function StorySection({ contentSection }: StorySectionProps) {
+export function StorySection({ section, cards }: StorySectionProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+  const visibleCards = useMemo(
+    () => cards.filter((card) => card.is_visible),
+    [cards],
+  );
 
   useEffect(() => {
+    if (!section?.is_visible || visibleCards.length === 0) return;
+
     const handleScroll = () => {
       const isDesktop = window.innerWidth >= 1024;
 
@@ -27,10 +33,13 @@ export function StorySection({ contentSection }: StorySectionProps) {
 
         if (totalScrollRange > 0) {
           const scrolled = topOffset - rect.top;
-          const progress = Math.max(0, Math.min(1, scrolled / totalScrollRange));
+          const progress = Math.max(
+            0,
+            Math.min(1, scrolled / totalScrollRange),
+          );
           const index = Math.min(
-            Math.floor(progress * ABOUT_STORY_DATA.length),
-            ABOUT_STORY_DATA.length - 1
+            Math.floor(progress * visibleCards.length),
+            visibleCards.length - 1,
           );
           setActiveIndex(Math.max(0, index));
           return;
@@ -63,21 +72,17 @@ export function StorySection({ contentSection }: StorySectionProps) {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleScroll);
     };
-  }, []);
+  }, [section?.is_visible, visibleCards.length]);
 
-  // A single admin-provided image (if set) overrides the per-card images.
-  const overrideImage = contentSection?.image;
+  if (!section?.is_visible || visibleCards.length === 0) return null;
 
   return (
-    <section className="bg-background border-t border-border/40 py-16 sm:py-20 lg:py-24">
+    <section className="bg-background border-border/40 border-t py-16 sm:py-20 lg:py-24">
       <div className="container max-w-7xl">
         <CenteredSectionHeader
-          title={contentSection?.title || "Merging Art and Science"}
-          description={
-            contentSection?.body ||
-            "Our journey of combining creative excellence with backend growth infrastructure."
-          }
-          label={contentSection?.subtitle || "Our Story"}
+          title={section.title}
+          description={section.description}
+          label={section.label}
         />
 
         <div
@@ -91,35 +96,25 @@ export function StorySection({ contentSection }: StorySectionProps) {
           <div className="hidden lg:sticky lg:top-[8vh] lg:flex lg:h-[84vh] lg:w-1/2 lg:shrink-0 lg:items-center lg:self-start">
             {/* Capped media card — aspect + max-height keep it from oversizing */}
             <div className="bg-muted border-border relative aspect-square max-h-[72vh] w-full overflow-hidden rounded-3xl border shadow-sm">
-              {overrideImage ? (
-                <Image
-                  src={overrideImage}
-                  alt={contentSection?.title || "Our story"}
-                  fill
-                  priority
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                />
-              ) : (
-                ABOUT_STORY_DATA.map((card, index) => (
-                  <div
-                    key={index}
-                    className={cn(
-                      "absolute inset-0 transition-opacity duration-700 ease-in-out",
-                      index === activeIndex ? "opacity-100" : "opacity-0",
-                    )}
-                  >
-                    <Image
-                      src={card.image}
-                      alt={card.title}
-                      fill
-                      priority={index === 0}
-                      className="object-cover"
-                      sizes="(max-width: 1024px) 100vw, 50vw"
-                    />
-                  </div>
-                ))
-              )}
+              {visibleCards.map((card, index) => (
+                <div
+                  key={card.id}
+                  className={cn(
+                    "absolute inset-0 transition-opacity duration-700 ease-in-out",
+                    index === activeIndex
+                      ? "z-10 opacity-100"
+                      : "pointer-events-none opacity-0",
+                  )}
+                >
+                  <CmsMediaDisplay
+                    media={card.media}
+                    alt={card.title}
+                    className="absolute inset-0"
+                    priority={index === 0}
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                  />
+                </div>
+              ))}
               <div className="border-border pointer-events-none absolute inset-0 rounded-3xl border" />
             </div>
           </div>
@@ -140,11 +135,11 @@ export function StorySection({ contentSection }: StorySectionProps) {
               <div className="bg-border absolute top-0 bottom-0 left-2 hidden w-px lg:block" />
 
               <div className="space-y-8 lg:space-y-16">
-                {ABOUT_STORY_DATA.map((card, index) => {
+                {visibleCards.map((card, index) => {
                   const isActive = activeIndex === index;
                   return (
                     <div
-                      key={index}
+                      key={card.id}
                       className={cn(
                         "story-card relative rounded-2xl border p-6 transition-all duration-500 sm:p-10",
                         // Mobile: every card stays a legible card. Desktop:
@@ -182,12 +177,11 @@ export function StorySection({ contentSection }: StorySectionProps) {
                         )}
                       >
                         <div className="border-border/40 relative aspect-4/3 w-full overflow-hidden rounded-2xl border">
-                          <Image
-                            src={overrideImage || card.image}
+                          <CmsMediaDisplay
+                            media={card.media}
                             alt={card.title}
-                            fill
+                            className="absolute inset-0"
                             sizes="100vw"
-                            className="object-cover"
                           />
                         </div>
                       </div>

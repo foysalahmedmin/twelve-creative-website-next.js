@@ -1,4 +1,5 @@
 import type { TFeature, TFeatureIconKey } from "@/data/why-choose-us.data";
+import { CmsMediaDisplay } from "@/components/common/cms-media-display";
 import { cn } from "@/lib/utils";
 import {
   BulbIcon,
@@ -42,6 +43,14 @@ export const FeatureCard = ({
         className,
       )}
     >
+      {feature.media && (
+        <CmsMediaDisplay
+          media={feature.media}
+          alt={feature.title}
+          className="mb-4 aspect-video w-full rounded-xl"
+          sizes="(max-width: 768px) 100vw, 33vw"
+        />
+      )}
       <div
         className={cn(
           "group-hover/feature:bg-primary text-primary group-hover/feature:text-primary-foreground inline-flex h-12 w-12 items-center justify-center rounded-xl transition-transform duration-300 group-hover/feature:scale-110",

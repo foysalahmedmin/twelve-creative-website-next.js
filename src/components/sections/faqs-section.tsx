@@ -4,16 +4,22 @@ import { Accordion } from "@/components/common/accordion";
 import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { CenteredSectionHeader } from "@/components/common/section-label";
 import { TFaqsData } from "@/data/faqs.data";
+import type { HeadingSection } from "@/lib/api/shared-sections";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 
 export interface FaqsSectionProps {
   data?: TFaqsData;
+  heading?: HeadingSection | null;
   className?: string;
 }
 
-export const FaqSection = ({ data, className }: FaqsSectionProps) => {
+export const FaqSection = ({
+  data,
+  heading: sectionHeading,
+  className,
+}: FaqsSectionProps) => {
   const {
     is_side_hide,
     image,
@@ -35,18 +41,24 @@ export const FaqSection = ({ data, className }: FaqsSectionProps) => {
       )}
     >
       <div className="container">
-        <ScrollReveal animation="fade-in-up" durationMs={800}>
-          <CenteredSectionHeader
-            label="FAQ"
-            title="Frequently Asked Questions"
-            description="Everything you need to know before we get started."
-            className="mb-10 sm:mb-16"
-          />
-        </ScrollReveal>
+        {sectionHeading !== null && (
+          <ScrollReveal animation="fade-in-up" durationMs={800}>
+            <CenteredSectionHeader
+              label={sectionHeading?.label ?? "FAQ"}
+              title={sectionHeading?.title ?? "Frequently Asked Questions"}
+              description={
+                sectionHeading?.description ??
+                "Everything you need to know before we get started."
+              }
+              className="mb-10 sm:mb-16"
+            />
+          </ScrollReveal>
+        )}
 
         <div
           className={cn(
-            "mt-8 grid grid-cols-1 items-start gap-8 lg:mt-16 lg:grid-cols-3",
+            "grid grid-cols-1 items-start gap-8 lg:grid-cols-3",
+            sectionHeading === null ? "mt-0" : "mt-8 lg:mt-16",
           )}
         >
           {/* Left Coordinator Profile Card — appears after questions on mobile */}

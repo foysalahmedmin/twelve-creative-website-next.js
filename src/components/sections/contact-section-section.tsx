@@ -4,11 +4,16 @@ import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { CenteredSectionHeader } from "@/components/common/section-label";
 import { cn } from "@/lib/utils";
 import { submitContactMessageAction } from "@/lib/api/contact-messages-actions";
+import type { PublicIndustryOption } from "@/lib/api/industries";
 import React, { useState } from "react";
 import { toast } from "sonner";
 
 export interface ContactSectionProps {
   className?: string;
+  industries?: PublicIndustryOption[];
+  label?: string;
+  title?: string;
+  description?: string;
 }
 
 interface FormDataType {
@@ -40,7 +45,11 @@ const INITIAL_FORM_DATA: FormDataType = {
 };
 
 // ── Contact Inquiry Form ──────────────────────────────
-const ContactFormSection = () => {
+const ContactFormSection = ({
+  industries,
+}: {
+  industries: PublicIndustryOption[];
+}) => {
   const [formData, setFormData] = useState<FormDataType>(INITIAL_FORM_DATA);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -63,7 +72,16 @@ const ContactFormSection = () => {
     if (formData.timeline) parts.push(`Timeline: ${formData.timeline}`);
     if (formData.budget) parts.push(`Budget: ${formData.budget}`);
     if (formData.website) parts.push(`Website/Instagram: ${formData.website}`);
-    if (formData.industry) parts.push(`Industry: ${formData.industry}`);
+    if (formData.industry) {
+      const selectedIndustry = industries.find(
+        (industry) => industry._id === formData.industry,
+      );
+      const industryName = selectedIndustry?.name ?? "Other";
+      parts.push(`Industry: ${industryName}`);
+      if (selectedIndustry) {
+        parts.push(`Industry reference: ${selectedIndustry._id}`);
+      }
+    }
 
     const result = await submitContactMessageAction({
       name: formData.name,
@@ -100,6 +118,7 @@ const ContactFormSection = () => {
             Full Name <span className="text-primary">*</span>
           </label>
           <input
+            id="name"
             name="name"
             type="text"
             required
@@ -119,6 +138,7 @@ const ContactFormSection = () => {
             Email Address <span className="text-primary">*</span>
           </label>
           <input
+            id="email"
             name="email"
             type="email"
             required
@@ -138,6 +158,7 @@ const ContactFormSection = () => {
             Phone Number
           </label>
           <input
+            id="phone"
             name="phone"
             type="tel"
             value={formData.phone}
@@ -156,6 +177,7 @@ const ContactFormSection = () => {
             Company Name
           </label>
           <input
+            id="company"
             name="company"
             type="text"
             value={formData.company}
@@ -174,6 +196,7 @@ const ContactFormSection = () => {
             Website / Instagram
           </label>
           <input
+            id="website"
             name="website"
             type="text"
             value={formData.website}
@@ -192,6 +215,7 @@ const ContactFormSection = () => {
             Industry Category
           </label>
           <select
+            id="industry"
             name="industry"
             value={formData.industry}
             onChange={handleChange}
@@ -200,18 +224,15 @@ const ContactFormSection = () => {
             <option value="" className="bg-card">
               Select Industry
             </option>
-            <option value="hospitality" className="bg-card">
-              Hospitality / Restaurant
-            </option>
-            <option value="real-estate" className="bg-card">
-              Real Estate
-            </option>
-            <option value="aviation" className="bg-card">
-              Aviation
-            </option>
-            <option value="professional-services" className="bg-card">
-              Professional Services
-            </option>
+            {industries.map((industry) => (
+              <option
+                key={industry._id}
+                value={industry._id}
+                className="bg-card"
+              >
+                {industry.name}
+              </option>
+            ))}
             <option value="other" className="bg-card">
               Other
             </option>
@@ -228,6 +249,7 @@ const ContactFormSection = () => {
           What are you looking for help with?
         </label>
         <textarea
+          id="lookingFor"
           name="lookingFor"
           value={formData.lookingFor}
           onChange={handleChange}
@@ -245,6 +267,7 @@ const ContactFormSection = () => {
           What is currently not working?
         </label>
         <textarea
+          id="notWorking"
           name="notWorking"
           value={formData.notWorking}
           onChange={handleChange}
@@ -263,6 +286,7 @@ const ContactFormSection = () => {
             Timeline
           </label>
           <select
+            id="timeline"
             name="timeline"
             value={formData.timeline}
             onChange={handleChange}
@@ -295,6 +319,7 @@ const ContactFormSection = () => {
             Monthly Budget Range
           </label>
           <select
+            id="budget"
             name="budget"
             value={formData.budget}
             onChange={handleChange}
@@ -320,7 +345,7 @@ const ContactFormSection = () => {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="bg-primary text-primary-foreground mt-4 flex h-14 w-full items-center justify-center rounded-lg text-sm font-semibold uppercase tracking-[0.05em] transition-all duration-200 select-none hover:scale-105 active:scale-95 disabled:pointer-events-none disabled:opacity-50"
+        className="bg-primary text-primary-foreground mt-4 flex h-14 w-full items-center justify-center rounded-lg text-sm font-semibold tracking-[0.05em] uppercase transition-all duration-200 select-none hover:scale-105 active:scale-95 disabled:pointer-events-none disabled:opacity-50"
       >
         {isSubmitting ? "Submitting Inquiry..." : "Submit Inquiry"}
       </button>
@@ -329,39 +354,45 @@ const ContactFormSection = () => {
 };
 
 // ── Main Layout Coordinator ────────────────────────────
-export const PageContactSection = ({ className }: ContactSectionProps) => {
+export const PageContactSection = ({
+  className,
+  industries = [],
+  label = "Send an Inquiry",
+  title = "Tell us what needs to move.",
+  description = "Whether the issue is unclear positioning, weak content, poor follow-up, a website that does not convert, or a campaign that needs structure — the first step is understanding the business.",
+}: ContactSectionProps) => {
   return (
     <section
       className={cn(
-        "w-full bg-background border-t border-border/40 py-16 sm:py-20 lg:py-24",
+        "bg-background border-border/40 w-full border-t py-16 sm:py-20 lg:py-24",
         className,
       )}
     >
       <div className="container">
         <div className="relative w-full">
-        {/* Layered peeking back card element */}
-        <div className="bg-muted border-border pointer-events-none absolute right-[2.5%] -bottom-3 left-[2.5%] z-0 h-12 rounded-b-3xl border-x border-b" />
+          {/* Layered peeking back card element */}
+          <div className="bg-muted border-border pointer-events-none absolute right-[2.5%] -bottom-3 left-[2.5%] z-0 h-12 rounded-b-3xl border-x border-b" />
 
-        {/* Main box holding the form */}
-        <div className="border-border bg-card relative z-10 space-y-10 rounded-3xl border p-8 sm:p-10 lg:p-12">
-          <ScrollReveal animation="fade-in-up" durationMs={800}>
-            <CenteredSectionHeader
-              label="Send an Inquiry"
-              title="Tell us what needs to move."
-              description="Whether the issue is unclear positioning, weak content, poor follow-up, a website that does not convert, or a campaign that needs structure — the first step is understanding the business."
-              className="mb-0"
-            />
-          </ScrollReveal>
+          {/* Main box holding the form */}
+          <div className="border-border bg-card relative z-10 space-y-10 rounded-3xl border p-8 sm:p-10 lg:p-12">
+            <ScrollReveal animation="fade-in-up" durationMs={800}>
+              <CenteredSectionHeader
+                label={label}
+                title={title}
+                description={description}
+                className="mb-0"
+              />
+            </ScrollReveal>
 
-          {/* Form wrapper */}
-          <ScrollReveal
-            animation="fade-in-up"
-            delayMs={200}
-            className="border-border bg-muted/40 w-full rounded-3xl border p-6 sm:p-8 lg:p-10"
-          >
-            <ContactFormSection />
-          </ScrollReveal>
-        </div>
+            {/* Form wrapper */}
+            <ScrollReveal
+              animation="fade-in-up"
+              delayMs={200}
+              className="border-border bg-muted/40 w-full rounded-3xl border p-6 sm:p-8 lg:p-10"
+            >
+              <ContactFormSection industries={industries} />
+            </ScrollReveal>
+          </div>
         </div>
       </div>
     </section>

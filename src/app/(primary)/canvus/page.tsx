@@ -22,14 +22,15 @@ import { WhyChooseUsSection } from "@/components/sections/why-choose-us-section"
 import { CONTACT_PAGE_DATA } from "@/data/contact.data";
 import { FAQS_DATA } from "@/data/faqs.data";
 import { CTA_PROCESS } from "@/data/page-ctas.data";
-import { GROWTH_SYSTEM_DATA } from "@/data/growth-system.data";
 import { SERVICE_SERVICES_DATA } from "@/data/service-services-section.data";
 import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
 import { CANVAS_PORTFOLIO_DATA } from "@/data/thumbnail-work-section.data";
 import { CANVAS_MARQUEE_DATA } from "@/data/vertical-marquee.data";
-import { WHY_CHOOSE_US_DATA } from "@/data/why-choose-us.data";
 import { getPublicProcessSection } from "@/lib/api/process-section";
+import { getPublicAboutPage } from "@/lib/api/about-page";
+import { getPublicSharedSections } from "@/lib/api/shared-sections";
 import { getPublicTestimonialsForSection } from "@/lib/api/testimonials";
+import { getPublicIndustryOptions } from "@/lib/api/industries";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -39,13 +40,34 @@ export const metadata: Metadata = {
 };
 
 export default async function CanvasPage() {
-  const [testimonialsData, processData] = await Promise.all([
+  const [
+    testimonialsData,
+    processData,
+    industries,
+    about,
+    [
+      whyChooseUs,
+      growthSystem,
+      workShowcaseHeading,
+      testimonialsHeading,
+      faqHeading,
+    ],
+  ] = await Promise.all([
     getPublicTestimonialsForSection({
       label: TESTIMONIALS_DATA.label,
       title: TESTIMONIALS_DATA.title,
       description: TESTIMONIALS_DATA.description,
     }),
     getPublicProcessSection(),
+    getPublicIndustryOptions(),
+    getPublicAboutPage(),
+    getPublicSharedSections([
+      "why-choose-us",
+      "growth-system",
+      "work-showcase",
+      "testimonials",
+      "faq",
+    ]),
   ]);
 
   return (
@@ -58,21 +80,37 @@ export default async function CanvasPage() {
 
       <BrandsSection />
 
-      <OurMissionSection />
+      {about && (
+        <>
+          <OurMissionSection
+            section={about.mission_section}
+            mission={about.mission}
+            vision={about.vision}
+          />
 
-      <StorySection />
+          <StorySection
+            section={about.story_section}
+            cards={about.story_cards}
+          />
+        </>
+      )}
 
       <TeamSection />
 
-      <GalleryMarqueeSection />
+      {about && (
+        <GalleryMarqueeSection
+          section={about.gallery_section}
+          items={about.gallery}
+        />
+      )}
 
-      <WhyChooseUsSection data={WHY_CHOOSE_US_DATA} />
+      {whyChooseUs && <WhyChooseUsSection cmsData={whyChooseUs} />}
 
       <ServiceServicesSection data={SERVICE_SERVICES_DATA} />
 
       <ProcessSection data={processData} />
 
-      <GrowthSystemSection data={GROWTH_SYSTEM_DATA} />
+      {growthSystem && <GrowthSystemSection cmsData={growthSystem} />}
 
       <SaasInsight />
 
@@ -96,18 +134,26 @@ export default async function CanvasPage() {
         />
       </div>
 
-      <ThumbnailWorkSection works={CANVAS_PORTFOLIO_DATA} slug="creative" />
+      <ThumbnailWorkSection
+        works={CANVAS_PORTFOLIO_DATA}
+        slug="creative"
+        heading={workShowcaseHeading}
+      />
 
-      <TestimonialSection data={testimonialsData} />
+      <TestimonialSection
+        data={testimonialsData}
+        heading={testimonialsHeading}
+      />
 
       <CTASection data={CTA_PROCESS} />
 
-      <FaqSection data={FAQS_DATA} />
+      <FaqSection data={FAQS_DATA} heading={faqHeading} />
 
       <BookingSection
         label={CONTACT_PAGE_DATA.booking.label}
         title={CONTACT_PAGE_DATA.booking.title}
         description={CONTACT_PAGE_DATA.booking.description}
+        industries={industries}
       />
 
       <ContactInfoMapSection
@@ -121,7 +167,7 @@ export default async function CanvasPage() {
         }}
       />
 
-      <PageContactSection />
+      <PageContactSection industries={industries} />
 
       <ContactSection />
     </main>

@@ -12,6 +12,8 @@ export type TIndustry = {
   description: string;
   image: string;
   work: string[];
+  /** Admin-managed CTA label shown on Industry cards/tabs. */
+  ctaLabel?: string;
   href: string;
   /** Resolved promo video URL (when configured in the admin panel). */
   videoSrc?: string;
@@ -41,6 +43,7 @@ export const INDUSTRIES_DATA: TIndustry[] = [
       "Influencer coordination",
       "Event promotion",
     ],
+    ctaLabel: "Explore Hospitality",
     href: "/industries#hospitality",
   },
   {
@@ -60,6 +63,7 @@ export const INDUSTRIES_DATA: TIndustry[] = [
       "Lead generation",
       "CRM and follow-up",
     ],
+    ctaLabel: "Explore Real Estate",
     href: "/industries#real-estate",
   },
   {
@@ -79,6 +83,7 @@ export const INDUSTRIES_DATA: TIndustry[] = [
       "Qualification forms",
       "CRM systems",
     ],
+    ctaLabel: "Explore Aviation",
     href: "/industries#aviation",
   },
   {
@@ -98,6 +103,7 @@ export const INDUSTRIES_DATA: TIndustry[] = [
       "CRM setup",
       "Paid campaigns",
     ],
+    ctaLabel: "Explore Professional Services",
     href: "/industries#professional-services",
   },
 ];

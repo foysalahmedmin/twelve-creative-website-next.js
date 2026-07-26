@@ -20,8 +20,8 @@ export const HOME_HERO_DATA: THomeHero = {
   description:
     "Twelve Creative helps businesses clarify their positioning, create stronger content, distribute it with purpose, and install the systems that turn attention into revenue.",
   primary_cta: { label: "Start a Conversation", href: "/contact" },
-  secondary_cta: { label: "View Our Work", href: "/work" },
+  secondary_cta: { label: "View Our Work", href: "/works" },
   video: {
-    src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    src: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
   },
 };

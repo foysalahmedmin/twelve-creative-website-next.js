@@ -4,14 +4,16 @@ import {
   GROWTH_SYSTEM_DATA,
   type GrowthSystemData,
 } from "@/data/growth-system.data";
+import { CmsMediaDisplay } from "@/components/common/cms-media-display";
+import type { GrowthSystemSection as CmsGrowthSystemSection } from "@/lib/api/shared-sections";
 import { cn } from "@/lib/utils";
 import { Tick02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import Image from "next/image";
-import { type ReactNode } from "react";
+import { type CSSProperties, type ReactNode } from "react";
 
 interface GrowthSystemSectionProps {
   data?: GrowthSystemData;
+  cmsData?: CmsGrowthSystemSection;
   className?: string;
 }
 
@@ -30,7 +32,7 @@ function StackCard({
 }) {
   return (
     <div
-      className="sticky top-0 h-screen w-full overflow-hidden"
+      className="relative min-h-screen w-full overflow-visible lg:sticky lg:top-0 lg:h-screen lg:overflow-hidden"
       style={{ zIndex: index + 1 }}
     >
       {/* Frosted brand background — lets the previous card blur through */}
@@ -60,11 +62,11 @@ function StackCard({
       />
 
       {/* Content */}
-      <div className="relative z-10 container flex h-full flex-col justify-center py-16 lg:py-20">
+      <div className="relative z-10 container flex min-h-screen flex-col justify-center py-16 lg:h-full lg:min-h-0 lg:py-20">
         {children}
 
         {/* Progress indicators */}
-        <div className="absolute right-0 bottom-8 left-0 container flex gap-2 lg:bottom-10">
+        <div className="mt-10 flex gap-2 lg:absolute lg:right-0 lg:bottom-10 lg:left-0 lg:container lg:mt-0">
           {Array.from({ length: total }).map((_, idx) => (
             <div
               key={idx}
@@ -82,17 +84,37 @@ function StackCard({
 
 export function GrowthSystemSection({
   data = GROWTH_SYSTEM_DATA,
+  cmsData,
   className,
 }: GrowthSystemSectionProps) {
-  const { tag, heading_title, paragraph, steps } = data;
+  const resolved = cmsData
+    ? {
+        tag: cmsData.label ?? "",
+        heading_title: cmsData.title,
+        paragraph: cmsData.description,
+        steps: cmsData.content.steps.map((step) => ({
+          title: step.title,
+          description: step.description,
+          media: step.media,
+          items: step.items.map((item) => item.text),
+        })),
+      }
+    : {
+        ...data,
+        steps: data.steps.map((step) => ({
+          ...step,
+          media: { type: "image", image: step.image } as const,
+        })),
+      };
+  const { tag, heading_title, paragraph, steps } = resolved;
   if (!steps?.length) return null;
 
   const total = steps.length + 1; // intro card + one card per stage
 
   return (
     <section
-      className={cn("relative", className)}
-      style={{ height: `${total * 100}vh` }}
+      className={cn("relative lg:h-[var(--stack-height)]", className)}
+      style={{ "--stack-height": `${total * 100}vh` } as CSSProperties}
     >
       {/* ── Intro card ── */}
       <StackCard index={0} total={total}>
@@ -133,12 +155,11 @@ export function GrowthSystemSection({
                 {pad(i + 1)}
               </span>
               <div className="border-border relative z-10 aspect-16/10 max-h-[32vh] w-full overflow-hidden rounded-2xl border shadow-xl lg:max-h-none lg:rounded-3xl">
-                <Image
-                  src={step.image}
+                <CmsMediaDisplay
+                  media={step.media}
                   alt={step.title}
-                  fill
+                  className="absolute inset-0"
                   sizes="(max-width: 1024px) 100vw, 600px"
-                  className="object-cover"
                 />
                 <div className="from-background/25 absolute inset-0 bg-linear-to-t to-transparent" />
               </div>

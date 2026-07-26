@@ -5,7 +5,9 @@ import { WorkWithUsSection } from "@/components/sections/work-with-us-section";
 import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
 import { VERTICALS_DATA } from "@/data/verticals.data";
 import { getPublicSiteSetting } from "@/lib/api/site-setting";
+import { getPublicIndustryOptions } from "@/lib/api/industries";
 import { getPublicTestimonialsForSection } from "@/lib/api/testimonials";
+import { getPublicSharedSections } from "@/lib/api/shared-sections";
 import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -50,13 +52,20 @@ export default async function VerticalDetailPage({ params }: Props) {
   const vertical = VERTICALS_DATA.find((v) => v.id === id);
   if (!vertical) notFound();
 
-  const [testimonialsData, settings] = await Promise.all([
+  const [
+    testimonialsData,
+    settings,
+    industries,
+    [workWithUs, testimonialsHeading],
+  ] = await Promise.all([
     getPublicTestimonialsForSection({
       label: TESTIMONIALS_DATA.label,
       title: TESTIMONIALS_DATA.title,
       description: TESTIMONIALS_DATA.description,
     }),
     getPublicSiteSetting(),
+    getPublicIndustryOptions(),
+    getPublicSharedSections(["work-with-us", "testimonials"]),
   ]);
 
   return (
@@ -96,13 +105,19 @@ export default async function VerticalDetailPage({ params }: Props) {
       </section>
 
       {/* ── Work With Us ── */}
-      <WorkWithUsSection />
+      {workWithUs && <WorkWithUsSection data={workWithUs} />}
 
       {/* ── Testimonials ── */}
-      <TestimonialSection data={testimonialsData} />
+      <TestimonialSection
+        data={testimonialsData}
+        heading={testimonialsHeading}
+      />
 
       {/* ── Inline Booking ── */}
-      <BookingInlineSection calendlyUrl={settings.calendly_url || undefined} />
+      <BookingInlineSection
+        calendlyUrl={settings.calendly_url || undefined}
+        industries={industries}
+      />
     </div>
   );
 }

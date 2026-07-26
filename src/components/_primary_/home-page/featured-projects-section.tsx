@@ -15,6 +15,7 @@ import {
   type TFeaturedProject,
 } from "@/data/featured-projects.data";
 import { cn } from "@/lib/utils";
+import type { HeadingSection } from "@/lib/api/shared-sections";
 import { PlayIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import dynamic from "next/dynamic";
@@ -91,11 +92,13 @@ const ProjectCard = ({ project }: { project: TFeaturedProject }) => {
 interface FeaturedProjectsSectionProps {
   className?: string;
   data: TFeaturedIndustryGroup[];
+  heading?: HeadingSection | null;
 }
 
 export const FeaturedProjectsSection = ({
   className,
   data,
+  heading,
 }: FeaturedProjectsSectionProps) => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const activeId = data.some((group) => group.id === selectedId)
@@ -110,19 +113,27 @@ export const FeaturedProjectsSection = ({
     >
       <div className="container">
         {/* Header */}
-        <CenteredSectionHeader
-          label="Our Works"
-          title="Featured Projects"
-          description="Real projects that show how strategy, creative, and systems work together."
-          className="mb-0 lg:mb-0"
-        />
+        {heading !== null && (
+          <CenteredSectionHeader
+            label={heading?.label ?? "Our Works"}
+            title={heading?.title ?? "Featured Projects"}
+            description={
+              heading?.description ??
+              "Real projects that show how strategy, creative, and systems work together."
+            }
+            className="mb-0 lg:mb-0"
+          />
+        )}
 
         {/* Tabs wrapper */}
         <div className="px-4">
           <Tabs
             value={activeId}
             onValueChange={setSelectedId}
-            className="mt-5 flex w-full flex-col items-center"
+            className={cn(
+              "flex w-full flex-col items-center",
+              heading === null ? "mt-0" : "mt-5",
+            )}
           >
             {/* Horizontally scrollable on mobile */}
             <div className="scrollbar-none w-full overflow-x-auto pb-1">

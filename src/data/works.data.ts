@@ -20,7 +20,7 @@ export interface IWorkItem {
   client?: {
     name: string;
     industry: string;
-    domain: string;
+    domain?: string;
     employees: string;
     tags: string[];
     desc: string;
@@ -52,7 +52,8 @@ export const WORKS_PAGE_MOCK_DATA: IWorkItem[] = [
   {
     id: "hudson-hospitality",
     type: "Hospitality",
-    title: "Helping a restaurant concept become easier to market — and eventually sell.",
+    title:
+      "Helping a restaurant concept become easier to market — and eventually sell.",
     description:
       "A restaurant group had been trying to sell a sister concept for several years. Twelve Creative supported the brand with ongoing content, website updates, social, campaign execution, and a stronger digital presence — making the concept more visible, more organized, and more attractive in the market.",
     image_url:
@@ -73,7 +74,6 @@ export const WORKS_PAGE_MOCK_DATA: IWorkItem[] = [
     client: {
       name: "Hudson Hospitality",
       industry: "Restaurant Group",
-      domain: "hudsonhospitality.example",
       employees: "50-200",
       tags: ["Restaurant", "Hospitality", "Multi-location"],
       desc: "A multi-concept restaurant group operating across hospitality categories — full-service dining, a sister pizzeria, and a private events space.",
@@ -119,7 +119,7 @@ export const WORKS_PAGE_MOCK_DATA: IWorkItem[] = [
     outcome_desc:
       "After one year of working together, revenue increased by approximately 40%. The improved visibility and consistency helped attract buyers and contributed to the successful sale of all three locations.",
     outcome_video:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+      "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
     testimonial: {
       quote:
         "They didn't just make our content look better. They made the business easier to talk about — and easier to sell.",
@@ -154,7 +154,6 @@ export const WORKS_PAGE_MOCK_DATA: IWorkItem[] = [
     client: {
       name: "Meridian Properties",
       industry: "Real Estate Development",
-      domain: "meridianproperties.example",
       employees: "20-50",
       tags: ["Luxury", "Residential", "Development"],
       desc: "A real estate developer focused on luxury residential and mixed-use projects in coastal markets.",
@@ -200,7 +199,7 @@ export const WORKS_PAGE_MOCK_DATA: IWorkItem[] = [
     outcome_desc:
       "Qualified inquiries increased 145% versus the prior launch, and the average buyer commitment timeline compressed by roughly 30%. Brokers engaged the materials three times more than before.",
     outcome_video:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+      "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
     testimonial: {
       quote:
         "They positioned the project, built the film, ran the campaign, and installed the CRM. We finally saw the path from interest to qualified buyer.",
@@ -235,7 +234,6 @@ export const WORKS_PAGE_MOCK_DATA: IWorkItem[] = [
     client: {
       name: "Skyline Charter",
       industry: "Private Aviation",
-      domain: "skylinecharter.example",
       employees: "10-50",
       tags: ["Charter", "Aviation", "Founder-led"],
       desc: "A founder-led private aviation brand operating charter services for high-trust buyers and corporate clients.",
@@ -281,7 +279,7 @@ export const WORKS_PAGE_MOCK_DATA: IWorkItem[] = [
     outcome_desc:
       "Qualified call volume increased 180% quarter-over-quarter, with a meaningful improvement in close rate. The founder reclaimed roughly a day per week previously lost to unqualified inquiries.",
     outcome_video:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+      "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
     testimonial: {
       quote:
         "Aviation buyers move on trust. They built the founder content and follow-up system that finally matched the level of our service.",

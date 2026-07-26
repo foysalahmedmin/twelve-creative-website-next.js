@@ -130,9 +130,10 @@ export function ImageInput({
               type="button"
               role="tab"
               aria-selected={mode === m}
+              disabled={uploading}
               onClick={() => setMode(m)}
               className={cn(
-                "rounded px-2.5 py-1 capitalize transition-colors",
+                "rounded px-2.5 py-1 capitalize transition-colors disabled:cursor-not-allowed disabled:opacity-50",
                 mode === m
                   ? "bg-card text-foreground shadow-sm"
                   : "text-muted-foreground hover:text-foreground",
@@ -214,7 +215,6 @@ export function ImageInput({
           className="border-border/60 bg-muted/30 relative w-full max-w-xs overflow-hidden rounded-lg border"
           style={{ aspectRatio: previewAspect }}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={value}
             alt={`${label} preview`}

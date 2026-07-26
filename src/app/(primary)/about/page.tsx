@@ -8,26 +8,38 @@ import { PageHeader } from "@/components/sections/page-header-section";
 import { StorySection } from "@/components/sections/story-section";
 import { TestimonialSection } from "@/components/sections/testimonial-section";
 import { FAQS_DATA } from "@/data/faqs.data";
-import { CTA_ABOUT } from "@/data/page-ctas.data";
 import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
+import { getPublicAboutPage } from "@/lib/api/about-page";
 import { getPublicFaqsForSection } from "@/lib/api/faqs";
 import {
   getPublicPageHero,
+  resolvePageMetadata,
   resolveThumbnail,
   resolveVideoSrc,
 } from "@/lib/api/page-heroes";
-import { getPublicSiteSetting } from "@/lib/api/site-setting";
+import { getPublicPageCta, toLegacyPageCta } from "@/lib/api/page-ctas";
+import { getPublicSharedSections } from "@/lib/api/shared-sections";
 import { getPublicTestimonialsForSection } from "@/lib/api/testimonials";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "About Twelve Creative | Strategy, Creative & Systems",
-  description:
-    "Twelve Creative was built from the belief that creative work should be connected to the business it serves. Led by Carlos Doce.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const hero = await getPublicPageHero("about");
+  return resolvePageMetadata(hero, {
+    title: "About Twelve Creative | Strategy, Creative & Systems",
+    description:
+      "Twelve Creative was built from the belief that creative work should be connected to the business it serves. Led by Carlos Doce.",
+  });
+}
 
 export default async function AboutPage() {
-  const [testimonialsData, faqsData, hero, settings] = await Promise.all([
+  const [
+    testimonialsData,
+    faqsData,
+    hero,
+    about,
+    [testimonialsHeading, faqHeading],
+    pageCta,
+  ] = await Promise.all([
     getPublicTestimonialsForSection({
       label: TESTIMONIALS_DATA.label,
       title: TESTIMONIALS_DATA.title,
@@ -43,7 +55,9 @@ export default async function AboutPage() {
       contact_link: FAQS_DATA.contact_link,
     }),
     getPublicPageHero("about"),
-    getPublicSiteSetting(),
+    getPublicAboutPage(),
+    getPublicSharedSections(["testimonials", "faq"]),
+    getPublicPageCta("about"),
   ]);
 
   return (
@@ -65,28 +79,48 @@ export default async function AboutPage() {
       {/* Brands we've worked with */}
       <BrandsStrip />
 
-      {/* Mission & Vision */}
-      <OurMissionSection />
+      {about && (
+        <>
+          {/* Mission & Vision */}
+          <OurMissionSection
+            section={about.mission_section}
+            mission={about.mission}
+            vision={about.vision}
+          />
 
-      {/* Story timeline */}
-      <StorySection contentSection={settings.content_section} />
+          {/* Story timeline */}
+          <StorySection
+            section={about.story_section}
+            cards={about.story_cards}
+          />
 
-      {/* Founder — Carlos Doce */}
-      <FounderSection imageSrc={settings.meeting_scene_image || undefined} />
+          {/* Founder — Carlos Doce */}
+          {about.founder && <FounderSection founder={about.founder} />}
 
-      {/* Behind the scenes gallery */}
-      <GalleryMarqueeSection />
+          {/* Behind the scenes gallery */}
+          <GalleryMarqueeSection
+            section={about.gallery_section}
+            items={about.gallery}
+          />
+        </>
+      )}
 
       {/* Client voices */}
-      <TestimonialSection data={testimonialsData} />
+      <TestimonialSection
+        data={testimonialsData}
+        heading={testimonialsHeading}
+      />
 
       {/* FAQ */}
       <div className="container py-8 lg:py-12">
-        <FaqSection data={{ ...faqsData, is_side_hide: true }} />
+        <FaqSection
+          data={{ ...faqsData, is_side_hide: true }}
+          heading={faqHeading}
+        />
       </div>
 
       {/* CTA */}
-      <CTASection data={CTA_ABOUT} />
+      {pageCta && <CTASection data={toLegacyPageCta(pageCta)} />}
     </main>
   );
 }

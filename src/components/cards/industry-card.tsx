@@ -31,7 +31,7 @@ export const IndustryCard = ({ industry, className }: IndustryCardProps) => {
     <Card
       className={cn(
         "group/industry relative h-full justify-between gap-5 py-7 transition-all duration-300",
-        "hover:border-border hover:shadow-sm hover:-translate-y-1",
+        "hover:border-border hover:-translate-y-1 hover:shadow-sm",
         className,
       )}
     >
@@ -46,7 +46,7 @@ export const IndustryCard = ({ industry, className }: IndustryCardProps) => {
         </div>
 
         <div className="space-y-2">
-          <h3 className="font-heading text-foreground text-xl font-black tracking-tight leading-tight">
+          <h3 className="font-heading text-foreground text-xl leading-tight font-black tracking-tight">
             {industry.headline}
           </h3>
           <p className="text-muted-foreground text-sm leading-relaxed">
@@ -75,7 +75,7 @@ export const IndustryCard = ({ industry, className }: IndustryCardProps) => {
           href={industry.href}
           className="text-foreground group-hover/industry:text-primary inline-flex items-center gap-1.5 text-sm font-semibold transition-colors"
         >
-          Explore work
+          {industry.ctaLabel ?? "Explore work"}
           <HugeiconsIcon
             icon={ArrowRight01Icon}
             className="h-4 w-4 transition-transform group-hover/industry:translate-x-1"

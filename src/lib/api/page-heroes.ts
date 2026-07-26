@@ -1,4 +1,6 @@
+import { unstable_rethrow } from "next/navigation";
 import { apiFetch } from "@/lib/admin/api-client";
+import { ApiError } from "@/lib/admin/types";
 import type { VideoRef } from "@/lib/admin/types";
 import { extractYouTubeId } from "@/lib/media/video";
 import { PAGE_HERO_TAG } from "./page-heroes.constants";
@@ -17,8 +19,40 @@ export interface ApiPageHero {
   trust_label?: string;
   primary_cta?: { label: string; href: string };
   secondary_cta?: { label: string; href: string };
+  seo?: {
+    title?: string;
+    description?: string;
+    og_image?: string;
+    canonical_url?: string;
+    no_index?: boolean;
+  };
   is_active: boolean;
   updated_at?: string;
+}
+
+export function resolvePageMetadata(
+  hero: ApiPageHero | null,
+  fallback: { title: string; description: string },
+) {
+  const title = hero?.seo?.title?.trim() || fallback.title;
+  const description =
+    hero?.seo?.description?.trim() || fallback.description;
+  const ogImage = hero?.seo?.og_image?.trim();
+  const canonical = hero?.seo?.canonical_url?.trim();
+
+  return {
+    title,
+    description,
+    ...(canonical ? { alternates: { canonical } } : {}),
+    ...(hero?.seo?.no_index
+      ? { robots: { index: false, follow: false } }
+      : {}),
+    openGraph: {
+      title,
+      description,
+      ...(ogImage ? { images: [{ url: ogImage }] } : {}),
+    },
+  };
 }
 
 export async function getPublicPageHero(
@@ -40,12 +74,8 @@ export async function getPublicPageHero(
 }
 
 export async function getAdminPageHeroes(): Promise<ApiPageHero[]> {
-  try {
-    const res = await apiFetch<ApiPageHero[]>("/api/page-hero");
-    return res.data ?? [];
-  } catch {
-    return [];
-  }
+  const res = await apiFetch<ApiPageHero[]>("/api/page-hero");
+  return res.data ?? [];
 }
 
 export async function getAdminPageHero(
@@ -54,8 +84,13 @@ export async function getAdminPageHero(
   try {
     const res = await apiFetch<ApiPageHero>(`/api/page-hero/${page}`);
     return res.data ?? null;
-  } catch {
-    return null;
+  } catch (error) {
+    // Keep a genuinely missing record distinct from an unavailable admin API.
+    // The editor can create a missing record, while operational/auth failures
+    // must reach the nearest error boundary instead of looking like empty data.
+    unstable_rethrow(error);
+    if (error instanceof ApiError && error.status === 404) return null;
+    throw error;
   }
 }
 

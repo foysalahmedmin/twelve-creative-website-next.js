@@ -1,3 +1,4 @@
+import { unstable_rethrow } from "next/navigation";
 import { apiFetch } from "@/lib/admin/api-client";
 
 export const CONTACT_MESSAGES_TAG = "contact-messages";
@@ -63,7 +64,8 @@ export async function getUnreadMessageCount(): Promise<number> {
       "/api/contact-message/unread-count",
     );
     return res.data?.count ?? 0;
-  } catch {
+  } catch (error) {
+    unstable_rethrow(error);
     return 0;
   }
 }

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
+import { IndustrySelect } from "@/components/admin/industry-select";
 import { ImageInput } from "@/components/admin/inputs/image-input";
 import { VideoInput } from "@/components/admin/inputs/video-input";
 import { Button } from "@/components/ui/button";
@@ -26,17 +27,30 @@ import {
   type TestimonialInput,
 } from "@/lib/api/testimonials-actions";
 import type { Testimonial } from "@/lib/api/testimonials";
+import type { IndustrySummary } from "@/lib/api/industries";
 
 interface TestimonialFormProps {
   mode: "create" | "edit";
   initial?: Testimonial;
+  industries: IndustrySummary[];
+  industriesError?: string;
 }
 
-export function TestimonialForm({ mode, initial }: TestimonialFormProps) {
+export function TestimonialForm({
+  mode,
+  initial,
+  industries,
+  industriesError,
+}: TestimonialFormProps) {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
+  const [activeUploads, setActiveUploads] = useState(0);
+  const isUploading = activeUploads > 0;
+  const reportUploading = (uploading: boolean) =>
+    setActiveUploads((count) => Math.max(0, count + (uploading ? 1 : -1)));
 
   const [form, setForm] = useState<TestimonialInput>({
+    industry: initial?.industry?._id ?? "",
     name: initial?.name ?? "",
     designation: initial?.designation ?? "",
     image: initial?.image ?? "",
@@ -55,21 +69,42 @@ export function TestimonialForm({ mode, initial }: TestimonialFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSaving(true);
+    if (isUploading) {
+      toast.error("Please wait for media uploads to finish.");
+      return;
+    }
 
     const payload: TestimonialInput = { ...form };
+    if (!payload.industry) {
+      toast.error("Industry is required.");
+      return;
+    }
     if (payload.category === "message") {
+      if ((payload.message?.trim().length ?? 0) < 10) {
+        toast.error("Message must be at least 10 characters.");
+        return;
+      }
+      payload.message = payload.message?.trim();
       payload.video_message = null;
       payload.thumbnail = "";
     } else {
       if (!payload.video_message) {
         toast.error("Video is required for a video testimonial.");
-        setSaving(false);
+        return;
+      }
+      if (
+        payload.video_message.source !== "youtube" &&
+        !payload.thumbnail?.trim()
+      ) {
+        toast.error(
+          "A thumbnail is required for direct URL and uploaded videos.",
+        );
         return;
       }
       payload.message = "";
     }
 
+    setSaving(true);
     const res =
       mode === "create"
         ? await createTestimonialAction(payload)
@@ -81,7 +116,9 @@ export function TestimonialForm({ mode, initial }: TestimonialFormProps) {
       toast.error(res.error ?? "Save failed");
       return;
     }
-    toast.success(mode === "create" ? "Testimonial created" : "Testimonial updated");
+    toast.success(
+      mode === "create" ? "Testimonial created" : "Testimonial updated",
+    );
     router.push("/admin/testimonials");
     router.refresh();
   };
@@ -89,7 +126,10 @@ export function TestimonialForm({ mode, initial }: TestimonialFormProps) {
   const isVideo = form.category === "video_message";
 
   return (
-    <form onSubmit={handleSubmit} className="container max-w-3xl space-y-6 py-8">
+    <form
+      onSubmit={handleSubmit}
+      className="container max-w-3xl space-y-6 py-8"
+    >
       <AdminPageHeader
         title={mode === "create" ? "New testimonial" : "Edit testimonial"}
         breadcrumb={[
@@ -101,6 +141,16 @@ export function TestimonialForm({ mode, initial }: TestimonialFormProps) {
 
       <Card>
         <CardContent className="space-y-6 pt-6">
+          <IndustrySelect
+            industries={industries}
+            currentIndustry={initial?.industry ?? undefined}
+            value={form.industry}
+            onValueChange={(value) => set("industry", value)}
+            loadError={industriesError}
+            disabled={saving}
+            description="Controls which Industry page can display this testimonial."
+          />
+
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="name">
@@ -133,6 +183,8 @@ export function TestimonialForm({ mode, initial }: TestimonialFormProps) {
             description="Square image works best (1:1). Shown next to the quote."
             value={form.image}
             onChange={(url) => set("image", url)}
+            onUploadingChange={reportUploading}
+            allowRelative
             previewAspect="1/1"
           />
 
@@ -163,6 +215,8 @@ export function TestimonialForm({ mode, initial }: TestimonialFormProps) {
               </Label>
               <Textarea
                 id="message"
+                required
+                minLength={10}
                 rows={5}
                 maxLength={400}
                 placeholder="Short quote (max 400 chars)…"
@@ -182,13 +236,20 @@ export function TestimonialForm({ mode, initial }: TestimonialFormProps) {
                 required
                 value={form.video_message ?? null}
                 onChange={(v) => set("video_message", v)}
+                onUploadingChange={reportUploading}
                 description="YouTube, direct URL, or upload."
               />
               <ImageInput
-                label="Thumbnail (optional)"
-                description="Used as the video poster. For YouTube, leave blank to auto-derive from the video."
+                label={`Thumbnail${form.video_message?.source === "youtube" ? " (optional)" : ""}`}
+                required={
+                  Boolean(form.video_message) &&
+                  form.video_message?.source !== "youtube"
+                }
+                description="Used as the video poster. YouTube can auto-derive one; direct URL and uploaded videos require it."
                 value={form.thumbnail ?? ""}
                 onChange={(url) => set("thumbnail", url)}
+                onUploadingChange={reportUploading}
+                allowRelative
                 previewAspect="16/9"
               />
             </>
@@ -230,13 +291,17 @@ export function TestimonialForm({ mode, initial }: TestimonialFormProps) {
           type="button"
           variant="outline"
           onClick={() => router.push("/admin/testimonials")}
-          disabled={saving}
+          disabled={saving || isUploading}
         >
           Cancel
         </Button>
-        <Button type="submit" disabled={saving}>
+        <Button type="submit" disabled={saving || isUploading}>
           {saving && <Loader2 className="size-4 animate-spin" />}
-          {mode === "create" ? "Create" : "Save changes"}
+          {isUploading
+            ? "Uploading media…"
+            : mode === "create"
+              ? "Create"
+              : "Save changes"}
         </Button>
       </div>
     </form>

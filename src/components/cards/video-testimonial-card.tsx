@@ -10,17 +10,21 @@ type VideoTestimonialCardProps = {
   testimonial: TTestimonial;
   onOpen: (t: TTestimonial) => void;
   className?: string;
+  interactive?: boolean;
 };
 
 export const VideoTestimonialCard = ({
   testimonial,
   onOpen,
   className,
+  interactive = true,
 }: VideoTestimonialCardProps) => {
   return (
     <button
       type="button"
       onClick={() => onOpen(testimonial)}
+      tabIndex={interactive ? 0 : -1}
+      aria-hidden={interactive ? undefined : true}
       aria-label={`Play video testimonial from ${testimonial.name}`}
       className={cn(
         "group flex h-full w-80 cursor-pointer flex-col gap-4 rounded-2xl border border-[#131C20]/10 bg-[#EAEAE4] p-2 text-left shadow-[0_18px_50px_rgba(19,28,32,0.12)] transition-all duration-300 select-none hover:border-[#131C20]/25 focus-visible:ring-2 focus-visible:ring-[#131C20]/25 focus-visible:outline-none md:w-96",

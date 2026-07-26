@@ -6,6 +6,7 @@ import { LogoIcon } from "@/components/icons/logo-icon";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { SITE } from "@/config/site";
 import { cn } from "@/lib/utils";
+import type { PublicIndustryOption } from "@/lib/api/industries";
 import {
   ArrowRight01Icon,
   Cancel01Icon,
@@ -19,9 +20,14 @@ import { useState } from "react";
 interface HeaderProps {
   className?: string;
   calendlyUrl?: string;
+  industries?: PublicIndustryOption[];
 }
 
-export const Header = ({ className, calendlyUrl }: HeaderProps) => {
+export const Header = ({
+  className,
+  calendlyUrl,
+  industries = [],
+}: HeaderProps) => {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
@@ -180,6 +186,7 @@ export const Header = ({ className, calendlyUrl }: HeaderProps) => {
         <BookingModal
           isOpen={isBookingOpen}
           onClose={() => setIsBookingOpen(false)}
+          industries={industries}
         />
       )}
     </>

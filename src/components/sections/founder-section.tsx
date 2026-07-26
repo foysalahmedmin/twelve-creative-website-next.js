@@ -1,15 +1,16 @@
+import { CmsMediaDisplay } from "@/components/common/cms-media-display";
+import type { AboutFounder } from "@/lib/api/about-page";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 
 interface FounderSectionProps {
   className?: string;
-  imageSrc?: string;
+  founder: AboutFounder;
 }
 
-export const FounderSection = ({
-  className,
-  imageSrc,
-}: FounderSectionProps) => {
+export const FounderSection = ({ className, founder }: FounderSectionProps) => {
+  if (!founder.is_visible) return null;
+  const name = `${founder.first_name} ${founder.last_name}`;
+
   return (
     <section
       className={cn(
@@ -22,91 +23,67 @@ export const FounderSection = ({
           {/* Left: Name + Title + Bio */}
           <div className="flex-1 space-y-8">
             {/* Eyebrow */}
-            {/* <span className="text-foreground border-foreground/25 inline-flex items-center rounded-md border px-3 py-1 text-[11px] font-bold tracking-[0.12em] uppercase">
-              Founder & Owner
-            </span> */}
+            {founder.eyebrow && (
+              <span className="text-foreground border-foreground/25 inline-flex items-center rounded-md border px-3 py-1 text-[11px] font-bold tracking-[0.12em] uppercase">
+                {founder.eyebrow}
+              </span>
+            )}
 
             {/* Large name — PP Object Sans Heavy */}
             <div className="space-y-2 space-x-1">
               <h2 className="font-heading text-foreground inline-block text-[56px] leading-[100%] font-black tracking-tight sm:text-[72px] lg:text-[90px]">
-                Carlos
+                {founder.first_name}
               </h2>{" "}
               <h2 className="font-heading text-primary inline-block text-[56px] leading-[100%] font-black tracking-tight sm:text-[72px] lg:text-[90px]">
-                Doce.
+                {founder.last_name}.
               </h2>
             </div>
 
             {/* Title */}
             <p className="text-muted-foreground text-sm font-normal tracking-[0.075em] uppercase">
-              Owner — Twelve Creative
+              {founder.title}
             </p>
 
             <div className="relative w-full max-w-sm shrink-0 lg:hidden">
               <div className="border-border bg-card relative aspect-square w-full overflow-hidden rounded-2xl border">
-                {imageSrc ? (
-                  <Image
-                    src={imageSrc}
-                    alt="Carlos Doce — Founder, Twelve Creative"
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 320px"
-                    className="object-cover"
-                    priority
-                  />
-                ) : (
-                  <div className="bg-muted absolute inset-0 flex flex-col items-center justify-center gap-4">
-                    <div className="bg-primary/15 flex h-24 w-24 items-center justify-center rounded-full">
-                      <span className="font-heading text-primary text-4xl font-black">
-                        CD
-                      </span>
-                    </div>
-                    <p className="text-muted-foreground text-xs tracking-widest uppercase">
-                      Photo coming soon
-                    </p>
-                  </div>
-                )}
+                <CmsMediaDisplay
+                  media={founder.media}
+                  alt={`${name} — ${founder.title}`}
+                  className="absolute inset-0"
+                  sizes="(max-width: 1024px) 100vw, 320px"
+                  priority
+                />
               </div>
             </div>
 
             {/* Bio */}
             <div className="border-primary space-y-4 border-l-2 pl-6">
-              <p className="text-foreground/80 text-base leading-[170%] font-medium sm:text-lg">
-                Carlos built Twelve Creative from the belief that most
-                businesses don't have a creative problem — they have a strategy
-                problem disguised as one. He combines the analytical rigor of
-                growth systems with the visual instincts of a creative director.
-              </p>
-              <p className="text-muted-foreground text-base leading-[170%]">
-                Every project at Twelve Creative reflects his core conviction:
-                that positioning, creative, and execution must exist in the same
-                room — not across three different agencies.
-              </p>
+              {founder.biography.map((paragraph, index) => (
+                <p
+                  key={`${index}-${paragraph.slice(0, 24)}`}
+                  className={cn(
+                    "text-base leading-[170%]",
+                    index === 0
+                      ? "text-foreground/80 font-medium sm:text-lg"
+                      : "text-muted-foreground",
+                  )}
+                >
+                  {paragraph}
+                </p>
+              ))}
             </div>
           </div>
 
           {/* Right: Photo */}
           <div className="relative hidden w-full max-w-sm shrink-0 lg:block lg:w-96">
             <div className="border-border bg-card relative aspect-3/4 w-full overflow-hidden rounded-2xl border">
-              {imageSrc ? (
-                <Image
-                  src={imageSrc}
-                  alt="Carlos Doce — Founder, Twelve Creative"
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 384px"
-                  className="object-cover"
-                  priority
-                />
-              ) : (
-                <div className="bg-muted absolute inset-0 flex flex-col items-center justify-center gap-4">
-                  <div className="bg-primary/15 flex h-24 w-24 items-center justify-center rounded-full">
-                    <span className="font-heading text-primary text-4xl font-black">
-                      CD
-                    </span>
-                  </div>
-                  <p className="text-muted-foreground text-xs tracking-widest uppercase">
-                    Photo coming soon
-                  </p>
-                </div>
-              )}
+              <CmsMediaDisplay
+                media={founder.media}
+                alt={`${name} — ${founder.title}`}
+                className="absolute inset-0"
+                sizes="(max-width: 1024px) 100vw, 384px"
+                priority
+              />
             </div>
           </div>
         </div>

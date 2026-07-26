@@ -15,19 +15,18 @@ export const SITE = {
     bio: "Carlos Doce is the founder of Twelve Creative. With more than 15 years in video production and a background in film and business from NYU, Carlos built Twelve Creative to combine cinematic creative with the practical systems businesses need to grow.",
   },
   links: {
-    facebook: "https://www.facebook.com/twelvecreative",
-    twitter: "#",
-    linkedin: "#",
-    instagram: "https://www.instagram.com/twelvecreative",
-    youtube: "#",
+    twitter: "https://x.com/twelvecreative",
+    linkedin: "https://linkedin.com/company/twelvecreative",
+    instagram: "https://instagram.com/twelvecreative",
+    youtube: "https://youtube.com/@twelvecreative",
   },
   contact: {
-    email: "hello@twelvecreative.io",
-    phones: ["+1 (000) 000-0000"],
-    address: "New York, NY",
+    email: "carlos@twelvecreative.io",
+    phones: ["+1 (951) 822-6223"],
+    address: "2121 NW 1st Place, Suite 203, Miami, FL 33127",
     whatsapp: ["+1 (951) 822-6223"],
     map_embed:
-      "https://maps.google.com/maps?q=New+York,+NY&t=&z=12&ie=UTF8&iwloc=&output=embed",
+      "https://maps.google.com/maps?q=2121+NW+1st+Place,+Suite+203,+Miami,+FL+33127&t=&z=15&ie=UTF8&iwloc=&output=embed",
   },
   nav: [
     { name: "Home", href: "/" },

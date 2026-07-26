@@ -3,6 +3,7 @@
 import { CenteredSectionHeader } from "@/components/common/section-label";
 import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { cn } from "@/lib/utils";
+import type { HeadingSection } from "@/lib/api/shared-sections";
 import { PlayIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import dynamic from "next/dynamic";
@@ -36,6 +37,7 @@ export interface ThumbnailWorkSectionProps {
   /** @deprecated Showcase filtering is relational; the Works page has no category query. */
   slug?: string;
   showViewMore?: boolean;
+  heading?: HeadingSection | null;
   className?: string;
 }
 
@@ -93,7 +95,7 @@ function WorkCard({ item }: { item: IPortfolioItem }) {
             {/* Dark hover scrim */}
             <span
               aria-hidden
-              className="absolute inset-0 bg-foreground/0 transition-colors duration-300 group-hover/card:bg-foreground/15"
+              className="bg-foreground/0 group-hover/card:bg-foreground/15 absolute inset-0 transition-colors duration-300"
             />
 
             {/* Glass play button — only shown when there's a video */}
@@ -103,9 +105,9 @@ function WorkCard({ item }: { item: IPortfolioItem }) {
                 className={cn(
                   "absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center",
                   "h-10 w-16 rounded-xl md:h-12 md:w-20 md:rounded-2xl",
-                  "border border-white/20 bg-card/10 text-white shadow-2xl backdrop-blur-md",
+                  "bg-card/10 border border-white/20 text-white shadow-2xl backdrop-blur-md",
                   "transition-all duration-300",
-                  "group-hover/card:scale-110 group-hover/card:border-white/35 group-hover/card:bg-card/30",
+                  "group-hover/card:bg-card/30 group-hover/card:scale-110 group-hover/card:border-white/35",
                   "group-active/card:scale-95",
                 )}
               >
@@ -128,6 +130,7 @@ function WorkCard({ item }: { item: IPortfolioItem }) {
 export const ThumbnailWorkSection = ({
   works,
   showViewMore = true,
+  heading,
   className,
 }: ThumbnailWorkSectionProps) => {
   const {
@@ -161,7 +164,8 @@ export const ThumbnailWorkSection = ({
    *    and span each card individually.
    */
   const gridCols = (() => {
-    if (isShorts || allReels) return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4";
+    if (isShorts || allReels)
+      return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4";
     if (!hasReels) return "grid-cols-1 md:grid-cols-2 lg:grid-cols-3";
     // mixed — 6-column base so reels take 1 unit and landscapes take 2
     return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-6";
@@ -170,29 +174,32 @@ export const ThumbnailWorkSection = ({
   return (
     <section
       className={cn(
-        "bg-background border-border/40 w-full border-t py-16 sm:py-20 lg:py-24",
+        "bg-card border-border/40 w-full border-y py-16 sm:py-20 lg:py-24",
         className,
       )}
     >
       <div className="container">
-        <div className="bg-card border-border relative overflow-hidden rounded-3xl border p-8 sm:p-12 lg:p-16">
-          <ScrollReveal
-            animation="fade-in-up"
-            durationMs={800}
-            className="relative z-10"
-          >
-            <CenteredSectionHeader
-              label={label}
-              title={title}
-              description={description}
-              className="mb-10 sm:mb-16"
-            />
-          </ScrollReveal>
+        <div className="relative">
+          {heading !== null && (
+            <ScrollReveal
+              animation="fade-in-up"
+              durationMs={800}
+              className="relative z-10"
+            >
+              <CenteredSectionHeader
+                label={heading?.label ?? label}
+                title={heading?.title ?? title}
+                description={heading?.description ?? description}
+                className="mb-10 sm:mb-16"
+              />
+            </ScrollReveal>
+          )}
 
           {/* Grid */}
           <div
             className={cn(
-              "relative z-10 mt-10 grid gap-4 lg:mt-16",
+              "relative z-10 grid gap-4",
+              heading === null ? "mt-0" : "mt-10 lg:mt-16",
               gridCols,
             )}
           >
@@ -236,7 +243,7 @@ export const ThumbnailWorkSection = ({
                   )}
                 >
                   Load More
-                  <span className="text-muted-foreground group-hover:text-primary-foreground tabular-nums text-xs transition-colors">
+                  <span className="text-muted-foreground group-hover:text-primary-foreground text-xs tabular-nums transition-colors">
                     +{Math.min(PAGE_SIZE, remaining)}
                   </span>
                   <svg

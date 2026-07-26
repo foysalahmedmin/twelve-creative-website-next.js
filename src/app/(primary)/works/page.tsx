@@ -5,26 +5,38 @@ import { CoreVerticalsSection } from "@/components/sections/core-verticals-secti
 import { CTASection } from "@/components/sections/cta-section";
 import { PageHeader } from "@/components/sections/page-header-section";
 import { ThumbnailWorkSection } from "@/components/sections/thumbnail-work-section";
-import { CTA_WORKS } from "@/data/page-ctas.data";
 import { CANVAS_PORTFOLIO_DATA } from "@/data/thumbnail-work-section.data";
 import { getPublicIndustries } from "@/lib/api/industries";
+import { getPublicPageCta, toLegacyPageCta } from "@/lib/api/page-ctas";
 import {
   getPublicPageHero,
+  resolvePageMetadata,
   resolveThumbnail,
   resolveVideoSrc,
 } from "@/lib/api/page-heroes";
+import { getPublicSharedSections } from "@/lib/api/shared-sections";
 import { getPublicShowcaseVideosForThumbnailGrid } from "@/lib/api/showcase-videos";
 import { adaptWorkToLegacy, getPublicWorks } from "@/lib/api/works";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Work | Twelve Creative Case Studies",
-  description:
-    "See how Twelve Creative helps businesses improve visibility, trust, campaigns, content, and conversion systems.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const hero = await getPublicPageHero("works");
+  return resolvePageMetadata(hero, {
+    title: "Work | Twelve Creative Case Studies",
+    description:
+      "See how Twelve Creative helps businesses improve visibility, trust, campaigns, content, and conversion systems.",
+  });
+}
 
 export default async function WorksPage() {
-  const [liveWorks, livePortfolio, hero, industries] = await Promise.all([
+  const [
+    liveWorks,
+    livePortfolio,
+    hero,
+    industries,
+    cta,
+    [workHeading, coreHeading],
+  ] = await Promise.all([
     getPublicWorks(),
     getPublicShowcaseVideosForThumbnailGrid({
       label: CANVAS_PORTFOLIO_DATA.label,
@@ -34,6 +46,8 @@ export default async function WorksPage() {
     }),
     getPublicPageHero("works"),
     getPublicIndustries(),
+    getPublicPageCta("works"),
+    getPublicSharedSections(["work-showcase", "core-verticals"]),
   ]);
   const works = liveWorks.map(adaptWorkToLegacy);
 
@@ -73,14 +87,22 @@ export default async function WorksPage() {
 
       {/* Additional work showcase */}
       {livePortfolio.work.length > 0 && (
-        <ThumbnailWorkSection works={livePortfolio} showViewMore={false} />
+        <ThumbnailWorkSection
+          works={livePortfolio}
+          heading={workHeading}
+          showViewMore={false}
+        />
       )}
 
       {/* Core Verticals */}
-      <CoreVerticalsSection industries={industries} tone="brand" />
+      <CoreVerticalsSection
+        industries={industries}
+        heading={coreHeading}
+        tone="brand"
+      />
 
       {/* CTA */}
-      <CTASection data={CTA_WORKS} />
+      {cta && <CTASection data={toLegacyPageCta(cta)} />}
     </main>
   );
 }

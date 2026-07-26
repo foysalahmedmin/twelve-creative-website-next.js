@@ -9,11 +9,16 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 export interface TCTAData {
+  eyebrow?: string;
   title: string;
   description: string;
   image: string;
   href: string;
   buttonText: string;
+  secondaryCta?: {
+    label: string;
+    href: string;
+  } | null;
 }
 
 interface CTASectionProps {
@@ -59,13 +64,18 @@ export const CTASection = ({ data, className = "" }: CTASectionProps) => {
 
             {/* Content */}
             <div className="flex flex-1 flex-col justify-center gap-5 text-center lg:text-left">
+              {data.eyebrow && (
+                <span className="border-primary-foreground/30 bg-primary-foreground/10 text-primary-foreground mx-auto inline-flex w-fit rounded-full border px-4 py-1.5 text-[11px] font-bold tracking-[0.14em] uppercase backdrop-blur-sm lg:mx-0 dark:border-[#eaeae4]/30 dark:bg-[#eaeae4]/10 dark:text-[#eaeae4]/90">
+                  {data.eyebrow}
+                </span>
+              )}
               <h2 className="font-heading text-primary-foreground text-2xl leading-[1.1] font-black tracking-tight sm:text-3xl lg:text-4xl dark:text-[#eaeae4]">
                 {data.title}
               </h2>
               <p className="text-primary-foreground/80 mx-auto max-w-xl text-sm leading-relaxed font-medium sm:text-base lg:mx-0 dark:text-[#eaeae4]/70">
                 {data.description}
               </p>
-              <div className="pt-2">
+              <div className="flex flex-col justify-center gap-3 pt-2 sm:flex-row lg:justify-start">
                 <Button
                   asChild
                   size="default"
@@ -77,6 +87,18 @@ export const CTASection = ({ data, className = "" }: CTASectionProps) => {
                     <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" />
                   </Link>
                 </Button>
+                {data.secondaryCta && (
+                  <Button
+                    asChild
+                    size="default"
+                    variant="outline"
+                    className="border-primary-foreground/40 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground bg-transparent dark:border-[#eaeae4]/30 dark:text-[#eaeae4] dark:hover:bg-[#eaeae4]/10 dark:hover:text-[#eaeae4]"
+                  >
+                    <Link href={data.secondaryCta.href}>
+                      {data.secondaryCta.label}
+                    </Link>
+                  </Button>
+                )}
               </div>
             </div>
           </div>

@@ -1,3 +1,4 @@
+import { unstable_rethrow } from "next/navigation";
 import { apiFetch } from "@/lib/admin/api-client";
 
 export const BOOKINGS_TAG = "bookings";
@@ -23,6 +24,8 @@ export interface Booking {
   email: string;
   phone?: string;
   company?: string;
+  industry_id?: string;
+  industry_name_snapshot?: string;
   industry?: string;
   timeline?: string;
   preferred_date?: string;
@@ -36,12 +39,14 @@ export interface Booking {
   updated_at: string;
 }
 
-export async function getAdminBookings(query: {
-  search?: string;
-  page?: number;
-  limit?: number;
-  filter?: BookingStatus;
-} = {}): Promise<{
+export async function getAdminBookings(
+  query: {
+    search?: string;
+    page?: number;
+    limit?: number;
+    filter?: BookingStatus;
+  } = {},
+): Promise<{
   data: Booking[];
   meta?: { total: number; page: number; limit: number; total_pages: number };
 }> {
@@ -70,7 +75,8 @@ export async function getPendingBookingCount(): Promise<number> {
   try {
     const res = await apiFetch<{ count: number }>("/api/booking/pending-count");
     return res.data?.count ?? 0;
-  } catch {
+  } catch (error) {
+    unstable_rethrow(error);
     return 0;
   }
 }
@@ -84,6 +90,9 @@ export interface PublicBookingPayload {
   email: string;
   phone?: string;
   company?: string;
+  industry_id?: string;
+  industry_name_snapshot?: string;
+  /** Legacy free-text fallback accepted by the backend. */
   industry?: string;
   preferred_date?: string; // ISO date
   preferred_time?: string;

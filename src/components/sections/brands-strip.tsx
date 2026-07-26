@@ -20,6 +20,7 @@ export async function BrandsStrip({ className }: Props) {
     name: b.name,
     logo_src: b.logo,
     alt: b.name,
+    href: b.href,
   }));
   return <BrandsSection data={data.length ? data : undefined} className={className} />;
 }

@@ -7,6 +7,7 @@ export const PAGE_KEYS = [
   "industries",
   "what-we-build",
   "contact",
+  "faq",
   "blogs",
   "process",
 ] as const;
@@ -20,6 +21,7 @@ export const PAGE_LABELS: Record<PageKey, string> = {
   industries: "Industries",
   "what-we-build": "What We Build",
   contact: "Contact",
+  faq: "FAQ",
   blogs: "Blogs / Insights",
   process: "Process",
 };

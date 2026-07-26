@@ -9,6 +9,7 @@ import {
   type TIndustryIconKey,
 } from "@/data/industries.data";
 import { cn } from "@/lib/utils";
+import type { HeadingSection } from "@/lib/api/shared-sections";
 import {
   Airplane01Icon,
   Briefcase01Icon,
@@ -35,11 +36,14 @@ const INDUSTRY_ICON_MAP: Record<TIndustryIconKey, typeof Restaurant01Icon> = {
 interface Props {
   className?: string;
   data?: TIndustry[];
+  heading?: HeadingSection | null;
 }
 
-export const IndustriesSection = ({ className, data }: Props) => {
-  const industries = data && data.length ? data : INDUSTRIES_DATA;
-  const [activeId, setActiveId] = useState(industries[0].id);
+export const IndustriesSection = ({ className, data, heading }: Props) => {
+  const industries = data === undefined ? INDUSTRIES_DATA : data;
+  const [activeId, setActiveId] = useState(industries[0]?.id ?? "");
+
+  if (industries.length === 0) return null;
 
   return (
     <section
@@ -49,12 +53,17 @@ export const IndustriesSection = ({ className, data }: Props) => {
         <ScrollReveal animation="fade-in-up" durationMs={800}>
           <div className="relative z-10 px-4 sm:px-8 lg:px-16">
             {/* Header styled exactly like Our Works */}
-            <CenteredSectionHeader
-              label="Industries"
-              title="Industries We Work With"
-              description="We work across industries where the buying decision depends on credibility, timing, taste, and a clear path to action."
-              className="mb-10 lg:mb-12"
-            />
+            {heading !== null && (
+              <CenteredSectionHeader
+                label={heading?.label ?? "Industries"}
+                title={heading?.title ?? "Industries We Work With"}
+                description={
+                  heading?.description ??
+                  "We work across industries where the buying decision depends on credibility, timing, taste, and a clear path to action."
+                }
+                className="mb-10 lg:mb-12"
+              />
+            )}
 
             <Tabs
               value={activeId}
@@ -149,7 +158,7 @@ export const IndustriesSection = ({ className, data }: Props) => {
                             href={industry.href}
                             className="bg-primary text-primary-foreground group/cta inline-flex items-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold tracking-[0.05em] uppercase transition-transform duration-200 hover:-translate-y-0.5"
                           >
-                            Book a Call
+                            {industry.ctaLabel ?? "Book a Call"}
                             <span className="transition-transform duration-200 group-hover/cta:translate-x-1">
                               &gt;
                             </span>

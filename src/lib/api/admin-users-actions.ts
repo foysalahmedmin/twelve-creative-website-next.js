@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { unstable_rethrow } from "next/navigation";
 import { apiFetch } from "@/lib/admin/api-client";
 import { ApiError } from "@/lib/admin/types";
 import type { AdminRole } from "@/lib/admin/types";
@@ -75,6 +76,7 @@ export async function deleteAdminAccountAction(
 }
 
 function errorMessage(e: unknown): string {
+  unstable_rethrow(e);
   if (e instanceof ApiError) {
     const sources = e.body?.errorSources;
     if (sources && sources.length) {

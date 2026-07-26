@@ -115,9 +115,9 @@ function IndustryRow({
 
         <Link
           href={href}
-          className="group bg-primary text-primary-foreground focus-visible:ring-primary/50 mt-2 inline-flex items-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold uppercase tracking-[0.05em] transition-transform duration-200 hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:outline-none"
+          className="group bg-primary text-primary-foreground focus-visible:ring-primary/50 mt-2 inline-flex items-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold tracking-[0.05em] uppercase transition-transform duration-200 hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:outline-none"
         >
-          Explore {industry.name}
+          {industry.ctaLabel ?? `Explore ${industry.name}`}
           <HugeiconsIcon
             icon={ArrowRight01Icon}
             className="size-4 transition-transform duration-200 group-hover:translate-x-1"
@@ -142,7 +142,7 @@ export const IndustriesDetailSection = ({
   return (
     <section
       className={cn(
-        "w-full bg-background border-t border-border/40 py-16 sm:py-20 lg:py-24",
+        "bg-background border-border/40 w-full border-t py-16 sm:py-20 lg:py-24",
         className,
       )}
     >

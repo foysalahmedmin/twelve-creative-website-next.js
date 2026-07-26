@@ -16,6 +16,8 @@ interface VideoInputProps {
   required?: boolean;
   value: VideoRef | null;
   onChange: (value: VideoRef | null) => void;
+  /** Reports upload lifecycle so parent forms can prevent stale saves. */
+  onUploadingChange?: (uploading: boolean) => void;
   className?: string;
 }
 
@@ -33,6 +35,7 @@ export function VideoInput({
   required,
   value,
   onChange,
+  onUploadingChange,
   className,
 }: VideoInputProps) {
   const id = useId();
@@ -63,6 +66,7 @@ export function VideoInput({
   const handleUpload = async (file: File) => {
     setError(null);
     setUploading(true);
+    onUploadingChange?.(true);
     try {
       const uploaded = await uploadAdminFile(file);
       onChange({ source: "upload", value: uploaded.url });
@@ -70,6 +74,7 @@ export function VideoInput({
       setError(e instanceof Error ? e.message : "Upload failed");
     } finally {
       setUploading(false);
+      onUploadingChange?.(false);
       if (fileRef.current) fileRef.current.value = "";
     }
   };
@@ -92,9 +97,10 @@ export function VideoInput({
               type="button"
               role="tab"
               aria-selected={mode === m}
+              disabled={uploading}
               onClick={() => switchMode(m)}
               className={cn(
-                "rounded px-2.5 py-1 transition-colors",
+                "rounded px-2.5 py-1 transition-colors disabled:cursor-not-allowed disabled:opacity-50",
                 mode === m
                   ? "bg-card text-foreground shadow-sm"
                   : "text-muted-foreground hover:text-foreground",
@@ -185,7 +191,6 @@ export function VideoInput({
               className="h-full w-full"
             />
           ) : (
-            // eslint-disable-next-line jsx-a11y/media-has-caption
             <video
               src={preview.embedUrl}
               controls

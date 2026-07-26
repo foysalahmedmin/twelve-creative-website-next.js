@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import {
   ArrowUpRight01Icon,
   Briefcase01Icon,
+  Call02Icon,
   InformationCircleIcon,
   Location04Icon,
   Mail01Icon,
@@ -17,6 +18,7 @@ import Link from "next/link";
 
 const CONTACT_ICON_MAP: Record<TContactCardKey, typeof Mail01Icon> = {
   email: Mail01Icon,
+  phone: Call02Icon,
   whatsapp: MessageMultiple01Icon,
   work: Briefcase01Icon,
   explore: InformationCircleIcon,
@@ -65,17 +67,14 @@ export const ContactInfoMapSection = ({
             <div className="grid h-full grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-1">
               {cards.map((card) => {
                 const Icon = CONTACT_ICON_MAP[card.id];
-                const isExternal =
-                  card.href.startsWith("mailto:") ||
-                  card.href.startsWith("tel:") ||
-                  card.href.startsWith("http");
+                const opensNewTab = card.href.startsWith("http");
 
                 return (
                   <Link
                     key={card.id}
                     href={card.href}
-                    target={isExternal ? "_blank" : undefined}
-                    rel={isExternal ? "noopener noreferrer" : undefined}
+                    target={opensNewTab ? "_blank" : undefined}
+                    rel={opensNewTab ? "noopener noreferrer" : undefined}
                     className="group/contact-card border-border bg-card hover:border-primary/40 flex h-full w-full rounded-2xl border transition-all duration-300 hover:scale-[1.02]"
                   >
                     <div className="flex h-full w-full items-center justify-between gap-4 p-5">

@@ -21,6 +21,7 @@ const PUBLIC_PATH: Record<PageKey, string> = {
   industries: "/industries",
   "what-we-build": "/what-we-build",
   contact: "/contact",
+  faq: "/faq",
   blogs: "/blogs",
   process: "/process",
 };
@@ -46,7 +47,8 @@ export default async function PageHeroesPage() {
       <div className="grid gap-4 sm:grid-cols-2">
         {PAGE_KEYS.map((page) => {
           const hero = heroMap[page];
-          const isActive = hero?.is_active !== false;
+          const isActive = hero?.is_active === true;
+          const status = !hero ? "Not configured" : isActive ? "Live" : "Static";
 
           return (
             <Card key={page} className="flex flex-col">
@@ -60,8 +62,10 @@ export default async function PageHeroesPage() {
                       {PUBLIC_PATH[page]}
                     </p>
                   </div>
-                  <Badge variant={isActive ? "default" : "secondary"}>
-                    {isActive ? "Live" : "Static"}
+                  <Badge
+                    variant={isActive ? "default" : hero ? "secondary" : "outline"}
+                  >
+                    {status}
                   </Badge>
                 </div>
 

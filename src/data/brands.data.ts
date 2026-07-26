@@ -4,6 +4,7 @@ export type TBrand = {
   /** Optional image URL — when provided, image is rendered; otherwise the name is shown as styled text. */
   logo_src?: string;
   alt?: string;
+  href?: string;
 };
 
 /**

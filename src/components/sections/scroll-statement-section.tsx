@@ -9,6 +9,7 @@ import {
   type MotionValue,
 } from "framer-motion";
 import { Fragment, useRef } from "react";
+import type { ScrollStatementSection as CmsScrollStatementSection } from "@/lib/api/shared-sections";
 
 interface Segment {
   text: string;
@@ -21,6 +22,7 @@ interface ScrollStatementSectionProps {
   eyebrow?: string;
   title?: string;
   paragraphs?: Segment[][];
+  data?: CmsScrollStatementSection;
 }
 
 const DEFAULT_TITLE =
@@ -68,9 +70,21 @@ function RevealChar({
 export function ScrollStatementSection({
   className,
   eyebrow,
-  title = DEFAULT_TITLE,
-  paragraphs = DEFAULT_PARAGRAPHS,
+  title,
+  paragraphs,
+  data,
 }: ScrollStatementSectionProps) {
+  const resolvedTitle = data?.title ?? title ?? DEFAULT_TITLE;
+  const resolvedEyebrow = data?.label ?? eyebrow;
+  const resolvedParagraphs =
+    data?.content.paragraphs.map((paragraph) =>
+      paragraph.segments.map((segment) => ({
+        text: segment.text,
+        highlight: segment.highlight,
+      })),
+    ) ??
+    paragraphs ??
+    DEFAULT_PARAGRAPHS;
   const titleRef = useRef<HTMLHeadingElement>(null);
   const reduceMotion = useReducedMotion();
 
@@ -82,9 +96,9 @@ export function ScrollStatementSection({
     offset: ["start 0.95", "start 0.15"],
   });
 
-  const words = title.split(" ");
+  const words = resolvedTitle.split(" ");
   // Total non-space characters — the reveal is mapped across these.
-  const totalChars = title.replace(/\s/g, "").length;
+  const totalChars = resolvedTitle.replace(/\s/g, "").length;
   // Each character fades over a window of a few characters, so several are
   // mid-transition at once — a soft wave instead of a hard per-character edge.
   const softWindow = 5;
@@ -102,9 +116,9 @@ export function ScrollStatementSection({
       )}
     >
       <div className="container max-w-5xl">
-        {eyebrow ? (
+        {resolvedEyebrow ? (
           <span className="text-primary mb-8 inline-block text-xs font-bold tracking-[0.2em] uppercase">
-            {eyebrow}
+            {resolvedEyebrow}
           </span>
         ) : null}
 
@@ -114,7 +128,7 @@ export function ScrollStatementSection({
           className="font-heading text-4xl leading-[1.05] font-black tracking-tight sm:text-5xl lg:text-6xl xl:text-[68px]"
         >
           {reduceMotion
-            ? title
+            ? resolvedTitle
             : words.map((word, wi) => (
                 <Fragment key={wi}>
                   {/* Whole word stays together so headlines never break mid-word */}
@@ -141,7 +155,7 @@ export function ScrollStatementSection({
 
         {/* Body — static, with brand-orange emphasis */}
         <div className="mt-10 max-w-2xl space-y-6 lg:mt-14">
-          {paragraphs.map((segments, pi) => (
+          {resolvedParagraphs.map((segments, pi) => (
             <p
               key={pi}
               className="text-base leading-relaxed text-[#EAEAE4]/80 sm:text-lg"

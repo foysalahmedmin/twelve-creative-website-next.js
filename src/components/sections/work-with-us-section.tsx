@@ -1,6 +1,9 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { CmsMediaDisplay } from "@/components/common/cms-media-display";
+import type { WorkWithUsSection as CmsWorkWithUsSection } from "@/lib/api/shared-sections";
+import type { CSSProperties } from "react";
 
 const CARDS = [
   {
@@ -25,17 +28,32 @@ const CARDS = [
   },
 ];
 
-export function WorkWithUsSection() {
+export function WorkWithUsSection({ data }: { data?: CmsWorkWithUsSection }) {
+  const cards = data
+    ? data.content.cards.map((card, index) => ({
+        id: card.id,
+        number: String(index).padStart(2, "0"),
+        title: card.title,
+        body: card.description,
+        media: card.media,
+      }))
+    : CARDS.map((card, index) => ({
+        ...card,
+        id: `work-with-us-${index}`,
+        media: undefined,
+      }));
+  if (!cards.length) return null;
+
   return (
     <section
       id="workwithus"
-      className="relative"
-      style={{ height: `${CARDS.length * 100}vh` }}
+      className="relative lg:h-[var(--stack-height)]"
+      style={{ "--stack-height": `${cards.length * 100}vh` } as CSSProperties}
     >
-      {CARDS.map((card, i) => (
+      {cards.map((card, i) => (
         <div
-          key={i}
-          className="sticky top-0 h-screen w-full overflow-hidden"
+          key={card.id}
+          className="relative min-h-screen w-full overflow-visible lg:sticky lg:top-0 lg:h-screen lg:overflow-hidden"
           style={{ zIndex: i + 1 }}
         >
           {/* Background — semi-opaque gradient, not fully black */}
@@ -43,7 +61,7 @@ export function WorkWithUsSection() {
             className={cn(
               "from-background via-background/50 to-muted/50 absolute inset-0 border-y bg-linear-to-br backdrop-blur-xl",
               i === 0 && "border-t-0",
-              i === CARDS.length - 1 && "border-b-0",
+              i === cards.length - 1 && "border-b-0",
             )}
           />
 
@@ -65,22 +83,27 @@ export function WorkWithUsSection() {
           />
 
           {/* Content */}
-          <div className="relative z-10 container flex h-full flex-col justify-center py-20">
+          <div className="relative z-10 container flex min-h-screen flex-col justify-center py-20 lg:h-full lg:min-h-0">
             <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:items-center lg:gap-20">
               {/* Left column */}
               <div className="space-y-6">
                 {i === 0 ? (
                   /* First card: "Work With Us" in primary color */
-                  <h2 className="font-heading text-primary text-5xl leading-[105%] font-black tracking-tight sm:text-6xl lg:text-7xl xl:text-8xl">
-                    Work
-                    <br />
-                    With Us
+                  <h2 className="font-heading text-primary max-w-xl text-5xl leading-[105%] font-black tracking-tight sm:text-6xl lg:text-7xl xl:text-8xl">
+                    {data?.title ?? "Work With Us"}
                   </h2>
                 ) : (
                   /* Other cards: large transparent number */
                   <span className="font-heading text-foreground/8 text-[9rem] leading-none font-black select-none lg:text-[12rem]">
                     {card.number}
                   </span>
+                )}
+                {card.media && (
+                  <CmsMediaDisplay
+                    media={card.media}
+                    alt={card.title}
+                    className="border-border/40 aspect-video w-full max-w-md rounded-2xl border"
+                  />
                 )}
               </div>
 
@@ -102,8 +125,8 @@ export function WorkWithUsSection() {
             </div>
 
             {/* Progress indicators */}
-            <div className="absolute right-0 bottom-10 left-0 container flex gap-2">
-              {CARDS.map((_, idx) => (
+            <div className="mt-10 flex gap-2 lg:absolute lg:right-0 lg:bottom-10 lg:left-0 lg:container lg:mt-0">
+              {cards.map((_, idx) => (
                 <div
                   key={idx}
                   className={cn(

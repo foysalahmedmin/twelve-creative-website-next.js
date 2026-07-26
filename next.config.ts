@@ -1,19 +1,28 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  allowedDevOrigins: ['192.168.0.110'],
+  allowedDevOrigins: ["192.168.0.110"],
   images: {
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "**",
+        hostname: "images.unsplash.com",
       },
       {
-        protocol: "http",
-        hostname: "**",
+        protocol: "https",
+        hostname: "img.youtube.com",
       },
+      { protocol: "https", hostname: "twelvecreative.io" },
+      { protocol: "https", hostname: "admin.twelvecreative.io" },
+      { protocol: "https", hostname: "storage.googleapis.com" },
+      ...(process.env.NODE_ENV !== "production"
+        ? [
+            { protocol: "http" as const, hostname: "localhost" },
+            { protocol: "http" as const, hostname: "127.0.0.1" },
+          ]
+        : []),
     ],
   },
 };

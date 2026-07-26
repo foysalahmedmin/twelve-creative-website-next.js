@@ -1,27 +1,18 @@
-import { BookingInlineSection } from "@/components/sections/booking-inline-section";
-import { BrandsStrip } from "@/components/sections/brands-strip";
-import { CTASection } from "@/components/sections/cta-section";
-import { IndustryVisualLibrarySection } from "@/components/sections/industry-visual-library-section";
-import { PageHeader } from "@/components/sections/page-header-section";
-import { ProcessSection } from "@/components/sections/process-section";
-import { ScrollStatementSection } from "@/components/sections/scroll-statement-section";
-import { TestimonialSection } from "@/components/sections/testimonial-section";
-import { ThumbnailWorkSection } from "@/components/sections/thumbnail-work-section";
-import { WorkWithUsSection } from "@/components/sections/work-with-us-section";
-import { CTA_ABOUT } from "@/data/page-ctas.data";
+import { IndustryDetailView } from "@/components/industry/industry-detail-view";
 import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
 import { CANVAS_PORTFOLIO_DATA } from "@/data/thumbnail-work-section.data";
 import {
   getPublicIndustries,
-  resolveIndustryThumbnail,
-  resolveIndustryVideoSrc,
+  getPublicIndustriesResult,
 } from "@/lib/api/industries";
+import { getPublicPageCta, toLegacyPageCta } from "@/lib/api/page-ctas";
 import { getPublicProcessSection } from "@/lib/api/process-section";
 import {
   getPublicShowcaseVideosForMarquee,
   getPublicShowcaseVideosForThumbnailGrid,
 } from "@/lib/api/showcase-videos";
 import { getPublicSiteSetting } from "@/lib/api/site-setting";
+import { getPublicSharedSections } from "@/lib/api/shared-sections";
 import { getPublicTestimonialsForSection } from "@/lib/api/testimonials";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -37,12 +28,14 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const industries = await getPublicIndustries();
-  const industry = industries.find((i) => i.slug === slug);
+  const result = await getPublicIndustriesResult();
+  if (result.failed) throw new Error("Unable to load Industry metadata");
+  const industry = result.data.find((i) => i.slug === slug);
   if (!industry) return {};
   return {
     title: `${industry.name} Marketing | Twelve Creative`,
     description: industry.headline,
+    alternates: { canonical: `/industries/${slug}` },
   };
 }
 
@@ -50,14 +43,22 @@ export default async function IndustryDetailPage({ params }: Props) {
   const { slug } = await params;
 
   const [
-    industries,
+    industriesResult,
     showcaseVideos,
     livePortfolio,
     testimonialsData,
     settings,
     processData,
+    cta,
+    [
+      statement,
+      workWithUs,
+      testimonialsHeading,
+      visualLibraryHeading,
+      workShowcaseHeading,
+    ],
   ] = await Promise.all([
-    getPublicIndustries(),
+    getPublicIndustriesResult(),
     getPublicShowcaseVideosForMarquee({ industrySlug: slug }),
     getPublicShowcaseVideosForThumbnailGrid(
       {
@@ -68,66 +69,54 @@ export default async function IndustryDetailPage({ params }: Props) {
       },
       { industrySlug: slug },
     ),
-    getPublicTestimonialsForSection({
-      label: TESTIMONIALS_DATA.label,
-      title: TESTIMONIALS_DATA.title,
-      description: TESTIMONIALS_DATA.description,
-    }),
+    getPublicTestimonialsForSection(
+      {
+        label: TESTIMONIALS_DATA.label,
+        title: TESTIMONIALS_DATA.title,
+        description: TESTIMONIALS_DATA.description,
+      },
+      { industrySlug: slug },
+    ),
     getPublicSiteSetting(),
     getPublicProcessSection(),
+    getPublicPageCta("industry-detail", { industrySlug: slug }),
+    getPublicSharedSections([
+      "scroll-statement",
+      "work-with-us",
+      "testimonials",
+      "visual-library",
+      "work-showcase",
+    ]),
   ]);
 
+  if (industriesResult.failed) {
+    throw new Error("Industries are temporarily unavailable");
+  }
+  const industries = industriesResult.data;
   const industry = industries.find((i) => i.slug === slug);
   if (!industry) notFound();
 
-  const videoSrc = resolveIndustryVideoSrc(industry.video);
-  const thumbnailSrc = resolveIndustryThumbnail(
-    industry.thumbnail,
-    industry.video,
-  );
-
   return (
-    <div className="bg-background min-h-screen">
-      {/* ── Hero ── */}
-      <PageHeader
-        label={industry.tagline ?? industry.name}
-        title={industry.headline}
-        description={industry.description}
-        videoSrc={videoSrc}
-        thumbnailSrc={thumbnailSrc}
-      />
-
-      {/* ── Brands ── */}
-      <BrandsStrip />
-
-      {/* ── Scroll-reveal statement ── */}
-      <ScrollStatementSection />
-
-      {/* ── Inline Booking ── */}
-      <BookingInlineSection calendlyUrl={settings.calendly_url || undefined} />
-
-      {/* ── Testimonials ── */}
-      <TestimonialSection data={testimonialsData} />
-
-      {/* ── Work With Us ── */}
-      <WorkWithUsSection />
-
-      {/* ── Visual Library — permanent cinema-black brand block ── */}
-      <IndustryVisualLibrarySection
-        industryName={industry.name}
-        videos={showcaseVideos}
-      />
-
-      {/* ── Work Showcase ── */}
-      {livePortfolio.work.length > 0 && (
-        <ThumbnailWorkSection works={livePortfolio} showViewMore={false} />
-      )}
-
-      {/* ── Process ── */}
-      <ProcessSection data={processData} />
-
-      {/* CTA */}
-      <CTASection data={CTA_ABOUT} />
-    </div>
+    <IndustryDetailView
+      industry={industry}
+      industryOptions={industries.map(({ _id, name, slug: optionSlug }) => ({
+        _id,
+        name,
+        slug: optionSlug,
+      }))}
+      showcaseVideos={showcaseVideos}
+      portfolio={livePortfolio}
+      testimonials={testimonialsData}
+      process={processData}
+      calendlyUrl={settings.calendly_url || undefined}
+      ctaData={cta ? toLegacyPageCta(cta) : null}
+      sharedContent={{
+        statement,
+        workWithUs,
+        testimonialsHeading,
+        visualLibraryHeading,
+        workShowcaseHeading,
+      }}
+    />
   );
 }

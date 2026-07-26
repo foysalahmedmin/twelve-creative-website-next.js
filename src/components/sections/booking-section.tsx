@@ -5,6 +5,7 @@ import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { CenteredSectionHeader } from "@/components/common/section-label";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import type { PublicIndustryOption } from "@/lib/api/industries";
 import {
   ArrowRight01Icon,
   Briefcase01Icon,
@@ -22,6 +23,7 @@ interface BookingSectionProps {
   description: string;
   className?: string;
   calendlyUrl?: string;
+  industries?: PublicIndustryOption[];
 }
 
 const BOOKING_STEPS = [
@@ -63,6 +65,7 @@ export const BookingSection = ({
   description,
   className,
   calendlyUrl,
+  industries = [],
 }: BookingSectionProps) => {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
 
@@ -211,6 +214,7 @@ export const BookingSection = ({
           <BookingModal
             isOpen={isBookingOpen}
             onClose={() => setIsBookingOpen(false)}
+            industries={industries}
           />
         )}
       </div>

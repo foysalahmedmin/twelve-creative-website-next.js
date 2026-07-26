@@ -15,7 +15,7 @@ export type TPortfolioData = {
 };
 
 const SAMPLE_VIDEO =
-  "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+  "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4";
 
 export const CANVAS_PORTFOLIO_DATA: TPortfolioData = {
   label: "Work Showcase",

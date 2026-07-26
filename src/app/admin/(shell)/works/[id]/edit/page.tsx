@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { ApiError } from "@/lib/admin/types";
+import { loadIndustryOptions } from "@/lib/admin/industry-options";
 import { getWorkById } from "@/lib/api/works";
 import { WorkForm } from "../../work-form";
 
@@ -12,13 +13,35 @@ interface PageProps {
 export default async function EditWorkPage({ params }: PageProps) {
   const { id } = await params;
 
-  let work: Awaited<ReturnType<typeof getWorkById>>;
-  try {
-    work = await getWorkById(id);
-  } catch (e) {
-    if (e instanceof ApiError && e.status === 404) notFound();
-    throw e;
+  const [workResult, industries] = await Promise.all([
+    loadWork(id),
+    loadIndustryOptions(),
+  ]);
+
+  if (workResult.error) {
+    if (
+      workResult.error instanceof ApiError &&
+      workResult.error.status === 404
+    ) {
+      notFound();
+    }
+    throw workResult.error;
   }
 
-  return <WorkForm mode="edit" initial={work} />;
+  return (
+    <WorkForm
+      mode="edit"
+      initial={workResult.data}
+      industries={industries.data}
+      industriesError={industries.error}
+    />
+  );
+}
+
+async function loadWork(id: string) {
+  try {
+    return { data: await getWorkById(id), error: undefined };
+  } catch (error) {
+    return { data: undefined, error };
+  }
 }

@@ -28,9 +28,10 @@ import { cn } from "@/lib/utils";
 
 interface Props {
   items: Testimonial[];
+  canReorder: boolean;
 }
 
-export function TestimonialsTable({ items: propItems }: Props) {
+export function TestimonialsTable({ items: propItems, canReorder }: Props) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [deleteTarget, setDeleteTarget] = useState<Testimonial | null>(null);
@@ -64,7 +65,7 @@ export function TestimonialsTable({ items: propItems }: Props) {
   };
 
   const handleDrop = (targetId: string) => {
-    if (!dragId || dragId === targetId) return;
+    if (!canReorder || !dragId || dragId === targetId) return;
     const from = items.findIndex((i) => i._id === dragId);
     const to = items.findIndex((i) => i._id === targetId);
     if (from === -1 || to === -1) return;
@@ -77,6 +78,7 @@ export function TestimonialsTable({ items: propItems }: Props) {
   };
 
   const handleSaveOrder = async () => {
+    if (!canReorder) return;
     setSaving(true);
     const res = await reorderTestimonialsAction(
       items.map((item, i) => ({ _id: item._id, order: i + 1 })),
@@ -127,8 +129,11 @@ export function TestimonialsTable({ items: propItems }: Props) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[40px]" />
+            <TableHead className="w-[40px]">
+              <span className="sr-only">Order</span>
+            </TableHead>
             <TableHead>Person</TableHead>
+            <TableHead className="hidden sm:table-cell">Industry</TableHead>
             <TableHead>Type</TableHead>
             <TableHead className="hidden md:table-cell">Preview</TableHead>
             <TableHead className="w-[100px]">Active</TableHead>
@@ -139,20 +144,28 @@ export function TestimonialsTable({ items: propItems }: Props) {
           {items.map((item) => (
             <TableRow
               key={item._id}
-              draggable
-              onDragStart={() => setDragId(item._id)}
-              onDragOver={(e) => e.preventDefault()}
-              onDrop={() => handleDrop(item._id)}
+              draggable={canReorder}
+              onDragStart={() => canReorder && setDragId(item._id)}
+              onDragOver={(e) => canReorder && e.preventDefault()}
+              onDrop={() => canReorder && handleDrop(item._id)}
               onDragEnd={() => setDragId(null)}
               className={cn(dragId === item._id && "opacity-40")}
             >
               <TableCell>
-                <GripVertical className="text-muted-foreground size-4 cursor-grab active:cursor-grabbing" />
+                {canReorder ? (
+                  <GripVertical
+                    className="text-muted-foreground size-4 cursor-grab active:cursor-grabbing"
+                    aria-label={`Reorder ${item.name}`}
+                  />
+                ) : (
+                  <span className="text-muted-foreground text-xs tabular-nums">
+                    {item.order}
+                  </span>
+                )}
               </TableCell>
               <TableCell>
                 <div className="flex items-center gap-3">
                   {item.image ? (
-                    // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={item.image}
                       alt={item.name}
@@ -170,6 +183,11 @@ export function TestimonialsTable({ items: propItems }: Props) {
                     </p>
                   </div>
                 </div>
+              </TableCell>
+              <TableCell className="hidden sm:table-cell">
+                <span className="text-muted-foreground text-xs">
+                  {item.industry?.name ?? "Migration required"}
+                </span>
               </TableCell>
               <TableCell>
                 <StatusBadge

@@ -7,17 +7,20 @@
 
 import { ServicesSection } from "@/components/_primary_/home-page/services-section";
 import { getPublicServicesAsLegacy } from "@/lib/api/services";
+import type { HeadingSection } from "@/lib/api/shared-sections";
 
 interface Props {
   className?: string;
+  heading?: HeadingSection | null;
 }
 
-export async function LiveServicesSection({ className }: Props) {
+export async function LiveServicesSection({ className, heading }: Props) {
   const services = await getPublicServicesAsLegacy();
   return (
     <ServicesSection
       className={className}
       data={services.length ? services : undefined}
+      heading={heading}
     />
   );
 }

@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath, updateTag } from "next/cache";
+import { unstable_rethrow } from "next/navigation";
 import { apiFetch } from "@/lib/admin/api-client";
 import { ApiError } from "@/lib/admin/types";
 import type { VideoRef } from "@/lib/admin/types";
@@ -16,6 +17,7 @@ import {
 } from "./works";
 
 export interface WorkInput {
+  industry: string;
   slug: string;
   type: string;
   title: string;
@@ -26,16 +28,16 @@ export interface WorkInput {
   tag_slugs?: string[];
   hero_stats?: HeroStat[];
   client?: WorkClient | null;
-  situation_intro?: string;
-  challenge_intro?: string;
+  situation_intro?: string | null;
+  challenge_intro?: string | null;
   challenge_items?: ChallengeItem[];
-  solution_intro?: string;
+  solution_intro?: string | null;
   solution_phases?: SolutionPhase[];
-  outcome_desc?: string;
+  outcome_desc?: string | null;
   outcome_video?: VideoRef | null;
-  outcome_video_thumbnail?: string;
+  outcome_video_thumbnail?: string | null;
   testimonial?: WorkTestimonial | null;
-  calendly_url?: string;
+  calendly_url?: string | null;
   order?: number;
   is_published?: boolean;
 }
@@ -46,20 +48,22 @@ export interface ActionResult<T = unknown> {
   data?: T;
 }
 
-const invalidate = (slug?: string) => {
+const invalidate = (...slugs: (string | undefined)[]) => {
   updateTag(WORKS_TAG);
-  if (slug) updateTag(`work:${slug}`);
   revalidatePath("/admin/works");
+  revalidatePath("/works");
+  for (const slug of new Set(slugs.filter((value): value is string => Boolean(value)))) {
+    updateTag(`work:${slug}`);
+    revalidatePath(`/works/${slug}`);
+  }
 };
 
-const stripNulls = <T extends Partial<WorkInput>>(input: T): T => {
-  const out = { ...input } as T;
-  if (out.client === null) delete (out as { client?: unknown }).client;
-  if (out.outcome_video === null)
-    delete (out as { outcome_video?: unknown }).outcome_video;
-  if (out.testimonial === null)
-    delete (out as { testimonial?: unknown }).testimonial;
-  return out;
+/** Create treats empty optional embedded sections as omitted. PATCH preserves
+ * explicit nulls so an editor can remove an existing client/testimonial/video. */
+const stripCreateNulls = <T extends Partial<WorkInput>>(input: T): T => {
+  return Object.fromEntries(
+    Object.entries(input).filter(([, value]) => value !== null),
+  ) as T;
 };
 
 export async function createWorkAction(
@@ -68,7 +72,7 @@ export async function createWorkAction(
   try {
     const res = await apiFetch<Work>("/api/work", {
       method: "POST",
-      body: stripNulls(payload),
+      body: stripCreateNulls(payload),
     });
     invalidate(res.data?.slug);
     return { ok: true, data: res.data };
@@ -80,13 +84,14 @@ export async function createWorkAction(
 export async function updateWorkAction(
   id: string,
   payload: Partial<WorkInput>,
+  previousSlug?: string,
 ): Promise<ActionResult<Work>> {
   try {
     const res = await apiFetch<Work>(`/api/work/${id}`, {
       method: "PATCH",
-      body: stripNulls(payload),
+      body: payload,
     });
-    invalidate(res.data?.slug);
+    invalidate(res.data?.slug, previousSlug);
     return { ok: true, data: res.data };
   } catch (e) {
     return { ok: false, error: errorMessage(e) };
@@ -124,6 +129,7 @@ export async function deleteWorkAction(
 }
 
 function errorMessage(e: unknown): string {
+  unstable_rethrow(e);
   if (e instanceof ApiError) {
     const sources = e.body?.errorSources;
     if (sources && sources.length) {

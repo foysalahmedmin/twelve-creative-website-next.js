@@ -109,7 +109,7 @@ export async function apiFetch<T = unknown>(
   }
 
   // 401 = expired or invalid session — clear cookies and redirect to sign-in.
-  if (res.status === 401) {
+  if (res.status === 401 && auth) {
     handleExpiredSession();
   }
 

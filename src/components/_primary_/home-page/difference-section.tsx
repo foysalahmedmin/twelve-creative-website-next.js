@@ -1,4 +1,5 @@
 import { CenteredSectionHeader } from "@/components/common/section-label";
+import { CmsMediaDisplay } from "@/components/common/cms-media-display";
 import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { Card, CardContent } from "@/components/ui/card";
 import { DIFFERENCE_DATA } from "@/data/difference.data";
@@ -6,17 +7,35 @@ import { cn } from "@/lib/utils";
 import { Cancel01Icon, Tick02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import Image from "next/image";
+import type { DifferenceSection as CmsDifferenceSection } from "@/lib/api/shared-sections";
 
 interface DifferenceSectionProps {
   className?: string;
   howWeStructureImage?: string;
+  data?: CmsDifferenceSection;
 }
 
 export const DifferenceSection = ({
   className,
   howWeStructureImage,
+  data: cmsData,
 }: DifferenceSectionProps) => {
-  const data = DIFFERENCE_DATA;
+  const data = cmsData
+    ? {
+        eyebrow: cmsData.label ?? "",
+        title: cmsData.title,
+        description: cmsData.description,
+        fragmented: {
+          title: cmsData.content.fragmented.title,
+          items: cmsData.content.fragmented.items.map((item) => item.text),
+        },
+        connected: {
+          title: cmsData.content.connected.title,
+          items: cmsData.content.connected.items.map((item) => item.text),
+        },
+      }
+    : DIFFERENCE_DATA;
+  const media = cmsData?.content.media;
 
   return (
     <section
@@ -34,17 +53,26 @@ export const DifferenceSection = ({
           />
         </ScrollReveal>
 
-        {howWeStructureImage && (
+        {(media || howWeStructureImage) && (
           <ScrollReveal animation="fade-in-up" delayMs={100} durationMs={800}>
-            <div className="relative mt-10 aspect-video w-full overflow-hidden rounded-2xl lg:mt-12">
-              <Image
-                src={howWeStructureImage}
+            {media ? (
+              <CmsMediaDisplay
+                media={media}
                 alt="How we structure our work"
-                fill
+                className="mt-10 aspect-video w-full rounded-2xl lg:mt-12"
                 sizes="(max-width: 1280px) 100vw, 1280px"
-                className="object-cover"
               />
-            </div>
+            ) : (
+              <div className="relative mt-10 aspect-video w-full overflow-hidden rounded-2xl lg:mt-12">
+                <Image
+                  src={howWeStructureImage!}
+                  alt="How we structure our work"
+                  fill
+                  sizes="(max-width: 1280px) 100vw, 1280px"
+                  className="object-cover"
+                />
+              </div>
+            )}
           </ScrollReveal>
         )}
 
@@ -67,9 +95,9 @@ export const DifferenceSection = ({
                   </h3>
                 </div>
                 <ul className="space-y-3">
-                  {data.fragmented.items.map((item) => (
+                  {data.fragmented.items.map((item, index) => (
                     <li
-                      key={item}
+                      key={`${index}-${item}`}
                       className="text-muted-foreground flex items-start gap-2.5 text-sm leading-relaxed"
                     >
                       <span className="bg-muted-foreground/40 mt-2 h-1 w-1 shrink-0 rounded-full" />
@@ -99,9 +127,9 @@ export const DifferenceSection = ({
                   </h3>
                 </div>
                 <ul className="space-y-3">
-                  {data.connected.items.map((item) => (
+                  {data.connected.items.map((item, index) => (
                     <li
-                      key={item}
+                      key={`${index}-${item}`}
                       className="text-primary-foreground/85 flex items-start gap-2.5 text-sm leading-relaxed font-medium dark:text-[#eaeae4]/85"
                     >
                       <HugeiconsIcon

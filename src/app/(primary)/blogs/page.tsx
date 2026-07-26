@@ -5,14 +5,22 @@ import { ComingSoon } from "@/components/common/coming-soon";
 import { PageHeader } from "@/components/sections/page-header-section";
 import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { getPublicInsights } from "@/lib/api/insights";
-import { getPublicPageHero, resolveVideoSrc, resolveThumbnail } from "@/lib/api/page-heroes";
+import {
+  getPublicPageHero,
+  resolvePageMetadata,
+  resolveThumbnail,
+  resolveVideoSrc,
+} from "@/lib/api/page-heroes";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Insights | Twelve Creative",
-  description:
-    "Notes on positioning, creative, distribution, and the systems behind real business growth.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const hero = await getPublicPageHero("blogs");
+  return resolvePageMetadata(hero, {
+    title: "Insights | Twelve Creative",
+    description:
+      "Notes on positioning, creative, distribution, and the systems behind real business growth.",
+  });
+}
 
 export const dynamic = "force-dynamic";
 

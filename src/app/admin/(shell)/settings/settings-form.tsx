@@ -16,14 +16,21 @@ interface Props {
   initial: SiteSetting;
 }
 
+// Empty strings are intentional PATCH values for clearable settings. Sending
+// `undefined` would make JSON omit the key and silently preserve the old value.
+const persistedText = (value: string): string => value.trim();
+
 export function SettingsForm({ initial }: Props) {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
+  const [faqImageUploading, setFaqImageUploading] = useState(false);
 
   const [form, setForm] = useState({
     contact_email: initial.contact_email ?? "",
     contact_phone: initial.contact_phone ?? "",
     contact_address: initial.contact_address ?? "",
+    contact_whatsapp: initial.contact_whatsapp ?? "",
+    contact_map_embed_url: initial.contact_map_embed_url ?? "",
     booking_notification_email: initial.booking_notification_email ?? "",
     instagram: initial.social?.instagram ?? "",
     linkedin: initial.social?.linkedin ?? "",
@@ -38,12 +45,19 @@ export function SettingsForm({ initial }: Props) {
     faq_position: initial.faq_section?.position ?? "",
     faq_contact_link: initial.faq_section?.contact_link ?? "",
     calendly_url: initial.calendly_url ?? "",
-    how_we_structure_image: initial.how_we_structure_image ?? "",
-    meeting_scene_image: initial.meeting_scene_image ?? "",
-    cs_title: initial.content_section?.title ?? "",
-    cs_subtitle: initial.content_section?.subtitle ?? "",
-    cs_body: initial.content_section?.body ?? "",
-    cs_image: initial.content_section?.image ?? "",
+    inquiry_label: initial.contact_page?.inquiry?.label ?? "",
+    inquiry_title: initial.contact_page?.inquiry?.title ?? "",
+    inquiry_description: initial.contact_page?.inquiry?.description ?? "",
+    booking_label: initial.contact_page?.booking?.label ?? "",
+    booking_title: initial.contact_page?.booking?.title ?? "",
+    booking_description: initial.contact_page?.booking?.description ?? "",
+    map_label: initial.contact_page?.map?.label ?? "",
+    map_title: initial.contact_page?.map?.title ?? "",
+    map_description: initial.contact_page?.map?.description ?? "",
+    footer_description: initial.footer?.description ?? "",
+    footer_cta_text: initial.footer?.cta_text ?? "",
+    footer_cta_label: initial.footer?.cta_label ?? "",
+    footer_cta_href: initial.footer?.cta_href ?? "",
   });
 
   const update = (key: keyof typeof form, value: string) =>
@@ -51,36 +65,59 @@ export function SettingsForm({ initial }: Props) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (faqImageUploading) {
+      toast.error("Wait for the FAQ image upload to finish before saving");
+      return;
+    }
     setSaving(true);
     const res = await updateSiteSettingAction({
-      contact_email: form.contact_email,
-      contact_phone: form.contact_phone,
-      contact_address: form.contact_address,
-      booking_notification_email: form.booking_notification_email,
+      contact_email: persistedText(form.contact_email),
+      contact_phone: persistedText(form.contact_phone),
+      contact_address: persistedText(form.contact_address),
+      contact_whatsapp: persistedText(form.contact_whatsapp),
+      contact_map_embed_url: persistedText(form.contact_map_embed_url),
+      booking_notification_email: persistedText(
+        form.booking_notification_email,
+      ),
       social: {
-        instagram: form.instagram || undefined,
-        linkedin: form.linkedin || undefined,
-        youtube: form.youtube || undefined,
-        x: form.x || undefined,
-        facebook: form.facebook || undefined,
+        instagram: persistedText(form.instagram),
+        linkedin: persistedText(form.linkedin),
+        youtube: persistedText(form.youtube),
+        x: persistedText(form.x),
+        facebook: persistedText(form.facebook),
       },
       faq_section: {
-        image: form.faq_image || undefined,
-        image_alt: form.faq_image_alt || undefined,
-        title: form.faq_title || undefined,
-        description: form.faq_description || undefined,
-        name: form.faq_name || undefined,
-        position: form.faq_position || undefined,
-        contact_link: form.faq_contact_link || undefined,
+        image: persistedText(form.faq_image),
+        image_alt: persistedText(form.faq_image_alt),
+        title: persistedText(form.faq_title),
+        description: persistedText(form.faq_description),
+        name: persistedText(form.faq_name),
+        position: persistedText(form.faq_position),
+        contact_link: persistedText(form.faq_contact_link),
       },
-      calendly_url: form.calendly_url || undefined,
-      how_we_structure_image: form.how_we_structure_image || undefined,
-      meeting_scene_image: form.meeting_scene_image || undefined,
-      content_section: {
-        title: form.cs_title || undefined,
-        subtitle: form.cs_subtitle || undefined,
-        body: form.cs_body || undefined,
-        image: form.cs_image || undefined,
+      calendly_url: persistedText(form.calendly_url),
+      contact_page: {
+        inquiry: {
+          label: persistedText(form.inquiry_label),
+          title: persistedText(form.inquiry_title),
+          description: persistedText(form.inquiry_description),
+        },
+        booking: {
+          label: persistedText(form.booking_label),
+          title: persistedText(form.booking_title),
+          description: persistedText(form.booking_description),
+        },
+        map: {
+          label: persistedText(form.map_label),
+          title: persistedText(form.map_title),
+          description: persistedText(form.map_description),
+        },
+      },
+      footer: {
+        description: persistedText(form.footer_description),
+        cta_text: persistedText(form.footer_cta_text),
+        cta_label: persistedText(form.footer_cta_label),
+        cta_href: persistedText(form.footer_cta_href),
       },
     });
     setSaving(false);
@@ -126,6 +163,127 @@ export function SettingsForm({ initial }: Props) {
               rows={2}
               value={form.contact_address}
               onChange={(e) => update("contact_address", e.target.value)}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="contact_whatsapp">WhatsApp</Label>
+            <Input
+              id="contact_whatsapp"
+              value={form.contact_whatsapp}
+              onChange={(e) => update("contact_whatsapp", e.target.value)}
+              placeholder="+1 951 822 6223"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="contact_map_embed_url">Map embed URL</Label>
+            <Input
+              id="contact_map_embed_url"
+              type="url"
+              value={form.contact_map_embed_url}
+              onChange={(e) => update("contact_map_embed_url", e.target.value)}
+              placeholder="https://maps.google.com/maps?...&output=embed"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section className="space-y-4">
+        <div>
+          <h3 className="text-foreground text-sm font-semibold">
+            Contact Page Content
+          </h3>
+          <p className="text-muted-foreground text-xs">
+            Editable section copy; the form structure and validation remain
+            code-controlled.
+          </p>
+        </div>
+        {(
+          [
+            ["inquiry", "Inquiry section"],
+            ["booking", "Booking section"],
+            ["map", "Contact & map section"],
+          ] as const
+        ).map(([prefix, heading]) => (
+          <div
+            key={prefix}
+            className="border-border space-y-3 rounded-lg border p-4"
+          >
+            <h4 className="text-foreground text-sm font-medium">{heading}</h4>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <div className="space-y-2">
+                <Label htmlFor={`${prefix}_label`}>Label</Label>
+                <Input
+                  id={`${prefix}_label`}
+                  value={form[`${prefix}_label`]}
+                  onChange={(e) => update(`${prefix}_label`, e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor={`${prefix}_title`}>Title</Label>
+                <Input
+                  id={`${prefix}_title`}
+                  value={form[`${prefix}_title`]}
+                  onChange={(e) => update(`${prefix}_title`, e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor={`${prefix}_description`}>Description</Label>
+              <Textarea
+                id={`${prefix}_description`}
+                rows={3}
+                value={form[`${prefix}_description`]}
+                onChange={(e) =>
+                  update(`${prefix}_description`, e.target.value)
+                }
+              />
+            </div>
+          </div>
+        ))}
+      </section>
+
+      <section className="space-y-4">
+        <div>
+          <h3 className="text-foreground text-sm font-semibold">
+            Footer Content
+          </h3>
+          <p className="text-muted-foreground text-xs">
+            Global footer description and conversion strip.
+          </p>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="footer_description">Brand description</Label>
+          <Textarea
+            id="footer_description"
+            rows={3}
+            value={form.footer_description}
+            onChange={(e) => update("footer_description", e.target.value)}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="footer_cta_text">CTA prompt</Label>
+          <Input
+            id="footer_cta_text"
+            value={form.footer_cta_text}
+            onChange={(e) => update("footer_cta_text", e.target.value)}
+          />
+        </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="space-y-2">
+            <Label htmlFor="footer_cta_label">Button label</Label>
+            <Input
+              id="footer_cta_label"
+              value={form.footer_cta_label}
+              onChange={(e) => update("footer_cta_label", e.target.value)}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="footer_cta_href">Button link</Label>
+            <Input
+              id="footer_cta_href"
+              value={form.footer_cta_href}
+              onChange={(e) => update("footer_cta_href", e.target.value)}
+              placeholder="/contact"
             />
           </div>
         </div>
@@ -196,8 +354,11 @@ export function SettingsForm({ initial }: Props) {
         <div className="space-y-2">
           <ImageInput
             label="Photo"
+            description="Paste an HTTP(S) URL or upload a square coordinator photo."
+            allowRelative
             value={form.faq_image}
             onChange={(v) => update("faq_image", v)}
+            onUploadingChange={setFaqImageUploading}
             previewAspect="1/1"
           />
         </div>
@@ -280,83 +441,18 @@ export function SettingsForm({ initial }: Props) {
         </div>
       </section>
 
-      <section className="space-y-4">
-        <div>
-          <h3 className="text-foreground text-sm font-semibold">Page Media</h3>
-          <p className="text-muted-foreground text-xs">
-            Visual assets for specific public sections. Leave blank to use the
-            built-in placeholder images.
-          </p>
-        </div>
-        <ImageInput
-          label="How we structure — section image (C5)"
-          description="Visual asset displayed in The Twelve Creative Difference section. Landscape 16:9 works best."
-          value={form.how_we_structure_image}
-          onChange={(v) => update("how_we_structure_image", v)}
-          previewAspect="16/9"
-        />
-        <ImageInput
-          label="Founder / Meeting scene photo (C6)"
-          description="Shown in the founder bio card on the About page. Portrait 3:4 works best."
-          value={form.meeting_scene_image}
-          onChange={(v) => update("meeting_scene_image", v)}
-          previewAspect="3/4"
-        />
-      </section>
-
-      <section className="space-y-4">
-        <div>
-          <h3 className="text-foreground text-sm font-semibold">
-            About Story Section (C7)
-          </h3>
-          <p className="text-muted-foreground text-xs">
-            Controls the "Merging Art and Science" section on the About page.
-            Leave fields blank to use the built-in defaults.
-          </p>
-        </div>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <div className="space-y-2">
-            <Label htmlFor="cs_title">Section heading</Label>
-            <Input
-              id="cs_title"
-              placeholder="Merging Art and Science"
-              value={form.cs_title}
-              onChange={(e) => update("cs_title", e.target.value)}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="cs_subtitle">Eyebrow / label</Label>
-            <Input
-              id="cs_subtitle"
-              placeholder="Our Story"
-              value={form.cs_subtitle}
-              onChange={(e) => update("cs_subtitle", e.target.value)}
-            />
-          </div>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="cs_body">Section description</Label>
-          <Textarea
-            id="cs_body"
-            rows={3}
-            placeholder="Short paragraph shown below the heading…"
-            value={form.cs_body}
-            onChange={(e) => update("cs_body", e.target.value)}
-          />
-        </div>
-        <ImageInput
-          label="Section image"
-          description="Main sticky image shown in the left column of the story section."
-          value={form.cs_image}
-          onChange={(v) => update("cs_image", v)}
-          previewAspect="1/1"
-        />
-      </section>
-
       <div className="flex justify-end">
-        <Button type="submit" disabled={saving}>
-          {saving && <Loader2 className="size-4 animate-spin" />}
-          Save changes
+        <Button type="submit" disabled={saving || faqImageUploading}>
+          {(saving || faqImageUploading) && (
+            <Loader2 className="size-4 animate-spin" />
+          )}
+          <span aria-live="polite">
+            {faqImageUploading
+              ? "Uploading image…"
+              : saving
+                ? "Saving…"
+                : "Save changes"}
+          </span>
         </Button>
       </div>
     </form>

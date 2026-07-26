@@ -10,6 +10,7 @@ import {
   type TTestimonialData,
 } from "@/data/testimonials.data";
 import { cn } from "@/lib/utils";
+import type { HeadingSection } from "@/lib/api/shared-sections";
 import { Cancel01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -18,6 +19,7 @@ import {
   forwardRef,
   useEffect,
   useImperativeHandle,
+  useCallback,
   useRef,
   useState,
 } from "react";
@@ -43,6 +45,7 @@ interface MarqueeProps {
   initialLeftward: boolean;
   gap: number;
   itemWidthClass: string;
+  accessibleItemCount: number;
   className?: string;
 }
 
@@ -54,6 +57,7 @@ const Marquee = forwardRef<MarqueeHandle, MarqueeProps>(function Marquee(
     initialLeftward,
     gap,
     itemWidthClass,
+    accessibleItemCount,
     className,
   },
   ref,
@@ -208,12 +212,15 @@ const Marquee = forwardRef<MarqueeHandle, MarqueeProps>(function Marquee(
             ref={copy === 0 ? copyRef : undefined}
             className="flex shrink-0 items-stretch"
             aria-hidden={copy === 1}
+            inert={copy === 1}
           >
             {items.map((item, i) => (
               <div
                 key={`${item.id}-${i}`}
                 className={cn("flex shrink-0 self-stretch", itemWidthClass)}
                 style={{ marginRight: gap }}
+                aria-hidden={copy === 1 || i >= accessibleItemCount}
+                inert={copy === 1 || i >= accessibleItemCount}
               >
                 {renderItem(item, i)}
               </div>
@@ -264,16 +271,21 @@ function SliderArrow({
 // ── Props ──────────────────────────────────────────────────────────────────
 export interface PageTestimonialSectionProps {
   data: TTestimonialData;
+  heading?: HeadingSection | null;
   className?: string;
 }
 
 // ── Main component ─────────────────────────────────────────────────────────
 export const TestimonialSection = ({
   data = TESTIMONIALS_DATA,
+  heading,
   className,
 }: Partial<PageTestimonialSectionProps>) => {
   const { label, title, description, testimonials = [] } = data || {};
   const [activeVideo, setActiveVideo] = useState<TTestimonial | null>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
 
   const videoMarquee = useRef<MarqueeHandle>(null);
   const textMarquee = useRef<MarqueeHandle>(null);
@@ -293,13 +305,66 @@ export const TestimonialSection = ({
   const videoItems = repeatToFill(videoTestimonials, 12);
   const textItems = repeatToFill(textTestimonials, 12);
 
+  const openVideo = (testimonial: TTestimonial) => {
+    previousFocusRef.current = document.activeElement as HTMLElement | null;
+    setActiveVideo(testimonial);
+  };
+
+  const closeVideo = useCallback(() => {
+    setActiveVideo(null);
+    window.requestAnimationFrame(() => previousFocusRef.current?.focus());
+  }, [setActiveVideo]);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setActiveVideo(null);
+      if (!activeVideo) return;
+      if (e.key === "Escape") {
+        closeVideo();
+        return;
+      }
+      if (e.key !== "Tab" || !modalRef.current) return;
+      const focusable = Array.from(
+        modalRef.current.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ),
+      );
+      if (!focusable.length) {
+        e.preventDefault();
+        modalRef.current.focus();
+        return;
+      }
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const active = document.activeElement;
+      if (!modalRef.current.contains(active)) {
+        e.preventDefault();
+        (e.shiftKey ? last : first).focus();
+      } else if (
+        e.shiftKey &&
+        (active === first || active === modalRef.current)
+      ) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault();
+        first.focus();
+      }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [activeVideo, closeVideo]);
+
+  useEffect(() => {
+    if (!activeVideo) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.requestAnimationFrame(() => closeButtonRef.current?.focus());
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [activeVideo]);
+
+  if (!testimonials.length) return null;
 
   return (
     <section
@@ -311,18 +376,27 @@ export const TestimonialSection = ({
       <ScrollReveal animation="fade-in-up" durationMs={800}>
         <div className="container">
           {/* Section header */}
-          <CenteredSectionHeader
-            label={label || "Testimonials"}
-            title={title || "What Our Clients Say"}
-            description={
-              description || "1,000+ creators trust us to edit their videos."
-            }
-            tone="inverse"
-            className="relative z-10 mb-0 lg:mb-0"
-          />
+          {heading !== null && (
+            <CenteredSectionHeader
+              label={heading?.label ?? label ?? "Testimonials"}
+              title={heading?.title ?? title ?? "What Our Clients Say"}
+              description={
+                heading?.description ??
+                description ??
+                "1,000+ creators trust us to edit their videos."
+              }
+              tone="inverse"
+              className="relative z-10 mb-0 lg:mb-0"
+            />
+          )}
 
           {/* ── Marquee rows ── */}
-          <div className="relative z-10 mt-12 flex flex-col gap-10 md:mt-16 md:gap-12">
+          <div
+            className={cn(
+              "relative z-10 flex flex-col gap-10 md:gap-12",
+              heading === null ? "mt-0" : "mt-12 md:mt-16",
+            )}
+          >
             {/* ── Row 1: Reels — default drifts left → right ── */}
             {videoTestimonials.length > 0 && (
               <div className="flex items-center gap-3 px-4 md:px-8 lg:px-12">
@@ -339,10 +413,12 @@ export const TestimonialSection = ({
                   pxPerSecond={30}
                   gap={14}
                   itemWidthClass="w-[180px] lg:w-[200px] xl:w-[240px]"
-                  renderItem={(testimonial) => (
+                  accessibleItemCount={videoTestimonials.length}
+                  renderItem={(testimonial, index) => (
                     <VideoTestimonialCard
                       testimonial={testimonial}
-                      onOpen={setActiveVideo}
+                      onOpen={openVideo}
+                      interactive={index < videoTestimonials.length}
                       className="h-full w-full md:w-full"
                     />
                   )}
@@ -372,6 +448,7 @@ export const TestimonialSection = ({
                   pxPerSecond={40}
                   gap={18}
                   itemWidthClass="w-[272px] sm:w-[310px] lg:w-[348px] xl:w-[384px]"
+                  accessibleItemCount={textTestimonials.length}
                   renderItem={(testimonial) => (
                     <TestimonialCard
                       testimonial={testimonial}
@@ -394,21 +471,31 @@ export const TestimonialSection = ({
       {/* ── Video modal ── */}
       {activeVideo && (
         <div
-          onClick={() => setActiveVideo(null)}
+          onClick={closeVideo}
           className="animate-fade-in fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
         >
           <div
+            ref={modalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="testimonial-video-title"
+            tabIndex={-1}
             onClick={(e) => e.stopPropagation()}
             className="bg-card animate-zoom-in border-border relative max-h-[85vh] w-auto max-w-[90vw] rounded-3xl border p-2 shadow-xl"
           >
             <button
+              ref={closeButtonRef}
               type="button"
-              onClick={() => setActiveVideo(null)}
+              onClick={closeVideo}
               className="hover:text-primary absolute -top-12 right-0 z-10 flex items-center gap-1 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-md transition-all duration-200"
             >
               <HugeiconsIcon icon={Cancel01Icon} className="size-4" />
               Close (ESC)
             </button>
+
+            <h2 id="testimonial-video-title" className="sr-only">
+              Video testimonial from {activeVideo.name}
+            </h2>
 
             <div className="aspect-9/16 h-[min(78vh,720px)] max-w-full overflow-hidden rounded-2xl bg-black">
               <ReactPlayer

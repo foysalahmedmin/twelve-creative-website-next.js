@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { unstable_rethrow } from "next/navigation";
 import { apiFetch } from "@/lib/admin/api-client";
 import { ApiError } from "@/lib/admin/types";
 import { TICKETS_TAG, type Ticket, type TicketPriority, type TicketStatus } from "./tickets";
@@ -53,6 +54,7 @@ export async function deleteTicketAction(id: string): Promise<ActionResult> {
 }
 
 function errorMessage(e: unknown): string {
+  unstable_rethrow(e);
   if (e instanceof ApiError) return e.message;
   if (e instanceof Error) return e.message;
   return "Something went wrong";

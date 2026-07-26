@@ -1,19 +1,23 @@
 /**
- * Server wrapper for Footer: fetches SiteSetting and feeds dynamic socials
- * + contact email + address into the client `Footer`. Static `SOCIAL_LINKS`
- * + `FOOTER_CONTACT` defaults remain the fallback when SiteSetting is empty
- * or unavailable.
+ * Server wrapper for Footer: fetches SiteSetting and Industry content. Static
+ * defaults are used only when the corresponding API is unavailable; a valid
+ * empty CMS response remains empty.
  */
 
 import { Footer, type FooterSocialItem } from "@/components/partials/footer";
-import { getPublicSiteSetting } from "@/lib/api/site-setting";
+import { getPublicIndustriesResult } from "@/lib/api/industries";
+import { getPublicSiteSettingResult } from "@/lib/api/site-setting";
 
 interface Props {
   className?: string;
 }
 
 export async function LiveFooter({ className }: Props) {
-  const setting = await getPublicSiteSetting();
+  const [settingResult, industriesResult] = await Promise.all([
+    getPublicSiteSettingResult(),
+    getPublicIndustriesResult(),
+  ]);
+  const setting = settingResult.data;
 
   const socials: FooterSocialItem[] = [];
   if (setting.social?.facebook)
@@ -30,9 +34,24 @@ export async function LiveFooter({ className }: Props) {
   return (
     <Footer
       className={className}
-      socials={socials.length ? socials : undefined}
+      socials={settingResult.failed ? undefined : socials}
       contactEmail={setting.contact_email || undefined}
+      contactPhone={
+        settingResult.failed ? undefined : setting.contact_phone?.trim() || null
+      }
       contactAddress={setting.contact_address || undefined}
+      industries={
+        industriesResult.failed
+          ? undefined
+          : industriesResult.data.map((industry) => ({
+              label: industry.name,
+              href: `/industries/${industry.slug}`,
+            }))
+      }
+      description={setting.footer?.description || undefined}
+      ctaText={setting.footer?.cta_text || undefined}
+      ctaLabel={setting.footer?.cta_label || undefined}
+      ctaHref={setting.footer?.cta_href || undefined}
     />
   );
 }

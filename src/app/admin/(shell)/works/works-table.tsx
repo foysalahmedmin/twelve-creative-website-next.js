@@ -77,7 +77,8 @@ export function WorksTable({ items }: Props) {
           <TableRow>
             <TableHead className="w-[60px]">Order</TableHead>
             <TableHead>Title</TableHead>
-            <TableHead className="hidden md:table-cell">Type</TableHead>
+            <TableHead className="hidden md:table-cell">Industry</TableHead>
+            <TableHead className="hidden lg:table-cell">Type</TableHead>
             <TableHead className="hidden md:table-cell">Slug</TableHead>
             <TableHead className="w-[110px]">Status</TableHead>
             <TableHead className="w-[110px]">Published</TableHead>
@@ -102,6 +103,11 @@ export function WorksTable({ items }: Props) {
                 </Link>
               </TableCell>
               <TableCell className="text-muted-foreground hidden text-xs md:table-cell">
+                {typeof item.industry === "object" && item.industry
+                  ? item.industry.name
+                  : "Unassigned"}
+              </TableCell>
+              <TableCell className="text-muted-foreground hidden text-xs lg:table-cell">
                 {item.type}
               </TableCell>
               <TableCell className="text-muted-foreground hidden font-mono text-xs md:table-cell">

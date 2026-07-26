@@ -1,3 +1,5 @@
+import type { CmsMedia } from "@/lib/api/cms-media";
+
 export type TFeatureIconKey =
   | "strategy"
   | "cinematic"
@@ -11,6 +13,7 @@ export type TFeature = {
   icon: TFeatureIconKey;
   title: string;
   description: string;
+  media?: CmsMedia;
 };
 
 export type TWhyChooseUsData = {

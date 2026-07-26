@@ -14,6 +14,7 @@
 import type { TTestimonial, TTestimonialData } from "@/data/testimonials.data";
 import { apiFetch } from "@/lib/admin/api-client";
 import type { VideoRef } from "@/lib/admin/types";
+import type { IndustrySummary } from "@/lib/api/industries";
 import { extractYouTubeId } from "@/lib/media/video";
 
 export const TESTIMONIALS_TAG = "testimonials";
@@ -22,6 +23,8 @@ export type TestimonialCategory = "message" | "video_message";
 
 export interface Testimonial {
   _id: string;
+  /** Null only for pre-migration legacy records. */
+  industry: IndustrySummary | null;
   name: string;
   designation: string;
   image: string;
@@ -36,14 +39,24 @@ export interface Testimonial {
 }
 
 /** Public read — only active testimonials, sorted by order. */
-export async function getPublicTestimonials(): Promise<Testimonial[]> {
+export async function getPublicTestimonials(
+  query: { industrySlug?: string } = {},
+): Promise<Testimonial[]> {
   try {
-    const res = await apiFetch<Testimonial[]>("/api/testimonial/public", {
-      method: "GET",
-      auth: false,
-      revalidate: 60,
-      tags: [TESTIMONIALS_TAG],
-    });
+    const params = new URLSearchParams();
+    if (query.industrySlug) {
+      params.set("industry_slug", query.industrySlug);
+    }
+    const qs = params.toString();
+    const res = await apiFetch<Testimonial[]>(
+      `/api/testimonial/public${qs ? `?${qs}` : ""}`,
+      {
+        method: "GET",
+        auth: false,
+        revalidate: 60,
+        tags: [TESTIMONIALS_TAG],
+      },
+    );
     return res.data ?? [];
   } catch {
     return [];
@@ -51,12 +64,16 @@ export async function getPublicTestimonials(): Promise<Testimonial[]> {
 }
 
 /** Admin list — paginated, requires auth cookie. */
-export async function getAdminTestimonials(query: {
-  search?: string;
-  page?: number;
-  limit?: number;
-  filter?: "active" | "inactive";
-} = {}): Promise<{
+export async function getAdminTestimonials(
+  query: {
+    search?: string;
+    page?: number;
+    limit?: number;
+    filter?: "active" | "inactive";
+    industry?: string;
+    category?: TestimonialCategory;
+  } = {},
+): Promise<{
   data: Testimonial[];
   meta?: { total: number; page: number; limit: number; total_pages: number };
 }> {
@@ -65,6 +82,8 @@ export async function getAdminTestimonials(query: {
   if (query.page) params.set("page", String(query.page));
   if (query.limit) params.set("limit", String(query.limit));
   if (query.filter) params.set("filter", query.filter);
+  if (query.industry) params.set("industry", query.industry);
+  if (query.category) params.set("category", query.category);
 
   const qs = params.toString();
   const res = await apiFetch<Testimonial[]>(
@@ -89,8 +108,9 @@ export async function getTestimonialById(id: string): Promise<Testimonial> {
  */
 export async function getPublicTestimonialsForSection(
   defaults: Pick<TTestimonialData, "label" | "title" | "description">,
+  query: { industrySlug?: string } = {},
 ): Promise<TTestimonialData> {
-  const items = await getPublicTestimonials();
+  const items = await getPublicTestimonials(query);
   return {
     ...defaults,
     testimonials: items.map(adaptForSection),
@@ -110,7 +130,10 @@ function adaptForSection(t: Testimonial): TTestimonial {
   };
 }
 
-function resolvePoster(video?: VideoRef, thumbnail?: string): string | undefined {
+function resolvePoster(
+  video?: VideoRef,
+  thumbnail?: string,
+): string | undefined {
   if (thumbnail) return thumbnail;
   if (video?.source === "youtube") {
     const id = extractYouTubeId(video.value);

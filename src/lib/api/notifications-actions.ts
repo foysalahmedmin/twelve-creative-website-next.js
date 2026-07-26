@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath, updateTag } from "next/cache";
+import { unstable_rethrow } from "next/navigation";
 import { apiFetch } from "@/lib/admin/api-client";
 import { ApiError } from "@/lib/admin/types";
 import { NOTIFICATIONS_TAG } from "./notifications";
@@ -44,6 +45,7 @@ export async function markAllNotificationsReadAction(): Promise<ActionResult> {
 }
 
 function errorMessage(e: unknown): string {
+  unstable_rethrow(e);
   if (e instanceof ApiError) return e.message;
   if (e instanceof Error) return e.message;
   return "Something went wrong";

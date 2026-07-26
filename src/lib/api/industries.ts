@@ -42,6 +42,11 @@ export interface IndustrySummary {
   is_active: boolean;
 }
 
+export type PublicIndustryOption = Pick<
+  IndustrySummary,
+  "_id" | "name" | "slug"
+>;
+
 export interface ApiIndustry {
   _id: string;
   slug: string;
@@ -64,7 +69,18 @@ export interface ApiIndustry {
   updated_at?: string;
 }
 
-export async function getPublicIndustries(): Promise<ApiIndustry[]> {
+export interface PublicIndustriesResult {
+  data: ApiIndustry[];
+  failed: boolean;
+}
+
+/**
+ * Keeps an authoritative empty collection distinct from an unavailable API.
+ * Public CMS surfaces use this distinction to avoid bringing deleted Industry
+ * content back from static defaults while retaining a resilience fallback for
+ * a genuine transport/backend failure.
+ */
+export async function getPublicIndustriesResult(): Promise<PublicIndustriesResult> {
   try {
     const res = await apiFetch<ApiIndustry[]>("/api/industry/public", {
       method: "GET",
@@ -72,10 +88,22 @@ export async function getPublicIndustries(): Promise<ApiIndustry[]> {
       revalidate: 60,
       tags: [INDUSTRIES_TAG],
     });
-    return res.data ?? [];
+    return { data: res.data ?? [], failed: false };
   } catch {
-    return [];
+    return { data: [], failed: true };
   }
+}
+
+export async function getPublicIndustries(): Promise<ApiIndustry[]> {
+  return (await getPublicIndustriesResult()).data;
+}
+
+/** Compact active options safe to serialize into public client-side forms. */
+export async function getPublicIndustryOptions(): Promise<
+  PublicIndustryOption[]
+> {
+  const industries = await getPublicIndustries();
+  return industries.map(({ _id, name, slug }) => ({ _id, name, slug }));
 }
 
 export async function getAdminIndustries(
@@ -138,8 +166,10 @@ export function toLegacyIndustries(items: ApiIndustry[]): TIndustry[] {
       description: i.description,
       image: i.image,
       work: i.work ?? [],
+      ctaLabel:
+        i.cta_label && i.cta_label.trim() ? i.cta_label : `Explore ${i.name}`,
       href:
-        i.cta_href && i.cta_href.trim() ? i.cta_href : `/industries#${i.slug}`,
+        i.cta_href && i.cta_href.trim() ? i.cta_href : `/industries/${i.slug}`,
       videoSrc: resolveIndustryVideoSrc(i.video),
       thumbnailSrc: resolveIndustryThumbnail(i.thumbnail, i.video),
       reelVideoSrc: reelMedia.videoSrc,
@@ -151,4 +181,12 @@ export function toLegacyIndustries(items: ApiIndustry[]): TIndustry[] {
 export async function getPublicIndustriesAsLegacy(): Promise<TIndustry[]> {
   const items = await getPublicIndustries();
   return toLegacyIndustries(items);
+}
+
+export async function getPublicIndustriesAsLegacyResult(): Promise<{
+  data: TIndustry[];
+  failed: boolean;
+}> {
+  const result = await getPublicIndustriesResult();
+  return { data: toLegacyIndustries(result.data), failed: result.failed };
 }

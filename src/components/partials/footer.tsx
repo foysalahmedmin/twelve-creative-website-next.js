@@ -15,6 +15,7 @@ import {
   Globe02Icon,
   InstagramIcon,
   Linkedin01Icon,
+  Location04Icon,
   Mail01Icon,
   NewTwitterIcon,
   YoutubeIcon,
@@ -31,18 +32,34 @@ interface FooterProps {
   className?: string;
   socials?: FooterSocialItem[];
   contactEmail?: string;
+  /** undefined = static fallback; null = intentionally hidden by the CMS. */
+  contactPhone?: string | null;
   contactAddress?: string;
+  industries?: { label: string; href: string }[];
+  description?: string;
+  ctaText?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
 }
 
 export const Footer = ({
   className,
   socials,
   contactEmail,
+  contactPhone,
   contactAddress,
+  industries,
+  description,
+  ctaText,
+  ctaLabel,
+  ctaHref,
 }: FooterProps) => {
-  const socialLinks = socials && socials.length ? socials : SOCIAL_LINKS;
+  const socialLinks = socials ?? SOCIAL_LINKS;
   const email = contactEmail || FOOTER_CONTACT.email;
+  const phone =
+    contactPhone === undefined ? FOOTER_CONTACT.phone : contactPhone || null;
   const address = contactAddress || FOOTER_CONTACT.address;
+  const industryLinks = industries ?? FOOTER_INDUSTRIES.links;
 
   const renderSocialIcon = (platform: string) => {
     switch (platform) {
@@ -80,13 +97,13 @@ export const Footer = ({
         <div className="border-primary-foreground/20 border-b">
           <div className="container flex flex-col items-center justify-between gap-4 py-6 sm:flex-row">
             <p className="text-primary-foreground/80 text-sm font-semibold">
-              Ready to build the structure behind your growth?
+              {ctaText || "Ready to build the structure behind your growth?"}
             </p>
             <Link
-              href="/contact"
+              href={ctaHref || "/contact"}
               className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-bold transition-all dark:bg-white/15 dark:text-white dark:backdrop-blur-sm dark:hover:bg-white dark:hover:text-[#E96A2C]"
             >
-              Start a conversation
+              {ctaLabel || "Start a conversation"}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-4 w-4"
@@ -117,29 +134,30 @@ export const Footer = ({
               </Link>
 
               <p className="text-primary-foreground/75 max-w-xs text-sm leading-relaxed">
-                Twelve Creative builds positioning, creative, distribution,
-                websites, CRM, and automation systems for businesses that need a
-                clearer path from attention to revenue.
+                {description ||
+                  "Twelve Creative builds positioning, creative, distribution, websites, CRM, and automation systems for businesses that need a clearer path from attention to revenue."}
               </p>
 
               {/* Socials */}
-              <div className="flex items-center gap-2.5">
-                {socialLinks.map((social) => (
-                  <Link
-                    key={social.platform}
-                    href={social.href}
-                    className="border-primary-foreground bg-primary-foreground text-primary hover:bg-primary-foreground/90 group flex h-9 w-9 items-center justify-center rounded-full border transition-all duration-200 hover:scale-110 dark:border-white/20 dark:bg-white/10 dark:text-white dark:backdrop-blur-sm dark:hover:border-white dark:hover:bg-white dark:hover:text-[#E96A2C]"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={social.platform}
-                  >
-                    <HugeiconsIcon
-                      icon={renderSocialIcon(social.platform)}
-                      className="h-4 w-4"
-                    />
-                  </Link>
-                ))}
-              </div>
+              {socialLinks.length > 0 && (
+                <div className="flex items-center gap-2.5">
+                  {socialLinks.map((social) => (
+                    <Link
+                      key={social.platform}
+                      href={social.href}
+                      className="border-primary-foreground bg-primary-foreground text-primary hover:bg-primary-foreground/90 group flex h-9 w-9 items-center justify-center rounded-full border transition-all duration-200 hover:scale-110 dark:border-white/20 dark:bg-white/10 dark:text-white dark:backdrop-blur-sm dark:hover:border-white dark:hover:bg-white dark:hover:text-[#E96A2C]"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={social.platform}
+                    >
+                      <HugeiconsIcon
+                        icon={renderSocialIcon(social.platform)}
+                        className="h-4 w-4"
+                      />
+                    </Link>
+                  ))}
+                </div>
+              )}
             </ScrollReveal>
 
             {/* Spacer on desktop */}
@@ -181,7 +199,7 @@ export const Footer = ({
                 Industries
               </h4>
               <ul className="flex flex-col gap-2.5">
-                {FOOTER_INDUSTRIES.links.map((link) => (
+                {industryLinks.map((link) => (
                   <li key={link.href}>
                     <Link
                       href={link.href}
@@ -218,10 +236,24 @@ export const Footer = ({
                   </span>
                   <span className="break-all">{email}</span>
                 </a>
+                {phone && (
+                  <a
+                    href={`tel:${phone.replace(/[^+\d]/g, "")}`}
+                    className="text-primary-foreground/70 hover:text-primary-foreground group flex items-start gap-3 text-sm transition-colors"
+                  >
+                    <span className="bg-primary-foreground/10 group-hover:bg-primary-foreground/20 mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg transition-colors">
+                      <HugeiconsIcon
+                        icon={Call02Icon}
+                        className="text-primary-foreground h-4 w-4"
+                      />
+                    </span>
+                    <span>{phone}</span>
+                  </a>
+                )}
                 <div className="text-primary-foreground/70 group flex items-start gap-3 text-sm">
                   <span className="bg-primary-foreground/10 mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg">
                     <HugeiconsIcon
-                      icon={Call02Icon}
+                      icon={Location04Icon}
                       className="text-primary-foreground h-4 w-4"
                     />
                   </span>

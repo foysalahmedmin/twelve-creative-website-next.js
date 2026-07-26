@@ -53,13 +53,11 @@ export const PageHeader = ({
       <div className="relative z-10 container mx-auto flex max-w-4xl flex-col items-center justify-center text-center">
         {/* Eyebrow Label Capsule */}
         {label && (
-          <>
-            <ScrollReveal animation="fade-in-down" durationMs={700}>
-              <span className="border-foreground/40 text-foreground mb-6 hidden rounded-md border px-3 py-1 text-[11px] font-bold tracking-[0.12em] uppercase">
-                {label}
-              </span>
-            </ScrollReveal>
-          </>
+          <ScrollReveal animation="fade-in-down" durationMs={700}>
+            <span className="border-foreground/40 text-foreground mb-6 inline-flex rounded-md border px-3 py-1 text-[11px] font-bold tracking-[0.12em] uppercase">
+              {label}
+            </span>
+          </ScrollReveal>
         )}
 
         {/* Breadcrumbs */}

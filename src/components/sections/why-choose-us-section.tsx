@@ -3,24 +3,36 @@ import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { CenteredSectionHeader } from "@/components/common/section-label";
 import { TWhyChooseUsData } from "@/data/why-choose-us.data";
 import { cn } from "@/lib/utils";
+import type { WhyChooseUsSection as CmsWhyChooseUsSection } from "@/lib/api/shared-sections";
 
 export interface PageWhyChooseUsProps {
-  data: TWhyChooseUsData;
+  data?: TWhyChooseUsData;
+  cmsData?: CmsWhyChooseUsSection;
   tone?: "default" | "brand";
   className?: string;
 }
 
 export const WhyChooseUsSection = ({
   data,
+  cmsData,
   tone = "default",
   className,
 }: PageWhyChooseUsProps) => {
+  const resolvedData: TWhyChooseUsData | undefined = cmsData
+    ? {
+        label: cmsData.label ?? "",
+        title: cmsData.title,
+        description: cmsData.description,
+        features: cmsData.content.features,
+      }
+    : data;
   const {
-    label: tag,
-    title: heading_part1,
-    description: paragraph,
+    label: tag = "Why choose us",
+    title: heading_part1 = "Built for clarity, consistency, and growth.",
+    description:
+      paragraph = "A connected creative system shaped around your brand and business goals.",
     features: whychooseus_items = [],
-  } = data || {};
+  } = resolvedData || {};
 
   return (
     <section

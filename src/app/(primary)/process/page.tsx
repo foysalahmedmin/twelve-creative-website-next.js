@@ -2,25 +2,32 @@ import { DifferenceSection } from "@/components/_primary_/home-page/difference-s
 import { CTASection } from "@/components/sections/cta-section";
 import { PageHeader } from "@/components/sections/page-header-section";
 import { ProcessSection } from "@/components/sections/process-section";
-import { CTA_PROCESS } from "@/data/page-ctas.data";
+import { getPublicPageCta, toLegacyPageCta } from "@/lib/api/page-ctas";
 import {
   getPublicPageHero,
+  resolvePageMetadata,
   resolveThumbnail,
   resolveVideoSrc,
 } from "@/lib/api/page-heroes";
 import { getPublicProcessSection } from "@/lib/api/process-section";
+import { getPublicSharedSection } from "@/lib/api/shared-sections";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Process | How Twelve Creative Builds Growth Systems",
-  description:
-    "Learn how Twelve Creative approaches growth through diagnostics, positioning, creative production, system installation, and optimization.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const hero = await getPublicPageHero("process");
+  return resolvePageMetadata(hero, {
+    title: "Process | How Twelve Creative Builds Growth Systems",
+    description:
+      "Learn how Twelve Creative approaches growth through diagnostics, positioning, creative production, system installation, and optimization.",
+  });
+}
 
 export default async function ProcessPage() {
-  const [hero, processData] = await Promise.all([
+  const [hero, processData, difference, cta] = await Promise.all([
     getPublicPageHero("process"),
     getPublicProcessSection(),
+    getPublicSharedSection("difference"),
+    getPublicPageCta("process"),
   ]);
 
   return (
@@ -43,10 +50,10 @@ export default async function ProcessPage() {
       />
 
       {/* The Twelve Creative Difference */}
-      <DifferenceSection />
+      {difference && <DifferenceSection data={difference} />}
 
       {/* CTA */}
-      <CTASection data={CTA_PROCESS} />
+      {cta && <CTASection data={toLegacyPageCta(cta)} />}
     </main>
   );
 }

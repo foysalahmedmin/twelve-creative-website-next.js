@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { HealthIcon, Home01Icon, Search01Icon } from "@hugeicons/core-free-icons";
+import { Home01Icon, Search01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import Link from "next/link";
 
@@ -17,8 +17,8 @@ export default function NotFound() {
         Page Not Found
       </h1>
       <p className="text-muted-foreground mx-auto mb-8 max-w-md text-sm font-medium leading-relaxed sm:text-base">
-        The page you are looking for has been moved or doesn&apos;t exist. 
-        Don&apos;t worry, our doctors are still available for other services!
+        The page you are looking for may have moved or no longer exists. You can
+        return home or explore our latest work.
       </p>
 
       <div className="flex flex-col gap-3 sm:flex-row">
@@ -29,9 +29,9 @@ export default function NotFound() {
           </Link>
         </Button>
         <Button asChild variant="outline" size="lg" className="h-10 gap-2 rounded-xl px-8 text-xs font-bold transition-all active:scale-95">
-          <Link href="/doctors">
+          <Link href="/works">
             <HugeiconsIcon icon={Search01Icon} size={18} />
-            Find a Doctor
+            View Our Work
           </Link>
         </Button>
       </div>

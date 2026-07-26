@@ -1,13 +1,24 @@
 import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { Button } from "@/components/ui/button";
 import { HOME_CTA_DATA } from "@/data/home-cta.data";
+import type { ApiPageCta } from "@/lib/api/page-ctas";
 import { cn } from "@/lib/utils";
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import Image from "next/image";
 import Link from "next/link";
 
-export const HomeCtaSection = ({ className }: { className?: string }) => {
-  const data = HOME_CTA_DATA;
+export const HomeCtaSection = ({
+  className,
+  data: cmsData,
+}: {
+  className?: string;
+  data?: ApiPageCta;
+}) => {
+  const data = cmsData ?? HOME_CTA_DATA;
+  const eyebrow = "eyebrow" in data ? data.eyebrow : undefined;
+  const image = cmsData?.image;
+  const secondaryCta = data.secondary_cta;
 
   return (
     <section
@@ -17,6 +28,23 @@ export const HomeCtaSection = ({ className }: { className?: string }) => {
         <ScrollReveal animation="fade-in-up" durationMs={800}>
           {/* ── Contained CTA card ── */}
           <div className="bg-brand-artefact relative overflow-hidden rounded-3xl px-8 py-16 sm:px-12 sm:py-20 lg:rounded-[2rem] lg:px-20 lg:py-24">
+            {image && (
+              <>
+                <Image
+                  src={image}
+                  alt=""
+                  fill
+                  sizes="(max-width: 1280px) 100vw, 1280px"
+                  className="pointer-events-none object-cover opacity-20 saturate-0"
+                  aria-hidden
+                />
+                <span
+                  aria-hidden
+                  className="bg-primary/65 pointer-events-none absolute inset-0 dark:bg-black/55"
+                />
+              </>
+            )}
+
             {/* Dark-mode decorative glow orbs */}
             <span
               aria-hidden
@@ -34,9 +62,11 @@ export const HomeCtaSection = ({ className }: { className?: string }) => {
             {/* Content */}
             <div className="relative z-10 mx-auto max-w-3xl text-center">
               {/* Eyebrow */}
-              <span className="border-primary-foreground/30 bg-primary-foreground/10 text-primary-foreground inline-flex rounded-full border px-4 py-1.5 text-[11px] font-bold tracking-[0.14em] uppercase backdrop-blur-sm dark:border-[#eaeae4]/30 dark:bg-[#eaeae4]/10 dark:text-[#eaeae4]/90">
-                {data.eyebrow}
-              </span>
+              {(cmsData ? eyebrow : HOME_CTA_DATA.eyebrow) && (
+                <span className="border-primary-foreground/30 bg-primary-foreground/10 text-primary-foreground inline-flex rounded-full border px-4 py-1.5 text-[11px] font-bold tracking-[0.14em] uppercase backdrop-blur-sm dark:border-[#eaeae4]/30 dark:bg-[#eaeae4]/10 dark:text-[#eaeae4]/90">
+                  {cmsData ? eyebrow : HOME_CTA_DATA.eyebrow}
+                </span>
+              )}
 
               {/* Title */}
               <h2 className="font-heading text-primary-foreground mt-6 text-3xl leading-[1.05] font-black tracking-tight sm:text-4xl lg:text-[3.25rem] dark:text-[#eaeae4]">
@@ -68,16 +98,16 @@ export const HomeCtaSection = ({ className }: { className?: string }) => {
                   </Link>
                 </Button>
 
-                <Button
-                  asChild
-                  size="xl"
-                  variant="outline"
-                  className="border-primary-foreground bg-primary-foreground text-primary hover:bg-primary-foreground/90 hover:text-primary dark:border-[#eaeae4]/30 dark:bg-[#eaeae4]/10 dark:text-[#eaeae4] dark:backdrop-blur-sm dark:hover:bg-[#eaeae4]/20 dark:hover:text-[#eaeae4]"
-                >
-                  <Link href={data.secondary_cta.href}>
-                    {data.secondary_cta.label}
-                  </Link>
-                </Button>
+                {secondaryCta && (
+                  <Button
+                    asChild
+                    size="xl"
+                    variant="outline"
+                    className="border-primary-foreground bg-primary-foreground text-primary hover:bg-primary-foreground/90 hover:text-primary dark:border-[#eaeae4]/30 dark:bg-[#eaeae4]/10 dark:text-[#eaeae4] dark:backdrop-blur-sm dark:hover:bg-[#eaeae4]/20 dark:hover:text-[#eaeae4]"
+                  >
+                    <Link href={secondaryCta.href}>{secondaryCta.label}</Link>
+                  </Button>
+                )}
               </div>
             </div>
           </div>

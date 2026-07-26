@@ -1,4 +1,8 @@
-import type { TFaqsData, TFaqItem } from "@/data/faqs.data";
+import {
+  FAQS_DATA,
+  type TFaqsData,
+  type TFaqItem,
+} from "@/data/faqs.data";
 import { apiFetch } from "@/lib/admin/api-client";
 import { getPublicSiteSetting } from "@/lib/api/site-setting";
 
@@ -71,10 +75,12 @@ export async function getPublicFaqsForSection(
     getPublicFaqs(),
     getPublicSiteSetting(),
   ]);
-  const faqs: TFaqItem[] = items.map((f) => ({
-    question: f.question,
-    answer: f.answer,
-  }));
+  const faqs: TFaqItem[] = items.length
+    ? items.map((f) => ({
+        question: f.question,
+        answer: f.answer,
+      }))
+    : FAQS_DATA.faqs.map((faq) => ({ ...faq }));
   const live = setting.faq_section ?? {};
   return {
     image: live.image || defaults.image,

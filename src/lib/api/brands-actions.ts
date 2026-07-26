@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath, updateTag } from "next/cache";
+import { unstable_rethrow } from "next/navigation";
 import { apiFetch } from "@/lib/admin/api-client";
 import { ApiError } from "@/lib/admin/types";
 import { BRANDS_TAG, type Brand } from "./brands";
@@ -103,6 +104,7 @@ function sanitize<T extends Partial<BrandInput>>(input: T): T {
 }
 
 function errorMessage(e: unknown): string {
+  unstable_rethrow(e);
   if (e instanceof ApiError) {
     const sources = e.body?.errorSources;
     if (sources && sources.length) {

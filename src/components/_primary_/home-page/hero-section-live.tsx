@@ -1,5 +1,4 @@
 import { HeroSection } from "@/components/sections/hero-section";
-import { HOME_HERO_DATA, type THomeHero } from "@/data/home-hero.data";
 import { getPublicPageHero } from "@/lib/api/page-heroes";
 
 export async function LiveHeroSection({
@@ -9,18 +8,21 @@ export async function LiveHeroSection({
 }) {
   const hero = await getPublicPageHero("home");
 
-  const override: Partial<THomeHero> | undefined = hero
+  const override = hero
     ? {
-        ...(hero.title ? { title: hero.title } : {}),
-        ...(hero.description ? { description: hero.description } : {}),
-        ...(hero.trust_label ? { trust_label: hero.trust_label } : {}),
-        ...(hero.primary_cta ? { primary_cta: hero.primary_cta } : {}),
-        ...(hero.secondary_cta ? { secondary_cta: hero.secondary_cta } : {}),
-        ...(hero.video?.value
-          ? { video: { src: hero.video.value, poster: hero.video.poster ?? hero.thumbnail } }
+        title: hero.title ?? "",
+        description: hero.description ?? "",
+        trust_label: hero.trust_label ?? "",
+        primary_cta: hero.primary_cta ?? null,
+        secondary_cta: hero.secondary_cta ?? null,
+        video: hero.video?.value
+          ? {
+              src: hero.video.value,
+              poster: hero.thumbnail ?? hero.video.poster,
+            }
           : hero.thumbnail
-          ? { video: { ...HOME_HERO_DATA.video, poster: hero.thumbnail } }
-          : {}),
+            ? { src: "", poster: hero.thumbnail }
+            : null,
       }
     : undefined;
 

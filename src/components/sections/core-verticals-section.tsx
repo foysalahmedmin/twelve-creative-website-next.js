@@ -4,6 +4,7 @@ import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { CenteredSectionHeader } from "@/components/common/section-label";
 import { VERTICALS_DATA } from "@/data/verticals.data";
 import type { ApiIndustry } from "@/lib/api/industries";
+import type { HeadingSection } from "@/lib/api/shared-sections";
 import { resolveIndustryReelMedia } from "@/lib/media/industry";
 import { cn } from "@/lib/utils";
 import { ArrowUpRight } from "lucide-react";
@@ -60,12 +61,14 @@ function fromVertical(v: (typeof VERTICALS_DATA)[0]): CardItem {
 
 interface Props {
   industries?: IndustryCardData[];
+  heading?: HeadingSection | null;
   tone?: "default" | "brand";
   className?: string;
 }
 
 export function CoreVerticalsSection({
   industries,
+  heading,
   tone = "default",
   className,
 }: Props) {
@@ -97,15 +100,20 @@ export function CoreVerticalsSection({
       )}
     >
       <div className="container">
-        <ScrollReveal animation="fade-in-up" durationMs={700}>
-          <CenteredSectionHeader
-            label="Industries"
-            title="Core Verticals"
-            description="We work across a focused set of industries where marketing structure, creative execution, and conversion systems make the biggest difference."
-            tone={tone === "brand" ? "inverse" : "default"}
-            className="mb-8 lg:mb-10"
-          />
-        </ScrollReveal>
+        {heading !== null && (
+          <ScrollReveal animation="fade-in-up" durationMs={700}>
+            <CenteredSectionHeader
+              label={heading?.label ?? "Industries"}
+              title={heading?.title ?? "Core Verticals"}
+              description={
+                heading?.description ??
+                "We work across a focused set of industries where marketing structure, creative execution, and conversion systems make the biggest difference."
+              }
+              tone={tone === "brand" ? "inverse" : "default"}
+              className="mb-8 lg:mb-10"
+            />
+          </ScrollReveal>
+        )}
 
         <div className="scrollbar-none flex snap-x snap-mandatory gap-2 overflow-x-auto pb-4 lg:pb-0">
           {cards.map((card, index) => {

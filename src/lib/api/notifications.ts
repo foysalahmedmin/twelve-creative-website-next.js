@@ -1,3 +1,4 @@
+import { unstable_rethrow } from "next/navigation";
 import { apiFetch } from "@/lib/admin/api-client";
 
 export const NOTIFICATIONS_TAG = "notifications";
@@ -52,7 +53,8 @@ export async function getAdminNotifications(limit = 20): Promise<{
         unread: raw?.statistics?.unread ?? 0,
       },
     };
-  } catch {
+  } catch (error) {
+    unstable_rethrow(error);
     return { data: [], meta: { total: 0, page: 1, limit, unread: 0 } };
   }
 }
@@ -61,7 +63,8 @@ export async function getUnreadNotificationCount(): Promise<number> {
   try {
     const { meta } = await getAdminNotifications(1);
     return meta.unread;
-  } catch {
+  } catch (error) {
+    unstable_rethrow(error);
     return 0;
   }
 }

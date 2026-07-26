@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath, updateTag } from "next/cache";
+import { unstable_rethrow } from "next/navigation";
 import { apiFetch } from "@/lib/admin/api-client";
 import { ApiError } from "@/lib/admin/types";
 import type { VideoRef } from "@/lib/admin/types";
@@ -19,6 +20,13 @@ export interface PageHeroInput {
   trust_label?: string;
   primary_cta?: { label: string; href: string } | null;
   secondary_cta?: { label: string; href: string } | null;
+  seo?: {
+    title?: string;
+    description?: string;
+    og_image?: string;
+    canonical_url?: string;
+    no_index?: boolean;
+  } | null;
   is_active?: boolean;
 }
 
@@ -35,6 +43,7 @@ const PUBLIC_PATH: Record<PageKey, string> = {
   industries: "/industries",
   "what-we-build": "/what-we-build",
   contact: "/contact",
+  faq: "/faq",
   blogs: "/blogs",
   process: "/process",
 };
@@ -55,6 +64,7 @@ export async function upsertPageHeroAction(
     revalidatePath(PUBLIC_PATH[page]);
     return { ok: true, data: res.data };
   } catch (e) {
+    unstable_rethrow(e);
     if (e instanceof ApiError) {
       const sources = e.body?.errorSources;
       if (sources?.length) {

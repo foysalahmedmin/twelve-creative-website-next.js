@@ -2,6 +2,7 @@ import { Plus } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
+import { AdminPagination } from "@/components/admin/admin-pagination";
 import { AdminSearch } from "@/components/admin/admin-search";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -24,13 +25,19 @@ const FILTERS: { label: string; value?: "published" | "draft" }[] = [
 const isFilter = (v?: string): v is "published" | "draft" =>
   v === "published" || v === "draft";
 
+function positivePage(value?: string): number {
+  const page = Number.parseInt(value ?? "1", 10);
+  return Number.isSafeInteger(page) && page > 0 ? page : 1;
+}
+
 export default async function WorksPage({ searchParams }: PageProps) {
   const params = await searchParams;
   const filter = isFilter(params.filter) ? params.filter : undefined;
+  const page = positivePage(params.page);
 
   const { data, meta } = await getAdminWorks({
     search: params.search,
-    page: params.page ? Number(params.page) : 1,
+    page,
     limit: 50,
     filter,
   });
@@ -83,6 +90,13 @@ export default async function WorksPage({ searchParams }: PageProps) {
       <Card className="p-0 overflow-hidden">
         <WorksTable items={data} />
       </Card>
+
+      <AdminPagination
+        path="/admin/works"
+        page={page}
+        totalPages={Math.max(1, meta?.total_pages ?? 1)}
+        query={{ search: params.search, filter }}
+      />
     </div>
   );
 }

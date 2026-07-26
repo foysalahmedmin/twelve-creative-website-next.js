@@ -1,6 +1,8 @@
 "use client";
 
 import { submitBookingAction } from "@/lib/api/bookings-actions";
+import type { PublicIndustryOption } from "@/lib/api/industries";
+import { localDateInputValue } from "@/lib/local-date";
 import { cn } from "@/lib/utils";
 import {
   ArrowRight01Icon,
@@ -11,14 +13,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-
-const MARKETS = [
-  "Hospitality (Restaurants, Hotels, Nightlife)",
-  "Real Estate (Developers, Projects, Brokerages)",
-  "Aviation (Charter, Maintenance, Sales)",
-  "Professional Services (Legal, Medical, Consulting)",
-  "Other",
-];
 
 const TIME_SLOTS = [
   { label: "Morning", range: "9:00 AM – 12:00 PM" },
@@ -32,17 +26,20 @@ const TOTAL_STEPS = 3;
 export function BookingInlineSection({
   className,
   calendlyUrl,
+  industries = [],
 }: {
   className?: string;
   /** When set, the section links out to Calendly instead of the built-in form. */
   calendlyUrl?: string;
+  industries?: PublicIndustryOption[];
 }) {
   const router = useRouter();
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [redirectIn, setRedirectIn] = useState(3);
   const [formData, setFormData] = useState({
-    market: "",
+    industryId: "",
+    industryName: "",
     preferredDate: "",
     preferredTime: "",
     firstName: "",
@@ -52,8 +49,12 @@ export function BookingInlineSection({
     company: "",
   });
 
-  const handleMarketSelect = (market: string) => {
-    setFormData((d) => ({ ...d, market }));
+  const handleMarketSelect = (industry: PublicIndustryOption | null) => {
+    setFormData((d) => ({
+      ...d,
+      industryId: industry?._id ?? "",
+      industryName: industry?.name ?? "Other",
+    }));
     setStep(2);
   };
 
@@ -72,7 +73,8 @@ export function BookingInlineSection({
       email: formData.email,
       phone: formData.phone || undefined,
       company: formData.company || undefined,
-      industry: formData.market || undefined,
+      industry_id: formData.industryId || undefined,
+      industry_name_snapshot: formData.industryName || undefined,
       preferred_date: formData.preferredDate || undefined,
       preferred_time: formData.preferredTime || undefined,
     });
@@ -125,7 +127,7 @@ export function BookingInlineSection({
               href={calendlyUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-primary text-primary-foreground group/cta relative z-10 inline-flex h-14 items-center justify-center gap-2 rounded-lg px-8 text-base font-semibold uppercase tracking-[0.05em] transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]"
+              className="bg-primary text-primary-foreground group/cta relative z-10 inline-flex h-14 items-center justify-center gap-2 rounded-lg px-8 text-base font-semibold tracking-[0.05em] uppercase transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]"
             >
               Start Booking
               <HugeiconsIcon
@@ -180,17 +182,25 @@ export function BookingInlineSection({
                   </h3>
                 </div>
                 <div className="grid gap-2.5">
-                  {MARKETS.map((option, idx) => (
+                  {[
+                    ...industries.map((industry) => ({
+                      key: industry._id,
+                      label: industry.name,
+                      industry,
+                    })),
+                    { key: "other", label: "Other", industry: null },
+                  ].map((option, idx) => (
                     <button
-                      key={idx}
-                      onClick={() => handleMarketSelect(option)}
+                      key={option.key}
+                      type="button"
+                      onClick={() => handleMarketSelect(option.industry)}
                       className="group border-border hover:border-primary/40 hover:bg-primary/8 flex items-center gap-3.5 rounded-2xl border bg-transparent p-3.5 text-left transition-all"
                     >
                       <span className="group-hover:border-primary group-hover:bg-primary border-border bg-muted text-muted-foreground group-hover:text-primary-foreground flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-sm font-semibold transition-all">
                         {String.fromCharCode(65 + idx)}
                       </span>
                       <span className="text-foreground/80 group-hover:text-foreground text-sm font-medium">
-                        {option}
+                        {option.label}
                       </span>
                     </button>
                   ))}
@@ -229,13 +239,14 @@ export function BookingInlineSection({
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
+                  <label htmlFor="inline-booking-date" className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
                     Preferred Date
                   </label>
                   <input
+                    id="inline-booking-date"
                     type="date"
                     value={formData.preferredDate}
-                    min={new Date().toISOString().split("T")[0]}
+                    min={localDateInputValue()}
                     onChange={(e) =>
                       setFormData((d) => ({
                         ...d,
@@ -247,14 +258,15 @@ export function BookingInlineSection({
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
+                  <p className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
                     Preferred Time
-                  </label>
+                  </p>
                   <div className="grid grid-cols-2 gap-2.5">
                     {TIME_SLOTS.map((slot) => (
                       <button
                         key={slot.label}
                         type="button"
+                        aria-pressed={formData.preferredTime === slot.label}
                         onClick={() =>
                           setFormData((d) => ({
                             ...d,
@@ -326,10 +338,11 @@ export function BookingInlineSection({
                   <div className="grid grid-cols-2 gap-3">
                     {(["firstName", "lastName"] as const).map((field) => (
                       <div key={field} className="space-y-1.5">
-                        <label className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
+                        <label htmlFor={`inline-booking-${field}`} className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
                           {field === "firstName" ? "First name" : "Last name"}
                         </label>
                         <input
+                          id={`inline-booking-${field}`}
                           required
                           type="text"
                           value={formData[field]}
@@ -367,10 +380,11 @@ export function BookingInlineSection({
                     },
                   ].map(({ field, label, type, placeholder }) => (
                     <div key={field} className="space-y-1.5">
-                      <label className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
+                      <label htmlFor={`inline-booking-${field}`} className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
                         {label}
                       </label>
                       <input
+                        id={`inline-booking-${field}`}
                         required={field !== "company"}
                         type={type}
                         value={formData[field]}

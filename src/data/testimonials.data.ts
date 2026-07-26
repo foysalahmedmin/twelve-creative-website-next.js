@@ -31,7 +31,7 @@ export const TESTIMONIALS: TTestimonial[] = [
       "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&h=400&fit=crop&auto=format",
     category: "video_message",
     video_message:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+      "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
     thumbnail:
       "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=768&h=512&fit=crop&auto=format",
   },
@@ -43,7 +43,7 @@ export const TESTIMONIALS: TTestimonial[] = [
       "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop&auto=format",
     category: "video_message",
     video_message:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+      "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
     thumbnail:
       "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=768&h=512&fit=crop&auto=format",
   },
@@ -55,7 +55,7 @@ export const TESTIMONIALS: TTestimonial[] = [
       "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&auto=format",
     category: "video_message",
     video_message:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+      "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
     thumbnail:
       "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=768&h=512&fit=crop&auto=format",
   },
@@ -67,7 +67,7 @@ export const TESTIMONIALS: TTestimonial[] = [
       "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop&auto=format",
     category: "video_message",
     video_message:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+      "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
     thumbnail:
       "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=768&h=512&fit=crop&auto=format",
   },
