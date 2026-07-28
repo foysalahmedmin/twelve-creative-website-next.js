@@ -1023,7 +1023,7 @@ function WorkWithUsEditor({
           <section key={card.id} className="space-y-4 rounded-xl border p-4">
             <div className="flex items-center justify-between">
               <p className="text-sm font-semibold">
-                Card {String(position).padStart(2, "0")}
+                Card {String(position + 1).padStart(2, "0")}
               </p>
               <ItemActions
                 position={position}

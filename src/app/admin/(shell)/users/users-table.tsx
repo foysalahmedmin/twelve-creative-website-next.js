@@ -67,7 +67,9 @@ export function UsersTable({ items, currentUserId }: Props) {
         toast.error(res.error ?? "Failed to update status");
         return;
       }
-      toast.success(next === "blocked" ? "Account blocked" : "Account unblocked");
+      toast.success(
+        next === "blocked" ? "Account blocked" : "Account unblocked",
+      );
       router.refresh();
     });
   };
@@ -120,7 +122,6 @@ export function UsersTable({ items, currentUserId }: Props) {
                 <TableCell>
                   <div className="flex items-center gap-3">
                     {item.image ? (
-                      // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={item.image}
                         alt={item.name}
@@ -137,7 +138,7 @@ export function UsersTable({ items, currentUserId }: Props) {
                       </div>
                     )}
                     <div className="space-y-0.5">
-                      <p className="text-foreground text-sm font-medium leading-tight">
+                      <p className="text-foreground text-sm leading-tight font-medium">
                         {item.name}
                         {isSelf && (
                           <span className="text-muted-foreground ml-1.5 text-xs font-normal">

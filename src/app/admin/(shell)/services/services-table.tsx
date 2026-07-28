@@ -60,8 +60,8 @@ export function ServicesTable({ items }: Props) {
       <div className="flex flex-col items-center justify-center gap-2 px-6 py-16 text-center">
         <p className="text-foreground text-sm font-medium">No services yet</p>
         <p className="text-muted-foreground text-sm">
-          Add your first service to populate the home page and
-          /what-we-build sections.
+          Add your first service to populate the home page and /what-we-build
+          sections.
         </p>
         <Button asChild className="mt-3">
           <Link href="/admin/services/new">Add service</Link>
@@ -93,7 +93,6 @@ export function ServicesTable({ items }: Props) {
               <TableCell>
                 <div className="border-border/60 bg-muted relative aspect-video w-16 overflow-hidden rounded">
                   {item.image ? (
-                    // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={item.image}
                       alt={item.title}

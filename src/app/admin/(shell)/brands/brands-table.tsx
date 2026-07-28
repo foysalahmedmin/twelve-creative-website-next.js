@@ -151,7 +151,6 @@ export function BrandsTable({ items: propItems }: Props) {
               <TableCell>
                 <div className="border-border/60 bg-card flex h-10 w-20 items-center justify-center overflow-hidden rounded">
                   {item.logo ? (
-                    // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={item.logo}
                       alt={item.name}

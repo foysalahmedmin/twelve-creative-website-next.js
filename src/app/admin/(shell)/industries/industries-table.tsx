@@ -60,7 +60,8 @@ export function IndustriesTable({ items }: Props) {
       <div className="flex flex-col items-center justify-center gap-2 px-6 py-16 text-center">
         <p className="text-foreground text-sm font-medium">No industries yet</p>
         <p className="text-muted-foreground text-sm">
-          Add your first industry to populate the home tabs and /industries page.
+          Add your first industry to populate the home tabs and /industries
+          page.
         </p>
         <Button asChild className="mt-3">
           <Link href="/admin/industries/new">Add industry</Link>
@@ -92,7 +93,6 @@ export function IndustriesTable({ items }: Props) {
               <TableCell>
                 <div className="border-border/60 bg-muted relative aspect-[4/3] w-16 overflow-hidden rounded">
                   {item.image ? (
-                    // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={item.image}
                       alt={item.name}

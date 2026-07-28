@@ -150,7 +150,6 @@ export function TeamTable({ items: propItems }: Props) {
               </TableCell>
               <TableCell>
                 {item.image ? (
-                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={item.image}
                     alt={item.name}
