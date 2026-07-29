@@ -23,7 +23,7 @@ const BrandItem = ({ brand }: { brand: TBrand }) => {
   );
 
   const wrapperClass =
-    "mx-6 flex h-16 items-center justify-center select-none lg:mx-10";
+    "mx-3 flex h-16 items-center justify-center select-none lg:mx-5";
 
   if (brand.href) {
     const external = /^https?:\/\//i.test(brand.href);
