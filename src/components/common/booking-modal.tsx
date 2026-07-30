@@ -16,6 +16,12 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
+// Any CTA labeled "Start a Conversation" (site-wide, static or CMS-edited)
+// opens this modal instead of navigating — see GlobalBookingModal.
+export function isStartConversationCta(label?: string | null): boolean {
+  return (label ?? "").trim().toLowerCase() === "start a conversation";
+}
+
 const TIME_SLOTS = [
   { label: "Morning", range: "9:00 AM – 12:00 PM" },
   { label: "Afternoon", range: "12:00 PM – 4:00 PM" },

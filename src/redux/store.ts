@@ -1,12 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
 import appReducer from './slices/app-slice';
 import authReducer from './slices/auth-slice';
+import bookingModalReducer from './slices/booking-modal-slice';
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       app: appReducer,
       auth: authReducer,
+      bookingModal: bookingModalReducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({

@@ -1,8 +1,13 @@
+"use client";
+
+import { isStartConversationCta } from "@/components/common/booking-modal";
 import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { Button } from "@/components/ui/button";
 import { HOME_CTA_DATA } from "@/data/home-cta.data";
 import type { ApiPageCta } from "@/lib/api/page-ctas";
 import { cn } from "@/lib/utils";
+import { useAppDispatch } from "@/redux/hooks";
+import { openBookingModal } from "@/redux/slices/booking-modal-slice";
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import Image from "next/image";
@@ -15,6 +20,7 @@ export const HomeCtaSection = ({
   className?: string;
   data?: ApiPageCta;
 }) => {
+  const dispatch = useAppDispatch();
   const data = cmsData ?? HOME_CTA_DATA;
   const eyebrow = "eyebrow" in data ? data.eyebrow : undefined;
   const image = cmsData?.image;
@@ -89,13 +95,24 @@ export const HomeCtaSection = ({
                   size="xl"
                   className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 dark:bg-secondary dark:text-secondary-foreground dark:hover:bg-secondary"
                 >
-                  <Link
-                    href={data.primary_cta.href}
-                    className="inline-flex items-center gap-2"
-                  >
-                    {data.primary_cta.label}
-                    <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" />
-                  </Link>
+                  {isStartConversationCta(data.primary_cta.label) ? (
+                    <button
+                      type="button"
+                      onClick={() => dispatch(openBookingModal())}
+                      className="inline-flex items-center gap-2"
+                    >
+                      {data.primary_cta.label}
+                      <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" />
+                    </button>
+                  ) : (
+                    <Link
+                      href={data.primary_cta.href}
+                      className="inline-flex items-center gap-2"
+                    >
+                      {data.primary_cta.label}
+                      <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" />
+                    </Link>
+                  )}
                 </Button>
 
                 {secondaryCta && (
@@ -105,7 +122,16 @@ export const HomeCtaSection = ({
                     variant="outline"
                     className="border-primary-foreground bg-primary-foreground text-primary hover:bg-primary-foreground/90 hover:text-primary dark:border-[#eaeae4]/30 dark:bg-[#eaeae4]/10 dark:text-[#eaeae4] dark:backdrop-blur-sm dark:hover:bg-[#eaeae4]/20 dark:hover:text-[#eaeae4]"
                   >
-                    <Link href={secondaryCta.href}>{secondaryCta.label}</Link>
+                    {isStartConversationCta(secondaryCta.label) ? (
+                      <button
+                        type="button"
+                        onClick={() => dispatch(openBookingModal())}
+                      >
+                        {secondaryCta.label}
+                      </button>
+                    ) : (
+                      <Link href={secondaryCta.href}>{secondaryCta.label}</Link>
+                    )}
                   </Button>
                 )}
               </div>

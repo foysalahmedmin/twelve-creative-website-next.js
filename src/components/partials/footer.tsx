@@ -1,7 +1,8 @@
 "use client";
 
-import { LogoIcon } from "@/components/icons/logo-icon";
+import { isStartConversationCta } from "@/components/common/booking-modal";
 import { ScrollReveal } from "@/components/common/scroll-reveal";
+import { LogoIcon } from "@/components/icons/logo-icon";
 import {
   FOOTER_CONTACT,
   FOOTER_INDUSTRIES,
@@ -9,6 +10,8 @@ import {
   SOCIAL_LINKS,
 } from "@/data/footer.data";
 import { cn } from "@/lib/utils";
+import { useAppDispatch } from "@/redux/hooks";
+import { openBookingModal } from "@/redux/slices/booking-modal-slice";
 import {
   Call02Icon,
   Facebook01Icon,
@@ -54,6 +57,7 @@ export const Footer = ({
   ctaLabel,
   ctaHref,
 }: FooterProps) => {
+  const dispatch = useAppDispatch();
   const socialLinks = socials ?? SOCIAL_LINKS;
   const email = contactEmail || FOOTER_CONTACT.email;
   const phone =
@@ -99,24 +103,46 @@ export const Footer = ({
             <p className="text-primary-foreground/80 text-sm font-semibold">
               {ctaText || "Ready to build the structure behind your growth?"}
             </p>
-            <Link
-              href={ctaHref || "/contact"}
-              className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-bold transition-all dark:bg-white/15 dark:text-white dark:backdrop-blur-sm dark:hover:bg-white dark:hover:text-[#E96A2C]"
-            >
-              {ctaLabel || "Start a conversation"}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2.5}
-                strokeLinecap="round"
-                strokeLinejoin="round"
+            {isStartConversationCta(ctaLabel || "Start a conversation") ? (
+              <button
+                type="button"
+                onClick={() => dispatch(openBookingModal())}
+                className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-bold transition-all dark:bg-white/15 dark:text-white dark:backdrop-blur-sm dark:hover:bg-white dark:hover:text-[#E96A2C]"
               >
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </Link>
+                {ctaLabel || "Start a conversation"}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2.5}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </button>
+            ) : (
+              <Link
+                href={ctaHref || "/contact"}
+                className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-bold transition-all dark:bg-white/15 dark:text-white dark:backdrop-blur-sm dark:hover:bg-white dark:hover:text-[#E96A2C]"
+              >
+                {ctaLabel || "Start a conversation"}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2.5}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </Link>
+            )}
           </div>
         </div>
 
@@ -226,7 +252,7 @@ export const Footer = ({
               <div className="flex flex-col gap-4">
                 <a
                   href={`mailto:${email}`}
-                  className="text-primary-foreground/70 hover:text-primary-foreground group flex items-start gap-3 text-sm transition-colors"
+                  className="text-primary-foreground/70 hover:text-primary-foreground group flex items-center gap-3 text-sm transition-colors"
                 >
                   <span className="bg-primary-foreground/10 group-hover:bg-primary-foreground/20 mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg transition-colors">
                     <HugeiconsIcon
@@ -239,7 +265,7 @@ export const Footer = ({
                 {phone && (
                   <a
                     href={`tel:${phone.replace(/[^+\d]/g, "")}`}
-                    className="text-primary-foreground/70 hover:text-primary-foreground group flex items-start gap-3 text-sm transition-colors"
+                    className="text-primary-foreground/70 hover:text-primary-foreground group flex items-center gap-3 text-sm transition-colors"
                   >
                     <span className="bg-primary-foreground/10 group-hover:bg-primary-foreground/20 mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg transition-colors">
                       <HugeiconsIcon
@@ -250,7 +276,7 @@ export const Footer = ({
                     <span>{phone}</span>
                   </a>
                 )}
-                <div className="text-primary-foreground/70 group flex items-start gap-3 text-sm">
+                <div className="text-primary-foreground/70 group flex items-center gap-3 text-sm">
                   <span className="bg-primary-foreground/10 mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg">
                     <HugeiconsIcon
                       icon={Location04Icon}

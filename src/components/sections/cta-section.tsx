@@ -1,12 +1,15 @@
 "use client";
 
 import { BrandFrame } from "@/components/common/brand";
+import { isStartConversationCta } from "@/components/common/booking-modal";
 import { Button } from "@/components/ui/button";
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { useAppDispatch } from "@/redux/hooks";
+import { openBookingModal } from "@/redux/slices/booking-modal-slice";
 
 export interface TCTAData {
   eyebrow?: string;
@@ -27,6 +30,8 @@ interface CTASectionProps {
 }
 
 export const CTASection = ({ data, className = "" }: CTASectionProps) => {
+  const dispatch = useAppDispatch();
+
   return (
     <section className={cn("bg-background w-full py-16 lg:py-24", className)}>
       <div className="container">
@@ -82,10 +87,20 @@ export const CTASection = ({ data, className = "" }: CTASectionProps) => {
                   variant="secondary"
                   className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 dark:bg-secondary dark:text-secondary-foreground dark:hover:bg-secondary"
                 >
-                  <Link href={data.href}>
-                    {data.buttonText}
-                    <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" />
-                  </Link>
+                  {isStartConversationCta(data.buttonText) ? (
+                    <button
+                      type="button"
+                      onClick={() => dispatch(openBookingModal())}
+                    >
+                      {data.buttonText}
+                      <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" />
+                    </button>
+                  ) : (
+                    <Link href={data.href}>
+                      {data.buttonText}
+                      <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" />
+                    </Link>
+                  )}
                 </Button>
                 {data.secondaryCta && (
                   <Button
@@ -94,9 +109,18 @@ export const CTASection = ({ data, className = "" }: CTASectionProps) => {
                     variant="outline"
                     className="border-primary-foreground/40 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground bg-transparent dark:border-[#eaeae4]/30 dark:text-[#eaeae4] dark:hover:bg-[#eaeae4]/10 dark:hover:text-[#eaeae4]"
                   >
-                    <Link href={data.secondaryCta.href}>
-                      {data.secondaryCta.label}
-                    </Link>
+                    {isStartConversationCta(data.secondaryCta.label) ? (
+                      <button
+                        type="button"
+                        onClick={() => dispatch(openBookingModal())}
+                      >
+                        {data.secondaryCta.label}
+                      </button>
+                    ) : (
+                      <Link href={data.secondaryCta.href}>
+                        {data.secondaryCta.label}
+                      </Link>
+                    )}
                   </Button>
                 )}
               </div>

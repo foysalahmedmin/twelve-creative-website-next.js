@@ -1,3 +1,4 @@
+import { LiveGlobalBookingModal } from "@/components/common/global-booking-modal-live";
 import { LiveHeader } from "@/components/partials/header-live";
 import { LiveFooter } from "@/components/partials/footer-live";
 import { MobileBottomNav } from "@/components/partials/mobile-bottom-nav";
@@ -16,6 +17,7 @@ export default function PrimaryLayout({
 
       <LiveFooter />
       <MobileBottomNav />
+      <LiveGlobalBookingModal />
     </div>
   );
 }
