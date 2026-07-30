@@ -1,12 +1,18 @@
 import { HeroSection } from "@/components/sections/hero-section";
+import { getPublicIndustryOptions } from "@/lib/api/industries";
 import { getPublicPageHero } from "@/lib/api/page-heroes";
+import { getPublicSiteSetting } from "@/lib/api/site-setting";
 
 export async function LiveHeroSection({
   className,
 }: {
   className?: string;
 }) {
-  const hero = await getPublicPageHero("home");
+  const [hero, settings, industries] = await Promise.all([
+    getPublicPageHero("home"),
+    getPublicSiteSetting(),
+    getPublicIndustryOptions(),
+  ]);
 
   const override = hero
     ? {
@@ -26,5 +32,12 @@ export async function LiveHeroSection({
       }
     : undefined;
 
-  return <HeroSection className={className} data={override} />;
+  return (
+    <HeroSection
+      className={className}
+      data={override}
+      calendlyUrl={settings.calendly_url || undefined}
+      industries={industries}
+    />
+  );
 }

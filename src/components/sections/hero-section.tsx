@@ -1,12 +1,15 @@
 "use client";
 
+import { BookingModal } from "@/components/common/booking-modal";
 import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { buttonVariants } from "@/components/ui/button";
 import { HOME_HERO_DATA, type THomeHero } from "@/data/home-hero.data";
+import type { PublicIndustryOption } from "@/lib/api/industries";
 import { cn } from "@/lib/utils";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 const ReactPlayer = dynamic(() => import("react-player"), { ssr: false });
 
@@ -20,13 +23,18 @@ interface HeroSectionProps {
     secondary_cta?: THomeHero["secondary_cta"] | null;
     video?: THomeHero["video"] | null;
   };
+  calendlyUrl?: string;
+  industries?: PublicIndustryOption[];
 }
 
 export const HeroSection = ({
   className,
   data: override,
+  calendlyUrl,
+  industries = [],
 }: HeroSectionProps) => {
   const data = { ...HOME_HERO_DATA, ...override };
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
 
   return (
     <section
@@ -70,14 +78,25 @@ export const HeroSection = ({
           >
             {(data.primary_cta || data.secondary_cta) && (
               <div className="mt-10 flex w-full flex-col items-center justify-center gap-3 px-4 md:flex-row md:px-0">
-                {data.primary_cta && (
-                  <Link
-                    href={data.primary_cta.href}
-                    className={cn(buttonVariants({ size: "xl" }))}
-                  >
-                    {data.primary_cta.label}
-                  </Link>
-                )}
+                {data.primary_cta &&
+                  (calendlyUrl ? (
+                    <a
+                      href={calendlyUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={cn(buttonVariants({ size: "xl" }))}
+                    >
+                      {data.primary_cta.label}
+                    </a>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setIsBookingOpen(true)}
+                      className={cn(buttonVariants({ size: "xl" }))}
+                    >
+                      {data.primary_cta.label}
+                    </button>
+                  ))}
                 {data.secondary_cta && (
                   <Link
                     href={data.secondary_cta.href}
@@ -126,6 +145,14 @@ export const HeroSection = ({
           </ScrollReveal>
         )}
       </div>
+
+      {!calendlyUrl && (
+        <BookingModal
+          isOpen={isBookingOpen}
+          onClose={() => setIsBookingOpen(false)}
+          industries={industries}
+        />
+      )}
     </section>
   );
 };
