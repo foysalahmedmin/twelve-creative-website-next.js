@@ -121,7 +121,7 @@ export const HeroSection = ({
             durationMs={900}
             className="w-full px-4 lg:px-12"
           >
-            <div className="border-foreground/10 relative mx-auto mt-8 aspect-video w-full max-w-7xl overflow-hidden rounded-2xl border shadow-sm lg:mt-10 lg:rounded-3xl">
+            <div className="border-foreground/10 relative mx-auto mt-8 aspect-video w-full max-w-5xl overflow-hidden rounded-2xl border shadow-sm lg:mt-10 lg:rounded-3xl">
               {data.video.src ? (
                 <ReactPlayer
                   src={data.video.src}
@@ -137,7 +137,7 @@ export const HeroSection = ({
                   src={data.video.poster!}
                   alt=""
                   fill
-                  sizes="(max-width: 1280px) 100vw, 1280px"
+                  sizes="(max-width: 1024px) 100vw, 1024px"
                   className="object-cover"
                 />
               )}
