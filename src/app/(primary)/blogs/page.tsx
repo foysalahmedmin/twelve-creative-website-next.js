@@ -51,6 +51,7 @@ export default async function BlogsPage() {
               key={article._id}
               animation="fade-in-up"
               delayMs={idx * 100}
+              className="h-full"
             >
               <Link
                 href={`/blogs/${article.slug}`}

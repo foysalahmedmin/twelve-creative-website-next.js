@@ -41,8 +41,13 @@ export function TeamSection({ data }: TeamSectionProps = {}) {
 
         <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 lg:mt-16 lg:grid-cols-3">
           {members.slice(0, visibleCount).map((member, idx) => (
-            <ScrollReveal key={idx} animation="fade-in-up" delayMs={idx * 100}>
-              <div className="group bg-card border-border hover:border-foreground/25 flex flex-col rounded-2xl border p-4 transition-all sm:p-5">
+            <ScrollReveal
+              key={idx}
+              animation="fade-in-up"
+              delayMs={idx * 100}
+              className="h-full"
+            >
+              <div className="group bg-card border-border hover:border-foreground/25 flex h-full flex-col rounded-2xl border p-4 transition-all sm:p-5">
                 <div className="bg-muted relative mb-5 aspect-[4/5] w-full overflow-hidden rounded-2xl">
                   <Image
                     src={member.photourl}

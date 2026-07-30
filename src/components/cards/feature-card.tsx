@@ -36,7 +36,7 @@ export const FeatureCard = ({
   return (
     <div
       className={cn(
-        "group/feature relative space-y-3 rounded-2xl border p-6 transition-all duration-300",
+        "group/feature relative h-full space-y-3 rounded-2xl border p-6 transition-all duration-300",
         tone === "brand"
           ? "border-[#131C20]/10 bg-[#EAEAE4] shadow-[0_18px_50px_rgba(19,28,32,0.12)] hover:border-[#131C20]/25 hover:bg-[#F2F1EC]"
           : "hover:border-border hover:bg-muted border-transparent hover:shadow-sm",
