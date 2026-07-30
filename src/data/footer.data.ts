@@ -14,7 +14,6 @@ export const FOOTER_QUICK_LINKS = {
     { label: "What We Build", href: "/what-we-build" },
     { label: "Industries", href: "/industries" },
     { label: "Work", href: "/works" },
-    { label: "Process", href: "/process" },
     { label: "About", href: "/about" },
     { label: "Contact", href: "/contact" },
   ],

@@ -15,9 +15,8 @@ import { FAQS_DATA } from "@/data/faqs.data";
 import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
 import { getPublicFaqsForSection } from "@/lib/api/faqs";
 import { getPublicPageCta } from "@/lib/api/page-ctas";
-import { getPublicProcessSection } from "@/lib/api/process-section";
 import { getPublicPageHero, resolvePageMetadata } from "@/lib/api/page-heroes";
-import { getPublicSiteSetting } from "@/lib/api/site-setting";
+import { getPublicProcessSection } from "@/lib/api/process-section";
 import { getPublicSharedSections } from "@/lib/api/shared-sections";
 import { getPublicTestimonialsForSection } from "@/lib/api/testimonials";
 import type { Metadata } from "next";
@@ -44,7 +43,6 @@ export default async function HomePage() {
   const [
     testimonialsData,
     faqsData,
-    settings,
     processData,
     homeCta,
     [
@@ -72,7 +70,6 @@ export default async function HomePage() {
       position: FAQS_DATA.position,
       contact_link: FAQS_DATA.contact_link,
     }),
-    getPublicSiteSetting(),
     getPublicProcessSection(),
     getPublicPageCta("home"),
     getPublicSharedSections([
@@ -102,12 +99,7 @@ export default async function HomePage() {
         data={processData}
         processThumbnail={processData.thumbnail}
       />
-      {difference && (
-        <DifferenceSection
-          data={difference}
-          howWeStructureImage={settings.how_we_structure_image || undefined}
-        />
-      )}
+      {difference && <DifferenceSection data={difference} />}
       <LiveIndustriesSection heading={industriesHeading} />
       {whyChooseUs && <WhyChooseUsSection cmsData={whyChooseUs} tone="brand" />}
       <FaqSection data={faqsData} heading={faqHeading} />

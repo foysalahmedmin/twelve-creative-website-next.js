@@ -86,7 +86,6 @@ export type DifferenceSection = SharedSectionBase & {
   content: {
     fragmented: { title: string; items: OrderedTextItem[] };
     connected: { title: string; items: OrderedTextItem[] };
-    media?: CmsMedia;
   };
 };
 export type WhyChooseUsSection = SharedSectionBase & {
@@ -208,18 +207,12 @@ function normalizeDifference(
   ) {
     return null;
   }
-  const media =
-    value.content.media === undefined
-      ? undefined
-      : normalizeCmsMedia(value.content.media);
-  if (value.content.media !== undefined && !media) return null;
   return {
     ...base,
     key: "difference",
     content: {
       fragmented: { title: fragmentedTitle, items: fragmentedItems },
       connected: { title: connectedTitle, items: connectedItems },
-      ...(media ? { media } : {}),
     },
   };
 }
@@ -451,11 +444,6 @@ export const SHARED_SECTION_FALLBACKS: Record<
       connected: {
         title: DIFFERENCE_DATA.connected.title,
         items: orderedText("connected", DIFFERENCE_DATA.connected.items),
-      },
-      media: {
-        type: "image",
-        image:
-          "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1280&h=720&fit=crop&auto=format",
       },
     },
     is_active: true,

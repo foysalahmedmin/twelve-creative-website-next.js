@@ -230,10 +230,9 @@ function validateSection(section: ApiSharedSection): string | null {
           !column.title.trim() ||
           !column.items.length ||
           column.items.some((item) => !item.text.trim()),
-      ) ||
-      !mediaIsComplete(section.content.media)
+      )
     ) {
-      return "Complete both Difference columns and any attached media";
+      return "Complete both Difference columns";
     }
   }
   if (section.key === "why-choose-us") {
@@ -463,7 +462,6 @@ type EditorProps<Section> = {
 function DifferenceEditor({
   section,
   onChange,
-  onUploadingChange = () => undefined,
 }: EditorProps<DifferenceSection>) {
   const update = (next: DifferenceSection["content"]) =>
     onChange({ ...section, content: next });
@@ -472,16 +470,10 @@ function DifferenceEditor({
       <CardHeader>
         <CardTitle>Comparison</CardTitle>
         <CardDescription>
-          Manage both ordered comparison columns and the optional hero media.
+          Manage both ordered comparison columns.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        <OptionalMediaEditor
-          label="Section media"
-          value={section.content.media}
-          onUploadingChange={onUploadingChange}
-          onChange={(media) => update({ ...section.content, media })}
-        />
         {(["fragmented", "connected"] as const).map((columnKey) => {
           const column = section.content[columnKey];
           return (

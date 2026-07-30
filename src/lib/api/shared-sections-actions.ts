@@ -50,9 +50,6 @@ function cleanSection(section: ApiSharedSection): ApiSharedSection {
             }),
           ),
         },
-        ...(section.content.media
-          ? { media: sanitizeCmsMedia(section.content.media) }
-          : {}),
       },
     };
   }

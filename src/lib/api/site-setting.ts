@@ -58,7 +58,6 @@ export interface SiteSetting {
   faq_section?: FaqSection;
   calendly_url?: string;
   process_thumbnail?: string;
-  how_we_structure_image?: string;
   meeting_scene_image?: string;
   content_section?: ContentSection;
   contact_page?: ContactPageContent;
