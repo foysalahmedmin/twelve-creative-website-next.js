@@ -17,10 +17,13 @@ interface Props {
   params: Promise<{ id: string }>;
 }
 
+// NOTE: "ventures" is deliberately NOT canonical here — /verticals/ventures is
+// a distinct, pre-existing static page (shared-upside partnership model) with
+// no relation to the Industries "Ventures" entry (formerly "Aviation"). Adding
+// it would hijack that page via the redirect below.
 const CANONICAL_INDUSTRY_SLUGS = new Set([
   "hospitality",
   "real-estate",
-  "aviation",
   "professional-services",
 ]);
 

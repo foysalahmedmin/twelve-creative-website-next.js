@@ -73,7 +73,7 @@ export const CONTACT_PAGE_DATA: TContactPageData = {
     label: "Visit / Mail Us",
     title: "Based in Miami.",
     description:
-      "We work with operators across hospitality, real estate, aviation, and professional services — based in Miami with reach across the US.",
+      "We work with operators across hospitality, real estate, ventures, and professional services — based in Miami with reach across the US.",
     address: SITE.contact.address,
     embed_src: SITE.contact.map_embed,
   },

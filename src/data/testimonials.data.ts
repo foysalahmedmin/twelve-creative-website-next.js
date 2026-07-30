@@ -18,7 +18,7 @@ export type TTestimonialData = {
 
 /**
  * Placeholder testimonials representing Twelve Creative's actual audience:
- * hospitality, real estate, aviation, and professional services operators.
+ * hospitality, real estate, ventures, and professional services operators.
  * Replace with real client testimonials, photos, and video URLs as they become available.
  */
 export const TESTIMONIALS: TTestimonial[] = [

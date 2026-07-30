@@ -20,9 +20,9 @@ export async function generateMetadata(): Promise<Metadata> {
   const hero = await getPublicPageHero("industries");
   return resolvePageMetadata(hero, {
     title:
-      "Industries | Hospitality, Real Estate, Aviation & Professional Services",
+      "Industries | Hospitality, Real Estate, Ventures & Professional Services",
     description:
-      "Twelve Creative works with hospitality, real estate, aviation, and professional service businesses that need stronger marketing structure.",
+      "Twelve Creative works with hospitality, real estate, ventures, and professional service businesses that need stronger marketing structure.",
   });
 }
 

@@ -33,9 +33,9 @@ export const FOOTER_SERVICES = {
 
 export const FOOTER_INDUSTRIES = {
   links: [
-    { label: "Hospitality", href: "/industries#hospitality" },
     { label: "Real Estate", href: "/industries#real-estate" },
-    { label: "Aviation", href: "/industries#aviation" },
+    { label: "Hospitality", href: "/industries#hospitality" },
+    { label: "Ventures", href: "/industries#ventures" },
     {
       label: "Professional Services",
       href: "/industries#professional-services",

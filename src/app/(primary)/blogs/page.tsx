@@ -39,7 +39,7 @@ export default async function BlogsPage() {
       <PageHeader
         label={hero?.label ?? "Insights"}
         title={hero?.title ?? "Notes on positioning, creative, and growth systems."}
-        description={hero?.description ?? "Field-tested thinking from the work we do for hospitality, real estate, aviation, and professional service operators."}
+        description={hero?.description ?? "Field-tested thinking from the work we do for hospitality, real estate, ventures, and professional service operators."}
         videoSrc={resolveVideoSrc(hero?.video)}
         thumbnailSrc={resolveThumbnail(hero?.thumbnail, hero?.video)}
       />

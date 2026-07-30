@@ -27,26 +27,6 @@ export type TIndustry = {
 
 export const INDUSTRIES_DATA: TIndustry[] = [
   {
-    id: "hospitality",
-    icon: "hospitality",
-    name: "Hospitality",
-    headline: "Hospitality marketing that understands the room.",
-    description:
-      "Restaurants and hospitality brands grow when experience, menu, atmosphere, events, and local market all work together. We help connect the moments to revenue.",
-    image:
-      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80",
-    work: [
-      "Restaurant content",
-      "Chef features",
-      "Wine dinner campaigns",
-      "Reservations strategy",
-      "Influencer coordination",
-      "Event promotion",
-    ],
-    ctaLabel: "Explore Hospitality",
-    href: "/industries#hospitality",
-  },
-  {
     id: "real-estate",
     icon: "real-estate",
     name: "Real Estate",
@@ -67,9 +47,29 @@ export const INDUSTRIES_DATA: TIndustry[] = [
     href: "/industries#real-estate",
   },
   {
-    id: "aviation",
+    id: "hospitality",
+    icon: "hospitality",
+    name: "Hospitality",
+    headline: "Hospitality marketing that understands the room.",
+    description:
+      "Restaurants and hospitality brands grow when experience, menu, atmosphere, events, and local market all work together. We help connect the moments to revenue.",
+    image:
+      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80",
+    work: [
+      "Restaurant content",
+      "Chef features",
+      "Wine dinner campaigns",
+      "Reservations strategy",
+      "Influencer coordination",
+      "Event promotion",
+    ],
+    ctaLabel: "Explore Hospitality",
+    href: "/industries#hospitality",
+  },
+  {
+    id: "ventures",
     icon: "aviation",
-    name: "Aviation",
+    name: "Ventures",
     headline: "High-trust marketing for high-value decisions.",
     description:
       "Private aviation is relationship-driven and credibility-dependent. We build positioning, content, funnels, and systems to support serious conversations.",
@@ -83,8 +83,8 @@ export const INDUSTRIES_DATA: TIndustry[] = [
       "Qualification forms",
       "CRM systems",
     ],
-    ctaLabel: "Explore Aviation",
-    href: "/industries#aviation",
+    ctaLabel: "Explore Ventures",
+    href: "/industries#ventures",
   },
   {
     id: "professional-services",

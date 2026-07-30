@@ -11,9 +11,9 @@ export type THomeHero = {
 export const HOME_HERO_DATA: THomeHero = {
   trust_label: "Trusted across industries",
   trust_avatars: [
-    { id: "hospitality", label: "Hospitality", icon: "restaurant" },
     { id: "real-estate", label: "Real Estate", icon: "building" },
-    { id: "aviation", label: "Aviation", icon: "airplane" },
+    { id: "hospitality", label: "Hospitality", icon: "restaurant" },
+    { id: "ventures", label: "Ventures", icon: "airplane" },
     { id: "professional", label: "Professional", icon: "briefcase" },
   ],
   title: "We Build The Structure Behind Growth",

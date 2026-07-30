@@ -37,7 +37,7 @@ interface Props {
 const ICON_OPTIONS: { value: TIndustryIconKey; label: string }[] = [
   { value: "hospitality", label: "Hospitality (Restaurant)" },
   { value: "real-estate", label: "Real Estate (Building)" },
-  { value: "aviation", label: "Aviation (Airplane)" },
+  { value: "aviation", label: "Airplane" },
   {
     value: "professional-services",
     label: "Professional Services (Briefcase)",

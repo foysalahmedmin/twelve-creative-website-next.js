@@ -48,6 +48,6 @@ export const SITE = {
     "Conversion Systems",
     "Hospitality Marketing",
     "Real Estate Marketing",
-    "Aviation Marketing",
+    "Ventures Marketing",
   ],
 };
