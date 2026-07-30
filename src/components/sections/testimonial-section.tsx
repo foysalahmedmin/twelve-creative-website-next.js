@@ -11,6 +11,7 @@ import {
 } from "@/data/testimonials.data";
 import { cn } from "@/lib/utils";
 import type { HeadingSection } from "@/lib/api/shared-sections";
+import { TESTIMONIALS_SECTION_ID } from "@/hooks/use-testimonials-section-state";
 import { Cancel01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -368,8 +369,9 @@ export const TestimonialSection = ({
 
   return (
     <section
+      id={TESTIMONIALS_SECTION_ID}
       className={cn(
-        "bg-brand-artefact border-primary-foreground/15 w-full border-y py-16 sm:py-20 lg:py-24 dark:border-[#eaeae4]/10",
+        "bg-brand-artefact border-primary-foreground/15 w-full scroll-mt-24 border-y py-16 sm:py-20 lg:py-24 dark:border-[#eaeae4]/10",
         className,
       )}
     >

@@ -16,6 +16,10 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import {
+  TESTIMONIALS_SECTION_ID,
+  useTestimonialsSectionState,
+} from "@/hooks/use-testimonials-section-state";
 
 interface HeaderProps {
   className?: string;
@@ -31,6 +35,8 @@ export const Header = ({
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const { has: hasTestimonials, active: isTestimonialsActive } =
+    useTestimonialsSectionState();
 
   return (
     <>
@@ -56,9 +62,10 @@ export const Header = ({
             <nav className="hidden items-center gap-4 lg:flex">
               {SITE.nav.map((item) => {
                 const isActive =
-                  item.href === "/"
+                  !isTestimonialsActive &&
+                  (item.href === "/"
                     ? pathname === "/"
-                    : pathname.startsWith(item.href);
+                    : pathname.startsWith(item.href));
                 return (
                   <Link
                     key={item.name}
@@ -77,6 +84,22 @@ export const Header = ({
                   </Link>
                 );
               })}
+              {hasTestimonials && (
+                <a
+                  href={`#${TESTIMONIALS_SECTION_ID}`}
+                  className={cn(
+                    "relative text-xs font-normal tracking-tighter whitespace-nowrap uppercase transition-colors",
+                    isTestimonialsActive
+                      ? "text-foreground"
+                      : "text-foreground/70 hover:text-foreground",
+                  )}
+                >
+                  Testimonials
+                  {isTestimonialsActive && (
+                    <span className="bg-primary absolute -bottom-1.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full" />
+                  )}
+                </a>
+              )}
             </nav>
 
             {/* Right Actions */}
@@ -131,9 +154,10 @@ export const Header = ({
               <nav className="flex flex-col gap-1 p-2">
                 {SITE.nav.map((item) => {
                   const isActive =
-                    item.href === "/"
+                    !isTestimonialsActive &&
+                    (item.href === "/"
                       ? pathname === "/"
-                      : pathname.startsWith(item.href);
+                      : pathname.startsWith(item.href));
                   return (
                     <Link
                       key={item.name}
@@ -150,6 +174,20 @@ export const Header = ({
                     </Link>
                   );
                 })}
+                {hasTestimonials && (
+                  <a
+                    href={`#${TESTIMONIALS_SECTION_ID}`}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={cn(
+                      "rounded-lg px-4 py-3 text-xs font-normal tracking-[0.04em] uppercase transition-all",
+                      isTestimonialsActive
+                        ? "bg-foreground/10 text-foreground"
+                        : "text-foreground/70 hover:bg-accent hover:text-foreground",
+                    )}
+                  >
+                    Testimonials
+                  </a>
+                )}
                 {calendlyUrl ? (
                   <a
                     href={calendlyUrl}
