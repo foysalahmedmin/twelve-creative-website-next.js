@@ -9,11 +9,73 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const ReactPlayer = dynamic(() => import("react-player"), { ssr: false });
 
 const PAGE_SIZE = 8;
+
+/* ─────────────── masonry column balancing ─────────────── */
+
+/* Mirrors the Tailwind sm/lg breakpoints used elsewhere in this file so the
+ * masonry column count always matches what's actually on screen. */
+function useMasonryColumnCount() {
+  const [columns, setColumns] = useState(4);
+
+  useEffect(() => {
+    const mqSm = window.matchMedia("(min-width: 640px)");
+    const mqLg = window.matchMedia("(min-width: 1024px)");
+    const update = () => setColumns(mqLg.matches ? 4 : mqSm.matches ? 3 : 2);
+    update();
+    mqSm.addEventListener("change", update);
+    mqLg.addEventListener("change", update);
+    return () => {
+      mqSm.removeEventListener("change", update);
+      mqLg.removeEventListener("change", update);
+    };
+  }, []);
+
+  return columns;
+}
+
+type MasonryItem = IPortfolioItem & { _idx: number };
+
+/* Height of each card relative to a landscape card of the same width — used
+ * only to decide which column is currently shortest. Reel (9:16) is ~3.16x
+ * taller than landscape (16:9) at equal width. */
+const RELATIVE_HEIGHT: Record<
+  NonNullable<IPortfolioItem["aspect"]>,
+  number
+> = {
+  reel: 16 / 9,
+  landscape: 9 / 16,
+};
+
+/* Classic masonry bin-packing: walk the items in order and always drop the
+ * next one into whichever column is currently shortest. This is what keeps
+ * reel and landscape cards genuinely balanced — CSS multi-column's built-in
+ * balancing only works well with dozens of items, not a handful. */
+function packMasonryColumns(
+  items: IPortfolioItem[],
+  columnCount: number,
+): MasonryItem[][] {
+  const heights = Array<number>(columnCount).fill(0);
+  const columns: MasonryItem[][] = Array.from(
+    { length: columnCount },
+    () => [],
+  );
+
+  items.forEach((item, idx) => {
+    let shortest = 0;
+    for (let c = 1; c < columnCount; c++) {
+      if (heights[c] < heights[shortest]) shortest = c;
+    }
+    columns[shortest].push({ ...item, _idx: idx });
+    heights[shortest] += RELATIVE_HEIGHT[item.aspect ?? "landscape"];
+  });
+
+  return columns;
+}
 
 /* ─────────────── types ─────────────── */
 
@@ -43,7 +105,7 @@ export interface ThumbnailWorkSectionProps {
 
 /* ─────────────── single card ─────────────── */
 
-function WorkCard({ item }: { item: IPortfolioItem }) {
+function WorkCard({ item, sizes }: { item: IPortfolioItem; sizes: string }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const isReel = item.aspect === "reel";
   const hasVideo = !!item.video_link;
@@ -84,11 +146,7 @@ function WorkCard({ item }: { item: IPortfolioItem }) {
               src={item.thumbnail}
               alt={item.title ?? "Work"}
               fill
-              sizes={
-                isReel
-                  ? "(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-                  : "(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-              }
+              sizes={sizes}
               className="object-cover transition-transform duration-300 group-hover/card:scale-105"
             />
 
@@ -147,29 +205,39 @@ export const ThumbnailWorkSection = ({
   const hasReels = work.some((w) => w.aspect === "reel");
   const allReels = work.every((w) => w.aspect === "reel");
 
+  /* A mixed set of reel (9:16) and landscape (16:9) cards can't share a
+   * regular CSS grid: the grid locks every card in a row to that row's
+   * tallest card, so the shorter landscape cards leave dead space beneath
+   * them. Flow mixed content as a hand-balanced masonry instead — each
+   * column packs tight to its own cards' real height, so a short landscape
+   * card is immediately followed by the next card rather than empty space. */
+  const isMasonry = hasReels && !isShorts && !allReels;
+  const columnCount = useMasonryColumnCount();
+
+  /* Uniform grid — only used when every visible card shares one aspect
+   * ratio, so row heights already match and a plain grid never gaps. */
+  const gridCols = isShorts || allReels
+    ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4"
+    : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"; // pure landscape
+
+  /* Reel-grid and masonry columns are both narrow (2/3/4-up); the pure-
+   * landscape grid is wider (1/2/3-up). */
+  const imageSizes = hasReels
+    ? "(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+    : "(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw";
+
   /* Load-more state */
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const visibleWork = work.slice(0, visibleCount);
   const hasMore = visibleCount < work.length;
   const remaining = work.length - visibleCount;
 
-  if (!work.length) return null;
+  const masonryColumns = useMemo(
+    () => (isMasonry ? packMasonryColumns(visibleWork, columnCount) : null),
+    [isMasonry, visibleWork, columnCount],
+  );
 
-  /* Grid columns:
-   *  - explicit "shortsreels-editing" type → same narrow columns as before
-   *  - all reels → narrow columns (portrait cards)
-   *  - all landscape → wide 3-col
-   *  - mixed (some reel, some landscape) → masonry-like: reels get 1 col,
-   *    landscapes get 2 cols via CSS grid span. We use a 6-column base grid
-   *    and span each card individually.
-   */
-  const gridCols = (() => {
-    if (isShorts || allReels)
-      return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4";
-    if (!hasReels) return "grid-cols-1 md:grid-cols-2 lg:grid-cols-3";
-    // mixed — 6-column base so reels take 1 unit and landscapes take 2
-    return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-6";
-  })();
+  if (!work.length) return null;
 
   return (
     <section
@@ -195,38 +263,48 @@ export const ThumbnailWorkSection = ({
             </ScrollReveal>
           )}
 
-          {/* Grid */}
-          <div
-            className={cn(
-              "relative z-10 grid gap-4",
-              heading === null ? "mt-0" : "mt-10 lg:mt-16",
-              gridCols,
-            )}
-          >
-            {visibleWork.map((item, idx) => {
-              const isReel = item.aspect === "reel";
-
-              /* In a mixed grid each landscape card spans 2 of the 6 columns
-                 and each reel spans 1 column so portrait cards stay narrow. */
-              const spanClass =
-                hasReels && !isShorts && !allReels
-                  ? isReel
-                    ? "" // 1 col
-                    : "col-span-2"
-                  : "";
-
-              return (
+          {/* Grid / masonry */}
+          {masonryColumns ? (
+            <div
+              className={cn(
+                "relative z-10 flex gap-4",
+                heading === null ? "mt-0" : "mt-10 lg:mt-16",
+              )}
+            >
+              {masonryColumns.map((column, colIdx) => (
+                <div key={colIdx} className="flex flex-1 flex-col gap-4">
+                  {column.map((item) => (
+                    <ScrollReveal
+                      key={item.id ?? item._idx}
+                      animation="fade-in-up"
+                      delayMs={80 * (item._idx % 4)}
+                    >
+                      <WorkCard item={item} sizes={imageSizes} />
+                    </ScrollReveal>
+                  ))}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div
+              className={cn(
+                "relative z-10 grid gap-4",
+                heading === null ? "mt-0" : "mt-10 lg:mt-16",
+                gridCols,
+              )}
+            >
+              {visibleWork.map((item, idx) => (
                 <ScrollReveal
                   key={item.id ?? idx}
                   animation="fade-in-up"
                   delayMs={80 * (idx % 4)}
-                  className={cn("w-full", spanClass)}
+                  className="w-full"
                 >
-                  <WorkCard item={item} />
+                  <WorkCard item={item} sizes={imageSizes} />
                 </ScrollReveal>
-              );
-            })}
-          </div>
+              ))}
+            </div>
+          )}
 
           {/* Load More — shown when there are more items beyond PAGE_SIZE */}
           {(hasMore || showViewMore) && (
