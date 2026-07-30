@@ -17,6 +17,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "twelvecreative.io" },
       { protocol: "https", hostname: "admin.twelvecreative.io" },
       { protocol: "https", hostname: "storage.googleapis.com" },
+      { protocol: "https", hostname: "placehold.co" },
       ...(process.env.NODE_ENV !== "production"
         ? [
             { protocol: "http" as const, hostname: "localhost" },
