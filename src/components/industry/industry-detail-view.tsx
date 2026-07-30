@@ -1,7 +1,6 @@
 import { BookingInlineSection } from "@/components/sections/booking-inline-section";
 import { BrandsStrip } from "@/components/sections/brands-strip";
 import { CTASection, type TCTAData } from "@/components/sections/cta-section";
-import { IndustryVisualLibrarySection } from "@/components/sections/industry-visual-library-section";
 import { PageHeader } from "@/components/sections/page-header-section";
 import { ProcessSection } from "@/components/sections/process-section";
 import { ScrollStatementSection } from "@/components/sections/scroll-statement-section";
@@ -12,7 +11,6 @@ import { CTA_ABOUT } from "@/data/page-ctas.data";
 import type { TProcessData } from "@/data/process.data";
 import type { TTestimonialData } from "@/data/testimonials.data";
 import type { TPortfolioData } from "@/data/thumbnail-work-section.data";
-import type { IMarqueeItem } from "@/data/vertical-marquee.data";
 import {
   resolveIndustryThumbnail,
   resolveIndustryVideoSrc,
@@ -20,9 +18,9 @@ import {
   type PublicIndustryOption,
 } from "@/lib/api/industries";
 import type {
-  HeadingSection,
   ScrollStatementSection as CmsScrollStatementSection,
   WorkWithUsSection as CmsWorkWithUsSection,
+  HeadingSection,
 } from "@/lib/api/shared-sections";
 import type { ReactNode } from "react";
 
@@ -55,7 +53,6 @@ export interface IndustryDetailSharedContent {
 interface IndustryDetailViewProps {
   industry: ApiIndustry;
   industryOptions: PublicIndustryOption[];
-  showcaseVideos: IMarqueeItem[];
   portfolio: TPortfolioData;
   testimonials: TTestimonialData;
   process: TProcessData;
@@ -68,7 +65,6 @@ interface IndustryDetailViewProps {
 export function IndustryDetailView({
   industry,
   industryOptions,
-  showcaseVideos,
   portfolio,
   testimonials,
   process,
@@ -131,14 +127,6 @@ export function IndustryDetailView({
         sharedContent?.workWithUs === null ? null : (
           <WorkWithUsSection data={sharedContent?.workWithUs} />
         ),
-      )}
-      {renderSlot(
-        "visualLibrary",
-        <IndustryVisualLibrarySection
-          industryName={industry.name}
-          videos={showcaseVideos}
-          heading={sharedContent?.visualLibraryHeading}
-        />,
       )}
       {renderSlot(
         "workShowcase",

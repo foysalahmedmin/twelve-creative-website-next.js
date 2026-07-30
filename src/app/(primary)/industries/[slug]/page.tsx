@@ -7,12 +7,9 @@ import {
 } from "@/lib/api/industries";
 import { getPublicPageCta, toLegacyPageCta } from "@/lib/api/page-ctas";
 import { getPublicProcessSection } from "@/lib/api/process-section";
-import {
-  getPublicShowcaseVideosForMarquee,
-  getPublicShowcaseVideosForThumbnailGrid,
-} from "@/lib/api/showcase-videos";
-import { getPublicSiteSetting } from "@/lib/api/site-setting";
 import { getPublicSharedSections } from "@/lib/api/shared-sections";
+import { getPublicShowcaseVideosForThumbnailGrid } from "@/lib/api/showcase-videos";
+import { getPublicSiteSetting } from "@/lib/api/site-setting";
 import { getPublicTestimonialsForSection } from "@/lib/api/testimonials";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -44,7 +41,6 @@ export default async function IndustryDetailPage({ params }: Props) {
 
   const [
     industriesResult,
-    showcaseVideos,
     livePortfolio,
     testimonialsData,
     settings,
@@ -59,7 +55,6 @@ export default async function IndustryDetailPage({ params }: Props) {
     ],
   ] = await Promise.all([
     getPublicIndustriesResult(),
-    getPublicShowcaseVideosForMarquee({ industrySlug: slug }),
     getPublicShowcaseVideosForThumbnailGrid(
       {
         label: CANVAS_PORTFOLIO_DATA.label,
@@ -104,7 +99,6 @@ export default async function IndustryDetailPage({ params }: Props) {
         name,
         slug: optionSlug,
       }))}
-      showcaseVideos={showcaseVideos}
       portfolio={livePortfolio}
       testimonials={testimonialsData}
       process={processData}
