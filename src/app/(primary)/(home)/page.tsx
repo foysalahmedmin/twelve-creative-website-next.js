@@ -92,12 +92,12 @@ export default async function HomePage() {
       <LiveHeroSection />
       <BrandsStrip />
       {statement && <ScrollStatementSection data={statement} />}
-      <LiveFeaturedProjectsSection heading={featuredHeading} />
       <LiveServicesSection heading={servicesHeading} />
       <TestimonialSection
         data={testimonialsData}
         heading={testimonialsHeading}
       />
+      <LiveFeaturedProjectsSection heading={featuredHeading} />
       <ProcessSection
         data={processData}
         processThumbnail={processData.thumbnail}
