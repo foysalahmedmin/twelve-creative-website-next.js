@@ -173,8 +173,14 @@ export const FeaturedProjectsSection = ({
                     ))}
                   </CarouselContent>
 
-                  <CarouselPrevious className="left-2 z-20 hidden lg:flex" />
-                  <CarouselNext className="right-2 z-20 hidden lg:flex" />
+                  <CarouselPrevious
+                    variant="default"
+                    className="left-2 z-20 hidden lg:flex"
+                  />
+                  <CarouselNext
+                    variant="default"
+                    className="right-2 z-20 hidden lg:flex"
+                  />
                   <CarouselDots className="mt-6" />
                 </Carousel>
               </TabsContent>
