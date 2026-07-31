@@ -1,5 +1,9 @@
+"use client";
+
 import type { TService, TServiceIconKey } from "@/data/services.data";
 import { cn } from "@/lib/utils";
+import { useAppDispatch } from "@/redux/hooks";
+import { openBookingModal } from "@/redux/slices/booking-modal-slice";
 import {
   AnalyticsUpIcon,
   GlobalEditingIcon,
@@ -10,7 +14,6 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import Image from "next/image";
-import Link from "next/link";
 
 const SERVICE_ICON_MAP: Record<TServiceIconKey, typeof Target02Icon> = {
   positioning: Target02Icon,
@@ -28,6 +31,7 @@ interface ServiceCardProps {
 
 export const ServiceCard = ({ service, className }: ServiceCardProps) => {
   const Icon = SERVICE_ICON_MAP[service.icon];
+  const dispatch = useAppDispatch();
 
   return (
     <div className={cn("group/service relative h-full", className)}>
@@ -86,15 +90,19 @@ export const ServiceCard = ({ service, className }: ServiceCardProps) => {
 
             {/* Bottom: button — teal-black on orange for contrast */}
             <div className="flex w-full justify-end">
-              <Link
-                href={service.href}
+              {/* Opens the booking modal rather than navigating — the intent
+                  here is to start a conversation, not to read another page.
+                  `service.href` is left on the model for other link surfaces. */}
+              <button
+                type="button"
+                onClick={() => dispatch(openBookingModal())}
                 className={cn(
                   "bg-primary-foreground text-primary rounded-lg px-6 py-3 text-sm font-semibold tracking-[0.05em] uppercase transition-transform duration-200 ease-out",
                   "hover:scale-105 active:scale-95",
                 )}
               >
                 Get Started
-              </Link>
+              </button>
             </div>
           </div>
         </div>
