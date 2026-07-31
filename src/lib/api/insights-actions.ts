@@ -13,7 +13,6 @@ export interface InsightInput {
   cover: string;
   content: string;
   category?: string;
-  author?: string;
   status?: "draft" | "published";
 }
 
@@ -94,7 +93,6 @@ export async function deleteInsightAction(
 function sanitize<T extends Partial<InsightInput>>(input: T): T {
   const out = { ...input } as T;
   if (out.category === "") delete (out as { category?: unknown }).category;
-  if (out.author === "") delete (out as { author?: unknown }).author;
   return out;
 }
 

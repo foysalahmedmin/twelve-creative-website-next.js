@@ -11,7 +11,6 @@ export interface Insight {
   content: string;
   category?: string;
   read_minutes?: number;
-  author?: string;
   status: "draft" | "published";
   published_at?: string;
   created_at: string;
