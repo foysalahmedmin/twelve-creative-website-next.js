@@ -35,8 +35,12 @@ function subscribe(onStoreChange: () => void): () => void {
     }
     setSnapshot({ has: true, active: false });
     intersectionObserver = new IntersectionObserver(
-      ([entry]) => setSnapshot({ has: true, active: entry.isIntersecting }),
-      { rootMargin: "-45% 0px -45% 0px" },
+      ([entry]) => {
+        const isVisible =
+          entry.isIntersecting && entry.intersectionRect.height > 20;
+        setSnapshot({ has: true, active: isVisible });
+      },
+      { rootMargin: "-10% 0px -20% 0px" },
     );
     intersectionObserver.observe(target);
   };

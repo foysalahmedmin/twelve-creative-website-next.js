@@ -138,13 +138,14 @@ const Marquee = forwardRef<MarqueeHandle, MarqueeProps>(function Marquee(
   }, [pxPerSecond]);
 
   // ── Pointer drag ──
-  // Engage drag (and capture the pointer) only after a small movement
+  // Engage drag (and capture the pointer) only after a clear movement
   // threshold, so a plain tap/click on a reel still reaches the card and opens
-  // its video — capturing on every pointerdown can swallow the click.
-  const DRAG_THRESHOLD = 5;
+  // its video.
+  const DRAG_THRESHOLD = 10;
   const onPointerDown = (e: React.PointerEvent) => {
     down.current = true;
     moved.current = 0;
+    dragging.current = false;
     lastX.current = e.clientX;
     pointerId.current = e.pointerId;
   };
@@ -170,7 +171,6 @@ const Marquee = forwardRef<MarqueeHandle, MarqueeProps>(function Marquee(
   const onPointerUp = (e: React.PointerEvent) => {
     down.current = false;
     if (dragging.current) {
-      dragging.current = false;
       try {
         (e.currentTarget as HTMLElement).releasePointerCapture(
           pointerId.current,
@@ -179,14 +179,17 @@ const Marquee = forwardRef<MarqueeHandle, MarqueeProps>(function Marquee(
         /* already released */
       }
     }
+    setTimeout(() => {
+      dragging.current = false;
+      moved.current = 0;
+    }, 50);
   };
   const onClickCapture = (e: React.MouseEvent) => {
     // Swallow the click only if this pointer sequence was a real drag.
-    if (moved.current > 6) {
+    if (dragging.current || moved.current > DRAG_THRESHOLD) {
       e.stopPropagation();
       e.preventDefault();
     }
-    moved.current = 0;
   };
 
   return (
@@ -213,7 +216,6 @@ const Marquee = forwardRef<MarqueeHandle, MarqueeProps>(function Marquee(
             ref={copy === 0 ? copyRef : undefined}
             className="flex shrink-0 items-stretch"
             aria-hidden={copy === 1}
-            inert={copy === 1}
           >
             {items.map((item, i) => (
               <div
@@ -221,7 +223,7 @@ const Marquee = forwardRef<MarqueeHandle, MarqueeProps>(function Marquee(
                 className={cn("flex shrink-0 self-stretch", itemWidthClass)}
                 style={{ marginRight: gap }}
                 aria-hidden={copy === 1 || i >= accessibleItemCount}
-                inert={copy === 1 || i >= accessibleItemCount}
+                tabIndex={copy === 1 || i >= accessibleItemCount ? -1 : undefined}
               >
                 {renderItem(item, i)}
               </div>

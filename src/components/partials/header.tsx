@@ -5,8 +5,12 @@ import { ThemeToggle } from "@/components/common/theme-toggle";
 import { LogoIcon } from "@/components/icons/logo-icon";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { SITE } from "@/config/site";
-import { cn } from "@/lib/utils";
+import {
+  TESTIMONIALS_SECTION_ID,
+  useTestimonialsSectionState,
+} from "@/hooks/use-testimonials-section-state";
 import type { PublicIndustryOption } from "@/lib/api/industries";
+import { cn } from "@/lib/utils";
 import {
   ArrowRight01Icon,
   Cancel01Icon,
@@ -15,11 +19,7 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
-import {
-  TESTIMONIALS_SECTION_ID,
-  useTestimonialsSectionState,
-} from "@/hooks/use-testimonials-section-state";
+import { useEffect, useState } from "react";
 
 interface HeaderProps {
   className?: string;
@@ -38,6 +38,41 @@ export const Header = ({
   const { has: hasTestimonials, active: isTestimonialsActive } =
     useTestimonialsSectionState();
 
+  useEffect(() => {
+    if (window.location.hash === `#${TESTIMONIALS_SECTION_ID}`) {
+      const timer = setTimeout(() => {
+        document
+          .getElementById(TESTIMONIALS_SECTION_ID)
+          ?.scrollIntoView({ behavior: "smooth" });
+      }, 150);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+  ) => {
+    const isSamePage =
+      href === "/" ? pathname === "/" : pathname.startsWith(href);
+    if (isSamePage) {
+      e.preventDefault();
+      if (window.location.hash) {
+        history.pushState(null, "", pathname);
+      }
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  const handleTestimonialsClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const el = document.getElementById(TESTIMONIALS_SECTION_ID);
+    if (el) {
+      e.preventDefault();
+      history.pushState(null, "", `#${TESTIMONIALS_SECTION_ID}`);
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <>
       <header
@@ -54,7 +89,11 @@ export const Header = ({
             )}
           >
             {/* Logo */}
-            <Link href="/" className="flex shrink-0 items-center">
+            <Link
+              href="/"
+              onClick={(e) => handleNavClick(e, "/")}
+              className="flex shrink-0 items-center"
+            >
               <LogoIcon compact className="h-8 w-auto md:h-10" />
             </Link>
 
@@ -70,10 +109,11 @@ export const Header = ({
                   <Link
                     key={item.name}
                     href={item.href}
+                    onClick={(e) => handleNavClick(e, item.href)}
                     className={cn(
                       "relative text-xs font-normal tracking-tighter whitespace-nowrap uppercase transition-colors",
                       isActive
-                        ? "text-foreground"
+                        ? "text-foreground font-semibold"
                         : "text-foreground/70 hover:text-foreground",
                     )}
                   >
@@ -87,10 +127,11 @@ export const Header = ({
               {hasTestimonials && (
                 <a
                   href={`#${TESTIMONIALS_SECTION_ID}`}
+                  onClick={handleTestimonialsClick}
                   className={cn(
-                    "relative text-xs font-normal tracking-tighter whitespace-nowrap uppercase transition-colors",
+                    "relative cursor-pointer text-xs font-normal tracking-tighter whitespace-nowrap uppercase transition-colors",
                     isTestimonialsActive
-                      ? "text-foreground"
+                      ? "text-foreground font-semibold"
                       : "text-foreground/70 hover:text-foreground",
                   )}
                 >
@@ -162,11 +203,14 @@ export const Header = ({
                     <Link
                       key={item.name}
                       href={item.href}
-                      onClick={() => setIsMobileMenuOpen(false)}
+                      onClick={(e) => {
+                        setIsMobileMenuOpen(false);
+                        handleNavClick(e, item.href);
+                      }}
                       className={cn(
                         "rounded-lg px-4 py-3 text-xs font-normal tracking-[0.04em] uppercase transition-all",
                         isActive
-                          ? "bg-foreground/10 text-foreground"
+                          ? "bg-foreground/10 text-foreground font-semibold"
                           : "text-foreground/70 hover:bg-accent hover:text-foreground",
                       )}
                     >
@@ -177,11 +221,14 @@ export const Header = ({
                 {hasTestimonials && (
                   <a
                     href={`#${TESTIMONIALS_SECTION_ID}`}
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    onClick={(e) => {
+                      setIsMobileMenuOpen(false);
+                      handleTestimonialsClick(e);
+                    }}
                     className={cn(
-                      "rounded-lg px-4 py-3 text-xs font-normal tracking-[0.04em] uppercase transition-all",
+                      "cursor-pointer rounded-lg px-4 py-3 text-xs font-normal tracking-[0.04em] uppercase transition-all",
                       isTestimonialsActive
-                        ? "bg-foreground/10 text-foreground"
+                        ? "bg-foreground/10 text-foreground font-semibold"
                         : "text-foreground/70 hover:bg-accent hover:text-foreground",
                     )}
                   >
