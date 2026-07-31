@@ -1,5 +1,6 @@
-import { Suspense } from "react";
+import { LogoIcon } from "@/components/icons/logo-icon";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { SigninForm } from "./signin-form";
 
 export const metadata: Metadata = {
@@ -12,9 +13,7 @@ export default function AdminLoginPage() {
     <div className="bg-background flex min-h-screen items-center justify-center px-4 py-12">
       <div className="w-full max-w-sm">
         <div className="mb-8 flex flex-col items-center gap-3 text-center">
-          <div className="bg-primary text-primary-foreground flex size-12 items-center justify-center rounded-xl text-base font-bold">
-            12
-          </div>
+          <LogoIcon symbol className="w-11" />
           <div>
             <h1 className="font-heading text-foreground text-2xl font-medium tracking-tight">
               Sign in to Admin

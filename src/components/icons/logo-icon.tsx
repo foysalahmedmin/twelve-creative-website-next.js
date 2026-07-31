@@ -4,6 +4,16 @@ import Image from "next/image";
 interface LogoIconProps {
   className?: string;
   compact?: boolean;
+  /**
+   * Render only the logo mark, with no wordmark, for tight spots where the
+   * name already appears beside it.
+   *
+   * The mark is drawn as a CSS mask rather than an <img>, so its colour comes
+   * from a background utility: it defaults to `bg-primary` and follows the
+   * theme, and any `bg-*` passed via className overrides it (cn runs
+   * tailwind-merge).
+   */
+  symbol?: boolean;
 }
 
 const maskStyle = (src: string) => ({
@@ -17,7 +27,25 @@ const maskStyle = (src: string) => ({
   maskSize: "contain",
 });
 
-export const LogoIcon = ({ className, compact = false }: LogoIconProps) => {
+export const LogoIcon = ({
+  className,
+  compact = false,
+  symbol = false,
+}: LogoIconProps) => {
+  if (symbol) {
+    return (
+      <span
+        role="img"
+        aria-label="Twelve Creative"
+        className={cn(
+          "bg-primary inline-block aspect-[704/416] shrink-0",
+          className,
+        )}
+        style={maskStyle("/logo-symbol-orange.png")}
+      />
+    );
+  }
+
   if (compact) {
     return (
       <span

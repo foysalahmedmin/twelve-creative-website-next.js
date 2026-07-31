@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { LogoIcon } from "@/components/icons/logo-icon";
 import { cn } from "@/lib/utils";
 import type { AdminUser } from "@/lib/admin/types";
 import { ADMIN_NAV, type AdminNavEntry } from "./admin-nav-config";
@@ -27,9 +28,7 @@ export function AdminSidebar({ user, className }: AdminSidebarProps) {
     >
       {/* Brand */}
       <div className="border-border/60 flex h-14 items-center gap-2.5 border-b px-5">
-        <div className="bg-primary text-primary-foreground flex size-9 items-center justify-center rounded-lg font-bold">
-          12
-        </div>
+        <LogoIcon symbol className="w-8" />
         <div className="flex flex-col">
           <span className="font-heading text-foreground text-sm font-semibold leading-tight">
             Twelve Creative
