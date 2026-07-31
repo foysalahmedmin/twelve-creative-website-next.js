@@ -63,7 +63,7 @@ export default async function WhatWeBuildPage() {
       {/* Growth system end-to-end deep dive */}
       {growthSystem && <GrowthSystemSection cmsData={growthSystem} />}
 
-      {/* The Twelve Creative Difference */}
+      {/* Twelve Creative Effect */}
       {difference && <DifferenceSection data={difference} />}
 
       {/* Why operators choose us */}

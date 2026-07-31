@@ -131,7 +131,10 @@ export const PageHeader = ({
             durationMs={900}
             className="w-full px-4 lg:px-12"
           >
-            <div className="ring-foreground/15 relative mx-auto mt-12 aspect-video w-full max-w-5xl overflow-hidden rounded-2xl ring-1 lg:mt-16">
+            {/* Stated as max-w-4xl to match what actually renders: the parent
+                column is max-w-4xl, so the old max-w-5xl here never applied
+                and only made the intended width look wider than it was. */}
+            <div className="ring-foreground/15 relative mx-auto mt-12 aspect-video w-full max-w-4xl overflow-hidden rounded-2xl ring-1 lg:mt-16">
               {videoSrc ? (
                 <ReactPlayer
                   src={videoSrc}

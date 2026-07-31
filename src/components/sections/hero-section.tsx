@@ -121,7 +121,10 @@ export const HeroSection = ({
             durationMs={900}
             className="w-full px-4 lg:px-12"
           >
-            <div className="border-foreground/10 relative mx-auto mt-8 aspect-video w-full max-w-5xl overflow-hidden rounded-2xl border shadow-sm lg:mt-10 lg:rounded-3xl">
+            {/* max-w-4xl matches PageHeader's hero media, whose width is
+                capped by that section's max-w-4xl column — so the home hero
+                and every other page hero read at the same width. */}
+            <div className="border-foreground/10 relative mx-auto mt-8 aspect-video w-full max-w-4xl overflow-hidden rounded-2xl border shadow-sm lg:mt-10 lg:rounded-3xl">
               {data.video.src ? (
                 <ReactPlayer
                   src={data.video.src}

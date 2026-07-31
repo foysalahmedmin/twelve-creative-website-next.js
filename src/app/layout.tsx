@@ -1,5 +1,4 @@
 import { ScrollRestoration } from "@/components/common/scroll-restoration";
-import { SmoothFollowerCursor } from "@/components/common/smooth-cursor";
 import { WhatsAppFloat } from "@/components/common/whatsapp-float";
 import { SITE } from "@/config/site";
 import Providers from "@/providers";
@@ -41,9 +40,7 @@ export const metadata: Metadata = {
     images: [SITE.ogImage],
   },
   icons: {
-    icon: [
-      { url: "/favicon.ico", sizes: "32x32", type: "image/x-icon" },
-    ],
+    icon: [{ url: "/favicon.ico", sizes: "32x32", type: "image/x-icon" }],
     shortcut: "/favicon.ico",
   },
 };
@@ -59,8 +56,7 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${hindSiliguri.variable} antialiased`}
     >
-      <body className="min-h-screen flex flex-col" suppressHydrationWarning>
-        <SmoothFollowerCursor />
+      <body className="flex min-h-screen flex-col" suppressHydrationWarning>
         <WhatsAppFloat />
         <ScrollRestoration />
         <Providers>{children}</Providers>

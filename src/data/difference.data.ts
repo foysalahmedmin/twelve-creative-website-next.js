@@ -7,7 +7,7 @@ export type TDifference = {
 };
 
 export const DIFFERENCE_DATA: TDifference = {
-  eyebrow: "The Twelve Creative Difference",
+  eyebrow: "Twelve Creative Effect",
   title: "Creative is only valuable when it is connected to the business.",
   description:
     "Most companies separate creative, ads, websites, and follow-up systems into different vendors. The result is often fragmented. We build these pieces together so the business has a clearer path from attention to revenue.",

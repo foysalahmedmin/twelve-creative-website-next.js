@@ -49,7 +49,7 @@ export default async function ProcessPage() {
         processThumbnail={processData.thumbnail}
       />
 
-      {/* The Twelve Creative Difference */}
+      {/* Twelve Creative Effect */}
       {difference && <DifferenceSection data={difference} />}
 
       {/* CTA */}
