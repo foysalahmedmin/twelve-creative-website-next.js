@@ -53,8 +53,11 @@ export const Header = ({
     e: React.MouseEvent<HTMLAnchorElement>,
     href: string,
   ) => {
-    const isSamePage =
-      href === "/" ? pathname === "/" : pathname.startsWith(href);
+    // Exact match only. `startsWith` would treat a detail page as "the same
+    // page" as its section, so clicking Works from /works/[id] — or Industries
+    // from /industries/[slug] — would scroll to the top and never navigate to
+    // the listing.
+    const isSamePage = pathname === href;
     if (isSamePage) {
       e.preventDefault();
       if (window.location.hash) {

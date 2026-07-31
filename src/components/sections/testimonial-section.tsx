@@ -40,7 +40,16 @@ export type MarqueeHandle = { setDirection: (leftward: boolean) => void };
 
 interface MarqueeProps {
   items: TTestimonial[];
-  renderItem: (item: TTestimonial, index: number) => React.ReactNode;
+  /**
+   * `interactive` is false for the duplicated copy and for the repeat-padding
+   * items. Only the Marquee knows which copy an item is in, so it decides —
+   * a card cannot work it out from its index alone.
+   */
+  renderItem: (
+    item: TTestimonial,
+    index: number,
+    interactive: boolean,
+  ) => React.ReactNode;
   pxPerSecond: number;
   /** true → content scrolls right → left; false → left → right */
   initialLeftward: boolean;
@@ -217,17 +226,24 @@ const Marquee = forwardRef<MarqueeHandle, MarqueeProps>(function Marquee(
             className="flex shrink-0 items-stretch"
             aria-hidden={copy === 1}
           >
-            {items.map((item, i) => (
-              <div
-                key={`${item.id}-${i}`}
-                className={cn("flex shrink-0 self-stretch", itemWidthClass)}
-                style={{ marginRight: gap }}
-                aria-hidden={copy === 1 || i >= accessibleItemCount}
-                tabIndex={copy === 1 || i >= accessibleItemCount ? -1 : undefined}
-              >
-                {renderItem(item, i)}
-              </div>
-            ))}
+            {items.map((item, i) => {
+              // The duplicate copy exists only to make the loop seamless, and
+              // the repeat-padding items are the same testimonials again — both
+              // are hidden from assistive tech, so anything focusable inside
+              // them must be taken out of the tab order too. (`inert` would do
+              // both, but it also swallows the click that opens the video.)
+              const interactive = copy === 0 && i < accessibleItemCount;
+              return (
+                <div
+                  key={`${item.id}-${i}`}
+                  className={cn("flex shrink-0 self-stretch", itemWidthClass)}
+                  style={{ marginRight: gap }}
+                  aria-hidden={!interactive}
+                >
+                  {renderItem(item, i, interactive)}
+                </div>
+              );
+            })}
           </div>
         ))}
       </div>
@@ -418,11 +434,11 @@ export const TestimonialSection = ({
                   gap={14}
                   itemWidthClass="w-[180px] lg:w-[200px] xl:w-[240px]"
                   accessibleItemCount={videoTestimonials.length}
-                  renderItem={(testimonial, index) => (
+                  renderItem={(testimonial, _index, interactive) => (
                     <VideoTestimonialCard
                       testimonial={testimonial}
                       onOpen={openVideo}
-                      interactive={index < videoTestimonials.length}
+                      interactive={interactive}
                       className="h-full w-full md:w-full"
                     />
                   )}
