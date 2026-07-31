@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { resolveVideo } from "@/lib/media/video";
 import { uploadAdminFile } from "@/lib/admin/upload-client";
+import { MAX_UPLOAD_LABEL, checkUploadSize } from "@/lib/admin/upload-limits";
 import type { VideoRef, VideoSource } from "@/lib/admin/types";
 import { cn } from "@/lib/utils";
 
@@ -65,6 +66,13 @@ export function VideoInput({
 
   const handleUpload = async (file: File) => {
     setError(null);
+    // Check before uploading — otherwise a 300MB file uploads for minutes
+    // only to be rejected at the end.
+    const tooBig = checkUploadSize(file);
+    if (tooBig) {
+      setError(tooBig);
+      return;
+    }
     setUploading(true);
     onUploadingChange?.(true);
     try {
@@ -175,6 +183,13 @@ export function VideoInput({
             </span>
           )}
         </div>
+      )}
+
+      {mode === "upload" && (
+        <p className="text-muted-foreground text-xs">
+          MP4, WebM or OGG — up to {MAX_UPLOAD_LABEL}. For anything larger, host
+          it on YouTube or a CDN and use the YouTube or URL option.
+        </p>
       )}
 
       {error && (

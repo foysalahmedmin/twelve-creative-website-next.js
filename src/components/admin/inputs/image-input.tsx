@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { uploadAdminFile } from "@/lib/admin/upload-client";
+import { MAX_UPLOAD_LABEL, checkUploadSize } from "@/lib/admin/upload-limits";
 import { cn } from "@/lib/utils";
 
 type Mode = "url" | "upload";
@@ -95,6 +96,11 @@ export function ImageInput({
   const handleUpload = async (file: File) => {
     setError(null);
     setWarning(null);
+    const tooBig = checkUploadSize(file);
+    if (tooBig) {
+      setError(tooBig);
+      return;
+    }
     setUploading(true);
     onUploadingChange?.(true);
     try {
@@ -199,6 +205,12 @@ export function ImageInput({
             </span>
           )}
         </div>
+      )}
+
+      {mode === "upload" && (
+        <p className="text-muted-foreground text-xs">
+          JPG, PNG, WebP, GIF or SVG — up to {MAX_UPLOAD_LABEL}.
+        </p>
       )}
 
       {error && <p className="text-destructive text-xs font-medium">{error}</p>}
