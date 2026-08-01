@@ -95,7 +95,11 @@ export function VideoDialog({
           )}
 
           {(status === "loading" || status === "buffering") && (
-            <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/40">
+            // Fully opaque, not translucent: this sits directly over the
+            // native <video> element, and anything less than opaque lets the
+            // browser's own buffering spinner show through underneath ours —
+            // which is the exact glitch this component exists to hide.
+            <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black">
               <Spinner className="text-primary-foreground size-8" />
             </div>
           )}
