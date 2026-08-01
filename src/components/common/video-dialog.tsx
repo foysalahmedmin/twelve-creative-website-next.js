@@ -155,7 +155,13 @@ export function VideoDialog({
             <ReactPlayer
               ref={videoRef}
               src={src}
-              playing
+              // Tied to our own paused state, not hardcoded true: react-player
+              // re-asserts this prop's play/pause state on every re-render,
+              // and onTimeUpdate re-renders constantly. Left as a constant
+              // `playing`, it fought every manual video.pause() from the
+              // custom button below and resumed playback within a few
+              // hundred ms — confirmed live, this is what that looked like.
+              playing={!paused}
               controls={false}
               width="100%"
               height="100%"
