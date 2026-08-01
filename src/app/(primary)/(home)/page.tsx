@@ -99,7 +99,7 @@ export default async function HomePage() {
         data={processData}
         processThumbnail={processData.thumbnail}
       />
-      {difference && <DifferenceSection data={difference} />}
+      {difference && <DifferenceSection data={difference} className="dark" />}
       <LiveIndustriesSection heading={industriesHeading} />
       {whyChooseUs && <WhyChooseUsSection cmsData={whyChooseUs} tone="brand" />}
       <FaqSection data={faqsData} heading={faqHeading} />

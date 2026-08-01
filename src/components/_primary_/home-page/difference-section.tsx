@@ -88,7 +88,11 @@ export const DifferenceSection = ({
             durationMs={800}
             className="h-full"
           >
-            <Card className="bg-brand-artefact relative h-full gap-5 overflow-hidden border-transparent py-8 shadow-sm">
+            {/* border-0, not border-transparent: Card applies a 1px border by
+                default, and a transparent border still lets the gradient
+                background paint underneath it — which showed as a faint orange
+                edge along the top of the card. */}
+            <Card className="bg-brand-artefact relative h-full gap-5 overflow-hidden border-0 py-8 shadow-sm">
               <CardContent className="space-y-5">
                 <div className="flex items-center gap-3">
                   <div className="bg-primary-foreground text-primary dark:bg-secondary dark:text-secondary-foreground inline-flex h-11 w-11 items-center justify-center rounded-lg">
