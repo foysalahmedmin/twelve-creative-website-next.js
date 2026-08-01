@@ -10,9 +10,9 @@ import {
   type TTestimonial,
   type TTestimonialData,
 } from "@/data/testimonials.data";
-import { cn } from "@/lib/utils";
-import type { HeadingSection } from "@/lib/api/shared-sections";
 import { TESTIMONIALS_SECTION_ID } from "@/hooks/use-testimonials-section-state";
+import type { HeadingSection } from "@/lib/api/shared-sections";
+import { cn } from "@/lib/utils";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import {
   forwardRef,
@@ -365,7 +365,7 @@ export const TestimonialSection = ({
                   initialLeftward={false}
                   pxPerSecond={30}
                   gap={14}
-                  itemWidthClass="w-[180px] lg:w-[200px] xl:w-[240px]"
+                  itemWidthClass="w-[200px] lg:w-[240px]"
                   accessibleItemCount={videoTestimonials.length}
                   renderItem={(testimonial, _index, interactive) => (
                     <VideoTestimonialCard

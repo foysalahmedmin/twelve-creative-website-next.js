@@ -57,7 +57,13 @@ export function VideoDialog({
       <DialogContent
         showCloseButton
         className={cn(
-          "w-auto gap-0 rounded-3xl border-none bg-transparent p-2 shadow-xl ring-0",
+          // flex, not the base grid: a CSS Grid column track is sized once,
+          // up front, from the auto-track algorithm, and every item is then
+          // clamped to that track regardless of the item's own width — even
+          // an explicit inline width can't exceed it. That was capping the
+          // video at a fraction of its real width. A flex column lets each
+          // child size independently.
+          "flex w-auto flex-col gap-0 rounded-3xl border-none bg-transparent p-2 shadow-xl ring-0",
           aspect === "16/9" && "sm:max-w-2xl",
         )}
       >
@@ -69,10 +75,27 @@ export function VideoDialog({
         <div
           className={cn(
             "relative max-w-full overflow-hidden rounded-2xl bg-black",
-            aspect === "9/16"
-              ? "aspect-9/16 h-[min(78vh,720px)]"
-              : "aspect-video w-[90vw]",
+            aspect === "16/9" && "aspect-video w-[90vw]",
           )}
+          // 9/16 sizing is inline, not a Tailwind arbitrary class: Tailwind's
+          // JIT silently failed to generate any rule for a min()-of-calc()s
+          // expression this nested, so the class was present in the markup
+          // but produced no CSS at all. Both dimensions are explicit here —
+          // not just height with aspect-ratio deriving width — because
+          // DialogContent is a CSS Grid with an auto column track, and that
+          // track's own auto-sizing pass ran before aspect-ratio resolved,
+          // pinning the column to ~185px regardless of the 9:16 ratio and
+          // squeezing the video into a thin, letterboxed strip.
+          style={
+            aspect === "9/16"
+              ? {
+                  aspectRatio: "9 / 16",
+                  height: "min(78vh, 720px)",
+                  width:
+                    "min(calc(78vh * 9 / 16), calc(720px * 9 / 16), 100%)",
+                }
+              : undefined
+          }
         >
           {status !== "error" && open && (
             <ReactPlayer
