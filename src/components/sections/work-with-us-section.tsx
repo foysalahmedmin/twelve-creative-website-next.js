@@ -53,7 +53,10 @@ export function WorkWithUsSection({ data }: { data?: CmsWorkWithUsSection }) {
       {cards.map((card, i) => (
         <div
           key={card.id}
-          className="relative min-h-screen w-full overflow-visible lg:sticky lg:top-0 lg:h-screen lg:overflow-hidden"
+          // min-h-screen only below: see growth-system-section.tsx for why
+          // this can't be unconditional — it's what was leaving a screen's
+          // worth of empty gradient above each card's content on mobile.
+          className="relative w-full overflow-visible lg:sticky lg:top-0 lg:h-screen lg:overflow-hidden"
           style={{ zIndex: i + 1 }}
         >
           {/* Background — semi-opaque gradient, not fully black */}
@@ -83,7 +86,7 @@ export function WorkWithUsSection({ data }: { data?: CmsWorkWithUsSection }) {
           />
 
           {/* Content */}
-          <div className="relative z-10 container flex min-h-screen flex-col justify-center py-20 lg:h-full lg:min-h-0">
+          <div className="relative z-10 container flex flex-col justify-center py-20 lg:h-full lg:min-h-0">
             <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:items-center lg:gap-20">
               {/* Left column */}
               <div className="space-y-6">

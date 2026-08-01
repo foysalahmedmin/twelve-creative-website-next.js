@@ -32,7 +32,11 @@ function StackCard({
 }) {
   return (
     <div
-      className="relative min-h-screen w-full overflow-visible lg:sticky lg:top-0 lg:h-screen lg:overflow-hidden"
+      // min-h-screen only below: the sticky/h-screen pin effect is desktop-only
+      // (lg:). Forcing a full-viewport minimum height on mobile too — where
+      // cards aren't sticky, just stacked in normal flow — left a screen's
+      // worth of empty gradient above each card's vertically-centered content.
+      className="relative w-full overflow-visible lg:sticky lg:top-0 lg:h-screen lg:overflow-hidden"
       style={{ zIndex: index + 1 }}
     >
       {/* Frosted brand background — lets the previous card blur through */}
@@ -62,7 +66,7 @@ function StackCard({
       />
 
       {/* Content */}
-      <div className="relative z-10 container flex min-h-screen flex-col justify-center py-16 lg:h-full lg:min-h-0 lg:py-20">
+      <div className="relative z-10 container flex flex-col justify-center py-16 lg:h-full lg:min-h-0 lg:py-20">
         {children}
 
         {/* Progress indicators */}
