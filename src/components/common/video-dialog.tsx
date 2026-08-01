@@ -17,7 +17,7 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import dynamic from "next/dynamic";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const ReactPlayer = dynamic(() => import("react-player"), { ssr: false });
 
@@ -82,6 +82,25 @@ export function VideoDialog({
       setCurrentTime(0);
     }
   }
+
+  // Independent of react-player's own event props entirely, as a last
+  // resort: on a real device in production, none of onReady/onCanPlay/
+  // onPlaying fired at all, even though the underlying <video> was
+  // confirmed already playing (readyState 4) — a provider-abstraction
+  // quirk on that engine, not something a longer wait or another prop
+  // would have caught, since the gap was in whether the event reached us
+  // at all. This reads the DOM element's own readyState directly through
+  // the ref, so it can't be affected by the same gap in event forwarding.
+  useEffect(() => {
+    if (!open || (status !== "loading" && status !== "buffering")) return;
+    const id = window.setInterval(() => {
+      const video = videoRef.current;
+      if (video && (video.readyState >= 3 || !video.paused)) {
+        setStatus((s) => (s === "error" ? s : "ready"));
+      }
+    }, 200);
+    return () => window.clearInterval(id);
+  }, [open, status]);
 
   const togglePlay = () => {
     const video = videoRef.current;
@@ -167,13 +186,21 @@ export function VideoDialog({
               height="100%"
               playsInline
               style={{ width: "100%", height: "100%" }}
+              // Three independent, redundant "the video can be shown now"
+              // signals, not just one: react-player's own onReady never
+              // fired at all on a real device in production (custom controls
+              // never appeared even though the video was already decoding
+              // and playing per the native <video> element's own readyState/
+              // paused properties) — a provider-abstraction quirk specific
+              // to that engine, not a timing issue a longer wait would have
+              // fixed. onCanPlay and onPlaying are plain native
+              // HTMLMediaElement events with no library layer to diverge on.
               onReady={() => setStatus((s) => (s === "error" ? s : "ready"))}
+              onCanPlay={() => setStatus((s) => (s === "error" ? s : "ready"))}
               onWaiting={() =>
                 setStatus((s) => (s === "ready" ? "buffering" : s))
               }
-              onPlaying={() =>
-                setStatus((s) => (s === "buffering" ? "ready" : s))
-              }
+              onPlaying={() => setStatus((s) => (s === "error" ? s : "ready"))}
               onError={() => setStatus("error")}
               onPlay={() => setPaused(false)}
               onPause={() => setPaused(true)}
