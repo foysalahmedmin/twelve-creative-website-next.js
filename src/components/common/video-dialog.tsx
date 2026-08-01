@@ -8,10 +8,16 @@ import {
 } from "@/components/ui/dialog";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
-import { Alert01Icon } from "@hugeicons/core-free-icons";
+import {
+  Alert01Icon,
+  PauseIcon,
+  PlayIcon,
+  VolumeHighIcon,
+  VolumeMute01Icon,
+} from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 const ReactPlayer = dynamic(() => import("react-player"), { ssr: false });
 
@@ -26,12 +32,27 @@ interface VideoDialogProps {
   aspect?: "9/16" | "16/9";
 }
 
+const formatTime = (seconds: number): string => {
+  if (!Number.isFinite(seconds) || seconds < 0) return "0:00";
+  const m = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60);
+  return `${m}:${String(s).padStart(2, "0")}`;
+};
+
 /**
  * Shared video lightbox for every "play this clip" surface in the app
  * (testimonials, marquee reels). Wraps react-player in its own loading/error
  * chrome so a slow network never exposes the browser's raw native buffering
  * or "can't play" icon inside the modal — that native chrome is what read as
  * a broken/glitchy line across the video.
+ *
+ * Controls are custom-built, not the native `controls` attribute: on real
+ * iOS Safari (never reproduced in desktop Chrome, including its device
+ * emulation — only caught by testing against real WebKit), the native
+ * control skin renders at a size that ignores this dialog's rounded,
+ * clipped container entirely, blowing the video up to cover most of the
+ * screen. Confirmed by removing `controls` alone, with nothing else
+ * changed, that this fixed it completely.
  */
 export function VideoDialog({
   open,
@@ -41,6 +62,11 @@ export function VideoDialog({
   aspect = "9/16",
 }: VideoDialogProps) {
   const [status, setStatus] = useState<PlayerStatus>("loading");
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [paused, setPaused] = useState(false);
+  const [muted, setMuted] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
 
   // Every newly opened video starts covered until it proves it can play.
   // Reset during render (not an effect) on the closed→open transition, per
@@ -49,8 +75,36 @@ export function VideoDialog({
   const [wasOpen, setWasOpen] = useState(open);
   if (open !== wasOpen) {
     setWasOpen(open);
-    if (open) setStatus("loading");
+    if (open) {
+      setStatus("loading");
+      setPaused(false);
+      setProgress(0);
+      setCurrentTime(0);
+    }
   }
+
+  const togglePlay = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (video.paused) void video.play();
+    else video.pause();
+  };
+
+  const toggleMute = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = !video.muted;
+    setMuted(video.muted);
+  };
+
+  const seek = (fraction: number) => {
+    const video = videoRef.current;
+    if (!video || !Number.isFinite(video.duration)) return;
+    video.currentTime = fraction * video.duration;
+    setProgress(fraction);
+  };
+
+  const showControls = status === "ready" || status === "buffering";
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -99,9 +153,10 @@ export function VideoDialog({
         >
           {status !== "error" && open && (
             <ReactPlayer
+              ref={videoRef}
               src={src}
               playing
-              controls
+              controls={false}
               width="100%"
               height="100%"
               playsInline
@@ -114,6 +169,19 @@ export function VideoDialog({
                 setStatus((s) => (s === "buffering" ? "ready" : s))
               }
               onError={() => setStatus("error")}
+              onPlay={() => setPaused(false)}
+              onPause={() => setPaused(true)}
+              onVolumeChange={() =>
+                setMuted(videoRef.current?.muted ?? false)
+              }
+              onTimeUpdate={() => {
+                const video = videoRef.current;
+                if (!video) return;
+                setCurrentTime(video.currentTime);
+                if (video.duration) {
+                  setProgress(video.currentTime / video.duration);
+                }
+              }}
             />
           )}
 
@@ -136,6 +204,50 @@ export function VideoDialog({
               <p className="text-primary-foreground/70 text-sm">
                 This video couldn&apos;t load. Please try again.
               </p>
+            </div>
+          )}
+
+          {showControls && (
+            <div className="absolute inset-x-0 bottom-0 z-10 flex items-center gap-2.5 bg-linear-to-t from-black/80 via-black/40 to-transparent px-3 pt-10 pb-3">
+              <button
+                type="button"
+                onClick={togglePlay}
+                aria-label={paused ? "Play" : "Pause"}
+                className="text-primary-foreground flex size-8 shrink-0 items-center justify-center rounded-full transition-transform active:scale-90"
+              >
+                <HugeiconsIcon
+                  icon={paused ? PlayIcon : PauseIcon}
+                  className="size-5"
+                  fill="currentColor"
+                />
+              </button>
+
+              <input
+                type="range"
+                min={0}
+                max={1}
+                step={0.001}
+                value={progress}
+                onChange={(e) => seek(Number(e.target.value))}
+                aria-label="Seek"
+                className="accent-primary h-1 flex-1 cursor-pointer"
+              />
+
+              <span className="text-primary-foreground/90 shrink-0 text-xs tabular-nums">
+                {formatTime(currentTime)}
+              </span>
+
+              <button
+                type="button"
+                onClick={toggleMute}
+                aria-label={muted ? "Unmute" : "Mute"}
+                className="text-primary-foreground flex size-8 shrink-0 items-center justify-center rounded-full transition-transform active:scale-90"
+              >
+                <HugeiconsIcon
+                  icon={muted ? VolumeMute01Icon : VolumeHighIcon}
+                  className="size-5"
+                />
+              </button>
             </div>
           )}
         </div>
