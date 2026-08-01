@@ -4,6 +4,7 @@ import { TestimonialCard } from "@/components/cards/testimonial-card";
 import { VideoTestimonialCard } from "@/components/cards/video-testimonial-card";
 import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { CenteredSectionHeader } from "@/components/common/section-label";
+import { VideoDialog } from "@/components/common/video-dialog";
 import {
   TESTIMONIALS_DATA,
   type TTestimonial,
@@ -12,22 +13,14 @@ import {
 import { cn } from "@/lib/utils";
 import type { HeadingSection } from "@/lib/api/shared-sections";
 import { TESTIMONIALS_SECTION_ID } from "@/hooks/use-testimonials-section-state";
-import { Cancel01Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import dynamic from "next/dynamic";
 import {
   forwardRef,
   useEffect,
   useImperativeHandle,
-  useCallback,
   useRef,
   useState,
 } from "react";
-
-const ReactPlayer = dynamic(() => import("react-player"), {
-  ssr: false,
-});
 
 // ── Continuous rAF marquee ──────────────────────────────────────────────────
 // A hand-rolled ticker: the track's translateX is advanced every animation
@@ -302,9 +295,6 @@ export const TestimonialSection = ({
 }: Partial<PageTestimonialSectionProps>) => {
   const { label, title, description, testimonials = [] } = data || {};
   const [activeVideo, setActiveVideo] = useState<TTestimonial | null>(null);
-  const modalRef = useRef<HTMLDivElement>(null);
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
-  const previousFocusRef = useRef<HTMLElement | null>(null);
 
   const videoMarquee = useRef<MarqueeHandle>(null);
   const textMarquee = useRef<MarqueeHandle>(null);
@@ -324,64 +314,7 @@ export const TestimonialSection = ({
   const videoItems = repeatToFill(videoTestimonials, 12);
   const textItems = repeatToFill(textTestimonials, 12);
 
-  const openVideo = (testimonial: TTestimonial) => {
-    previousFocusRef.current = document.activeElement as HTMLElement | null;
-    setActiveVideo(testimonial);
-  };
-
-  const closeVideo = useCallback(() => {
-    setActiveVideo(null);
-    window.requestAnimationFrame(() => previousFocusRef.current?.focus());
-  }, [setActiveVideo]);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!activeVideo) return;
-      if (e.key === "Escape") {
-        closeVideo();
-        return;
-      }
-      if (e.key !== "Tab" || !modalRef.current) return;
-      const focusable = Array.from(
-        modalRef.current.querySelectorAll<HTMLElement>(
-          'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
-        ),
-      );
-      if (!focusable.length) {
-        e.preventDefault();
-        modalRef.current.focus();
-        return;
-      }
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      const active = document.activeElement;
-      if (!modalRef.current.contains(active)) {
-        e.preventDefault();
-        (e.shiftKey ? last : first).focus();
-      } else if (
-        e.shiftKey &&
-        (active === first || active === modalRef.current)
-      ) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && active === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [activeVideo, closeVideo]);
-
-  useEffect(() => {
-    if (!activeVideo) return;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    window.requestAnimationFrame(() => closeButtonRef.current?.focus());
-    return () => {
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [activeVideo]);
+  const openVideo = (testimonial: TTestimonial) => setActiveVideo(testimonial);
 
   if (!testimonials.length) return null;
 
@@ -488,48 +421,14 @@ export const TestimonialSection = ({
         </div>
       </ScrollReveal>
 
-      {/* ── Video modal ── */}
-      {activeVideo && (
-        <div
-          onClick={closeVideo}
-          className="animate-fade-in fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
-        >
-          <div
-            ref={modalRef}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="testimonial-video-title"
-            tabIndex={-1}
-            onClick={(e) => e.stopPropagation()}
-            className="bg-card animate-zoom-in border-border relative max-h-[85vh] w-auto max-w-[90vw] rounded-3xl border p-2 shadow-xl"
-          >
-            <button
-              ref={closeButtonRef}
-              type="button"
-              onClick={closeVideo}
-              className="hover:text-primary absolute -top-12 right-0 z-10 flex items-center gap-1 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-md transition-all duration-200"
-            >
-              <HugeiconsIcon icon={Cancel01Icon} className="size-4" />
-              Close (ESC)
-            </button>
-
-            <h2 id="testimonial-video-title" className="sr-only">
-              Video testimonial from {activeVideo.name}
-            </h2>
-
-            <div className="aspect-9/16 h-[min(78vh,720px)] max-w-full overflow-hidden rounded-2xl bg-black">
-              <ReactPlayer
-                src={activeVideo.video_message || ""}
-                playing
-                controls
-                width="100%"
-                height="100%"
-                playsInline
-              />
-            </div>
-          </div>
-        </div>
-      )}
+      <VideoDialog
+        open={!!activeVideo}
+        onOpenChange={(next) => {
+          if (!next) setActiveVideo(null);
+        }}
+        src={activeVideo?.video_message || ""}
+        title={`Video testimonial from ${activeVideo?.name ?? ""}`}
+      />
     </section>
   );
 };

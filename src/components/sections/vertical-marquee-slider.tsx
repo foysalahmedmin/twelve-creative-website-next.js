@@ -2,10 +2,8 @@
 
 import { Play } from "lucide-react";
 import React, { useState } from "react";
-import dynamic from "next/dynamic";
+import { VideoDialog } from "@/components/common/video-dialog";
 import { cn } from "@/lib/utils";
-
-const ReactPlayer = dynamic(() => import("react-player"), { ssr: false }) as any;
 
 export interface MarqueeItem {
   image_url: string;
@@ -19,52 +17,6 @@ interface VerticalMarqueeSliderProps {
   pauseOnHover?: boolean;
   className?: string;
 }
-
-// ── Popup Modal ──────────────────────────────────────────
-const VideoPopup = ({
-  url,
-  onClose,
-}: {
-  url: string;
-  onClose: () => void;
-}) => {
-  return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
-      onClick={onClose}
-    >
-      <div
-        className="relative w-[90vw] max-w-3xl aspect-video"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Close button */}
-        <button
-          onClick={onClose}
-          className="absolute top-0 right-4 text-white text-3xl font-bold z-10 hover:text-gray-300"
-        >
-          ✕
-        </button>
-        <div className="aspect-9/16 max-w-100 w-full mx-auto rounded-lg overflow-hidden relative h-full">
-          <ReactPlayer
-            className="aspect-9/16 absolute inset-0"
-            src={url}
-            playing={true}
-            width="100%"
-            height="100%"
-            controls={true}
-            playsinline
-            config={{
-              youtube: {
-                modestbranding: 1,
-                rel: 0,
-              },
-            }}
-          />
-        </div>
-      </div>
-    </div>
-  );
-};
 
 // ── Main Component ───────────────────────────────────────
 export const VerticalMarqueeSlider: React.FC<VerticalMarqueeSliderProps> = ({
@@ -138,10 +90,14 @@ export const VerticalMarqueeSlider: React.FC<VerticalMarqueeSliderProps> = ({
 
   return (
     <section className="w-full py-12 sm:py-16">
-      {/* Video Popup */}
-      {popupUrl && (
-        <VideoPopup url={popupUrl} onClose={() => setPopupUrl(null)} />
-      )}
+      <VideoDialog
+        open={!!popupUrl}
+        onOpenChange={(next) => {
+          if (!next) setPopupUrl(null);
+        }}
+        src={popupUrl ?? ""}
+        title="Reel preview"
+      />
 
       <div
         className={cn(
