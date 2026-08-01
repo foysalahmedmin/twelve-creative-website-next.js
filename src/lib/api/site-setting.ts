@@ -63,6 +63,11 @@ export interface SiteSetting {
   contact_page?: ContactPageContent;
   footer?: FooterContent;
   updated_at?: string;
+  /**
+   * Derived, admin-only: where a lead notification would actually land right
+   * now, including the server fallback when the field is left empty.
+   */
+  notification_recipients_effective?: string[];
 }
 
 export interface PublicSiteSettingResult {

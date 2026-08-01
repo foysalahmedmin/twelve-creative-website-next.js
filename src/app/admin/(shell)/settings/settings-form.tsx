@@ -10,7 +10,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import type { SiteSetting } from "@/lib/api/site-setting";
-import { updateSiteSettingAction } from "@/lib/api/site-setting-actions";
+import {
+  sendTestNotificationEmailAction,
+  updateSiteSettingAction,
+} from "@/lib/api/site-setting-actions";
 
 interface Props {
   initial: SiteSetting;
@@ -23,6 +26,7 @@ const persistedText = (value: string): string => value.trim();
 export function SettingsForm({ initial }: Props) {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
+  const [testingEmail, setTestingEmail] = useState(false);
   const [faqImageUploading, setFaqImageUploading] = useState(false);
 
   const [form, setForm] = useState({
@@ -62,6 +66,31 @@ export function SettingsForm({ initial }: Props) {
 
   const update = (key: keyof typeof form, value: string) =>
     setForm((s) => ({ ...s, [key]: value }));
+
+  const effectiveRecipients = initial.notification_recipients_effective ?? [];
+  // When the field is blank the server falls back to its configured sender,
+  // which is exactly what `effectiveRecipients` already resolves to.
+  const defaultRecipientLabel = initial.booking_notification_email?.trim()
+    ? ""
+    : effectiveRecipients.join(", ");
+  // The test targets the saved value, so an unsaved edit would silently test
+  // the wrong address.
+  const notificationEmailDirty =
+    form.booking_notification_email.trim() !==
+    (initial.booking_notification_email ?? "").trim();
+
+  const handleSendTestEmail = async () => {
+    setTestingEmail(true);
+    const res = await sendTestNotificationEmailAction();
+    setTestingEmail(false);
+    if (!res.ok) {
+      toast.error(res.error ?? "Could not send the test email");
+      return;
+    }
+    toast.success(
+      `Test email sent to ${res.data?.recipients.join(", ")}. Check the inbox to confirm it arrived.`,
+    );
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -295,20 +324,70 @@ export function SettingsForm({ initial }: Props) {
             Notifications
           </h3>
           <p className="text-muted-foreground text-xs">
-            Where booking and contact submissions get emailed. Defaults to the
-            SMTP user.
+            Where booking and contact form submissions are emailed.
           </p>
         </div>
         <div className="space-y-2">
           <Label htmlFor="booking_notification_email">Notification email</Label>
+          {/* Deliberately not type="email": the browser rejects a
+              comma-separated list, which would block the whole form. */}
           <Input
             id="booking_notification_email"
-            type="email"
+            type="text"
+            inputMode="email"
+            autoComplete="off"
+            placeholder={defaultRecipientLabel}
             value={form.booking_notification_email}
             onChange={(e) =>
               update("booking_notification_email", e.target.value)
             }
+            aria-describedby="booking_notification_email_help"
           />
+          <p
+            id="booking_notification_email_help"
+            className="text-muted-foreground text-xs"
+          >
+            Separate several addresses with commas to notify more than one
+            person. Leave it empty to use the default
+            {defaultRecipientLabel ? ` (${defaultRecipientLabel})` : ""}.
+          </p>
+        </div>
+
+        <div className="border-border bg-muted/30 space-y-3 rounded-lg border p-3">
+          <div className="text-xs">
+            <span className="text-muted-foreground">Currently sending to </span>
+            {effectiveRecipients.length ? (
+              <span className="text-foreground font-medium">
+                {effectiveRecipients.join(", ")}
+              </span>
+            ) : (
+              <span className="text-destructive font-medium">
+                nobody — set an address above, or notifications will not be
+                delivered.
+              </span>
+            )}
+          </div>
+          <div className="flex flex-wrap items-center gap-3">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={handleSendTestEmail}
+              disabled={
+                testingEmail ||
+                notificationEmailDirty ||
+                !effectiveRecipients.length
+              }
+            >
+              {testingEmail && <Loader2 className="size-4 animate-spin" />}
+              {testingEmail ? "Sending…" : "Send test email"}
+            </Button>
+            {notificationEmailDirty && (
+              <span className="text-muted-foreground text-xs">
+                Save your change first — the test goes to the saved address.
+              </span>
+            )}
+          </div>
         </div>
       </section>
 

@@ -37,6 +37,32 @@ export interface ActionResult<T = unknown> {
   data?: T;
 }
 
+/**
+ * Sends a real notification email to whoever is configured right now, so an
+ * admin can confirm the address receives mail instead of finding out when a
+ * lead goes missing. Targets the saved value — save first, then test.
+ */
+export async function sendTestNotificationEmailAction(): Promise<
+  ActionResult<{ recipients: string[] }>
+> {
+  try {
+    const res = await apiFetch<{ recipients: string[] }>(
+      "/api/site-setting/notification-email/test",
+      { method: "POST" },
+    );
+    return { ok: true, data: res.data };
+  } catch (e) {
+    unstable_rethrow(e);
+    if (e instanceof ApiError) {
+      return { ok: false, error: e.message };
+    }
+    return {
+      ok: false,
+      error: e instanceof Error ? e.message : "Could not send the test email",
+    };
+  }
+}
+
 export async function updateSiteSettingAction(
   payload: SiteSettingInput,
 ): Promise<ActionResult<SiteSetting>> {
