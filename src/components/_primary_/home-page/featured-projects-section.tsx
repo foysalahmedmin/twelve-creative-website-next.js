@@ -9,7 +9,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   type TFeaturedIndustryGroup,
   type TFeaturedProject,
@@ -100,12 +99,11 @@ export const FeaturedProjectsSection = ({
   data,
   heading,
 }: FeaturedProjectsSectionProps) => {
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const activeId = data.some((group) => group.id === selectedId)
-    ? selectedId!
-    : (data[0]?.id ?? "");
+  // Industry tabs are off for now — every group's projects show together in
+  // one carousel rather than filtered by industry.
+  const projects = data.flatMap((group) => group.projects);
 
-  if (!data.length) return null;
+  if (!projects.length) return null;
 
   return (
     <section
@@ -125,68 +123,37 @@ export const FeaturedProjectsSection = ({
           />
         )}
 
-        {/* Tabs wrapper */}
-        <div className="px-4">
-          <Tabs
-            value={activeId}
-            onValueChange={setSelectedId}
-            className={cn(
-              "flex w-full flex-col items-center",
-              heading === null ? "mt-0" : "mt-5",
-            )}
-          >
-            {/* Horizontally scrollable on mobile */}
-            <div className="scrollbar-none w-full overflow-x-auto pb-1">
-              <div className="flex min-w-max justify-center px-2">
-                <TabsList>
-                  {data.map((industry) => (
-                    <TabsTrigger key={industry.id} value={industry.id}>
-                      {industry.label}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
-              </div>
-            </div>
-
-            {data.map((industry) => (
-              <TabsContent
-                key={industry.id}
-                value={industry.id}
-                className="mt-10 w-full lg:mt-16"
+        {/* Carousel instead of a grid: on mobile the projects sit side-by-side
+            and swipe horizontally, so you never scroll a tall column of
+            videos. Desktop keeps the same item counts as the old grid. */}
+        <Carousel
+          opts={{ align: "start" }}
+          className={cn(
+            "mx-auto max-w-7xl px-4 lg:px-14",
+            heading === null ? "mt-0" : "mt-10 lg:mt-16",
+          )}
+        >
+          <CarouselContent className="-ml-2">
+            {projects.map((project) => (
+              <CarouselItem
+                key={project.id}
+                className="basis-full pl-2 sm:basis-1/2 lg:basis-1/4"
               >
-                {/* Carousel instead of a grid: on mobile the projects sit
-                    side-by-side and swipe horizontally, so you never scroll a
-                    tall column of videos or lose sight of the tabs. Desktop
-                    keeps the same item counts as the old grid. */}
-                <Carousel
-                  opts={{ align: "start" }}
-                  className="mx-auto max-w-7xl px-4 lg:px-14"
-                >
-                  <CarouselContent className="-ml-2">
-                    {industry.projects.map((project) => (
-                      <CarouselItem
-                        key={project.id}
-                        className="basis-full pl-2 sm:basis-1/2 lg:basis-1/4"
-                      >
-                        <ProjectCard project={project} />
-                      </CarouselItem>
-                    ))}
-                  </CarouselContent>
-
-                  <CarouselPrevious
-                    variant="default"
-                    className="left-2 z-20 hidden lg:flex"
-                  />
-                  <CarouselNext
-                    variant="default"
-                    className="right-2 z-20 hidden lg:flex"
-                  />
-                  <CarouselDots className="mt-6" />
-                </Carousel>
-              </TabsContent>
+                <ProjectCard project={project} />
+              </CarouselItem>
             ))}
-          </Tabs>
-        </div>
+          </CarouselContent>
+
+          <CarouselPrevious
+            variant="default"
+            className="left-2 z-20 hidden lg:flex"
+          />
+          <CarouselNext
+            variant="default"
+            className="right-2 z-20 hidden lg:flex"
+          />
+          <CarouselDots className="mt-6" />
+        </Carousel>
       </div>
     </section>
   );
