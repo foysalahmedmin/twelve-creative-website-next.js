@@ -76,31 +76,17 @@ export const ProcessSection = ({
   const imgY = reduceMotion ? "0%" : drift;
 
   useEffect(() => {
+    // Which step is "active" is decided by proximity to viewport centre,
+    // on every breakpoint — not by a row-height-derived scroll percentage.
+    // That math needed the steps column to be substantially taller than the
+    // 84vh sticky window to give each step a meaningful scroll distance; in
+    // practice the column is only ~100vh, so the whole 0→1 progress range
+    // collapsed into a couple hundred pixels. One scroll tick blew past
+    // nearly all of it, jumping straight to the last step and sticking
+    // there — the sticky image looked frozen for the rest of the section.
+    // Distance-to-centre has no such range to get wrong: it stays correct
+    // regardless of how tall the cards end up being.
     const handleScroll = () => {
-      const isDesktop = window.innerWidth >= 1024;
-
-      if (isDesktop && rowRef.current) {
-        const rect = rowRef.current.getBoundingClientRect();
-        const topOffset = window.innerHeight * 0.08; // 8vh
-        const stickyHeight = window.innerHeight * 0.84; // 84vh
-        const totalScrollRange = rect.height - stickyHeight;
-
-        if (totalScrollRange > 0) {
-          const scrolled = topOffset - rect.top;
-          const progress = Math.max(
-            0,
-            Math.min(1, scrolled / totalScrollRange),
-          );
-          const index = Math.min(
-            Math.floor(progress * process_steps.length),
-            process_steps.length - 1,
-          );
-          setActiveIndex(Math.max(0, index));
-          return;
-        }
-      }
-
-      // Mobile/tablet fallback: closest to viewport center
       const cards = document.querySelectorAll(".process-story-card");
       const mid = window.innerHeight / 2;
       let closestIndex = 0;
