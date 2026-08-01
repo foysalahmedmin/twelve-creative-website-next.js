@@ -34,13 +34,26 @@ export const ServiceCard = ({ service, className }: ServiceCardProps) => {
   const dispatch = useAppDispatch();
 
   return (
-    <div className={cn("group/service relative h-full", className)}>
+    // tabIndex makes the card itself focusable, not just the button inside
+    // it — group-hover has no equivalent on touch, so without this, a phone
+    // could never trigger the flip at all and "Get Started" was permanently
+    // unreachable. Tapping the card focuses it (:focus-within), tapping the
+    // now-revealed button moves focus onto it without leaving the card's
+    // focus-within scope, so it stays flipped for that second tap.
+    <div
+      tabIndex={0}
+      className={cn(
+        "group/service focus-visible:ring-primary/40 relative h-full rounded-2xl outline-none focus-visible:ring-2",
+        className,
+      )}
+    >
       {/* Front face — visible by default */}
       <div
         className={cn(
           "bg-muted text-foreground flex h-full w-full flex-col items-start justify-start rounded-2xl px-5 py-6",
           "transform transition-all duration-500 ease-out",
           "group-hover/service:-translate-y-6 group-hover/service:opacity-0",
+          "group-focus-within/service:-translate-y-6 group-focus-within/service:opacity-0",
         )}
       >
         <h3 className="font-heading text-foreground text-xl leading-tight font-black tracking-tight md:text-2xl">
@@ -62,12 +75,13 @@ export const ServiceCard = ({ service, className }: ServiceCardProps) => {
         </div>
       </div>
 
-      {/* Back face — shown on hover: brand-orange gradient reveal */}
+      {/* Back face — shown on hover or (for touch/keyboard) focus-within */}
       <div
         className={cn(
           "pointer-events-none absolute inset-0 h-full w-full opacity-0",
           "translate-y-6 transform transition-all duration-500 ease-out",
           "group-hover/service:pointer-events-auto group-hover/service:translate-y-0 group-hover/service:opacity-100",
+          "group-focus-within/service:pointer-events-auto group-focus-within/service:translate-y-0 group-focus-within/service:opacity-100",
         )}
       >
         {/* Orange gradient surface — brand primary, dark-on-orange content */}
