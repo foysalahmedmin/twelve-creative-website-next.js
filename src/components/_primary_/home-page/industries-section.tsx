@@ -17,6 +17,10 @@ import {
   Restaurant01Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  NativeSelect,
+  NativeSelectOption,
+} from "@/components/ui/native-select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import dynamic from "next/dynamic";
 import Link from "next/link";
@@ -42,6 +46,8 @@ interface Props {
 export const IndustriesSection = ({ className, data, heading }: Props) => {
   const industries = data === undefined ? INDUSTRIES_DATA : data;
   const [activeId, setActiveId] = useState(industries[0]?.id ?? "");
+  const activeIndustry =
+    industries.find((industry) => industry.id === activeId) ?? industries[0];
 
   if (industries.length === 0) return null;
 
@@ -70,27 +76,56 @@ export const IndustriesSection = ({ className, data, heading }: Props) => {
               onValueChange={setActiveId}
               className="flex w-full flex-col items-center"
             >
-              {/* Tab Pills - Styled exactly like the old glass navigation bar */}
-              <div className="scrollbar-none mb-12 w-full overflow-x-auto pb-2">
-                <div className="flex min-w-max justify-center px-4">
-                  <TabsList className="border-border bg-card flex gap-1 rounded-2xl border p-1.5">
-                    {industries.map((industry) => {
-                      const Icon = INDUSTRY_ICON_MAP[industry.icon];
-                      return (
-                        <TabsTrigger
-                          key={industry.id}
-                          value={industry.id}
-                          className="hover:bg-muted data-[state=active]:bg-primary data-[state=active]:text-primary-foreground flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all sm:px-6"
-                        >
-                          <HugeiconsIcon
-                            icon={Icon}
-                            className="size-4 shrink-0"
-                          />
-                          {industry.name}
-                        </TabsTrigger>
-                      );
-                    })}
-                  </TabsList>
+              {/* Pill tabs — plenty of room at this width, so every industry
+                  reads at a glance. Below lg a row of these either got cut
+                  off or forced a scrollbar, so mobile gets a native select
+                  instead (below) rather than a squeezed-down version of the
+                  same row. */}
+              <div className="mb-12 hidden w-full justify-center lg:flex">
+                <TabsList className="border-border bg-card flex gap-1 rounded-2xl border p-1.5">
+                  {industries.map((industry) => {
+                    const Icon = INDUSTRY_ICON_MAP[industry.icon];
+                    return (
+                      <TabsTrigger
+                        key={industry.id}
+                        value={industry.id}
+                        className="hover:bg-muted data-[state=active]:bg-primary data-[state=active]:text-primary-foreground flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all sm:px-6"
+                      >
+                        <HugeiconsIcon icon={Icon} className="size-4 shrink-0" />
+                        {industry.name}
+                      </TabsTrigger>
+                    );
+                  })}
+                </TabsList>
+              </div>
+
+              {/* Native select — one tap opens the OS's own picker sheet/wheel
+                  instead of a row that has to fit N industries in ~360px.
+                  Doesn't care how many industries there are or how long a
+                  name runs, so renaming one in the CMS can't reintroduce the
+                  cramped-row problem this replaces. */}
+              <div className="mb-10 w-full max-w-xs px-4 lg:hidden">
+                <div className="relative">
+                  <NativeSelect
+                    value={activeId}
+                    onChange={(e) => setActiveId(e.target.value)}
+                    aria-label="Choose an industry"
+                    className="w-full"
+                    selectClassName="border-border bg-card text-foreground h-12 rounded-2xl pl-11 pr-10 text-sm font-semibold shadow-sm"
+                  >
+                    {industries.map((industry) => (
+                      <NativeSelectOption key={industry.id} value={industry.id}>
+                        {industry.name}
+                      </NativeSelectOption>
+                    ))}
+                  </NativeSelect>
+                  {/* Painted after the select (not before) so its opaque
+                      background doesn't cover this — both sit at the same
+                      auto stacking level, and later DOM order wins there. */}
+                  <HugeiconsIcon
+                    icon={INDUSTRY_ICON_MAP[activeIndustry.icon]}
+                    className="text-primary pointer-events-none absolute top-1/2 left-4 size-4 -translate-y-1/2"
+                  />
                 </div>
               </div>
 
