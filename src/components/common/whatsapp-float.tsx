@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const WA_NUMBER = "19518226223"; // Replace with Twelve Creative's WhatsApp number
 const WA_MESSAGE = encodeURIComponent(
@@ -20,13 +20,34 @@ export function WhatsAppFloat() {
   // clock); set to the current time when the user opens the chat.
   const [time, setTime] = useState("");
 
+  // This widget deliberately floats above everything (z-9998), which also put
+  // it above modals — on a phone it landed right on the video dialog's mute
+  // button. Rather than lowering it below every overlay, step out of the way
+  // only while a dialog is actually open. Watching for the portalled dialog
+  // node keeps this independent of which dialog opened, or from where.
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  useEffect(() => {
+    const check = () =>
+      setDialogOpen(!!document.querySelector("[data-slot='dialog-content']"));
+    check();
+    const observer = new MutationObserver(check);
+    observer.observe(document.body, { childList: true, subtree: true });
+    return () => observer.disconnect();
+  }, []);
+
   const handleToggle = () => {
     if (!open) setTime(formatNow());
     setOpen((prev) => !prev);
   };
 
   return (
-    <div className="pointer-events-none fixed right-5 bottom-24 z-9998 flex flex-col items-end gap-3 sm:right-6 lg:bottom-6">
+    <div
+      className={cn(
+        "pointer-events-none fixed right-5 bottom-24 z-9998 flex flex-col items-end gap-3 transition-opacity duration-200 sm:right-6 lg:bottom-6",
+        dialogOpen && "invisible opacity-0",
+      )}
+    >
       {/* Chat Bubble Popup */}
       <div
         className={cn(
