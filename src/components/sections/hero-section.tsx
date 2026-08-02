@@ -15,10 +15,7 @@ const ReactPlayer = dynamic(() => import("react-player"), { ssr: false });
 
 interface HeroSectionProps {
   className?: string;
-  data?: Omit<
-    Partial<THomeHero>,
-    "primary_cta" | "secondary_cta" | "video"
-  > & {
+  data?: Omit<Partial<THomeHero>, "primary_cta" | "secondary_cta" | "video"> & {
     primary_cta?: THomeHero["primary_cta"] | null;
     secondary_cta?: THomeHero["secondary_cta"] | null;
     video?: THomeHero["video"] | null;
@@ -66,6 +63,38 @@ export const HeroSection = ({
               <p className="text-foreground/80 mt-6 text-center text-sm leading-[150%] font-normal md:text-base">
                 {data.description}
               </p>
+            </ScrollReveal>
+          )}
+
+          {/* Video showcase */}
+          {data.video && (data.video.src || data.video.poster) && (
+            <ScrollReveal
+              animation="zoom-in"
+              delayMs={500}
+              durationMs={900}
+              className="w-full px-4 lg:hidden lg:px-12"
+            >
+              <div className="border-foreground/10 relative mx-auto mt-8 aspect-video w-full max-w-4xl overflow-hidden rounded-2xl border shadow-sm lg:mt-10 lg:rounded-3xl">
+                {data.video.src ? (
+                  <ReactPlayer
+                    src={data.video.src}
+                    controls
+                    width="100%"
+                    height="100%"
+                    playsInline
+                    light={data.video.poster || false}
+                    style={{ width: "100%", height: "100%" }}
+                  />
+                ) : (
+                  <Image
+                    src={data.video.poster!}
+                    alt=""
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 1024px"
+                    className="object-cover"
+                  />
+                )}
+              </div>
             </ScrollReveal>
           )}
 
@@ -119,7 +148,7 @@ export const HeroSection = ({
             animation="zoom-in"
             delayMs={500}
             durationMs={900}
-            className="w-full px-4 lg:px-12"
+            className="hidden w-full px-4 lg:block lg:px-12"
           >
             {/* max-w-4xl matches PageHeader's hero media, whose width is
                 capped by that section's max-w-4xl column — so the home hero
