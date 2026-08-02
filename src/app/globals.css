@@ -130,6 +130,7 @@
   --animate-accordion-down: slide-down 200ms ease-out;
   --animate-accordion-up: slide-up 200ms ease-out;
   --animate-spin-slow: spin 3s linear infinite;
+  --animate-nudge-x: nudge-x 1.4s ease-in-out infinite;
 
   @keyframes spin {
     from {
@@ -182,6 +183,17 @@
     100% {
       transform: scale(1);
       opacity: 1;
+    }
+  }
+
+  @keyframes nudge-x {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+
+    50% {
+      transform: translateX(4px);
     }
   }
 

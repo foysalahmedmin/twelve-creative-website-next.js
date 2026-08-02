@@ -15,7 +15,7 @@ import {
 } from "@/data/featured-projects.data";
 import { cn } from "@/lib/utils";
 import type { HeadingSection } from "@/lib/api/shared-sections";
-import { PlayIcon } from "@hugeicons/core-free-icons";
+import { ArrowRight02Icon, PlayIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
@@ -122,6 +122,25 @@ export const FeaturedProjectsSection = ({
             className="mb-0 lg:mb-0"
           />
         )}
+
+        {/* Swipe hint (client request) — mobile only, since desktop already
+            shows the Previous/Next arrow buttons below and the hint would be
+            redundant there. Right-aligned to the carousel's own edge. */}
+        <div
+          className={cn(
+            "mx-auto flex max-w-7xl items-center justify-end gap-1.5 px-4 lg:hidden",
+            heading === null ? "mt-4" : "mt-6",
+          )}
+        >
+          <span className="text-muted-foreground text-[11px] font-bold tracking-[0.12em] uppercase">
+            Swipe to discover
+          </span>
+          <HugeiconsIcon
+            icon={ArrowRight02Icon}
+            strokeWidth={2.5}
+            className="text-muted-foreground motion-safe:animate-nudge-x size-3.5"
+          />
+        </div>
 
         {/* Carousel instead of a grid: on mobile the projects sit side-by-side
             and swipe horizontally, so you never scroll a tall column of

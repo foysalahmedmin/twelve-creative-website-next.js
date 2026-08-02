@@ -1,7 +1,7 @@
 "use client";
 
-import { CenteredSectionHeader } from "@/components/common/section-label";
 import { ScrollReveal } from "@/components/common/scroll-reveal";
+import { CenteredSectionHeader } from "@/components/common/section-label";
 import { Card } from "@/components/ui/card";
 import {
   Carousel,
@@ -9,21 +9,22 @@ import {
   CarouselDots,
   CarouselItem,
 } from "@/components/ui/carousel";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   INDUSTRIES_DATA,
   type TIndustry,
   type TIndustryIconKey,
 } from "@/data/industries.data";
-import { cn } from "@/lib/utils";
 import type { HeadingSection } from "@/lib/api/shared-sections";
+import { cn } from "@/lib/utils";
 import {
   Airplane01Icon,
+  ArrowRight02Icon,
   Briefcase01Icon,
   Building04Icon,
   Restaurant01Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useState } from "react";
@@ -103,9 +104,11 @@ const IndustryPanel = ({ industry }: { industry: TIndustry }) => {
               className="bg-primary text-primary-foreground group/cta inline-flex items-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold tracking-[0.05em] uppercase transition-transform duration-200 hover:-translate-y-0.5"
             >
               {industry.ctaLabel ?? "Book a Call"}
-              <span className="transition-transform duration-200 group-hover/cta:translate-x-1">
-                &gt;
-              </span>
+              <HugeiconsIcon
+                icon={ArrowRight02Icon}
+                strokeWidth={2.5}
+                className="size-4 shrink-0 transition-transform duration-200 group-hover/cta:translate-x-1"
+              />
             </Link>
           </div>
         </div>
@@ -226,6 +229,20 @@ export const IndustriesSection = ({ className, data, heading }: Props) => {
                 The card carries its own name, so the dots only need to say
                 where you are, not what's next. */}
             <div className="lg:hidden">
+              {/* Swipe hint — same affordance as Featured Projects. The card
+                  fills most of the screen and otherwise gives no indication
+                  there's more than one industry to see. */}
+              <div className="mb-4 flex items-center justify-end gap-1.5">
+                <span className="text-muted-foreground text-[11px] font-bold tracking-[0.12em] uppercase">
+                  Swipe to discover
+                </span>
+                <HugeiconsIcon
+                  icon={ArrowRight02Icon}
+                  strokeWidth={2.5}
+                  className="text-muted-foreground motion-safe:animate-nudge-x size-3.5"
+                />
+              </div>
+
               {/* Looping, but not advancing on its own: each card is a wall of
                   copy to read, and having it slide away mid-sentence costs
                   more than the movement gains. */}
@@ -233,11 +250,9 @@ export const IndustriesSection = ({ className, data, heading }: Props) => {
                 opts={{ loop: true, align: "start" }}
                 className="w-full"
               >
-                {/* pb-5 keeps the layered card peeking below each panel from
-                    being clipped by the carousel's own overflow. */}
                 <CarouselContent>
                   {industries.map((industry) => (
-                    <CarouselItem key={industry.id} className="basis-full pb-5">
+                    <CarouselItem key={industry.id} className="basis-full">
                       <IndustryPanel industry={industry} />
                     </CarouselItem>
                   ))}
