@@ -1,6 +1,5 @@
 "use client";
 
-import { format } from "date-fns";
 import { Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -23,6 +22,7 @@ import {
   togglePublishInsightAction,
 } from "@/lib/api/insights-actions";
 import type { Insight } from "@/lib/api/insights";
+import { formatDate } from "@/lib/local-date";
 
 interface Props {
   items: Insight[];
@@ -107,8 +107,8 @@ export function InsightsTable({ items }: Props) {
               <TableCell className="text-muted-foreground hidden text-xs md:table-cell">
                 {item.category ?? "—"}
               </TableCell>
-              <TableCell className="text-muted-foreground hidden whitespace-nowrap text-xs md:table-cell">
-                {format(new Date(item.updated_at), "d MMM yy")}
+              <TableCell className="text-muted-foreground hidden text-xs whitespace-nowrap md:table-cell">
+                {formatDate(item.updated_at)}
               </TableCell>
               <TableCell>
                 <StatusBadge

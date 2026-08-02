@@ -1,6 +1,5 @@
 "use client";
 
-import { format } from "date-fns";
 import Link from "next/link";
 import { StatusBadge } from "@/components/admin/status-badge";
 import {
@@ -13,6 +12,7 @@ import {
 } from "@/components/ui/table";
 import type { ContactMessage } from "@/lib/api/contact-messages";
 import { cn } from "@/lib/utils";
+import { formatDate } from "@/lib/local-date";
 
 interface Props {
   items: ContactMessage[];
@@ -44,10 +44,12 @@ export function MessagesTable({ items }: Props) {
         {items.map((item) => (
           <TableRow
             key={item._id}
-            className={cn(!item.is_read && !item.is_archived && "bg-primary/[0.02]")}
+            className={cn(
+              !item.is_read && !item.is_archived && "bg-primary/[0.02]",
+            )}
           >
-            <TableCell className="text-muted-foreground whitespace-nowrap text-xs">
-              {format(new Date(item.created_at), "d MMM yy")}
+            <TableCell className="text-muted-foreground text-xs whitespace-nowrap">
+              {formatDate(item.created_at)}
             </TableCell>
             <TableCell>
               <Link

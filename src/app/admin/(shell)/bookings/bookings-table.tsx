@@ -1,6 +1,5 @@
 "use client";
 
-import { format } from "date-fns";
 import Link from "next/link";
 import {
   Table,
@@ -13,6 +12,7 @@ import {
 import type { Booking } from "@/lib/api/bookings";
 import { BookingStatusBadge } from "./status-pill";
 import { LeadSourceBadge } from "./lead-source-badge";
+import { formatDate } from "@/lib/local-date";
 
 interface Props {
   items: Booking[];
@@ -45,8 +45,8 @@ export function BookingsTable({ items }: Props) {
       <TableBody>
         {items.map((item) => (
           <TableRow key={item._id}>
-            <TableCell className="text-muted-foreground whitespace-nowrap text-xs">
-              {format(new Date(item.created_at), "d MMM yy")}
+            <TableCell className="text-muted-foreground text-xs whitespace-nowrap">
+              {formatDate(item.created_at)}
             </TableCell>
             <TableCell>
               <Link

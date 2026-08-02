@@ -3,7 +3,8 @@
 import { formatDistanceToNow } from "date-fns";
 import { Bell, CalendarCheck, ChevronDown, LogOut, Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useState, useSyncExternalStore, useTransition } from "react";
+import { formatDateTime } from "@/lib/local-date";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/common/theme-toggle";
 import {
@@ -28,12 +29,34 @@ interface AdminTopbarProps {
   unreadCount?: number;
 }
 
-function relativeTime(date: string) {
+const subscribeToNothing = () => () => {};
+
+const relativeOrFixed = (date: string, mounted: boolean): string => {
+  if (!mounted) return formatDateTime(date);
   try {
     return formatDistanceToNow(new Date(date), { addSuffix: true });
   } catch {
-    return "";
+    return formatDateTime(date);
   }
+};
+
+/**
+ * "3 minutes ago" is measured against the clock at render time, so the server
+ * and the browser can never agree on it — rendering it during hydration is a
+ * guaranteed mismatch (React #418). Show the fixed timestamp until the
+ * component has mounted, then swap in the relative phrasing on the client.
+ */
+function RelativeTime({ date }: { date: string }) {
+  // useSyncExternalStore is the sanctioned way to ask "has this hydrated
+  // yet?": it returns the server snapshot during SSR and hydration, then the
+  // client one, without a setState-in-effect round trip.
+  const mounted = useSyncExternalStore(
+    subscribeToNothing,
+    () => true,
+    () => false,
+  );
+
+  return <>{relativeOrFixed(date, mounted)}</>;
 }
 
 const TYPE_ICON: Record<string, React.ReactNode> = {
@@ -181,7 +204,7 @@ export function AdminTopbar({
                         </p>
                       )}
                       <p className="text-muted-foreground/70 mt-1 text-[11px]">
-                        {relativeTime(n.created_at)}
+                        <RelativeTime date={n.created_at} />
                       </p>
                     </div>
 

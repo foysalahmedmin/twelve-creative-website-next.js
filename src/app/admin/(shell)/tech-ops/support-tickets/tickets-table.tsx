@@ -1,6 +1,5 @@
 "use client";
 
-import { format } from "date-fns";
 import Link from "next/link";
 import {
   Table,
@@ -12,8 +11,12 @@ import {
 } from "@/components/ui/table";
 import { StatusBadge } from "@/components/admin/status-badge";
 import type { Ticket, TicketPriority, TicketStatus } from "@/lib/api/tickets";
+import { formatDate } from "@/lib/local-date";
 
-const STATUS_TONE: Record<TicketStatus, "warning" | "info" | "positive" | "danger" | "neutral"> = {
+const STATUS_TONE: Record<
+  TicketStatus,
+  "warning" | "info" | "positive" | "danger" | "neutral"
+> = {
   open: "warning",
   in_progress: "info",
   resolved: "positive",
@@ -26,7 +29,10 @@ const STATUS_LABEL: Record<TicketStatus, string> = {
   closed: "Closed",
 };
 
-const PRIORITY_TONE: Record<TicketPriority, "danger" | "warning" | "info" | "neutral"> = {
+const PRIORITY_TONE: Record<
+  TicketPriority,
+  "danger" | "warning" | "info" | "neutral"
+> = {
   urgent: "danger",
   high: "warning",
   medium: "info",
@@ -38,7 +44,9 @@ export function TicketsTable({ items }: { items: Ticket[] }) {
     return (
       <div className="flex flex-col items-center justify-center gap-2 px-6 py-16 text-center">
         <p className="text-foreground text-sm font-medium">No tickets yet</p>
-        <p className="text-muted-foreground text-sm">Create a ticket to start tracking support issues.</p>
+        <p className="text-muted-foreground text-sm">
+          Create a ticket to start tracking support issues.
+        </p>
       </div>
     );
   }
@@ -56,8 +64,8 @@ export function TicketsTable({ items }: { items: Ticket[] }) {
       <TableBody>
         {items.map((item) => (
           <TableRow key={item._id}>
-            <TableCell className="text-muted-foreground whitespace-nowrap text-xs">
-              {format(new Date(item.created_at), "d MMM yy")}
+            <TableCell className="text-muted-foreground text-xs whitespace-nowrap">
+              {formatDate(item.created_at)}
             </TableCell>
             <TableCell>
               <Link
@@ -66,15 +74,23 @@ export function TicketsTable({ items }: { items: Ticket[] }) {
               >
                 {item.title}
                 {item.created_by && (
-                  <span className="text-muted-foreground block text-xs">{item.created_by}</span>
+                  <span className="text-muted-foreground block text-xs">
+                    {item.created_by}
+                  </span>
                 )}
               </Link>
             </TableCell>
             <TableCell>
-              <StatusBadge label={item.priority} tone={PRIORITY_TONE[item.priority]} />
+              <StatusBadge
+                label={item.priority}
+                tone={PRIORITY_TONE[item.priority]}
+              />
             </TableCell>
             <TableCell>
-              <StatusBadge label={STATUS_LABEL[item.status]} tone={STATUS_TONE[item.status]} />
+              <StatusBadge
+                label={STATUS_LABEL[item.status]}
+                tone={STATUS_TONE[item.status]}
+              />
             </TableCell>
           </TableRow>
         ))}

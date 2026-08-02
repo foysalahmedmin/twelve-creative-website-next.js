@@ -1,6 +1,5 @@
 "use client";
 
-import { format } from "date-fns";
 import Link from "next/link";
 import {
   Table,
@@ -12,6 +11,7 @@ import {
 } from "@/components/ui/table";
 import { StatusBadge } from "@/components/admin/status-badge";
 import type { Task, TaskPriority, TaskStatus } from "@/lib/api/tasks";
+import { formatDate } from "@/lib/local-date";
 
 const STATUS_TONE: Record<TaskStatus, "warning" | "info" | "positive"> = {
   todo: "warning",
@@ -35,7 +35,9 @@ export function TasksTable({ items }: { items: Task[] }) {
     return (
       <div className="flex flex-col items-center justify-center gap-2 px-6 py-16 text-center">
         <p className="text-foreground text-sm font-medium">No tasks yet</p>
-        <p className="text-muted-foreground text-sm">Create a task to start tracking work.</p>
+        <p className="text-muted-foreground text-sm">
+          Create a task to start tracking work.
+        </p>
       </div>
     );
   }
@@ -62,13 +64,19 @@ export function TasksTable({ items }: { items: Task[] }) {
               </Link>
             </TableCell>
             <TableCell>
-              <StatusBadge label={item.priority} tone={PRIORITY_TONE[item.priority]} />
+              <StatusBadge
+                label={item.priority}
+                tone={PRIORITY_TONE[item.priority]}
+              />
             </TableCell>
             <TableCell>
-              <StatusBadge label={STATUS_LABEL[item.status]} tone={STATUS_TONE[item.status]} />
+              <StatusBadge
+                label={STATUS_LABEL[item.status]}
+                tone={STATUS_TONE[item.status]}
+              />
             </TableCell>
             <TableCell className="text-muted-foreground text-xs">
-              {item.due_date ? format(new Date(item.due_date), "d MMM yy") : "—"}
+              {formatDate(item.due_date)}
             </TableCell>
           </TableRow>
         ))}
