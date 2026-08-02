@@ -1,9 +1,11 @@
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
+import { AdminPagination } from "@/components/admin/admin-pagination";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { getAdminServices } from "@/lib/api/services";
+import { positivePage } from "@/lib/admin/pagination";
 import { ServicesTable } from "./services-table";
 
 export const dynamic = "force-dynamic";
@@ -14,9 +16,10 @@ interface PageProps {
 
 export default async function ServicesPage({ searchParams }: PageProps) {
   const params = await searchParams;
+  const page = positivePage(params.page);
   const { data, meta } = await getAdminServices({
     search: params.search,
-    page: params.page ? Number(params.page) : 1,
+    page,
     limit: 100,
     filter:
       params.filter === "active" || params.filter === "inactive"
@@ -46,6 +49,16 @@ export default async function ServicesPage({ searchParams }: PageProps) {
       <Card className="p-0 overflow-hidden">
         <ServicesTable items={data} />
       </Card>
+
+      <AdminPagination
+        path="/admin/services"
+        page={page}
+        totalPages={meta?.total_pages ?? 1}
+        query={{
+          search: params.search,
+          filter: params.filter,
+        }}
+      />
     </div>
   );
 }

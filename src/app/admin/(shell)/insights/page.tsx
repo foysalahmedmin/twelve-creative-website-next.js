@@ -2,10 +2,12 @@ import { Plus } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
+import { AdminPagination } from "@/components/admin/admin-pagination";
 import { AdminSearch } from "@/components/admin/admin-search";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { getAdminInsights } from "@/lib/api/insights";
+import { positivePage } from "@/lib/admin/pagination";
 import { InsightsTable } from "./insights-table";
 import { cn } from "@/lib/utils";
 
@@ -26,11 +28,12 @@ const isFilter = (v?: string): v is "published" | "draft" =>
 
 export default async function InsightsPage({ searchParams }: PageProps) {
   const params = await searchParams;
+  const page = positivePage(params.page);
   const filter = isFilter(params.filter) ? params.filter : undefined;
 
   const { data, meta } = await getAdminInsights({
     search: params.search,
-    page: params.page ? Number(params.page) : 1,
+    page,
     limit: 50,
     filter,
   });
@@ -83,6 +86,16 @@ export default async function InsightsPage({ searchParams }: PageProps) {
       <Card className="p-0 overflow-hidden">
         <InsightsTable items={data} />
       </Card>
+
+      <AdminPagination
+        path="/admin/insights"
+        page={page}
+        totalPages={meta?.total_pages ?? 1}
+        query={{
+          filter: params.filter,
+          search: params.search,
+        }}
+      />
     </div>
   );
 }

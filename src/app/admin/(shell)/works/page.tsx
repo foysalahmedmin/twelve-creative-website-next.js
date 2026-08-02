@@ -7,6 +7,7 @@ import { AdminSearch } from "@/components/admin/admin-search";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { getAdminWorks } from "@/lib/api/works";
+import { positivePage } from "@/lib/admin/pagination";
 import { WorksTable } from "./works-table";
 import { cn } from "@/lib/utils";
 
@@ -24,11 +25,6 @@ const FILTERS: { label: string; value?: "published" | "draft" }[] = [
 
 const isFilter = (v?: string): v is "published" | "draft" =>
   v === "published" || v === "draft";
-
-function positivePage(value?: string): number {
-  const page = Number.parseInt(value ?? "1", 10);
-  return Number.isSafeInteger(page) && page > 0 ? page : 1;
-}
 
 export default async function WorksPage({ searchParams }: PageProps) {
   const params = await searchParams;

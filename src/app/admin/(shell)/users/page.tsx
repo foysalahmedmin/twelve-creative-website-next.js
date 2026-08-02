@@ -3,12 +3,14 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
+import { AdminPagination } from "@/components/admin/admin-pagination";
 import { AdminSearch } from "@/components/admin/admin-search";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { requireAdminSession } from "@/lib/admin/session";
 import { ADMIN_CONFIG } from "@/lib/admin/config";
 import { getAdminAccounts } from "@/lib/api/admin-users";
+import { positivePage } from "@/lib/admin/pagination";
 import { UsersTable } from "./users-table";
 
 export const dynamic = "force-dynamic";
@@ -22,9 +24,10 @@ export default async function UsersPage({ searchParams }: PageProps) {
   if (session.role !== "admin") redirect(ADMIN_CONFIG.dashboardPath);
 
   const params = await searchParams;
+  const page = positivePage(params.page);
   const { data, meta } = await getAdminAccounts({
     search: params.search,
-    page: params.page ? Number(params.page) : 1,
+    page,
     limit: 50,
   });
 
@@ -54,6 +57,15 @@ export default async function UsersPage({ searchParams }: PageProps) {
       <Card className="p-0 overflow-hidden">
         <UsersTable items={data} currentUserId={session._id} />
       </Card>
+
+      <AdminPagination
+        path="/admin/users"
+        page={page}
+        totalPages={meta?.total_pages ?? 1}
+        query={{
+          search: params.search,
+        }}
+      />
     </div>
   );
 }

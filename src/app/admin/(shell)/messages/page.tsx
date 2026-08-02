@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
+import { AdminPagination } from "@/components/admin/admin-pagination";
 import { Card } from "@/components/ui/card";
 import { getAdminContactMessages } from "@/lib/api/contact-messages";
+import { positivePage } from "@/lib/admin/pagination";
 import { MessagesTable } from "./messages-table";
 import { cn } from "@/lib/utils";
 
@@ -23,11 +25,12 @@ const isFilter = (v?: string): v is "unread" | "read" | "archived" =>
 
 export default async function MessagesPage({ searchParams }: PageProps) {
   const params = await searchParams;
+  const page = positivePage(params.page);
   const filter = isFilter(params.filter) ? params.filter : undefined;
 
   const { data, meta } = await getAdminContactMessages({
     search: params.search,
-    page: params.page ? Number(params.page) : 1,
+    page,
     limit: 50,
     filter,
   });
@@ -67,6 +70,16 @@ export default async function MessagesPage({ searchParams }: PageProps) {
       <Card className="p-0 overflow-hidden">
         <MessagesTable items={data} />
       </Card>
+
+      <AdminPagination
+        path="/admin/messages"
+        page={page}
+        totalPages={meta?.total_pages ?? 1}
+        query={{
+          filter: params.filter,
+          search: params.search,
+        }}
+      />
     </div>
   );
 }

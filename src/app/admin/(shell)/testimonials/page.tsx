@@ -10,13 +10,9 @@ import { Card } from "@/components/ui/card";
 import { getAdminTestimonials } from "@/lib/api/testimonials";
 import { TestimonialsTable } from "./testimonials-table";
 import { loadIndustryOptions } from "@/lib/admin/industry-options";
+import { positivePage } from "@/lib/admin/pagination";
 
 export const dynamic = "force-dynamic";
-
-function positivePage(value?: string): number {
-  const page = Number.parseInt(value ?? "1", 10);
-  return Number.isSafeInteger(page) && page > 0 ? page : 1;
-}
 
 interface PageProps {
   searchParams: Promise<{
