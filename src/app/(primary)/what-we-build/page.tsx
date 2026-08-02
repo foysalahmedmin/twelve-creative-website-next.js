@@ -1,4 +1,3 @@
-import { DifferenceSection } from "@/components/_primary_/home-page/difference-section";
 import { LiveServicesSection } from "@/components/_primary_/home-page/services-section-live";
 import { CoreVerticalsSection } from "@/components/sections/core-verticals-section";
 import { CTASection } from "@/components/sections/cta-section";
@@ -68,9 +67,6 @@ export default async function WhatWeBuildPage() {
 
       {/* Growth system end-to-end deep dive */}
       {growthSystem && <GrowthSystemSection cmsData={growthSystem} />}
-
-      {/* Twelve Creative Effect */}
-      {difference && <DifferenceSection data={difference} />}
 
       {/* Why operators choose us */}
       {whyChooseUs && <WhyChooseUsSection cmsData={whyChooseUs} tone="brand" />}

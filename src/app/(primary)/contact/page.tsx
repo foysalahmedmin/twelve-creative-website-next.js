@@ -1,16 +1,10 @@
 import { BookingSection } from "@/components/sections/booking-section";
 import { ContactInfoMapSection } from "@/components/sections/contact-info-map-section";
 import { PageContactSection } from "@/components/sections/contact-section-section";
-import { PageHeader } from "@/components/sections/page-header-section";
 import { CONTACT_PAGE_DATA, type TContactCard } from "@/data/contact.data";
-import {
-  getPublicPageHero,
-  resolvePageMetadata,
-  resolveThumbnail,
-  resolveVideoSrc,
-} from "@/lib/api/page-heroes";
-import { getPublicSiteSetting } from "@/lib/api/site-setting";
 import { getPublicIndustryOptions } from "@/lib/api/industries";
+import { getPublicPageHero, resolvePageMetadata } from "@/lib/api/page-heroes";
+import { getPublicSiteSetting } from "@/lib/api/site-setting";
 import type { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -23,9 +17,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ContactPage() {
-  const { header, contact_cards, booking, map } = CONTACT_PAGE_DATA;
-  const [hero, settings, industries] = await Promise.all([
-    getPublicPageHero("contact"),
+  const { contact_cards, booking, map } = CONTACT_PAGE_DATA;
+  const [settings, industries] = await Promise.all([
     getPublicSiteSetting(),
     getPublicIndustryOptions(),
   ]);
@@ -63,13 +56,14 @@ export default async function ContactPage() {
 
   return (
     <main className="bg-background min-h-screen">
-      <PageHeader
+      {/* Now this section should comment out. When we need we will enable this section */}
+      {/* <PageHeader
         label={hero?.label ?? "Contact"}
         title={hero?.title ?? header.title}
         description={hero?.description ?? header.description}
         videoSrc={resolveVideoSrc(hero?.video)}
         thumbnailSrc={resolveThumbnail(hero?.thumbnail, hero?.video)}
-      />
+      /> */}
 
       {/* Inquiry form (cards removed — moved below with map) */}
       <PageContactSection
