@@ -2,6 +2,7 @@
 
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogTitle,
@@ -10,6 +11,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 import {
   Alert01Icon,
+  Cancel01Icon,
   PauseIcon,
   PlayIcon,
   VolumeHighIcon,
@@ -225,7 +227,11 @@ export function VideoDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        showCloseButton
+        // The dialog's own close button anchors to the dialog, which is wider
+        // than the video to keep the video's own width definite. That left the
+        // X floating off the picture's corner, so the close button lives
+        // inside the video box below instead.
+        showCloseButton={false}
         // w-full + items-center, never w-auto: a shrink-to-fit dialog takes
         // its width from this box, while the box took its width from the
         // dialog — a cycle the engine has to break on its own, and one engine
@@ -340,6 +346,24 @@ export function VideoDialog({
               </p>
             </div>
           )}
+
+          {/* Above every overlay and always mounted, so the video can still be
+              dismissed while it's loading or after it has failed. Carries its
+              own scrim because it sits over the footage, which can be any
+              colour at the moment it's tapped. */}
+          <DialogClose asChild>
+            <button
+              type="button"
+              aria-label="Close video"
+              className="text-primary-foreground absolute top-2 right-2 z-20 flex size-9 items-center justify-center rounded-full bg-black/55 backdrop-blur-sm transition-transform active:scale-90"
+            >
+              <HugeiconsIcon
+                icon={Cancel01Icon}
+                className="size-4.5"
+                strokeWidth={2.5}
+              />
+            </button>
+          </DialogClose>
 
           {showControls && (
             <div className="absolute inset-x-0 bottom-0 z-10 flex items-center gap-2.5 bg-linear-to-t from-black/80 via-black/40 to-transparent px-3 pt-10 pb-3">
