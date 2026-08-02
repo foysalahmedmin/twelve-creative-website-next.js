@@ -9,7 +9,8 @@ export type TContactCard = {
   id: TContactCardKey;
   title: string;
   value: string;
-  href: string;
+  /** Omit to render the card as information rather than a link. */
+  href?: string;
 };
 
 export type TContactPageData = {
@@ -51,10 +52,12 @@ export const CONTACT_PAGE_DATA: TContactPageData = {
       href: `https://wa.me/${SITE.contact.whatsapp[0].replace(/[^0-9]/g, "")}`,
     },
     {
+      // No href: there is no careers page, and this pointed at /careers, which
+      // 404'd. Left as information until there is somewhere real to send
+      // people — the copy no longer promises a page that isn't there.
       id: "work",
       title: "Work with Us",
-      value: "Explore current opportunities",
-      href: "/careers",
+      value: "Roles are shared here when we're hiring",
     },
     {
       id: "explore",

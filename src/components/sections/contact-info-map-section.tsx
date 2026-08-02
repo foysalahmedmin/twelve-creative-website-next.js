@@ -67,7 +67,46 @@ export const ContactInfoMapSection = ({
             <div className="grid h-full grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-1">
               {cards.map((card) => {
                 const Icon = CONTACT_ICON_MAP[card.id];
-                const opensNewTab = card.href.startsWith("http");
+                const opensNewTab = card.href?.startsWith("http") ?? false;
+
+                // A card without a destination stays on the page as
+                // information: no hover lift, no arrow, nothing that offers a
+                // click it can't honour.
+                const body = (
+                  <div className="flex h-full w-full items-center justify-between gap-4 p-5">
+                    {/* Texts */}
+                    <div className="flex-1 space-y-1 truncate">
+                      <h4 className="font-heading text-foreground group-hover/contact-card:text-primary flex items-center gap-1.5 truncate text-base font-semibold transition-colors sm:text-lg">
+                        {card.title}
+                        {card.href && (
+                          <HugeiconsIcon
+                            icon={ArrowUpRight01Icon}
+                            className="size-4 shrink-0 opacity-0 transition-all duration-200 group-hover/contact-card:opacity-100"
+                          />
+                        )}
+                      </h4>
+                      <p className="text-muted-foreground truncate text-xs sm:text-sm">
+                        {card.value}
+                      </p>
+                    </div>
+
+                    {/* Icon tile */}
+                    <div className="bg-primary/10 border-primary/20 text-primary flex size-11 shrink-0 items-center justify-center rounded-lg border">
+                      <HugeiconsIcon icon={Icon} className="size-5" />
+                    </div>
+                  </div>
+                );
+
+                if (!card.href) {
+                  return (
+                    <div
+                      key={card.id}
+                      className="border-border bg-card flex h-full w-full rounded-2xl border"
+                    >
+                      {body}
+                    </div>
+                  );
+                }
 
                 return (
                   <Link
@@ -77,26 +116,7 @@ export const ContactInfoMapSection = ({
                     rel={opensNewTab ? "noopener noreferrer" : undefined}
                     className="group/contact-card border-border bg-card hover:border-primary/40 flex h-full w-full rounded-2xl border transition-all duration-300 hover:scale-[1.02]"
                   >
-                    <div className="flex h-full w-full items-center justify-between gap-4 p-5">
-                      {/* Texts */}
-                      <div className="flex-1 space-y-1 truncate">
-                        <h4 className="font-heading text-foreground group-hover/contact-card:text-primary flex items-center gap-1.5 truncate text-base font-semibold transition-colors sm:text-lg">
-                          {card.title}
-                          <HugeiconsIcon
-                            icon={ArrowUpRight01Icon}
-                            className="size-4 shrink-0 opacity-0 transition-all duration-200 group-hover/contact-card:opacity-100"
-                          />
-                        </h4>
-                        <p className="text-muted-foreground truncate text-xs sm:text-sm">
-                          {card.value}
-                        </p>
-                      </div>
-
-                      {/* Icon tile */}
-                      <div className="bg-primary/10 border-primary/20 text-primary flex size-11 shrink-0 items-center justify-center rounded-lg border">
-                        <HugeiconsIcon icon={Icon} className="size-5" />
-                      </div>
-                    </div>
+                    {body}
                   </Link>
                 );
               })}
