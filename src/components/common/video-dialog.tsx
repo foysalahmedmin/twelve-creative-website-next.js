@@ -37,12 +37,16 @@ const HEIGHT_RATIO = 0.78;
 /** Share of the viewport's width the player is allowed to occupy. */
 const WIDTH_RATIO = 0.92;
 const MAX_HEIGHT_PX = 720;
-const MAX_WIDTH_PX = { "9/16": 405, "16/9": 1100 } as const;
+const MAX_WIDTH_PX = { portrait: 405, landscape: 1000 } as const;
 
 type Size = { width: number; height: number };
 
+/** Ratio is width ÷ height, so 9/16 is portrait and 16/9 is landscape. */
+const ratioOf = (aspect: "9/16" | "16/9") =>
+  aspect === "16/9" ? 16 / 9 : 9 / 16;
+
 /**
- * Largest box of the requested ratio that fits the current viewport.
+ * Largest box of the given ratio that fits the current viewport.
  *
  * Deliberately plain arithmetic on window.innerWidth/innerHeight rather than
  * the CSS it replaces (`aspect-ratio` plus a `min()` of vh/px/% terms). That
@@ -53,15 +57,14 @@ type Size = { width: number; height: number };
  * that is itself sized by its children; numbers resolved here have no such
  * dependency and cannot collapse.
  */
-const measure = (aspect: "9/16" | "16/9"): Size => {
-  const ratio = aspect === "16/9" ? 16 / 9 : 9 / 16; // width ÷ height
+const measure = (ratio: number): Size => {
   const availableHeight = Math.min(
     window.innerHeight * HEIGHT_RATIO,
     MAX_HEIGHT_PX,
   );
   const availableWidth = Math.min(
     window.innerWidth * WIDTH_RATIO,
-    MAX_WIDTH_PX[aspect],
+    ratio >= 1 ? MAX_WIDTH_PX.landscape : MAX_WIDTH_PX.portrait,
   );
 
   let height = availableHeight;
@@ -106,6 +109,21 @@ export function VideoDialog({
   const [size, setSize] = useState<Size | null>(null);
   const boxRef = useRef<HTMLDivElement>(null);
   const [report, setReport] = useState<string | null>(null);
+  // The `aspect` prop is only a hint for the first paint. The real ratio comes
+  // from the file itself, because callers don't reliably know it: the marquee
+  // renders a mixed library and asks for portrait for everything, so 16:9
+  // clips were being letterboxed into a tall box with the picture reduced to a
+  // band across the middle.
+  const [ratio, setRatio] = useState(() => ratioOf(aspect));
+
+  const syncRatio = useCallback(() => {
+    const video = videoRef.current;
+    if (!video?.videoWidth || !video.videoHeight) return;
+    const actual = video.videoWidth / video.videoHeight;
+    setRatio((current) =>
+      Math.abs(current - actual) < 0.01 ? current : actual,
+    );
+  }, []);
 
   // Every newly opened video starts covered until it proves it can play.
   // Reset during render (not an effect) on the closed→open transition, per
@@ -119,6 +137,7 @@ export function VideoDialog({
       setPaused(false);
       setProgress(0);
       setCurrentTime(0);
+      setRatio(ratioOf(aspect));
     }
   }
 
@@ -127,7 +146,7 @@ export function VideoDialog({
   // can change between one open and the next.
   useEffect(() => {
     if (!open) return;
-    const update = () => setSize(measure(aspect));
+    const update = () => setSize(measure(ratio));
     update();
     window.addEventListener("resize", update);
     window.addEventListener("orientationchange", update);
@@ -135,7 +154,7 @@ export function VideoDialog({
       window.removeEventListener("resize", update);
       window.removeEventListener("orientationchange", update);
     };
-  }, [open, aspect]);
+  }, [open, ratio]);
 
   // Independent of react-player's own event props, as a fallback: on a real
   // device none of onReady/onCanPlay/onPlaying fired at all even though the
@@ -147,11 +166,12 @@ export function VideoDialog({
     const id = window.setInterval(() => {
       const video = videoRef.current;
       if (video && (video.readyState >= 3 || !video.paused)) {
+        syncRatio();
         setStatus((s) => (s === "error" ? s : "ready"));
       }
     }, 200);
     return () => window.clearInterval(id);
-  }, [open, status]);
+  }, [open, status, syncRatio]);
 
   // Temporary, opt-in only: append ?vdebug=1 to the URL to overlay what the
   // player actually measured on this device. Kept because this modal has
@@ -214,7 +234,9 @@ export function VideoDialog({
         // instead of "invisible".
         className={cn(
           "flex w-full flex-col items-center gap-0 border-none bg-transparent p-2 shadow-none ring-0",
-          aspect === "16/9" ? "sm:max-w-4xl" : "sm:max-w-lg",
+          // Wide enough to clear the measured box in either orientation, so
+          // the dialog's own max-width never clips it.
+          ratio >= 1 ? "sm:max-w-5xl" : "sm:max-w-lg",
         )}
       >
         <DialogTitle className="sr-only">{title}</DialogTitle>
@@ -237,7 +259,11 @@ export function VideoDialog({
               : // Only ever used for the first paint before measuring. Plain
                 // viewport units with no percentage and no ratio to resolve,
                 // so this fallback cannot collapse either.
-                { width: "90vw", height: "160vw", maxHeight: "78vh" }
+                {
+                  width: "90vw",
+                  height: ratio >= 1 ? "50.6vw" : "160vw",
+                  maxHeight: "78vh",
+                }
           }
         >
           {status !== "error" && open && (
@@ -263,12 +289,22 @@ export function VideoDialog({
                 height: "100%",
                 objectFit: "contain",
               }}
-              onReady={() => setStatus((s) => (s === "error" ? s : "ready"))}
-              onCanPlay={() => setStatus((s) => (s === "error" ? s : "ready"))}
+              onLoadedMetadata={syncRatio}
+              onReady={() => {
+                syncRatio();
+                setStatus((s) => (s === "error" ? s : "ready"));
+              }}
+              onCanPlay={() => {
+                syncRatio();
+                setStatus((s) => (s === "error" ? s : "ready"));
+              }}
               onWaiting={() =>
                 setStatus((s) => (s === "ready" ? "buffering" : s))
               }
-              onPlaying={() => setStatus((s) => (s === "error" ? s : "ready"))}
+              onPlaying={() => {
+                syncRatio();
+                setStatus((s) => (s === "error" ? s : "ready"));
+              }}
               onError={() => setStatus("error")}
               onPlay={() => setPaused(false)}
               onPause={() => setPaused(true)}
