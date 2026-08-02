@@ -24,10 +24,9 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Autoplay from "embla-carousel-autoplay";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 
 const ReactPlayer = dynamic(() => import("react-player"), {
   ssr: false,
@@ -39,9 +38,6 @@ const INDUSTRY_ICON_MAP: Record<TIndustryIconKey, typeof Restaurant01Icon> = {
   aviation: Airplane01Icon,
   "professional-services": Briefcase01Icon,
 };
-
-/** Long enough to read the offer list before it moves on by itself. */
-const AUTOPLAY_DELAY_MS = 7000;
 
 /**
  * One industry's full pitch. Shared verbatim between the desktop tab panels
@@ -159,25 +155,6 @@ interface Props {
 export const IndustriesSection = ({ className, data, heading }: Props) => {
   const industries = data === undefined ? INDUSTRIES_DATA : data;
   const [activeId, setActiveId] = useState(industries[0]?.id ?? "");
-  const [reduceMotion, setReduceMotion] = useState(false);
-
-  useEffect(() => {
-    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const sync = () => setReduceMotion(query.matches);
-    sync();
-    query.addEventListener("change", sync);
-    return () => query.removeEventListener("change", sync);
-  }, []);
-
-  // Nothing should keep moving on its own for someone who asked the OS to
-  // stop animations, so the plugin is dropped entirely rather than sped up.
-  const plugins = useMemo(
-    () =>
-      reduceMotion
-        ? []
-        : [Autoplay({ delay: AUTOPLAY_DELAY_MS, stopOnInteraction: true })],
-    [reduceMotion],
-  );
 
   if (industries.length === 0) return null;
 
@@ -220,7 +197,10 @@ export const IndustriesSection = ({ className, data, heading }: Props) => {
                         value={industry.id}
                         className="hover:bg-muted data-[state=active]:bg-primary data-[state=active]:text-primary-foreground flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all sm:px-6"
                       >
-                        <HugeiconsIcon icon={Icon} className="size-4 shrink-0" />
+                        <HugeiconsIcon
+                          icon={Icon}
+                          className="size-4 shrink-0"
+                        />
                         {industry.name}
                       </TabsTrigger>
                     );
@@ -246,9 +226,11 @@ export const IndustriesSection = ({ className, data, heading }: Props) => {
                 The card carries its own name, so the dots only need to say
                 where you are, not what's next. */}
             <div className="lg:hidden">
+              {/* Looping, but not advancing on its own: each card is a wall of
+                  copy to read, and having it slide away mid-sentence costs
+                  more than the movement gains. */}
               <Carousel
                 opts={{ loop: true, align: "start" }}
-                plugins={plugins}
                 className="w-full"
               >
                 {/* pb-5 keeps the layered card peeking below each panel from

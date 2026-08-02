@@ -127,7 +127,7 @@ export const FeaturedProjectsSection = ({
             and swipe horizontally, so you never scroll a tall column of
             videos. Desktop keeps the same item counts as the old grid. */}
         <Carousel
-          opts={{ align: "start" }}
+          opts={{ align: "start", loop: true }}
           className={cn(
             "mx-auto max-w-7xl px-4 lg:px-14",
             heading === null ? "mt-0" : "mt-10 lg:mt-16",
