@@ -17,7 +17,7 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import dynamic from "next/dynamic";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const ReactPlayer = dynamic(() => import("react-player"), { ssr: false });
 
@@ -32,6 +32,47 @@ interface VideoDialogProps {
   aspect?: "9/16" | "16/9";
 }
 
+/** Share of the viewport's height the player is allowed to occupy. */
+const HEIGHT_RATIO = 0.78;
+/** Share of the viewport's width the player is allowed to occupy. */
+const WIDTH_RATIO = 0.92;
+const MAX_HEIGHT_PX = 720;
+const MAX_WIDTH_PX = { "9/16": 405, "16/9": 1100 } as const;
+
+type Size = { width: number; height: number };
+
+/**
+ * Largest box of the requested ratio that fits the current viewport.
+ *
+ * Deliberately plain arithmetic on window.innerWidth/innerHeight rather than
+ * the CSS it replaces (`aspect-ratio` plus a `min()` of vh/px/% terms). That
+ * CSS measured correctly in every engine available here, yet still collapsed
+ * to zero width on a real iPhone — the modal rendered as nothing but its
+ * close button, and the video kept playing audio at zero size. Percentages
+ * and aspect-ratio both need the engine to resolve a size against a parent
+ * that is itself sized by its children; numbers resolved here have no such
+ * dependency and cannot collapse.
+ */
+const measure = (aspect: "9/16" | "16/9"): Size => {
+  const ratio = aspect === "16/9" ? 16 / 9 : 9 / 16; // width ÷ height
+  const availableHeight = Math.min(
+    window.innerHeight * HEIGHT_RATIO,
+    MAX_HEIGHT_PX,
+  );
+  const availableWidth = Math.min(
+    window.innerWidth * WIDTH_RATIO,
+    MAX_WIDTH_PX[aspect],
+  );
+
+  let height = availableHeight;
+  let width = height * ratio;
+  if (width > availableWidth) {
+    width = availableWidth;
+    height = width / ratio;
+  }
+  return { width: Math.round(width), height: Math.round(height) };
+};
+
 const formatTime = (seconds: number): string => {
   if (!Number.isFinite(seconds) || seconds < 0) return "0:00";
   const m = Math.floor(seconds / 60);
@@ -43,16 +84,11 @@ const formatTime = (seconds: number): string => {
  * Shared video lightbox for every "play this clip" surface in the app
  * (testimonials, marquee reels). Wraps react-player in its own loading/error
  * chrome so a slow network never exposes the browser's raw native buffering
- * or "can't play" icon inside the modal — that native chrome is what read as
- * a broken/glitchy line across the video.
+ * or "can't play" icon inside the modal.
  *
- * Controls are custom-built, not the native `controls` attribute: on real
- * iOS Safari (never reproduced in desktop Chrome, including its device
- * emulation — only caught by testing against real WebKit), the native
- * control skin renders at a size that ignores this dialog's rounded,
- * clipped container entirely, blowing the video up to cover most of the
- * screen. Confirmed by removing `controls` alone, with nothing else
- * changed, that this fixed it completely.
+ * Controls are custom-built rather than the native `controls` attribute, so
+ * the control bar is styled with the rest of the app and stays inside the
+ * dialog's rounded, clipped box on every engine.
  */
 export function VideoDialog({
   open,
@@ -67,6 +103,9 @@ export function VideoDialog({
   const [muted, setMuted] = useState(false);
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
+  const [size, setSize] = useState<Size | null>(null);
+  const boxRef = useRef<HTMLDivElement>(null);
+  const [report, setReport] = useState<string | null>(null);
 
   // Every newly opened video starts covered until it proves it can play.
   // Reset during render (not an effect) on the closed→open transition, per
@@ -83,14 +122,26 @@ export function VideoDialog({
     }
   }
 
-  // Independent of react-player's own event props entirely, as a last
-  // resort: on a real device in production, none of onReady/onCanPlay/
-  // onPlaying fired at all, even though the underlying <video> was
-  // confirmed already playing (readyState 4) — a provider-abstraction
-  // quirk on that engine, not something a longer wait or another prop
-  // would have caught, since the gap was in whether the event reached us
-  // at all. This reads the DOM element's own readyState directly through
-  // the ref, so it can't be affected by the same gap in event forwarding.
+  // Re-measured on rotate/resize, and on every open: iOS reports a different
+  // innerHeight depending on whether the browser chrome is expanded, and that
+  // can change between one open and the next.
+  useEffect(() => {
+    if (!open) return;
+    const update = () => setSize(measure(aspect));
+    update();
+    window.addEventListener("resize", update);
+    window.addEventListener("orientationchange", update);
+    return () => {
+      window.removeEventListener("resize", update);
+      window.removeEventListener("orientationchange", update);
+    };
+  }, [open, aspect]);
+
+  // Independent of react-player's own event props, as a fallback: on a real
+  // device none of onReady/onCanPlay/onPlaying fired at all even though the
+  // underlying <video> was already playing, so the controls never appeared.
+  // Reading readyState off the element itself can't be affected by whatever
+  // swallowed those events.
   useEffect(() => {
     if (!open || (status !== "loading" && status !== "buffering")) return;
     const id = window.setInterval(() => {
@@ -102,26 +153,52 @@ export function VideoDialog({
     return () => window.clearInterval(id);
   }, [open, status]);
 
-  const togglePlay = () => {
+  // Temporary, opt-in only: append ?vdebug=1 to the URL to overlay what the
+  // player actually measured on this device. Kept because this modal has
+  // already been "fixed" against engines that could not reproduce the real
+  // device's behaviour — a single screenshot of these numbers says more than
+  // another round of guessing. Safe to delete once the modal is settled.
+  useEffect(() => {
+    if (!open || !window.location.search.includes("vdebug=1")) return;
+    const id = window.setInterval(() => {
+      const box = boxRef.current?.getBoundingClientRect();
+      const dialog = boxRef.current?.closest("[data-slot='dialog-content']");
+      const dialogBox = dialog?.getBoundingClientRect();
+      const video = videoRef.current;
+      setReport(
+        [
+          `viewport ${window.innerWidth}x${window.innerHeight}`,
+          `measured ${size ? `${size.width}x${size.height}` : "null"}`,
+          `box      ${box ? `${Math.round(box.width)}x${Math.round(box.height)}` : "none"}`,
+          `dialog   ${dialogBox ? `${Math.round(dialogBox.width)}x${Math.round(dialogBox.height)}` : "none"}`,
+          `video    ${video ? `${Math.round(video.getBoundingClientRect().width)}x${Math.round(video.getBoundingClientRect().height)} nat ${video.videoWidth}x${video.videoHeight}` : "none"}`,
+          `state    rs=${video?.readyState ?? "-"} paused=${video?.paused ?? "-"} status=${status}`,
+        ].join("\n"),
+      );
+    }, 400);
+    return () => window.clearInterval(id);
+  }, [open, size, status]);
+
+  const togglePlay = useCallback(() => {
     const video = videoRef.current;
     if (!video) return;
     if (video.paused) void video.play();
     else video.pause();
-  };
+  }, []);
 
-  const toggleMute = () => {
+  const toggleMute = useCallback(() => {
     const video = videoRef.current;
     if (!video) return;
     video.muted = !video.muted;
     setMuted(video.muted);
-  };
+  }, []);
 
-  const seek = (fraction: number) => {
+  const seek = useCallback((fraction: number) => {
     const video = videoRef.current;
     if (!video || !Number.isFinite(video.duration)) return;
     video.currentTime = fraction * video.duration;
     setProgress(fraction);
-  };
+  }, []);
 
   const showControls = status === "ready" || status === "buffering";
 
@@ -129,15 +206,15 @@ export function VideoDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         showCloseButton
+        // w-full + items-center, never w-auto: a shrink-to-fit dialog takes
+        // its width from this box, while the box took its width from the
+        // dialog — a cycle the engine has to break on its own, and one engine
+        // broke it by collapsing to zero. A definite width removes the cycle,
+        // and means even a dropped size on the box degrades to "full width"
+        // instead of "invisible".
         className={cn(
-          // flex, not the base grid: a CSS Grid column track is sized once,
-          // up front, from the auto-track algorithm, and every item is then
-          // clamped to that track regardless of the item's own width — even
-          // an explicit inline width can't exceed it. That was capping the
-          // video at a fraction of its real width. A flex column lets each
-          // child size independently.
-          "flex w-auto flex-col gap-0 rounded-3xl border-none bg-transparent p-2 shadow-xl ring-0",
-          aspect === "16/9" && "sm:max-w-2xl",
+          "flex w-full flex-col items-center gap-0 border-none bg-transparent p-2 shadow-none ring-0",
+          aspect === "16/9" ? "sm:max-w-4xl" : "sm:max-w-lg",
         )}
       >
         <DialogTitle className="sr-only">{title}</DialogTitle>
@@ -145,29 +222,22 @@ export function VideoDialog({
           Video playback dialog. Press Escape to close.
         </DialogDescription>
 
+        {report && (
+          <pre className="fixed inset-x-0 top-0 z-100 m-0 bg-black/85 p-2 font-mono text-[10px] leading-tight whitespace-pre text-lime-400">
+            {report}
+          </pre>
+        )}
+
         <div
-          className={cn(
-            "relative max-w-full overflow-hidden rounded-2xl bg-black",
-            aspect === "16/9" && "aspect-video w-[90vw]",
-          )}
-          // 9/16 sizing is inline, not a Tailwind arbitrary class: Tailwind's
-          // JIT silently failed to generate any rule for a min()-of-calc()s
-          // expression this nested, so the class was present in the markup
-          // but produced no CSS at all. Both dimensions are explicit here —
-          // not just height with aspect-ratio deriving width — because
-          // DialogContent is a CSS Grid with an auto column track, and that
-          // track's own auto-sizing pass ran before aspect-ratio resolved,
-          // pinning the column to ~185px regardless of the 9:16 ratio and
-          // squeezing the video into a thin, letterboxed strip.
+          ref={boxRef}
+          className="relative overflow-hidden rounded-2xl bg-black"
           style={
-            aspect === "9/16"
-              ? {
-                  aspectRatio: "9 / 16",
-                  height: "min(78vh, 720px)",
-                  width:
-                    "min(calc(78vh * 9 / 16), calc(720px * 9 / 16), 100%)",
-                }
-              : undefined
+            size
+              ? { width: size.width, height: size.height }
+              : // Only ever used for the first paint before measuring. Plain
+                // viewport units with no percentage and no ratio to resolve,
+                // so this fallback cannot collapse either.
+                { width: "90vw", height: "160vw", maxHeight: "78vh" }
           }
         >
           {status !== "error" && open && (
@@ -179,22 +249,20 @@ export function VideoDialog({
               // and onTimeUpdate re-renders constantly. Left as a constant
               // `playing`, it fought every manual video.pause() from the
               // custom button below and resumed playback within a few
-              // hundred ms — confirmed live, this is what that looked like.
+              // hundred ms.
               playing={!paused}
               controls={false}
-              width="100%"
-              height="100%"
               playsInline
-              style={{ width: "100%", height: "100%" }}
-              // Three independent, redundant "the video can be shown now"
-              // signals, not just one: react-player's own onReady never
-              // fired at all on a real device in production (custom controls
-              // never appeared even though the video was already decoding
-              // and playing per the native <video> element's own readyState/
-              // paused properties) — a provider-abstraction quirk specific
-              // to that engine, not a timing issue a longer wait would have
-              // fixed. onCanPlay and onPlaying are plain native
-              // HTMLMediaElement events with no library layer to diverge on.
+              // Pinned to the box's edges rather than sized at 100%: the box
+              // is already an exact pixel size, so there is nothing left for
+              // a percentage to resolve against incorrectly.
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+              }}
               onReady={() => setStatus((s) => (s === "error" ? s : "ready"))}
               onCanPlay={() => setStatus((s) => (s === "error" ? s : "ready"))}
               onWaiting={() =>
@@ -204,9 +272,7 @@ export function VideoDialog({
               onError={() => setStatus("error")}
               onPlay={() => setPaused(false)}
               onPause={() => setPaused(true)}
-              onVolumeChange={() =>
-                setMuted(videoRef.current?.muted ?? false)
-              }
+              onVolumeChange={() => setMuted(videoRef.current?.muted ?? false)}
               onTimeUpdate={() => {
                 const video = videoRef.current;
                 if (!video) return;
@@ -221,8 +287,7 @@ export function VideoDialog({
           {(status === "loading" || status === "buffering") && (
             // Fully opaque, not translucent: this sits directly over the
             // native <video> element, and anything less than opaque lets the
-            // browser's own buffering spinner show through underneath ours —
-            // which is the exact glitch this component exists to hide.
+            // browser's own buffering spinner show through underneath ours.
             <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black">
               <Spinner className="text-primary-foreground size-8" />
             </div>
