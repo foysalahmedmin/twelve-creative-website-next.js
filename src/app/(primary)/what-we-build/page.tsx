@@ -1,4 +1,5 @@
 import { DifferenceSection } from "@/components/_primary_/home-page/difference-section";
+import { LiveServicesSection } from "@/components/_primary_/home-page/services-section-live";
 import { CoreVerticalsSection } from "@/components/sections/core-verticals-section";
 import { CTASection } from "@/components/sections/cta-section";
 import { GrowthSystemSection } from "@/components/sections/growth-system-section";
@@ -29,13 +30,14 @@ export default async function WhatWeBuildPage() {
     hero,
     industries,
     cta,
-    [coreHeading, growthSystem, difference, whyChooseUs],
+    [coreHeading, servicesHeading, growthSystem, difference, whyChooseUs],
   ] = await Promise.all([
     getPublicPageHero("what-we-build"),
     getPublicIndustries(),
     getPublicPageCta("what-we-build"),
     getPublicSharedSections([
       "core-verticals",
+      "home-services",
       "growth-system",
       "difference",
       "why-choose-us",
@@ -59,6 +61,10 @@ export default async function WhatWeBuildPage() {
 
       {/* Core Verticals */}
       <CoreVerticalsSection industries={industries} heading={coreHeading} />
+
+      {/* Services — moved here from the home page: the deliverables follow
+          naturally once someone has seen who we build for. */}
+      <LiveServicesSection heading={servicesHeading} />
 
       {/* Growth system end-to-end deep dive */}
       {growthSystem && <GrowthSystemSection cmsData={growthSystem} />}

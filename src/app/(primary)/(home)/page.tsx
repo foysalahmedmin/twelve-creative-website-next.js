@@ -3,13 +3,11 @@ import { LiveFeaturedProjectsSection } from "@/components/_primary_/home-page/fe
 import { LiveHeroSection } from "@/components/_primary_/home-page/hero-section-live";
 import { HomeCtaSection } from "@/components/_primary_/home-page/home-cta-section";
 import { LiveIndustriesSection } from "@/components/_primary_/home-page/industries-section-live";
-import { LiveServicesSection } from "@/components/_primary_/home-page/services-section-live";
 import { BrandsStrip } from "@/components/sections/brands-strip";
 import FaqSection from "@/components/sections/faqs-section";
 import { ProcessSection } from "@/components/sections/process-section";
 import { ScrollStatementSection } from "@/components/sections/scroll-statement-section";
 import { TestimonialSection } from "@/components/sections/testimonial-section";
-import { WhyChooseUsSection } from "@/components/sections/why-choose-us-section";
 import { SITE } from "@/config/site";
 import { FAQS_DATA } from "@/data/faqs.data";
 import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
@@ -48,7 +46,6 @@ export default async function HomePage() {
     [
       statement,
       featuredHeading,
-      servicesHeading,
       testimonialsHeading,
       difference,
       industriesHeading,
@@ -75,7 +72,6 @@ export default async function HomePage() {
     getPublicSharedSections([
       "scroll-statement",
       "home-featured-projects",
-      "home-services",
       "testimonials",
       "difference",
       "home-industries",
@@ -89,19 +85,17 @@ export default async function HomePage() {
       <LiveHeroSection />
       <BrandsStrip />
       {statement && <ScrollStatementSection data={statement} />}
-      <LiveServicesSection heading={servicesHeading} />
+      <LiveFeaturedProjectsSection heading={featuredHeading} />
       <TestimonialSection
         data={testimonialsData}
         heading={testimonialsHeading}
       />
-      <LiveFeaturedProjectsSection heading={featuredHeading} />
       <ProcessSection
         data={processData}
         processThumbnail={processData.thumbnail}
       />
       {difference && <DifferenceSection data={difference} className="dark" />}
       <LiveIndustriesSection heading={industriesHeading} />
-      {whyChooseUs && <WhyChooseUsSection cmsData={whyChooseUs} tone="brand" />}
       <FaqSection data={faqsData} heading={faqHeading} />
       {homeCta && <HomeCtaSection data={homeCta} />}
     </div>

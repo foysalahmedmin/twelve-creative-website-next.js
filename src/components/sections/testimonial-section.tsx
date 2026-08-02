@@ -31,6 +31,17 @@ import {
 // pointer drag.
 export type MarqueeHandle = { setDirection: (leftward: boolean) => void };
 
+// Fades each row to transparent at both edges (borrowed from BrandsSection)
+// rather than letting a card cut off abruptly — needed here specifically
+// because this section drops its container on mobile, so the row runs edge
+// to edge with nothing to visually close it off.
+const EDGE_FADE_MASK: React.CSSProperties = {
+  maskImage:
+    "linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)",
+  WebkitMaskImage:
+    "linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)",
+};
+
 interface MarqueeProps {
   items: TTestimonial[];
   /**
@@ -327,7 +338,7 @@ export const TestimonialSection = ({
       )}
     >
       <ScrollReveal animation="fade-in-up" durationMs={800}>
-        <div className="container">
+        <div className="lg:container">
           {/* Section header */}
           {heading !== null && (
             <CenteredSectionHeader
@@ -352,30 +363,32 @@ export const TestimonialSection = ({
           >
             {/* ── Row 1: Reels — default drifts left → right ── */}
             {videoTestimonials.length > 0 && (
-              <div className="flex items-center gap-3 px-4 md:px-8 lg:px-12">
+              <div className="flex items-center gap-1 px-1">
                 <SliderArrow
                   className="hidden"
                   direction="prev"
                   onClick={() => videoMarquee.current?.setDirection(true)}
                 />
 
-                <Marquee
-                  ref={videoMarquee}
-                  items={videoItems}
-                  initialLeftward={false}
-                  pxPerSecond={30}
-                  gap={14}
-                  itemWidthClass="w-[200px] lg:w-[240px]"
-                  accessibleItemCount={videoTestimonials.length}
-                  renderItem={(testimonial, _index, interactive) => (
-                    <VideoTestimonialCard
-                      testimonial={testimonial}
-                      onOpen={openVideo}
-                      interactive={interactive}
-                      className="h-full w-full md:w-full"
-                    />
-                  )}
-                />
+                <div className="flex min-w-0 flex-1" style={EDGE_FADE_MASK}>
+                  <Marquee
+                    ref={videoMarquee}
+                    items={videoItems}
+                    initialLeftward={false}
+                    pxPerSecond={30}
+                    gap={14}
+                    itemWidthClass="w-[200px] lg:w-[240px]"
+                    accessibleItemCount={videoTestimonials.length}
+                    renderItem={(testimonial, _index, interactive) => (
+                      <VideoTestimonialCard
+                        testimonial={testimonial}
+                        onOpen={openVideo}
+                        interactive={interactive}
+                        className="h-full w-full md:w-full"
+                      />
+                    )}
+                  />
+                </div>
 
                 <SliderArrow
                   className="hidden"
@@ -387,28 +400,30 @@ export const TestimonialSection = ({
 
             {/* ── Row 2: Text — default drifts right → left ── */}
             {textTestimonials.length > 0 && (
-              <div className="flex items-center gap-3 px-4 md:px-8 lg:px-12">
+              <div className="flex items-center gap-1 px-1">
                 <SliderArrow
                   className="hidden"
                   direction="prev"
                   onClick={() => textMarquee.current?.setDirection(true)}
                 />
 
-                <Marquee
-                  ref={textMarquee}
-                  items={textItems}
-                  initialLeftward={true}
-                  pxPerSecond={40}
-                  gap={18}
-                  itemWidthClass="w-[272px] sm:w-[310px] lg:w-[348px] xl:w-[384px]"
-                  accessibleItemCount={textTestimonials.length}
-                  renderItem={(testimonial) => (
-                    <TestimonialCard
-                      testimonial={testimonial}
-                      className="h-full w-full md:w-full"
-                    />
-                  )}
-                />
+                <div className="flex min-w-0 flex-1" style={EDGE_FADE_MASK}>
+                  <Marquee
+                    ref={textMarquee}
+                    items={textItems}
+                    initialLeftward={true}
+                    pxPerSecond={40}
+                    gap={18}
+                    itemWidthClass="w-[272px] sm:w-[310px] lg:w-[348px] xl:w-[384px]"
+                    accessibleItemCount={textTestimonials.length}
+                    renderItem={(testimonial) => (
+                      <TestimonialCard
+                        testimonial={testimonial}
+                        className="h-full w-full md:w-full"
+                      />
+                    )}
+                  />
+                </div>
 
                 <SliderArrow
                   className="hidden"
