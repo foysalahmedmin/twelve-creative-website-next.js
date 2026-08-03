@@ -136,6 +136,7 @@ export const PageHeader = ({
                   src={videoSrc}
                   title={title}
                   thumbnailSrc={thumbnailSrc}
+                  className="h-full"
                 />
               ) : (
                 <img

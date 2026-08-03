@@ -78,6 +78,7 @@ export const HeroSection = ({
                     src={data.video.src}
                     title={data.title ?? "Twelve Creative"}
                     thumbnailSrc={data.video.poster}
+                    className="h-full"
                   />
                 ) : (
                   <Image
@@ -153,6 +154,7 @@ export const HeroSection = ({
                   src={data.video.src}
                   title={data.title ?? "Twelve Creative"}
                   thumbnailSrc={data.video.poster}
+                  className="h-full"
                 />
               ) : (
                 <Image
