@@ -1,6 +1,10 @@
 import { HeroSection } from "@/components/sections/hero-section";
 import { getPublicIndustryOptions } from "@/lib/api/industries";
-import { getPublicPageHero } from "@/lib/api/page-heroes";
+import {
+  getPublicPageHero,
+  resolveThumbnail,
+  resolveVideoSrc,
+} from "@/lib/api/page-heroes";
 import { getPublicSiteSetting } from "@/lib/api/site-setting";
 
 export async function LiveHeroSection({
@@ -14,6 +18,9 @@ export async function LiveHeroSection({
     getPublicIndustryOptions(),
   ]);
 
+  const videoSrc = resolveVideoSrc(hero?.video);
+  const poster = resolveThumbnail(hero?.thumbnail, hero?.video);
+
   const override = hero
     ? {
         title: hero.title ?? "",
@@ -21,14 +28,7 @@ export async function LiveHeroSection({
         trust_label: hero.trust_label ?? "",
         primary_cta: hero.primary_cta ?? null,
         secondary_cta: hero.secondary_cta ?? null,
-        video: hero.video?.value
-          ? {
-              src: hero.video.value,
-              poster: hero.thumbnail ?? hero.video.poster,
-            }
-          : hero.thumbnail
-            ? { src: "", poster: hero.thumbnail }
-            : null,
+        video: videoSrc || poster ? { src: videoSrc ?? "", poster } : null,
       }
     : undefined;
 
