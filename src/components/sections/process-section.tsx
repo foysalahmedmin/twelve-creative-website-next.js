@@ -60,7 +60,6 @@ export const ProcessSection = ({
   const label = data?.label || PROCESS_DATA.label;
   const title = data?.title || PROCESS_DATA.title;
   const description = data?.description || PROCESS_DATA.description;
-  const safeProcessThumbnail = processThumbnail?.trim() || undefined;
   const [activeIndex, setActiveIndex] = useState(0);
   const reduceMotion = useReducedMotion();
   const rowRef = useRef<HTMLDivElement>(null);
@@ -122,7 +121,14 @@ export const ProcessSection = ({
   };
 
   const activeStep = process_steps[activeIndex];
-  const useStepImages = !safeProcessThumbnail;
+  // Per-step images take priority whenever steps have them — which, given
+  // the candidateSteps filter above, is always once process_steps is
+  // non-empty. `processThumbnail` used to win outright just by being set,
+  // silently discarding every step's own image (all 6 could have distinct
+  // photos and the panel would still show one static thumbnail, frozen
+  // through the whole scroll). It's now only a last-resort fallback for the
+  // case process_steps itself ends up empty.
+  const useStepImages = process_steps.length > 0;
 
   return (
     <section
@@ -175,14 +181,16 @@ export const ProcessSection = ({
                     </div>
                   ))
                 ) : (
-                  <Image
-                    src={safeProcessThumbnail || process_steps[0].image}
-                    alt="Our process"
-                    fill
-                    sizes="(min-width: 1024px) 520px, 100vw"
-                    className="object-cover"
-                    priority
-                  />
+                  processThumbnail?.trim() && (
+                    <Image
+                      src={processThumbnail.trim()}
+                      alt="Our process"
+                      fill
+                      sizes="(min-width: 1024px) 520px, 100vw"
+                      className="object-cover"
+                      priority
+                    />
+                  )
                 )}
               </motion.div>
 
