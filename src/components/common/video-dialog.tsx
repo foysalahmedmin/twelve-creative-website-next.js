@@ -106,6 +106,16 @@ export function VideoDialog({
   const [status, setStatus] = useState<PlayerStatus>("loading");
   const videoRef = useRef<HTMLVideoElement>(null);
   const [paused, setPaused] = useState(false);
+  // `paused` is play/pause intent and flips false optimistically the instant
+  // the dialog opens, before playback has actually begun. `isPlaying` only
+  // flips true on a confirmed playback event. YouTube removed the `showinfo`
+  // embed param years ago, so its title/avatar overlay and big center
+  // play/pause/replay icon render natively on the iframe any time it isn't
+  // actively playing — controls={false} only suppresses the in-player scrub
+  // bar, not this cover. Loading/buffering already get an opaque cover below;
+  // paused/ended/force-paused-by-exclusivity need one too, or that native
+  // YouTube chrome shows through inside our own dialog.
+  const [isPlaying, setIsPlaying] = useState(false);
   const [muted, setMuted] = useState(false);
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
@@ -146,6 +156,7 @@ export function VideoDialog({
     if (open) {
       setStatus("loading");
       setPaused(false);
+      setIsPlaying(false);
       setProgress(0);
       setCurrentTime(0);
       setRatio(ratioOf(aspect));
@@ -179,6 +190,7 @@ export function VideoDialog({
       if (video && (video.readyState >= 3 || !video.paused)) {
         syncRatio();
         setStatus((s) => (s === "error" ? s : "ready"));
+        if (!video.paused) setIsPlaying(true);
       }
     }, 200);
     return () => window.clearInterval(id);
@@ -319,13 +331,18 @@ export function VideoDialog({
               onPlaying={() => {
                 syncRatio();
                 setStatus((s) => (s === "error" ? s : "ready"));
+                setIsPlaying(true);
               }}
               onError={() => setStatus("error")}
               onPlay={() => {
                 setPaused(false);
+                setIsPlaying(true);
                 claimPlayback();
               }}
-              onPause={() => setPaused(true)}
+              onPause={() => {
+                setPaused(true);
+                setIsPlaying(false);
+              }}
               onVolumeChange={() => setMuted(videoRef.current?.muted ?? false)}
               onTimeUpdate={() => {
                 const video = videoRef.current;
@@ -338,15 +355,6 @@ export function VideoDialog({
             />
           )}
 
-          {(status === "loading" || status === "buffering") && (
-            // Fully opaque, not translucent: this sits directly over the
-            // native <video> element, and anything less than opaque lets the
-            // browser's own buffering spinner show through underneath ours.
-            <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black">
-              <Spinner className="text-primary-foreground size-8" />
-            </div>
-          )}
-
           {status === "error" && (
             <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 px-6 text-center">
               <HugeiconsIcon
@@ -357,6 +365,42 @@ export function VideoDialog({
                 This video couldn&apos;t load. Please try again.
               </p>
             </div>
+          )}
+
+          {status !== "error" && !isPlaying && (
+            <>
+              {status === "loading" || status === "buffering" ? (
+                // Fully opaque, not translucent: this sits directly over the
+                // native <video> element, and anything less than opaque lets
+                // the browser's own buffering spinner show through underneath.
+                <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black">
+                  <Spinner className="text-primary-foreground size-8" />
+                </div>
+              ) : (
+                // Same reasoning as the loading cover, but for paused/ended/
+                // force-paused: without this, YouTube's own title/avatar
+                // overlay and big center icon (controls={false} never
+                // suppresses that cover screen, only the in-player scrub bar)
+                // show through the instant playback isn't active.
+                <button
+                  type="button"
+                  onClick={togglePlay}
+                  aria-label={`Play ${title}`}
+                  className="absolute inset-0 z-5 flex items-center justify-center bg-black"
+                >
+                  <span
+                    aria-hidden
+                    className="flex h-12 w-20 items-center justify-center rounded-2xl border border-white/20 bg-card/10 text-white shadow-2xl backdrop-blur-md transition-all duration-300 hover:bg-card/30 hover:scale-110 active:scale-95"
+                  >
+                    <HugeiconsIcon
+                      icon={PlayIcon}
+                      className="size-6"
+                      fill="currentColor"
+                    />
+                  </span>
+                </button>
+              )}
+            </>
           )}
 
           {/* Above every overlay and always mounted, so the video can still be

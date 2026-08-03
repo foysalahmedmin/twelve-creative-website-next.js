@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import { ArrowUpRight } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const ReactPlayer = dynamic(() => import("react-player"), { ssr: false });
 
@@ -59,6 +59,154 @@ function fromVertical(v: (typeof VERTICALS_DATA)[0]): CardItem {
   };
 }
 
+function IndustryCard({
+  card,
+  isFirst,
+  isLast,
+}: {
+  card: CardItem;
+  isFirst: boolean;
+  isLast: boolean;
+}) {
+  const [hovered, setHovered] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const [playing, setPlaying] = useState(false);
+  const [size, setSize] = useState<{ width: number; height: number } | null>(
+    null,
+  );
+  const cardRef = useRef<HTMLAnchorElement>(null);
+
+  const enter = () => {
+    setMounted(true);
+    setHovered(true);
+  };
+  const leave = () => setHovered(false);
+
+  // Same fix as InlineVideoPlayer/VideoDialog: a cross-origin iframe (the
+  // YouTube provider here) reads its box once and doesn't reliably re-adapt
+  // to a later CSS layout pass, so percentage sizing against this card's
+  // flex/viewport-derived width could lock in a pillarboxed video. Real,
+  // already-settled pixel dimensions sidestep that entirely.
+  useEffect(() => {
+    const el = cardRef.current;
+    if (!el) return;
+    const measure = (rect: { width: number; height: number }) => {
+      const width = Math.round(rect.width);
+      const height = Math.round(rect.height);
+      if (width <= 0 || height <= 0) return;
+      setSize((prev) =>
+        prev && prev.width === width && prev.height === height
+          ? prev
+          : { width, height },
+      );
+    };
+    measure(el.getBoundingClientRect());
+    const observer = new ResizeObserver(([entry]) => measure(entry.contentRect));
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const showVideo = hovered && playing && !!card.videoSrc;
+  const shouldMountVideo = !!card.videoSrc && mounted && !!size;
+
+  return (
+    <Link
+      ref={cardRef}
+      href={card.href}
+      className={cn(
+        "group relative shrink-0 snap-start overflow-hidden",
+        "w-[80vw] sm:w-[60vw] lg:w-0 lg:flex-1",
+        "h-[500px] lg:h-[580px]",
+        isFirst ? "rounded-l-3xl" : "",
+        isLast ? "rounded-r-3xl" : "",
+        "rounded-2xl lg:rounded-none",
+        isFirst && "lg:rounded-l-3xl",
+        isLast && "lg:rounded-r-3xl",
+        "cursor-pointer select-none",
+      )}
+      onMouseEnter={enter}
+      onMouseLeave={leave}
+      onFocus={enter}
+      onBlur={leave}
+    >
+      {/* Static image */}
+      <img
+        src={card.image}
+        alt={card.title}
+        className={cn(
+          "absolute inset-0 h-full w-full object-cover transition-all duration-700",
+          showVideo
+            ? "scale-105 opacity-0"
+            : hovered
+              ? "scale-105 opacity-100"
+              : "scale-100 opacity-100",
+        )}
+        draggable={false}
+      />
+
+      {/* Video (plays on hover) */}
+      {shouldMountVideo && size && (
+        <div
+          className={cn(
+            "pointer-events-none absolute inset-0 h-full w-full transition-opacity duration-700",
+            showVideo ? "opacity-100" : "opacity-0",
+          )}
+        >
+          <ReactPlayer
+            src={card.videoSrc}
+            playing={hovered}
+            muted
+            loop
+            playsInline
+            controls={false}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: size.width,
+              height: size.height,
+              objectFit: "cover",
+            }}
+            onPlaying={() => setPlaying(true)}
+            onError={() => setPlaying(false)}
+          />
+        </div>
+      )}
+
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/10 to-black/70" />
+
+      {/* Content */}
+      <div className="absolute inset-0 flex flex-col justify-between p-7 lg:p-8">
+        <div>
+          <h3 className="font-heading text-3xl leading-none font-black tracking-tight text-white lg:text-4xl">
+            {card.title}
+          </h3>
+        </div>
+
+        <div className="space-y-3">
+          <p className="text-sm leading-relaxed text-white/80 lg:text-base">
+            {card.description}
+          </p>
+          <div
+            className={cn(
+              "flex items-center gap-2 transition-all duration-300",
+              hovered
+                ? "translate-x-0 opacity-100"
+                : "-translate-x-2 opacity-0",
+            )}
+          >
+            <span className="text-xs font-bold tracking-widest text-white uppercase">
+              Explore
+            </span>
+            <ArrowUpRight className="size-4 text-white" />
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
 interface Props {
   industries?: IndustryCardData[];
   heading?: HeadingSection | null;
@@ -75,19 +223,6 @@ export function CoreVerticalsSection({
   const cards: CardItem[] = industries?.length
     ? industries.map(fromIndustry)
     : VERTICALS_DATA.map(fromVertical);
-
-  const [hoveredId, setHoveredId] = useState<string | null>(null);
-  const [mountedVideoIds, setMountedVideoIds] = useState<string[]>([]);
-  const [playingVideoIds, setPlayingVideoIds] = useState<string[]>([]);
-
-  const handleMouseEnter = (id: string) => {
-    setMountedVideoIds((ids) => (ids.includes(id) ? ids : [...ids, id]));
-    setHoveredId(id);
-  };
-
-  const handleMouseLeave = (id: string) => {
-    setHoveredId((current) => (current === id ? null : current));
-  };
 
   return (
     <section
@@ -116,116 +251,14 @@ export function CoreVerticalsSection({
         )}
 
         <div className="scrollbar-none flex snap-x snap-mandatory gap-2 overflow-x-auto pb-4 lg:pb-0">
-          {cards.map((card, index) => {
-            const isHovered = hoveredId === card.id;
-            const showVideo =
-              isHovered && playingVideoIds.includes(card.id) && !!card.videoSrc;
-            const shouldMountVideo =
-              !!card.videoSrc && mountedVideoIds.includes(card.id);
-            const isFirst = index === 0;
-            const isLast = index === cards.length - 1;
-
-            return (
-              <Link
-                key={card.id}
-                href={card.href}
-                className={cn(
-                  "group relative shrink-0 snap-start overflow-hidden",
-                  "w-[80vw] sm:w-[60vw] lg:w-0 lg:flex-1",
-                  "h-[500px] lg:h-[580px]",
-                  isFirst ? "rounded-l-3xl" : "",
-                  isLast ? "rounded-r-3xl" : "",
-                  "rounded-2xl lg:rounded-none",
-                  isFirst && "lg:rounded-l-3xl",
-                  isLast && "lg:rounded-r-3xl",
-                  "cursor-pointer select-none",
-                )}
-                onMouseEnter={() => handleMouseEnter(card.id)}
-                onMouseLeave={() => handleMouseLeave(card.id)}
-                onFocus={() => handleMouseEnter(card.id)}
-                onBlur={() => handleMouseLeave(card.id)}
-              >
-                {/* Static image */}
-                <img
-                  src={card.image}
-                  alt={card.title}
-                  className={cn(
-                    "absolute inset-0 h-full w-full object-cover transition-all duration-700",
-                    showVideo
-                      ? "scale-105 opacity-0"
-                      : isHovered
-                        ? "scale-105 opacity-100"
-                        : "scale-100 opacity-100",
-                  )}
-                  draggable={false}
-                />
-
-                {/* Video (plays on hover) */}
-                {shouldMountVideo && (
-                  <div
-                    className={cn(
-                      "pointer-events-none absolute inset-0 h-full w-full transition-opacity duration-700",
-                      "[&_iframe]:h-full [&_iframe]:w-full [&_video]:h-full [&_video]:w-full [&_video]:object-cover",
-                      showVideo ? "opacity-100" : "opacity-0",
-                    )}
-                  >
-                    <ReactPlayer
-                      src={card.videoSrc}
-                      playing={isHovered}
-                      muted
-                      loop
-                      playsInline
-                      controls={false}
-                      width="100%"
-                      height="100%"
-                      style={{ width: "100%", height: "100%" }}
-                      onPlaying={() =>
-                        setPlayingVideoIds((ids) =>
-                          ids.includes(card.id) ? ids : [...ids, card.id],
-                        )
-                      }
-                      onError={() =>
-                        setPlayingVideoIds((ids) =>
-                          ids.filter((id) => id !== card.id),
-                        )
-                      }
-                    />
-                  </div>
-                )}
-
-                {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/10 to-black/70" />
-
-                {/* Content */}
-                <div className="absolute inset-0 flex flex-col justify-between p-7 lg:p-8">
-                  <div>
-                    <h3 className="font-heading text-3xl leading-none font-black tracking-tight text-white lg:text-4xl">
-                      {card.title}
-                    </h3>
-                  </div>
-
-                  <div className="space-y-3">
-                    <p className="text-sm leading-relaxed text-white/80 lg:text-base">
-                      {card.description}
-                    </p>
-                    <div
-                      className={cn(
-                        "flex items-center gap-2 transition-all duration-300",
-                        isHovered
-                          ? "translate-x-0 opacity-100"
-                          : "-translate-x-2 opacity-0",
-                      )}
-                    >
-                      <span className="text-xs font-bold tracking-widest text-white uppercase">
-                        Explore
-                      </span>
-                      <ArrowUpRight className="size-4 text-white" />
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            );
-          })}
+          {cards.map((card, index) => (
+            <IndustryCard
+              key={card.id}
+              card={card}
+              isFirst={index === 0}
+              isLast={index === cards.length - 1}
+            />
+          ))}
         </div>
       </div>
     </section>

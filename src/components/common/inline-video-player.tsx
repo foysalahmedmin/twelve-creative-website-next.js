@@ -19,6 +19,61 @@ const ReactPlayer = dynamic(() => import("react-player"), { ssr: false });
 
 type PlayerStatus = "loading" | "ready" | "buffering" | "error";
 
+/**
+ * Thumbnail + centered play button, shared by the pre-start cover and the
+ * paused cover below — same look, different click target.
+ */
+function VideoCoverButton({
+  label,
+  thumbnailSrc,
+  thumbnailSizes,
+  onClick,
+}: {
+  label: string;
+  thumbnailSrc?: string;
+  thumbnailSizes: string;
+  onClick: (e: React.MouseEvent) => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="absolute inset-0 z-10 block h-full w-full cursor-pointer"
+      aria-label={label}
+    >
+      {thumbnailSrc && (
+        <Image
+          src={thumbnailSrc}
+          alt=""
+          fill
+          sizes={thumbnailSizes}
+          className="object-cover transition-transform duration-300 group-hover/video:scale-105"
+        />
+      )}
+      <span
+        aria-hidden
+        className="bg-foreground/0 group-hover/video:bg-foreground/15 absolute inset-0 transition-colors duration-300"
+      />
+      <span
+        aria-hidden
+        className={cn(
+          "absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center",
+          "h-10 w-16 rounded-xl md:h-12 md:w-20 md:rounded-2xl",
+          "bg-card/10 border border-white/20 text-white shadow-2xl backdrop-blur-md",
+          "group-hover/video:bg-card/30 transition-all duration-300 group-hover/video:scale-110 group-hover/video:border-white/35",
+          "group-active/video:scale-95",
+        )}
+      >
+        <HugeiconsIcon
+          icon={PlayIcon}
+          className="size-5 md:size-6"
+          fill="currentColor"
+        />
+      </span>
+    </button>
+  );
+}
+
 interface InlineVideoPlayerProps {
   src: string;
   title: string;
@@ -53,9 +108,59 @@ export function InlineVideoPlayer({
   const [started, setStarted] = useState(false);
   const [status, setStatus] = useState<PlayerStatus>("loading");
   const [paused, setPaused] = useState(false);
+  // Separate from `paused`: `paused` is play/pause *intent* (drives the
+  // `playing` prop and the control-bar icon) and flips to false optimistically
+  // the instant start() fires, before the provider has actually begun
+  // rendering frames. `isPlaying` only flips true once a real playback event
+  // confirms it. YouTube removed the `showinfo` embed param years ago, so its
+  // title/avatar overlay and big center play/pause/replay icon show natively
+  // on the iframe any time it isn't actively playing — controls={false} only
+  // suppresses the in-player scrub bar, not this cover. Every other state
+  // (loading, buffering, paused, ended, force-paused by exclusivity or
+  // scrolling away) needs our own opaque cover in front of the iframe, or
+  // YouTube's chrome shows through underneath.
+  const [isPlaying, setIsPlaying] = useState(false);
   const [muted, setMuted] = useState(false);
+  const [size, setSize] = useState<{ width: number; height: number } | null>(
+    null,
+  );
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Real, already-settled pixel dimensions instead of the "100%" the box's
+  // own aspect-ratio CSS would otherwise resolve to. Same reason VideoDialog
+  // computes exact pixels rather than trusting percentage/aspect-ratio: a
+  // native <video> repaints itself on every later layout change regardless
+  // of when it was told its size, but the YouTube/Vimeo/etc. providers here
+  // render through a cross-origin iframe that reads its box once and doesn't
+  // reliably re-adapt — on a portrait (9:16) reel this showed up as the
+  // video pillarboxed into a fraction of the card with YouTube's own
+  // title/avatar/Shorts chrome still visible, because the iframe locked in a
+  // size before this card's aspect-ratio box had actually resolved. Measured
+  // via ResizeObserver specifically because its callback only ever fires
+  // after layout has genuinely settled — no other API in the platform makes
+  // that guarantee — and the player stays unmounted until a measurement
+  // exists, so the iframe is never created against an unresolved box.
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    const measure = (rect: { width: number; height: number }) => {
+      const width = Math.round(rect.width);
+      const height = Math.round(rect.height);
+      if (width <= 0 || height <= 0) return;
+      setSize((prev) =>
+        prev && prev.width === width && prev.height === height
+          ? prev
+          : { width, height },
+      );
+    };
+    measure(container.getBoundingClientRect());
+    const observer = new ResizeObserver(([entry]) => {
+      measure(entry.contentRect);
+    });
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, []);
 
   const { claimPlayback, releasePlayback } = useExclusiveVideoPlayback(() => {
     videoRef.current?.pause();
@@ -95,6 +200,7 @@ export function InlineVideoPlayer({
       const video = videoRef.current;
       if (video && (video.readyState >= 3 || !video.paused)) {
         setStatus((s) => (s === "error" ? s : "ready"));
+        if (!video.paused) setIsPlaying(true);
       }
     }, 200);
     return () => window.clearInterval(id);
@@ -103,6 +209,7 @@ export function InlineVideoPlayer({
   const start = useCallback(() => {
     setStatus("loading");
     setPaused(false);
+    setIsPlaying(false);
     setStarted(true);
   }, []);
 
@@ -133,45 +240,15 @@ export function InlineVideoPlayer({
       )}
     >
       {!started ? (
-        <button
-          type="button"
+        <VideoCoverButton
+          label={`Play ${title}`}
+          thumbnailSrc={thumbnailSrc}
+          thumbnailSizes={thumbnailSizes}
           onClick={start}
-          className="absolute inset-0 z-10 block h-full w-full cursor-pointer"
-          aria-label={`Play ${title}`}
-        >
-          {thumbnailSrc && (
-            <Image
-              src={thumbnailSrc}
-              alt={title}
-              fill
-              sizes={thumbnailSizes}
-              className="object-cover transition-transform duration-300 group-hover/video:scale-105"
-            />
-          )}
-          <span
-            aria-hidden
-            className="bg-foreground/0 group-hover/video:bg-foreground/15 absolute inset-0 transition-colors duration-300"
-          />
-          <span
-            aria-hidden
-            className={cn(
-              "absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center",
-              "h-10 w-16 rounded-xl md:h-12 md:w-20 md:rounded-2xl",
-              "bg-card/10 border border-white/20 text-white shadow-2xl backdrop-blur-md",
-              "group-hover/video:bg-card/30 transition-all duration-300 group-hover/video:scale-110 group-hover/video:border-white/35",
-              "group-active/video:scale-95",
-            )}
-          >
-            <HugeiconsIcon
-              icon={PlayIcon}
-              className="size-5 md:size-6"
-              fill="currentColor"
-            />
-          </span>
-        </button>
+        />
       ) : (
         <>
-          {status !== "error" && (
+          {status !== "error" && size && (
             <ReactPlayer
               ref={videoRef}
               src={src}
@@ -180,9 +257,10 @@ export function InlineVideoPlayer({
               playsInline
               style={{
                 position: "absolute",
-                inset: 0,
-                width: "100%",
-                height: "100%",
+                top: 0,
+                left: 0,
+                width: size.width,
+                height: size.height,
                 objectFit: "contain",
               }}
               onReady={() => setStatus((s) => (s === "error" ? s : "ready"))}
@@ -190,21 +268,22 @@ export function InlineVideoPlayer({
               onWaiting={() =>
                 setStatus((s) => (s === "ready" ? "buffering" : s))
               }
-              onPlaying={() => setStatus((s) => (s === "error" ? s : "ready"))}
+              onPlaying={() => {
+                setStatus((s) => (s === "error" ? s : "ready"));
+                setIsPlaying(true);
+              }}
               onError={() => setStatus("error")}
               onPlay={() => {
                 setPaused(false);
+                setIsPlaying(true);
                 claimPlayback();
               }}
-              onPause={() => setPaused(true)}
+              onPause={() => {
+                setPaused(true);
+                setIsPlaying(false);
+              }}
               onVolumeChange={() => setMuted(videoRef.current?.muted ?? false)}
             />
-          )}
-
-          {(status === "loading" || status === "buffering") && (
-            <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black">
-              <Spinner className="text-primary-foreground size-6" />
-            </div>
           )}
 
           {status === "error" && (
@@ -217,6 +296,23 @@ export function InlineVideoPlayer({
                 This video couldn&apos;t load.
               </p>
             </div>
+          )}
+
+          {status !== "error" && !isPlaying && (
+            <>
+              {status === "loading" || status === "buffering" ? (
+                <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black">
+                  <Spinner className="text-primary-foreground size-6" />
+                </div>
+              ) : (
+                <VideoCoverButton
+                  label={`Play ${title}`}
+                  thumbnailSrc={thumbnailSrc}
+                  thumbnailSizes={thumbnailSizes}
+                  onClick={togglePlay}
+                />
+              )}
+            </>
           )}
 
           {showControls && (
