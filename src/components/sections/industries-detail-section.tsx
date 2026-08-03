@@ -1,17 +1,13 @@
 "use client";
 
+import { InlineVideoPlayer } from "@/components/common/inline-video-player";
 import { ScrollReveal } from "@/components/common/scroll-reveal";
 import type { TIndustry } from "@/data/industries.data";
 import { cn } from "@/lib/utils";
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
-
-const ReactPlayer = dynamic(() => import("react-player"), {
-  ssr: false,
-}) as any;
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
@@ -24,14 +20,11 @@ function IndustryMedia({ industry }: { industry: TIndustry }) {
   return (
     <div className="border-border relative aspect-4/3 w-full overflow-hidden rounded-2xl border shadow-sm lg:aspect-16/11">
       {industry.videoSrc ? (
-        <ReactPlayer
+        <InlineVideoPlayer
           src={industry.videoSrc}
-          controls
-          playsInline
-          width="100%"
-          height="100%"
-          light={poster || true}
-          style={{ width: "100%", height: "100%" }}
+          title={`${industry.name} film`}
+          thumbnailSrc={poster}
+          className="h-full"
         />
       ) : (
         <Link href={detailHref(industry)} className="group block h-full w-full">

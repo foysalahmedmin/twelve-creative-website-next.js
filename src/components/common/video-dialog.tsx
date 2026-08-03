@@ -8,6 +8,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Spinner } from "@/components/ui/spinner";
+import { useExclusiveVideoPlayback } from "@/hooks/use-exclusive-video-playback";
 import { cn } from "@/lib/utils";
 import {
   Alert01Icon,
@@ -117,6 +118,14 @@ export function VideoDialog({
   // clips were being letterboxed into a tall box with the picture reduced to a
   // band across the middle.
   const [ratio, setRatio] = useState(() => ratioOf(aspect));
+
+  const { claimPlayback, releasePlayback } = useExclusiveVideoPlayback(() => {
+    videoRef.current?.pause();
+  });
+
+  useEffect(() => {
+    if (!open) releasePlayback();
+  }, [open, releasePlayback]);
 
   const syncRatio = useCallback(() => {
     const video = videoRef.current;
@@ -312,7 +321,10 @@ export function VideoDialog({
                 setStatus((s) => (s === "error" ? s : "ready"));
               }}
               onError={() => setStatus("error")}
-              onPlay={() => setPaused(false)}
+              onPlay={() => {
+                setPaused(false);
+                claimPlayback();
+              }}
               onPause={() => setPaused(true)}
               onVolumeChange={() => setMuted(videoRef.current?.muted ?? false)}
               onTimeUpdate={() => {

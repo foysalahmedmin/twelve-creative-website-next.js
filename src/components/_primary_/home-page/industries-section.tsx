@@ -1,5 +1,6 @@
 "use client";
 
+import { InlineVideoPlayer } from "@/components/common/inline-video-player";
 import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { CenteredSectionHeader } from "@/components/common/section-label";
 import { Card } from "@/components/ui/card";
@@ -25,13 +26,8 @@ import {
   Restaurant01Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useState } from "react";
-
-const ReactPlayer = dynamic(() => import("react-player"), {
-  ssr: false,
-});
 
 const INDUSTRY_ICON_MAP: Record<TIndustryIconKey, typeof Restaurant01Icon> = {
   hospitality: Restaurant01Icon,
@@ -115,18 +111,13 @@ const IndustryPanel = ({ industry }: { industry: TIndustry }) => {
 
         {/* Right: Visual Showcase — plays the industry video when set,
           otherwise shows the thumbnail/image; appears first on mobile */}
-        <div className="border-border relative order-first mx-auto aspect-4/5 w-full max-w-md overflow-hidden rounded-2xl border lg:order-last [&_iframe]:h-full [&_iframe]:w-full [&_video]:h-full [&_video]:w-full [&_video]:object-cover">
+        <div className="border-border relative order-first mx-auto aspect-4/5 w-full max-w-md overflow-hidden rounded-2xl border lg:order-last">
           {reelVideoSrc ? (
-            <ReactPlayer
+            <InlineVideoPlayer
               src={reelVideoSrc}
-              playing
-              controls
-              playsInline
-              width="100%"
-              height="100%"
-              light={reelThumbnailSrc || true}
-              previewAriaLabel={`Play ${industry.name} reel`}
-              style={{ width: "100%", height: "100%" }}
+              title={`${industry.name} reel`}
+              thumbnailSrc={reelThumbnailSrc}
+              className="h-full"
             />
           ) : (
             <>

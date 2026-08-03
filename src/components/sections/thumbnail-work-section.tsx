@@ -1,17 +1,13 @@
 "use client";
 
+import { InlineVideoPlayer } from "@/components/common/inline-video-player";
 import { CenteredSectionHeader } from "@/components/common/section-label";
 import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { cn } from "@/lib/utils";
 import type { HeadingSection } from "@/lib/api/shared-sections";
-import { PlayIcon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
-import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-
-const ReactPlayer = dynamic(() => import("react-player"), { ssr: false });
 
 const PAGE_SIZE = 8;
 
@@ -106,78 +102,43 @@ export interface ThumbnailWorkSectionProps {
 /* ─────────────── single card ─────────────── */
 
 function WorkCard({ item, sizes }: { item: IPortfolioItem; sizes: string }) {
-  const [isPlaying, setIsPlaying] = useState(false);
   const isReel = item.aspect === "reel";
   const hasVideo = !!item.video_link;
+  const aspectClassName = isReel ? "aspect-9/16" : "aspect-video";
+
+  if (hasVideo) {
+    return (
+      <div className="relative w-full overflow-hidden rounded-2xl">
+        <InlineVideoPlayer
+          src={item.video_link!}
+          title={item.title ?? "video"}
+          thumbnailSrc={item.thumbnail}
+          thumbnailSizes={sizes}
+          className={cn("rounded-2xl", aspectClassName)}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="group/card relative w-full overflow-hidden rounded-2xl">
       <div
         className={cn(
           "relative overflow-hidden rounded-2xl",
-          isReel ? "aspect-9/16" : "aspect-video",
+          aspectClassName,
         )}
       >
-        {hasVideo && isPlaying ? (
-          /* ── Active player ── */
-          <div className="absolute inset-0">
-            <ReactPlayer
-              src={item.video_link!}
-              controls
-              playing
-              width="100%"
-              height="100%"
-              style={{ width: "100%", height: "100%" }}
-            />
-          </div>
-        ) : (
-          /* ── Thumbnail + play button ── */
-          <button
-            type="button"
-            onClick={hasVideo ? () => setIsPlaying(true) : undefined}
-            className={cn(
-              "absolute inset-0 z-10 block w-full",
-              hasVideo ? "cursor-pointer" : "cursor-default",
-            )}
-            aria-label={hasVideo ? `Play ${item.title ?? "video"}` : undefined}
-          >
-            {/* Thumbnail image */}
-            <Image
-              src={item.thumbnail}
-              alt={item.title ?? "Work"}
-              fill
-              sizes={sizes}
-              className="object-cover transition-transform duration-300 group-hover/card:scale-105"
-            />
-
-            {/* Dark hover scrim */}
-            <span
-              aria-hidden
-              className="bg-foreground/0 group-hover/card:bg-foreground/15 absolute inset-0 transition-colors duration-300"
-            />
-
-            {/* Glass play button — only shown when there's a video */}
-            {hasVideo && (
-              <span
-                aria-hidden
-                className={cn(
-                  "absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center",
-                  "h-10 w-16 rounded-xl md:h-12 md:w-20 md:rounded-2xl",
-                  "bg-card/10 border border-white/20 text-white shadow-2xl backdrop-blur-md",
-                  "transition-all duration-300",
-                  "group-hover/card:bg-card/30 group-hover/card:scale-110 group-hover/card:border-white/35",
-                  "group-active/card:scale-95",
-                )}
-              >
-                <HugeiconsIcon
-                  icon={PlayIcon}
-                  className="size-5 md:size-6"
-                  fill="currentColor"
-                />
-              </span>
-            )}
-          </button>
-        )}
+        <Image
+          src={item.thumbnail}
+          alt={item.title ?? "Work"}
+          fill
+          sizes={sizes}
+          className="object-cover transition-transform duration-300 group-hover/card:scale-105"
+        />
+        <span
+          aria-hidden
+          className="bg-foreground/0 group-hover/card:bg-foreground/15 absolute inset-0 transition-colors duration-300"
+        />
       </div>
     </div>
   );

@@ -9,14 +9,10 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { cn } from "@/lib/utils";
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import React from "react";
+import { InlineVideoPlayer } from "../common/inline-video-player";
 import { ScrollReveal } from "../common/scroll-reveal";
-
-const ReactPlayer = dynamic(() => import("react-player"), {
-  ssr: false,
-});
 
 interface BreadcrumbItemType {
   label: string;
@@ -136,14 +132,10 @@ export const PageHeader = ({
                 and only made the intended width look wider than it was. */}
             <div className="ring-foreground/15 relative mx-auto mt-12 aspect-video w-full max-w-4xl overflow-hidden rounded-2xl ring-1 lg:mt-16">
               {videoSrc ? (
-                <ReactPlayer
+                <InlineVideoPlayer
                   src={videoSrc}
-                  controls
-                  width="100%"
-                  height="100%"
-                  playsInline
-                  light={thumbnailSrc || false}
-                  style={{ width: "100%", height: "100%" }}
+                  title={title}
+                  thumbnailSrc={thumbnailSrc}
                 />
               ) : (
                 <img

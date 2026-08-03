@@ -1,17 +1,15 @@
 "use client";
 
 import { BookingModal } from "@/components/common/booking-modal";
+import { InlineVideoPlayer } from "@/components/common/inline-video-player";
 import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { buttonVariants } from "@/components/ui/button";
 import { HOME_HERO_DATA, type THomeHero } from "@/data/home-hero.data";
 import type { PublicIndustryOption } from "@/lib/api/industries";
 import { cn } from "@/lib/utils";
-import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-
-const ReactPlayer = dynamic(() => import("react-player"), { ssr: false });
 
 interface HeroSectionProps {
   className?: string;
@@ -76,14 +74,10 @@ export const HeroSection = ({
             >
               <div className="border-foreground/10 relative mx-auto mt-8 aspect-video w-full max-w-4xl overflow-hidden rounded-2xl border shadow-sm lg:mt-10 lg:rounded-3xl">
                 {data.video.src ? (
-                  <ReactPlayer
+                  <InlineVideoPlayer
                     src={data.video.src}
-                    controls
-                    width="100%"
-                    height="100%"
-                    playsInline
-                    light={data.video.poster || false}
-                    style={{ width: "100%", height: "100%" }}
+                    title={data.title ?? "Twelve Creative"}
+                    thumbnailSrc={data.video.poster}
                   />
                 ) : (
                   <Image
@@ -155,14 +149,10 @@ export const HeroSection = ({
                 and every other page hero read at the same width. */}
             <div className="border-foreground/10 relative mx-auto mt-8 aspect-video w-full max-w-4xl overflow-hidden rounded-2xl border shadow-sm lg:mt-10 lg:rounded-3xl">
               {data.video.src ? (
-                <ReactPlayer
+                <InlineVideoPlayer
                   src={data.video.src}
-                  controls
-                  width="100%"
-                  height="100%"
-                  playsInline
-                  light={data.video.poster || false}
-                  style={{ width: "100%", height: "100%" }}
+                  title={data.title ?? "Twelve Creative"}
+                  thumbnailSrc={data.video.poster}
                 />
               ) : (
                 <Image

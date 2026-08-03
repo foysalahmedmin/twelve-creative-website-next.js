@@ -1,6 +1,7 @@
 "use client";
 
 import { CenteredSectionHeader } from "@/components/common/section-label";
+import { InlineVideoPlayer } from "@/components/common/inline-video-player";
 import {
   Carousel,
   CarouselContent,
@@ -15,78 +16,22 @@ import {
 } from "@/data/featured-projects.data";
 import { cn } from "@/lib/utils";
 import type { HeadingSection } from "@/lib/api/shared-sections";
-import { ArrowRight02Icon, PlayIcon } from "@hugeicons/core-free-icons";
+import { ArrowRight02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import dynamic from "next/dynamic";
-import Image from "next/image";
-import { useState } from "react";
 
-const ReactPlayer = dynamic(() => import("react-player"), { ssr: false });
-
-const ProjectCard = ({ project }: { project: TFeaturedProject }) => {
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  return (
-    <div className="group/project relative w-full overflow-hidden rounded-lg">
-      <div
-        className={cn(
-          "relative overflow-hidden rounded-lg",
-          project.aspect === "reel" ? "aspect-9/16" : "aspect-video",
-        )}
-      >
-        {!isPlaying ? (
-          <button
-            type="button"
-            onClick={() => setIsPlaying(true)}
-            className="absolute inset-0 z-10 block w-full cursor-pointer"
-            aria-label={`Play ${project.title}`}
-          >
-            <Image
-              src={project.thumbnail_src}
-              alt={project.title}
-              fill
-              sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-              className="object-cover transition-transform duration-300 group-hover/project:scale-105"
-            />
-            {/* Hover overlay */}
-            <span
-              aria-hidden
-              className="bg-foreground/0 group-hover/project:bg-foreground/15 absolute inset-0 transition-colors duration-300"
-            />
-            {/* Play button */}
-            <span
-              aria-hidden
-              className={cn(
-                "absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center",
-                "h-10 w-16 rounded-xl md:h-12 md:w-20 md:rounded-2xl",
-                "bg-card/10 border border-white/20 text-white shadow-2xl backdrop-blur-md",
-                "group-hover/project:bg-card/30 transition-all duration-300 group-hover/project:scale-110 group-hover/project:border-white/35",
-                "group-active/project:scale-95",
-              )}
-            >
-              <HugeiconsIcon
-                icon={PlayIcon}
-                className="size-5 md:size-6"
-                fill="currentColor"
-              />
-            </span>
-          </button>
-        ) : (
-          <div className="absolute inset-0">
-            <ReactPlayer
-              src={project.video_src}
-              controls
-              playing
-              width="100%"
-              height="100%"
-              style={{ width: "100%", height: "100%" }}
-            />
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
+const ProjectCard = ({ project }: { project: TFeaturedProject }) => (
+  <div className="relative w-full overflow-hidden rounded-lg">
+    <InlineVideoPlayer
+      src={project.video_src}
+      title={project.title}
+      thumbnailSrc={project.thumbnail_src}
+      className={cn(
+        "rounded-lg",
+        project.aspect === "reel" ? "aspect-9/16" : "aspect-video",
+      )}
+    />
+  </div>
+);
 
 interface FeaturedProjectsSectionProps {
   className?: string;
