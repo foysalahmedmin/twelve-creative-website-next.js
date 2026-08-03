@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/dialog";
 import { Spinner } from "@/components/ui/spinner";
 import { useExclusiveVideoPlayback } from "@/hooks/use-exclusive-video-playback";
-import { isYouTubeUrl } from "@/lib/media/video";
 import { cn } from "@/lib/utils";
 import {
   Alert01Icon,
@@ -246,14 +245,6 @@ export function VideoDialog({
 
   const showControls = status === "ready" || status === "buffering";
 
-  // Same mitigation as InlineVideoPlayer: YouTube's Shorts embed player
-  // reserves a band of its own UI down the left side of a portrait iframe
-  // instead of filling it edge-to-edge, and that's inside cross-origin
-  // content this component has no reach into. Scaling the player up and
-  // anchoring the transform to the right edge pushes that band out of the
-  // visible box rather than centering the crop.
-  const isPortraitYouTube = aspect === "9/16" && isYouTubeUrl(src);
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
@@ -315,6 +306,19 @@ export function VideoDialog({
               playing={!paused}
               controls={false}
               playsInline
+              // Real pixel numbers reach the YouTube provider's own iframe
+              // via a patched dependency (patches/youtube-video-element.patch)
+              // — see that patch for why. CSS width/height alone leaves the
+              // iframe's own width/height *attributes* at the library's
+              // hardcoded "100%", which YouTube reads as "no real size
+              // given" and defaults its internal layout to landscape,
+              // rendering a portrait (Shorts) video pillarboxed regardless
+              // of the iframe's actual CSS-rendered shape.
+              config={
+                size
+                  ? { youtube: { width: size.width, height: size.height } }
+                  : undefined
+              }
               // Pinned to the box's edges rather than sized at 100%: the box
               // is already an exact pixel size, so there is nothing left for
               // a percentage to resolve against incorrectly.
@@ -324,10 +328,6 @@ export function VideoDialog({
                 width: "100%",
                 height: "100%",
                 objectFit: "contain",
-                ...(isPortraitYouTube && {
-                  transform: "scale(1.5)",
-                  transformOrigin: "100% 50%",
-                }),
               }}
               onLoadedMetadata={syncRatio}
               onReady={() => {

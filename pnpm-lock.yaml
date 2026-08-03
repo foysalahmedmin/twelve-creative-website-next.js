@@ -10,6 +10,11 @@ overrides:
   postcss@8.4.31: 8.5.18
   sharp@0.34.5: 0.35.3
 
+patchedDependencies:
+  youtube-video-element:
+    hash: 832bff9f0ad8de6b328749aca5477eb1171dc314bff1ff83a1192f074791f41e
+    path: patches/youtube-video-element.patch
+
 importers:
 
   .:
@@ -142,7 +147,7 @@ importers:
         version: 1.1.2(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       youtube-video-element:
         specifier: ^1.9.0
-        version: 1.9.0
+        version: 1.9.0(patch_hash=832bff9f0ad8de6b328749aca5477eb1171dc314bff1ff83a1192f074791f41e)
       zod:
         specifier: ^4.3.6
         version: 4.3.6
@@ -9195,7 +9200,7 @@ snapshots:
       twitch-video-element: 0.1.6
       vimeo-video-element: 1.7.2
       wistia-video-element: 1.4.0
-      youtube-video-element: 1.9.0
+      youtube-video-element: 1.9.0(patch_hash=832bff9f0ad8de6b328749aca5477eb1171dc314bff1ff83a1192f074791f41e)
     transitivePeerDependencies:
       - '@svta/cml-cta'
       - '@svta/cml-structured-field-values'
@@ -10051,7 +10056,7 @@ snapshots:
 
   yoctocolors@2.2.0: {}
 
-  youtube-video-element@1.9.0:
+  youtube-video-element@1.9.0(patch_hash=832bff9f0ad8de6b328749aca5477eb1171dc314bff1ff83a1192f074791f41e):
     dependencies:
       media-played-ranges-mixin: 0.1.0
 

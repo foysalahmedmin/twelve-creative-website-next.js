@@ -6,7 +6,6 @@ import { VERTICALS_DATA } from "@/data/verticals.data";
 import type { ApiIndustry } from "@/lib/api/industries";
 import type { HeadingSection } from "@/lib/api/shared-sections";
 import { resolveIndustryReelMedia } from "@/lib/media/industry";
-import { isYouTubeUrl } from "@/lib/media/video";
 import { cn } from "@/lib/utils";
 import { ArrowUpRight } from "lucide-react";
 import dynamic from "next/dynamic";
@@ -109,13 +108,6 @@ function IndustryCard({
 
   const showVideo = hovered && playing && !!card.videoSrc;
   const shouldMountVideo = !!card.videoSrc && mounted && !!size;
-  // Same mitigation as InlineVideoPlayer/VideoDialog: YouTube's Shorts embed
-  // player reserves a band of its own UI down the left side of a portrait
-  // iframe instead of filling it edge-to-edge — cross-origin content this
-  // component has no reach into. This card is fixed-height and flex-narrow,
-  // so it renders portrait at nearly every breakpoint.
-  const isPortraitYouTube =
-    !!size && size.height > size.width && isYouTubeUrl(card.videoSrc ?? "");
 
   return (
     <Link
@@ -167,6 +159,10 @@ function IndustryCard({
             loop
             playsInline
             controls={false}
+            // Real pixel numbers reach the YouTube provider's own iframe via
+            // a patched dependency (patches/youtube-video-element.patch) —
+            // see that patch for why CSS width/height alone isn't enough.
+            config={{ youtube: { width: size.width, height: size.height } }}
             style={{
               position: "absolute",
               top: 0,
@@ -174,10 +170,6 @@ function IndustryCard({
               width: size.width,
               height: size.height,
               objectFit: "cover",
-              ...(isPortraitYouTube && {
-                transform: "scale(1.5)",
-                transformOrigin: "100% 50%",
-              }),
             }}
             onPlaying={() => setPlaying(true)}
             onError={() => setPlaying(false)}

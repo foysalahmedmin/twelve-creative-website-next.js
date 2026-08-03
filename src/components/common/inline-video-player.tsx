@@ -2,7 +2,6 @@
 
 import { Spinner } from "@/components/ui/spinner";
 import { useExclusiveVideoPlayback } from "@/hooks/use-exclusive-video-playback";
-import { isYouTubeUrl } from "@/lib/media/video";
 import { cn } from "@/lib/utils";
 import {
   Alert01Icon,
@@ -232,16 +231,6 @@ export function InlineVideoPlayer({
 
   const showControls = status === "ready" || status === "buffering";
 
-  // YouTube's Shorts embed player doesn't fill a portrait box edge-to-edge
-  // the way it does a landscape one — it renders the actual video narrower
-  // than the iframe, with a reserved band of its own UI down one side, and
-  // that band doesn't move if the iframe's box changes shape (that part is
-  // cross-origin, entirely outside CSS/JS reach). Scaling the player up and
-  // anchoring the transform to the right edge pushes that left-side band out
-  // of the visible box instead of centering the crop, since the band sits
-  // specifically on the left, not split evenly on both sides.
-  const isPortraitYouTube = !!size && size.height > size.width && isYouTubeUrl(src);
-
   return (
     <div
       ref={containerRef}
@@ -266,6 +255,15 @@ export function InlineVideoPlayer({
               playing={!paused}
               controls={false}
               playsInline
+              // Real pixel numbers reach the YouTube provider's own iframe
+              // via a patched dependency (patches/youtube-video-element.patch)
+              // — see that patch for why. CSS width/height alone leaves the
+              // iframe's own width/height *attributes* at the library's
+              // hardcoded "100%", which YouTube reads as "no real size
+              // given" and defaults its internal layout to landscape,
+              // rendering a portrait (Shorts) video pillarboxed regardless
+              // of the iframe's actual CSS-rendered shape.
+              config={{ youtube: { width: size.width, height: size.height } }}
               style={{
                 position: "absolute",
                 top: 0,
@@ -273,10 +271,6 @@ export function InlineVideoPlayer({
                 width: size.width,
                 height: size.height,
                 objectFit: "contain",
-                ...(isPortraitYouTube && {
-                  transform: "scale(1.5)",
-                  transformOrigin: "100% 50%",
-                }),
               }}
               onReady={() => setStatus((s) => (s === "error" ? s : "ready"))}
               onCanPlay={() => setStatus((s) => (s === "error" ? s : "ready"))}
