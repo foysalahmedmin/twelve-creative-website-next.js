@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Spinner } from "@/components/ui/spinner";
 import { useExclusiveVideoPlayback } from "@/hooks/use-exclusive-video-playback";
+import { isYouTubeUrl } from "@/lib/media/video";
 import { cn } from "@/lib/utils";
 import {
   Alert01Icon,
@@ -245,6 +246,14 @@ export function VideoDialog({
 
   const showControls = status === "ready" || status === "buffering";
 
+  // Same mitigation as InlineVideoPlayer: YouTube's Shorts embed player
+  // reserves a band of its own UI down the left side of a portrait iframe
+  // instead of filling it edge-to-edge, and that's inside cross-origin
+  // content this component has no reach into. Scaling the player up and
+  // anchoring the transform to the right edge pushes that band out of the
+  // visible box rather than centering the crop.
+  const isPortraitYouTube = aspect === "9/16" && isYouTubeUrl(src);
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
@@ -315,6 +324,10 @@ export function VideoDialog({
                 width: "100%",
                 height: "100%",
                 objectFit: "contain",
+                ...(isPortraitYouTube && {
+                  transform: "scale(1.5)",
+                  transformOrigin: "100% 50%",
+                }),
               }}
               onLoadedMetadata={syncRatio}
               onReady={() => {
