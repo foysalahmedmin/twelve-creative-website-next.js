@@ -9,6 +9,7 @@ import type { TFeaturedIndustryGroup } from "@/data/featured-projects.data";
 import { apiFetch } from "@/lib/admin/api-client";
 import type { VideoRef } from "@/lib/admin/types";
 import { INDUSTRIES_TAG, type IndustrySummary } from "@/lib/api/industries";
+import { resolveVideo } from "@/lib/media/video";
 
 export const FEATURED_PROJECTS_TAG = "featured-projects";
 
@@ -130,7 +131,9 @@ export async function getPublicFeaturedProjectsGrouped(): Promise<
       id: item._id,
       title: item.title,
       aspect: item.aspect,
-      thumbnail_src: item.thumbnail,
+      // Falls back to YouTube's own thumbnail when the admin hasn't set one
+      // and the video is a YouTube link — matches showcase-video's adapter.
+      thumbnail_src: resolveVideo(item.video, item.thumbnail)?.posterUrl || item.thumbnail,
       video_src: item.video?.value ?? "",
     });
   }

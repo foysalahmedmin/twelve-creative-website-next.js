@@ -1,10 +1,12 @@
 "use client";
 
-import { InlineVideoPlayer } from "@/components/common/inline-video-player";
 import { CenteredSectionHeader } from "@/components/common/section-label";
 import { ScrollReveal } from "@/components/common/scroll-reveal";
+import { VideoDialog } from "@/components/common/video-dialog";
 import { cn } from "@/lib/utils";
 import type { HeadingSection } from "@/lib/api/shared-sections";
+import { PlayIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -101,45 +103,77 @@ export interface ThumbnailWorkSectionProps {
 
 /* ─────────────── single card ─────────────── */
 
-function WorkCard({ item, sizes }: { item: IPortfolioItem; sizes: string }) {
+function WorkCard({
+  item,
+  sizes,
+  onOpenVideo,
+}: {
+  item: IPortfolioItem;
+  sizes: string;
+  onOpenVideo: (item: IPortfolioItem) => void;
+}) {
   const isReel = item.aspect === "reel";
   const hasVideo = !!item.video_link;
   const aspectClassName = isReel ? "aspect-9/16" : "aspect-video";
 
+  const media = (
+    <>
+      <Image
+        src={item.thumbnail}
+        alt={item.title ?? "Work"}
+        fill
+        sizes={sizes}
+        className="object-cover transition-transform duration-300 group-hover/card:scale-105"
+      />
+      <span
+        aria-hidden
+        className="bg-foreground/0 group-hover/card:bg-foreground/15 absolute inset-0 transition-colors duration-300"
+      />
+      {hasVideo && (
+        <span
+          aria-hidden
+          className={cn(
+            "absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center",
+            "h-10 w-16 rounded-xl md:h-12 md:w-20 md:rounded-2xl",
+            "bg-card/10 border border-white/20 text-white shadow-2xl backdrop-blur-md",
+            "group-hover/card:bg-card/30 transition-all duration-300 group-hover/card:scale-110 group-hover/card:border-white/35",
+            "group-active/card:scale-95",
+          )}
+        >
+          <HugeiconsIcon
+            icon={PlayIcon}
+            className="size-5 md:size-6"
+            fill="currentColor"
+          />
+        </span>
+      )}
+    </>
+  );
+
   if (hasVideo) {
     return (
-      <div className="relative w-full overflow-hidden rounded-2xl">
-        <InlineVideoPlayer
-          src={item.video_link!}
-          title={item.title ?? "video"}
-          thumbnailSrc={item.thumbnail}
-          thumbnailSizes={sizes}
-          className={cn("rounded-2xl", aspectClassName)}
-        />
-      </div>
+      <button
+        type="button"
+        onClick={() => onOpenVideo(item)}
+        aria-label={`Play ${item.title ?? "video"}`}
+        className={cn(
+          "group/card relative block w-full overflow-hidden rounded-2xl",
+          aspectClassName,
+        )}
+      >
+        {media}
+      </button>
     );
   }
 
   return (
-    <div className="group/card relative w-full overflow-hidden rounded-2xl">
-      <div
-        className={cn(
-          "relative overflow-hidden rounded-2xl",
-          aspectClassName,
-        )}
-      >
-        <Image
-          src={item.thumbnail}
-          alt={item.title ?? "Work"}
-          fill
-          sizes={sizes}
-          className="object-cover transition-transform duration-300 group-hover/card:scale-105"
-        />
-        <span
-          aria-hidden
-          className="bg-foreground/0 group-hover/card:bg-foreground/15 absolute inset-0 transition-colors duration-300"
-        />
-      </div>
+    <div
+      className={cn(
+        "group/card relative w-full overflow-hidden rounded-2xl",
+        aspectClassName,
+      )}
+    >
+      {media}
     </div>
   );
 }
@@ -193,6 +227,8 @@ export const ThumbnailWorkSection = ({
   const hasMore = visibleCount < work.length;
   const remaining = work.length - visibleCount;
 
+  const [activeVideo, setActiveVideo] = useState<IPortfolioItem | null>(null);
+
   const masonryColumns = useMemo(
     () => (isMasonry ? packMasonryColumns(visibleWork, columnCount) : null),
     [isMasonry, visibleWork, columnCount],
@@ -240,7 +276,11 @@ export const ThumbnailWorkSection = ({
                       animation="fade-in-up"
                       delayMs={80 * (item._idx % 4)}
                     >
-                      <WorkCard item={item} sizes={imageSizes} />
+                      <WorkCard
+                        item={item}
+                        sizes={imageSizes}
+                        onOpenVideo={setActiveVideo}
+                      />
                     </ScrollReveal>
                   ))}
                 </div>
@@ -261,7 +301,11 @@ export const ThumbnailWorkSection = ({
                   delayMs={80 * (idx % 4)}
                   className="w-full"
                 >
-                  <WorkCard item={item} sizes={imageSizes} />
+                  <WorkCard
+                    item={item}
+                    sizes={imageSizes}
+                    onOpenVideo={setActiveVideo}
+                  />
                 </ScrollReveal>
               ))}
             </div>
@@ -312,6 +356,16 @@ export const ThumbnailWorkSection = ({
           )}
         </div>
       </div>
+
+      <VideoDialog
+        open={!!activeVideo}
+        onOpenChange={(next) => {
+          if (!next) setActiveVideo(null);
+        }}
+        src={activeVideo?.video_link ?? ""}
+        title={activeVideo?.title ?? "Work"}
+        aspect={activeVideo?.aspect === "reel" ? "9/16" : "16/9"}
+      />
     </section>
   );
 };
