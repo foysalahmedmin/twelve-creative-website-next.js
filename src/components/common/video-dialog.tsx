@@ -232,8 +232,15 @@ export function VideoDialog({
   const toggleMute = useCallback(() => {
     const video = videoRef.current;
     if (!video) return;
-    video.muted = !video.muted;
-    setMuted(video.muted);
+    // Compute the target once and use it for both — the YouTube provider's
+    // `muted` setter mutes asynchronously (it waits on an internal ready
+    // promise before calling the real mute/unmute API), so reading
+    // `video.muted` back immediately after assigning it returns the old,
+    // pre-toggle value almost every time. The button looked like it did
+    // nothing because the icon was always one click behind.
+    const next = !video.muted;
+    video.muted = next;
+    setMuted(next);
   }, []);
 
   const seek = useCallback((fraction: number) => {
@@ -241,6 +248,13 @@ export function VideoDialog({
     if (!video || !Number.isFinite(video.duration)) return;
     video.currentTime = fraction * video.duration;
     setProgress(fraction);
+    // A direct, synchronous call from this click handler — same reasoning
+    // as togglePlay. Seeking a YouTube source that had already reached
+    // "ended" relies on the provider's own internal seek-then-restore-pause
+    // promise chain, which waits for a real PLAYING state transition that
+    // isn't guaranteed to arrive on its own; calling play() here ourselves,
+    // from a genuine user gesture, doesn't depend on that chain resolving.
+    void video.play();
   }, []);
 
   const showControls = status === "ready" || status === "buffering";
@@ -355,6 +369,17 @@ export function VideoDialog({
               onPause={() => {
                 setPaused(true);
                 setIsPlaying(false);
+              }}
+              // Nothing forced the bar to its actual end: onTimeUpdate stops
+              // once playback stops, so progress was left at whatever the
+              // last tick happened to read — visibly short of the end, since
+              // update ticks don't land exactly on the final frame.
+              onEnded={() => {
+                setProgress(1);
+                const duration = videoRef.current?.duration;
+                if (duration && Number.isFinite(duration)) {
+                  setCurrentTime(duration);
+                }
               }}
               onVolumeChange={() => setMuted(videoRef.current?.muted ?? false)}
               onTimeUpdate={() => {

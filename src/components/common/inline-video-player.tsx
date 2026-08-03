@@ -225,8 +225,15 @@ export function InlineVideoPlayer({
     e.stopPropagation();
     const video = videoRef.current;
     if (!video) return;
-    video.muted = !video.muted;
-    setMuted(video.muted);
+    // Compute the target once and use it for both — the YouTube provider's
+    // `muted` setter mutes asynchronously (it waits on an internal ready
+    // promise before calling the real mute/unmute API), so reading
+    // `video.muted` back immediately after assigning it returns the old,
+    // pre-toggle value almost every time. The button looked like it did
+    // nothing because the icon was always one click behind.
+    const next = !video.muted;
+    video.muted = next;
+    setMuted(next);
   }, []);
 
   const showControls = status === "ready" || status === "buffering";
