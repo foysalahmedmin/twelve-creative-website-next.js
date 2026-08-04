@@ -33,6 +33,7 @@ export const SITE = {
     { name: "What We Build", href: "/what-we-build" },
     { name: "Industries", href: "/industries" },
     { name: "Works", href: "/works" },
+    { name: "Insights", href: "/blogs" },
     { name: "About", href: "/about" },
     { name: "Contact", href: "/contact" },
   ],
