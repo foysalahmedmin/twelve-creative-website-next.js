@@ -323,22 +323,29 @@ export function SharedSectionForm({ initial }: { initial: ApiSharedSection }) {
       return;
     }
     setSaving(true);
-    const result = await saveSharedSectionAction(section);
-    setSaving(false);
-    if (!result.ok) {
-      toast.error(result.error ?? "Unable to save shared section");
-      return;
+    // try/finally: without it, a thrown/rejected save leaves `saving` stuck
+    // at `true` forever — the button spins indefinitely with no way out.
+    try {
+      const result = await saveSharedSectionAction(section);
+      if (!result.ok) {
+        toast.error(result.error ?? "Unable to save shared section");
+        return;
+      }
+      toast.success(
+        section.is_active !== false
+          ? isHeadingOnly
+            ? "Shared heading saved and visible"
+            : "Shared section saved and active"
+          : isHeadingOnly
+            ? "Shared heading saved as hidden"
+            : "Shared section saved as inactive and hidden publicly",
+      );
+      router.refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Unable to save shared section");
+    } finally {
+      setSaving(false);
     }
-    toast.success(
-      section.is_active !== false
-        ? isHeadingOnly
-          ? "Shared heading saved and visible"
-          : "Shared section saved and active"
-        : isHeadingOnly
-          ? "Shared heading saved as hidden"
-          : "Shared section saved as inactive and hidden publicly",
-    );
-    router.refresh();
   };
 
   return (

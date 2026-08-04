@@ -99,63 +99,71 @@ export function SettingsForm({ initial }: Props) {
       return;
     }
     setSaving(true);
-    const res = await updateSiteSettingAction({
-      contact_email: persistedText(form.contact_email),
-      contact_phone: persistedText(form.contact_phone),
-      contact_address: persistedText(form.contact_address),
-      contact_whatsapp: persistedText(form.contact_whatsapp),
-      contact_map_embed_url: persistedText(form.contact_map_embed_url),
-      booking_notification_email: persistedText(
-        form.booking_notification_email,
-      ),
-      social: {
-        instagram: persistedText(form.instagram),
-        linkedin: persistedText(form.linkedin),
-        youtube: persistedText(form.youtube),
-        x: persistedText(form.x),
-        facebook: persistedText(form.facebook),
-      },
-      faq_section: {
-        image: persistedText(form.faq_image),
-        image_alt: persistedText(form.faq_image_alt),
-        title: persistedText(form.faq_title),
-        description: persistedText(form.faq_description),
-        name: persistedText(form.faq_name),
-        position: persistedText(form.faq_position),
-        contact_link: persistedText(form.faq_contact_link),
-      },
-      calendly_url: persistedText(form.calendly_url),
-      contact_page: {
-        inquiry: {
-          label: persistedText(form.inquiry_label),
-          title: persistedText(form.inquiry_title),
-          description: persistedText(form.inquiry_description),
+    // try/finally is essential here: without it, a thrown/rejected save
+    // (network error, expired-session redirect, etc.) leaves `saving` stuck
+    // at `true` forever — the button spins indefinitely with no way out.
+    try {
+      const res = await updateSiteSettingAction({
+        contact_email: persistedText(form.contact_email),
+        contact_phone: persistedText(form.contact_phone),
+        contact_address: persistedText(form.contact_address),
+        contact_whatsapp: persistedText(form.contact_whatsapp),
+        contact_map_embed_url: persistedText(form.contact_map_embed_url),
+        booking_notification_email: persistedText(
+          form.booking_notification_email,
+        ),
+        social: {
+          instagram: persistedText(form.instagram),
+          linkedin: persistedText(form.linkedin),
+          youtube: persistedText(form.youtube),
+          x: persistedText(form.x),
+          facebook: persistedText(form.facebook),
         },
-        booking: {
-          label: persistedText(form.booking_label),
-          title: persistedText(form.booking_title),
-          description: persistedText(form.booking_description),
+        faq_section: {
+          image: persistedText(form.faq_image),
+          image_alt: persistedText(form.faq_image_alt),
+          title: persistedText(form.faq_title),
+          description: persistedText(form.faq_description),
+          name: persistedText(form.faq_name),
+          position: persistedText(form.faq_position),
+          contact_link: persistedText(form.faq_contact_link),
         },
-        map: {
-          label: persistedText(form.map_label),
-          title: persistedText(form.map_title),
-          description: persistedText(form.map_description),
+        calendly_url: persistedText(form.calendly_url),
+        contact_page: {
+          inquiry: {
+            label: persistedText(form.inquiry_label),
+            title: persistedText(form.inquiry_title),
+            description: persistedText(form.inquiry_description),
+          },
+          booking: {
+            label: persistedText(form.booking_label),
+            title: persistedText(form.booking_title),
+            description: persistedText(form.booking_description),
+          },
+          map: {
+            label: persistedText(form.map_label),
+            title: persistedText(form.map_title),
+            description: persistedText(form.map_description),
+          },
         },
-      },
-      footer: {
-        description: persistedText(form.footer_description),
-        cta_text: persistedText(form.footer_cta_text),
-        cta_label: persistedText(form.footer_cta_label),
-        cta_href: persistedText(form.footer_cta_href),
-      },
-    });
-    setSaving(false);
-    if (!res.ok) {
-      toast.error(res.error ?? "Save failed");
-      return;
+        footer: {
+          description: persistedText(form.footer_description),
+          cta_text: persistedText(form.footer_cta_text),
+          cta_label: persistedText(form.footer_cta_label),
+          cta_href: persistedText(form.footer_cta_href),
+        },
+      });
+      if (!res.ok) {
+        toast.error(res.error ?? "Save failed");
+        return;
+      }
+      toast.success("Settings saved");
+      router.refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Save failed");
+    } finally {
+      setSaving(false);
     }
-    toast.success("Settings saved");
-    router.refresh();
   };
 
   return (
@@ -203,7 +211,7 @@ export function SettingsForm({ initial }: Props) {
               placeholder="+1 951 822 6223"
             />
           </div>
-          <div className="space-y-2">
+          <div className="space-y-2 sm:col-span-2">
             <Label htmlFor="contact_map_embed_url">Map embed URL</Label>
             <Input
               id="contact_map_embed_url"
@@ -211,7 +219,17 @@ export function SettingsForm({ initial }: Props) {
               value={form.contact_map_embed_url}
               onChange={(e) => update("contact_map_embed_url", e.target.value)}
               placeholder="https://maps.google.com/maps?...&output=embed"
+              aria-describedby="contact_map_embed_url_help"
             />
+            <p
+              id="contact_map_embed_url_help"
+              className="text-muted-foreground text-xs"
+            >
+              Not the link from the address bar or the Share button — those
+              refuse to load here. On Google Maps: Share → Embed a map →
+              copy the URL inside <code>src=&quot;...&quot;</code> from the
+              code shown, and paste that.
+            </p>
           </div>
         </div>
       </section>

@@ -7,6 +7,33 @@ import { getPublicPageHero, resolvePageMetadata } from "@/lib/api/page-heroes";
 import { getPublicSiteSetting } from "@/lib/api/site-setting";
 import type { Metadata } from "next";
 
+const GOOGLE_MAPS_HOSTS = new Set([
+  "google.com",
+  "www.google.com",
+  "maps.google.com",
+]);
+
+/**
+ * A regular Google Maps share/browsing link is a valid URL, so it passes
+ * backend validation retroactively saved before that check existed — but it
+ * refuses to load in an iframe (X-Frame-Options), showing a broken "refused
+ * to connect" panel. Falls back to the known-good default rather than
+ * rendering that, while the admin re-enters a proper embed URL.
+ */
+function resolveMapEmbedSrc(url: string | undefined, fallback: string): string {
+  if (!url) return fallback;
+  try {
+    const parsed = new URL(url);
+    if (!GOOGLE_MAPS_HOSTS.has(parsed.hostname.toLowerCase())) return url;
+    const embeddable =
+      parsed.pathname.startsWith("/maps/embed") ||
+      parsed.searchParams.get("output") === "embed";
+    return embeddable ? url : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
 export async function generateMetadata(): Promise<Metadata> {
   const hero = await getPublicPageHero("contact");
   return resolvePageMetadata(hero, {
@@ -90,7 +117,10 @@ export default async function ContactPage() {
         cards={liveCards}
         map={{
           address: settings.contact_address || map.address,
-          embed_src: settings.contact_map_embed_url || map.embed_src,
+          embed_src: resolveMapEmbedSrc(
+            settings.contact_map_embed_url,
+            map.embed_src,
+          ),
         }}
       />
     </main>

@@ -98,12 +98,24 @@ export async function apiFetch<T = unknown>(
             : JSON.stringify(body),
       cache: revalidate === undefined && !tags ? "no-store" : undefined,
       next: Object.keys(nextOptions).length ? nextOptions : undefined,
+      // Without this, a hung backend/DB call leaves this fetch neither
+      // resolved nor rejected — callers relying on try/finally to reset a
+      // "saving" spinner would spin forever, since finally only runs once
+      // the promise settles.
+      signal: AbortSignal.timeout(30_000),
     });
   } catch (err) {
-    console.error("Network error while fetching", url, err);
+    const timedOut = err instanceof Error && err.name === "TimeoutError";
+    console.error(
+      timedOut ? "Timed out fetching" : "Network error while fetching",
+      url,
+      err,
+    );
     throw new ApiError(
       503,
-      "The API is temporarily unreachable. Please try again.",
+      timedOut
+        ? "The request timed out. Please try again."
+        : "The API is temporarily unreachable. Please try again.",
       null,
     );
   }
