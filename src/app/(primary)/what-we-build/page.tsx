@@ -1,10 +1,8 @@
 import { LiveServicesSection } from "@/components/_primary_/home-page/services-section-live";
-import { CoreVerticalsSection } from "@/components/sections/core-verticals-section";
 import { CTASection } from "@/components/sections/cta-section";
 import { GrowthSystemSection } from "@/components/sections/growth-system-section";
 import { PageHeader } from "@/components/sections/page-header-section";
 import { WhyChooseUsSection } from "@/components/sections/why-choose-us-section";
-import { getPublicIndustries } from "@/lib/api/industries";
 import { getPublicPageCta, toLegacyPageCta } from "@/lib/api/page-ctas";
 import {
   getPublicPageHero,
@@ -27,12 +25,10 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function WhatWeBuildPage() {
   const [
     hero,
-    industries,
     cta,
     [coreHeading, servicesHeading, growthSystem, difference, whyChooseUs],
   ] = await Promise.all([
     getPublicPageHero("what-we-build"),
-    getPublicIndustries(),
     getPublicPageCta("what-we-build"),
     getPublicSharedSections([
       "core-verticals",
@@ -57,9 +53,6 @@ export default async function WhatWeBuildPage() {
         videoSrc={resolveVideoSrc(hero?.video)}
         thumbnailSrc={resolveThumbnail(hero?.thumbnail, hero?.video)}
       />
-
-      {/* Core Verticals */}
-      <CoreVerticalsSection industries={industries} heading={coreHeading} />
 
       {/* Services — moved here from the home page: the deliverables follow
           naturally once someone has seen who we build for. */}
