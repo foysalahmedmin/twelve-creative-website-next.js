@@ -112,42 +112,52 @@ export function PageCtaForm({
       is_active: isActive,
     };
     setSaving(true);
-    const result = await savePageCtaAction(payload);
-    setSaving(false);
-    if (!result.ok) {
-      toast.error(result.error ?? "Unable to save Page CTA");
-      return;
+    try {
+      const result = await savePageCtaAction(payload);
+      if (!result.ok) {
+        toast.error(result.error ?? "Unable to save Page CTA");
+        return;
+      }
+      toast.success(
+        isActive
+          ? industryOverride
+            ? "Industry CTA override saved and active"
+            : "Page CTA saved and active"
+          : industryOverride
+            ? "Industry CTA override saved as inactive and hidden"
+            : "Page CTA saved as inactive and hidden publicly",
+      );
+      if (industryOverride) router.push("/admin/page-ctas");
+      router.refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Unable to save Page CTA");
+    } finally {
+      setSaving(false);
     }
-    toast.success(
-      isActive
-        ? industryOverride
-          ? "Industry CTA override saved and active"
-          : "Page CTA saved and active"
-        : industryOverride
-          ? "Industry CTA override saved as inactive and hidden"
-          : "Page CTA saved as inactive and hidden publicly",
-    );
-    if (industryOverride) router.push("/admin/page-ctas");
-    router.refresh();
   };
 
   const handleDelete = async () => {
     if (!initial._id || !window.confirm("Delete this managed CTA record?"))
       return;
     setDeleting(true);
-    const result = await deletePageCtaAction(initial._id);
-    setDeleting(false);
-    if (!result.ok) {
-      toast.error(result.error ?? "Unable to delete Page CTA");
-      return;
+    try {
+      const result = await deletePageCtaAction(initial._id);
+      if (!result.ok) {
+        toast.error(result.error ?? "Unable to delete Page CTA");
+        return;
+      }
+      toast.success(
+        industryOverride
+          ? "Industry CTA override deleted"
+          : "Page CTA deleted and no longer public",
+      );
+      router.push("/admin/page-ctas");
+      router.refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Unable to delete Page CTA");
+    } finally {
+      setDeleting(false);
     }
-    toast.success(
-      industryOverride
-        ? "Industry CTA override deleted"
-        : "Page CTA deleted and no longer public",
-    );
-    router.push("/admin/page-ctas");
-    router.refresh();
   };
 
   return (

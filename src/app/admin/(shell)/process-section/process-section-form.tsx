@@ -176,22 +176,27 @@ export function ProcessSectionForm({ initial }: ProcessSectionFormProps) {
     }
 
     setSaving(true);
-    const result = await updateProcessSectionAction({
-      label: cleanLabel,
-      title: cleanTitle,
-      description: cleanDescription,
-      thumbnail: cleanThumbnail,
-      process_steps: cleanedSteps,
-    });
-    setSaving(false);
+    try {
+      const result = await updateProcessSectionAction({
+        label: cleanLabel,
+        title: cleanTitle,
+        description: cleanDescription,
+        thumbnail: cleanThumbnail,
+        process_steps: cleanedSteps,
+      });
 
-    if (!result.ok) {
-      toast.error(result.error ?? "Save failed");
-      return;
+      if (!result.ok) {
+        toast.error(result.error ?? "Save failed");
+        return;
+      }
+
+      toast.success("Process section updated");
+      router.refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Save failed");
+    } finally {
+      setSaving(false);
     }
-
-    toast.success("Process section updated");
-    router.refresh();
   };
 
   return (

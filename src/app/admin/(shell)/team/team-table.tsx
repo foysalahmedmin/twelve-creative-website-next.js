@@ -77,17 +77,22 @@ export function TeamTable({ items: propItems }: Props) {
 
   const handleSaveOrder = async () => {
     setSaving(true);
-    const res = await reorderTeamMembersAction(
-      items.map((item, i) => ({ _id: item._id, order: i + 1 })),
-    );
-    setSaving(false);
-    if (!res.ok) {
-      toast.error(res.error ?? "Failed to save order");
-      return;
+    try {
+      const res = await reorderTeamMembersAction(
+        items.map((item, i) => ({ _id: item._id, order: i + 1 })),
+      );
+      if (!res.ok) {
+        toast.error(res.error ?? "Failed to save order");
+        return;
+      }
+      toast.success("Order saved");
+      setDirty(false);
+      router.refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to save order");
+    } finally {
+      setSaving(false);
     }
-    toast.success("Order saved");
-    setDirty(false);
-    router.refresh();
   };
 
   if (items.length === 0) {

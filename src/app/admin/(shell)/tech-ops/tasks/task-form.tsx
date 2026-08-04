@@ -51,28 +51,33 @@ export function TaskForm({ task }: Props) {
     e.preventDefault();
     if (!title.trim()) return;
     setSaving(true);
-    const res = isEdit
-      ? await updateTaskAction(task._id, {
-          title,
-          description: description || null,
-          priority,
-          status,
-          due_date: dueDate || null,
-        })
-      : await createTaskAction({
-          title,
-          description: description || undefined,
-          priority,
-          due_date: dueDate || undefined,
-        });
-    setSaving(false);
-    if (!res.ok) {
-      toast.error(res.error ?? "Save failed");
-      return;
+    try {
+      const res = isEdit
+        ? await updateTaskAction(task._id, {
+            title,
+            description: description || null,
+            priority,
+            status,
+            due_date: dueDate || null,
+          })
+        : await createTaskAction({
+            title,
+            description: description || undefined,
+            priority,
+            due_date: dueDate || undefined,
+          });
+      if (!res.ok) {
+        toast.error(res.error ?? "Save failed");
+        return;
+      }
+      toast.success(isEdit ? "Task updated" : "Task created");
+      router.push("/admin/tech-ops/tasks");
+      router.refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Save failed");
+    } finally {
+      setSaving(false);
     }
-    toast.success(isEdit ? "Task updated" : "Task created");
-    router.push("/admin/tech-ops/tasks");
-    router.refresh();
   };
 
   return (

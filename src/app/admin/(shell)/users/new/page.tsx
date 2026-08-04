@@ -29,15 +29,20 @@ export default function NewUserPage() {
       return;
     }
     setSaving(true);
-    const res = await createAdminAccountAction({ name, email, password });
-    setSaving(false);
-    if (!res.ok) {
-      toast.error(res.error ?? "Failed to create account");
-      return;
+    try {
+      const res = await createAdminAccountAction({ name, email, password });
+      if (!res.ok) {
+        toast.error(res.error ?? "Failed to create account");
+        return;
+      }
+      toast.success(`Account created for ${email}. They can now sign in.`);
+      router.push("/admin/users");
+      router.refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to create account");
+    } finally {
+      setSaving(false);
     }
-    toast.success(`Account created for ${email}. They can now sign in.`);
-    router.push("/admin/users");
-    router.refresh();
   };
 
   return (

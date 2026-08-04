@@ -68,33 +68,38 @@ export function InsightForm({ mode, initial }: Props) {
       return;
     }
     setSaving(true);
-    const payload: InsightInput = {
-      slug: slug.trim(),
-      title: title.trim(),
-      excerpt: excerpt.trim(),
-      cover,
-      content: content.trim(),
-      category: category || undefined,
-      status,
-    };
-    const res =
-      mode === "create"
-        ? await createInsightAction(payload)
-        : await updateInsightAction(initial!._id, payload);
-    setSaving(false);
-    if (!res.ok) {
-      toast.error(res.error ?? "Save failed");
-      return;
+    try {
+      const payload: InsightInput = {
+        slug: slug.trim(),
+        title: title.trim(),
+        excerpt: excerpt.trim(),
+        cover,
+        content: content.trim(),
+        category: category || undefined,
+        status,
+      };
+      const res =
+        mode === "create"
+          ? await createInsightAction(payload)
+          : await updateInsightAction(initial!._id, payload);
+      if (!res.ok) {
+        toast.error(res.error ?? "Save failed");
+        return;
+      }
+      toast.success(
+        mode === "create"
+          ? status === "published"
+            ? "Article published"
+            : "Draft saved"
+          : "Article updated",
+      );
+      router.push("/admin/insights");
+      router.refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Save failed");
+    } finally {
+      setSaving(false);
     }
-    toast.success(
-      mode === "create"
-        ? status === "published"
-          ? "Article published"
-          : "Draft saved"
-        : "Article updated",
-    );
-    router.push("/admin/insights");
-    router.refresh();
   };
 
   return (

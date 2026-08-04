@@ -610,20 +610,25 @@ export function WorkForm({
     };
 
     setSaving(true);
-    const result =
-      mode === "create"
-        ? await createWorkAction(payload)
-        : await updateWorkAction(initial!._id, payload, initial!.slug);
-    setSaving(false);
+    try {
+      const result =
+        mode === "create"
+          ? await createWorkAction(payload)
+          : await updateWorkAction(initial!._id, payload, initial!.slug);
 
-    if (!result.ok) {
-      toast.error(result.error ?? "Save failed");
-      return;
+      if (!result.ok) {
+        toast.error(result.error ?? "Save failed");
+        return;
+      }
+
+      toast.success(mode === "create" ? "Work created" : "Work updated");
+      router.push("/admin/works");
+      router.refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Save failed");
+    } finally {
+      setSaving(false);
     }
-
-    toast.success(mode === "create" ? "Work created" : "Work updated");
-    router.push("/admin/works");
-    router.refresh();
   };
 
   return (

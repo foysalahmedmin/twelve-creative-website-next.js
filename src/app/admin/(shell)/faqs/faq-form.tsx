@@ -39,25 +39,30 @@ export function FaqForm({ mode, initial }: Props) {
       return;
     }
     setSaving(true);
-    const payload: FaqInput = {
-      question: question.trim(),
-      answer: answer.trim(),
-      group: group || undefined,
-      order,
-      is_active: isActive,
-    };
-    const res =
-      mode === "create"
-        ? await createFaqAction(payload)
-        : await updateFaqAction(initial!._id, payload);
-    setSaving(false);
-    if (!res.ok) {
-      toast.error(res.error ?? "Save failed");
-      return;
+    try {
+      const payload: FaqInput = {
+        question: question.trim(),
+        answer: answer.trim(),
+        group: group || undefined,
+        order,
+        is_active: isActive,
+      };
+      const res =
+        mode === "create"
+          ? await createFaqAction(payload)
+          : await updateFaqAction(initial!._id, payload);
+      if (!res.ok) {
+        toast.error(res.error ?? "Save failed");
+        return;
+      }
+      toast.success(mode === "create" ? "FAQ added" : "FAQ updated");
+      router.push("/admin/faqs");
+      router.refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Save failed");
+    } finally {
+      setSaving(false);
     }
-    toast.success(mode === "create" ? "FAQ added" : "FAQ updated");
-    router.push("/admin/faqs");
-    router.refresh();
   };
 
   return (

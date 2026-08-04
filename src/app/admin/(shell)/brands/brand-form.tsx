@@ -40,25 +40,30 @@ export function BrandForm({ mode, initial }: Props) {
       return;
     }
     setSaving(true);
-    const payload: BrandInput = {
-      name: name.trim(),
-      logo,
-      href: href || undefined,
-      order,
-      is_active: isActive,
-    };
-    const res =
-      mode === "create"
-        ? await createBrandAction(payload)
-        : await updateBrandAction(initial!._id, payload);
-    setSaving(false);
-    if (!res.ok) {
-      toast.error(res.error ?? "Save failed");
-      return;
+    try {
+      const payload: BrandInput = {
+        name: name.trim(),
+        logo,
+        href: href || undefined,
+        order,
+        is_active: isActive,
+      };
+      const res =
+        mode === "create"
+          ? await createBrandAction(payload)
+          : await updateBrandAction(initial!._id, payload);
+      if (!res.ok) {
+        toast.error(res.error ?? "Save failed");
+        return;
+      }
+      toast.success(mode === "create" ? "Brand added" : "Brand updated");
+      router.push("/admin/brands");
+      router.refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Save failed");
+    } finally {
+      setSaving(false);
     }
-    toast.success(mode === "create" ? "Brand added" : "Brand updated");
-    router.push("/admin/brands");
-    router.refresh();
   };
 
   return (

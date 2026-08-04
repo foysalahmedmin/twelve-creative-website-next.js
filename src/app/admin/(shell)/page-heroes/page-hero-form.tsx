@@ -81,49 +81,54 @@ export function PageHeroForm({ page, initial }: Props) {
       return;
     }
     setSaving(true);
-    const res = await upsertPageHeroAction(page, {
-      // Empty strings are intentional values. The API omits `undefined`, which
-      // would otherwise leave a previously-saved value in place.
-      label: form.label.trim(),
-      title: form.title.trim(),
-      description: form.description.trim(),
-      thumbnail: thumbnail || null,
-      video: video ?? null,
-      trust_label: isHome ? form.trust_label.trim() : undefined,
-      primary_cta:
-        isHome && primaryCtaStarted
-          ? {
-              label: form.primary_cta_label.trim(),
-              href: form.primary_cta_href.trim(),
-            }
-          : isHome
-            ? null
-            : undefined,
-      secondary_cta:
-        isHome && secondaryCtaStarted
-          ? {
-              label: form.secondary_cta_label.trim(),
-              href: form.secondary_cta_href.trim(),
-            }
-          : isHome
-            ? null
-            : undefined,
-      seo: {
-        title: form.seo_title.trim() || undefined,
-        description: form.seo_description.trim() || undefined,
-        og_image: ogImage.trim() || undefined,
-        canonical_url: form.canonical_url.trim() || undefined,
-        no_index: form.no_index,
-      },
-      is_active: form.is_active,
-    });
-    setSaving(false);
-    if (!res.ok) {
-      toast.error(res.error ?? "Save failed");
-      return;
+    try {
+      const res = await upsertPageHeroAction(page, {
+        // Empty strings are intentional values. The API omits `undefined`, which
+        // would otherwise leave a previously-saved value in place.
+        label: form.label.trim(),
+        title: form.title.trim(),
+        description: form.description.trim(),
+        thumbnail: thumbnail || null,
+        video: video ?? null,
+        trust_label: isHome ? form.trust_label.trim() : undefined,
+        primary_cta:
+          isHome && primaryCtaStarted
+            ? {
+                label: form.primary_cta_label.trim(),
+                href: form.primary_cta_href.trim(),
+              }
+            : isHome
+              ? null
+              : undefined,
+        secondary_cta:
+          isHome && secondaryCtaStarted
+            ? {
+                label: form.secondary_cta_label.trim(),
+                href: form.secondary_cta_href.trim(),
+              }
+            : isHome
+              ? null
+              : undefined,
+        seo: {
+          title: form.seo_title.trim() || undefined,
+          description: form.seo_description.trim() || undefined,
+          og_image: ogImage.trim() || undefined,
+          canonical_url: form.canonical_url.trim() || undefined,
+          no_index: form.no_index,
+        },
+        is_active: form.is_active,
+      });
+      if (!res.ok) {
+        toast.error(res.error ?? "Save failed");
+        return;
+      }
+      toast.success("Hero updated");
+      router.refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Save failed");
+    } finally {
+      setSaving(false);
     }
-    toast.success("Hero updated");
-    router.refresh();
   };
 
   return (

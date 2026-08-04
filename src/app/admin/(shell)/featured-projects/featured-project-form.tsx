@@ -65,27 +65,32 @@ export function FeaturedProjectForm({
       return;
     }
     setSaving(true);
-    const payload: FeaturedProjectInput = {
-      title: title.trim(),
-      industry: industryId,
-      aspect,
-      thumbnail,
-      video,
-      order,
-      is_active: isActive,
-    };
-    const res =
-      mode === "create"
-        ? await createFeaturedProjectAction(payload)
-        : await updateFeaturedProjectAction(initial!._id, payload);
-    setSaving(false);
-    if (!res.ok) {
-      toast.error(res.error ?? "Save failed");
-      return;
+    try {
+      const payload: FeaturedProjectInput = {
+        title: title.trim(),
+        industry: industryId,
+        aspect,
+        thumbnail,
+        video,
+        order,
+        is_active: isActive,
+      };
+      const res =
+        mode === "create"
+          ? await createFeaturedProjectAction(payload)
+          : await updateFeaturedProjectAction(initial!._id, payload);
+      if (!res.ok) {
+        toast.error(res.error ?? "Save failed");
+        return;
+      }
+      toast.success(mode === "create" ? "Project added" : "Project updated");
+      router.push("/admin/featured-projects");
+      router.refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Save failed");
+    } finally {
+      setSaving(false);
     }
-    toast.success(mode === "create" ? "Project added" : "Project updated");
-    router.push("/admin/featured-projects");
-    router.refresh();
   };
 
   return (

@@ -45,32 +45,37 @@ export function TeamForm({ mode, initial }: Props) {
       return;
     }
     setSaving(true);
-    const socials: TeamMemberInput["socials"] = {};
-    if (linkedin) socials.linkedin = linkedin;
-    if (instagram) socials.instagram = instagram;
-    if (x) socials.x = x;
+    try {
+      const socials: TeamMemberInput["socials"] = {};
+      if (linkedin) socials.linkedin = linkedin;
+      if (instagram) socials.instagram = instagram;
+      if (x) socials.x = x;
 
-    const payload: TeamMemberInput = {
-      name: name.trim(),
-      role: role.trim(),
-      bio: bio.trim() || undefined,
-      image,
-      socials: Object.keys(socials).length ? socials : undefined,
-      order,
-      is_active: isActive,
-    };
-    const res =
-      mode === "create"
-        ? await createTeamMemberAction(payload)
-        : await updateTeamMemberAction(initial!._id, payload);
-    setSaving(false);
-    if (!res.ok) {
-      toast.error(res.error ?? "Save failed");
-      return;
+      const payload: TeamMemberInput = {
+        name: name.trim(),
+        role: role.trim(),
+        bio: bio.trim() || undefined,
+        image,
+        socials: Object.keys(socials).length ? socials : undefined,
+        order,
+        is_active: isActive,
+      };
+      const res =
+        mode === "create"
+          ? await createTeamMemberAction(payload)
+          : await updateTeamMemberAction(initial!._id, payload);
+      if (!res.ok) {
+        toast.error(res.error ?? "Save failed");
+        return;
+      }
+      toast.success(mode === "create" ? "Member added" : "Member updated");
+      router.push("/admin/team");
+      router.refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Save failed");
+    } finally {
+      setSaving(false);
     }
-    toast.success(mode === "create" ? "Member added" : "Member updated");
-    router.push("/admin/team");
-    router.refresh();
   };
 
   return (

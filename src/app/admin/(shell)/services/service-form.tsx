@@ -102,29 +102,34 @@ export function ServiceForm({ mode, initial }: Props) {
       return;
     }
     setSaving(true);
-    const payload: ServiceInput = {
-      slug: cleanSlug,
-      title: title.trim(),
-      description: description.trim(),
-      highlights: cleanedHighlights,
-      image,
-      icon,
-      href: href.trim() || undefined,
-      order,
-      is_active: isActive,
-    };
-    const res =
-      mode === "create"
-        ? await createServiceAction(payload)
-        : await updateServiceAction(initial!._id, payload);
-    setSaving(false);
-    if (!res.ok) {
-      toast.error(res.error ?? "Save failed");
-      return;
+    try {
+      const payload: ServiceInput = {
+        slug: cleanSlug,
+        title: title.trim(),
+        description: description.trim(),
+        highlights: cleanedHighlights,
+        image,
+        icon,
+        href: href.trim() || undefined,
+        order,
+        is_active: isActive,
+      };
+      const res =
+        mode === "create"
+          ? await createServiceAction(payload)
+          : await updateServiceAction(initial!._id, payload);
+      if (!res.ok) {
+        toast.error(res.error ?? "Save failed");
+        return;
+      }
+      toast.success(mode === "create" ? "Service added" : "Service updated");
+      router.push("/admin/services");
+      router.refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Save failed");
+    } finally {
+      setSaving(false);
     }
-    toast.success(mode === "create" ? "Service added" : "Service updated");
-    router.push("/admin/services");
-    router.refresh();
   };
 
   return (

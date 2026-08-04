@@ -69,31 +69,34 @@ export function VideoForm({
       return;
     }
     setSaving(true);
+    try {
+      const payload: ShowcaseVideoInput = {
+        industry: industryId,
+        video,
+        thumbnail: thumbnail || undefined,
+        alt: alt.trim(),
+        aspect,
+        order,
+        is_active: isActive,
+      };
 
-    const payload: ShowcaseVideoInput = {
-      industry: industryId,
-      video,
-      thumbnail: thumbnail || undefined,
-      alt: alt.trim(),
-      aspect,
-      order,
-      is_active: isActive,
-    };
+      const res =
+        mode === "create"
+          ? await createShowcaseVideoAction(payload)
+          : await updateShowcaseVideoAction(initial!._id, payload);
 
-    const res =
-      mode === "create"
-        ? await createShowcaseVideoAction(payload)
-        : await updateShowcaseVideoAction(initial!._id, payload);
-
-    setSaving(false);
-
-    if (!res.ok) {
-      toast.error(res.error ?? "Save failed");
-      return;
+      if (!res.ok) {
+        toast.error(res.error ?? "Save failed");
+        return;
+      }
+      toast.success(mode === "create" ? "Video added" : "Video updated");
+      router.push("/admin/videos");
+      router.refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Save failed");
+    } finally {
+      setSaving(false);
     }
-    toast.success(mode === "create" ? "Video added" : "Video updated");
-    router.push("/admin/videos");
-    router.refresh();
   };
 
   return (

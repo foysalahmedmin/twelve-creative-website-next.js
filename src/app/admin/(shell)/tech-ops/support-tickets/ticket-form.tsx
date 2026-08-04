@@ -50,17 +50,22 @@ export function TicketForm({ ticket }: Props) {
     e.preventDefault();
     if (!title.trim()) return;
     setSaving(true);
-    const res = isEdit
-      ? await updateTicketAction(ticket._id, { title, description: description || null, priority, status })
-      : await createTicketAction({ title, description: description || undefined, priority });
-    setSaving(false);
-    if (!res.ok) {
-      toast.error(res.error ?? "Save failed");
-      return;
+    try {
+      const res = isEdit
+        ? await updateTicketAction(ticket._id, { title, description: description || null, priority, status })
+        : await createTicketAction({ title, description: description || undefined, priority });
+      if (!res.ok) {
+        toast.error(res.error ?? "Save failed");
+        return;
+      }
+      toast.success(isEdit ? "Ticket updated" : "Ticket created");
+      router.push("/admin/tech-ops/support-tickets");
+      router.refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Save failed");
+    } finally {
+      setSaving(false);
     }
-    toast.success(isEdit ? "Ticket updated" : "Ticket created");
-    router.push("/admin/tech-ops/support-tickets");
-    router.refresh();
   };
 
   return (

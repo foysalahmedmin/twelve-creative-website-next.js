@@ -76,28 +76,33 @@ export function LegalPageForm({ initial }: LegalPageFormProps) {
     }
 
     setSaving(true);
-    const result = await updateLegalPageAction(initial.slug, {
-      slug: initial.slug,
-      title: cleanTitle,
-      markdown: cleanMarkdown,
-      effective_date: effectiveDate
-        ? new Date(`${effectiveDate}T00:00:00.000Z`).toISOString()
-        : null,
-      seo: {
-        title: cleanSeoTitle,
-        description: cleanSeoDescription,
-      },
-      is_published: published,
-    });
-    setSaving(false);
-    if (!result.ok) {
-      toast.error(result.error ?? "Save failed");
-      return;
+    try {
+      const result = await updateLegalPageAction(initial.slug, {
+        slug: initial.slug,
+        title: cleanTitle,
+        markdown: cleanMarkdown,
+        effective_date: effectiveDate
+          ? new Date(`${effectiveDate}T00:00:00.000Z`).toISOString()
+          : null,
+        seo: {
+          title: cleanSeoTitle,
+          description: cleanSeoDescription,
+        },
+        is_published: published,
+      });
+      if (!result.ok) {
+        toast.error(result.error ?? "Save failed");
+        return;
+      }
+      toast.success(
+        published ? "Legal page published" : "Legal page draft saved",
+      );
+      router.refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Save failed");
+    } finally {
+      setSaving(false);
     }
-    toast.success(
-      published ? "Legal page published" : "Legal page draft saved",
-    );
-    router.refresh();
   };
 
   return (

@@ -120,36 +120,41 @@ export function IndustryForm({ mode, initial }: Props) {
       return;
     }
     setSaving(true);
-    const payload: IndustryInput = {
-      slug: cleanSlug,
-      name: name.trim(),
-      headline: headline.trim(),
-      description: description.trim(),
-      work: cleanedWork,
-      image,
-      icon,
-      cta_label: ctaLabel.trim() || undefined,
-      cta_href: ctaHref.trim() || undefined,
-      tagline: tagline.trim() || undefined,
-      thumbnail: thumbnail.trim() || null,
-      video: video ?? null,
-      reel_thumbnail: reelThumbnail.trim() || null,
-      reel_video: reelVideo ?? null,
-      order,
-      is_active: isActive,
-    };
-    const res =
-      mode === "create"
-        ? await createIndustryAction(payload)
-        : await updateIndustryAction(initial!._id, payload);
-    setSaving(false);
-    if (!res.ok) {
-      toast.error(res.error ?? "Save failed");
-      return;
+    try {
+      const payload: IndustryInput = {
+        slug: cleanSlug,
+        name: name.trim(),
+        headline: headline.trim(),
+        description: description.trim(),
+        work: cleanedWork,
+        image,
+        icon,
+        cta_label: ctaLabel.trim() || undefined,
+        cta_href: ctaHref.trim() || undefined,
+        tagline: tagline.trim() || undefined,
+        thumbnail: thumbnail.trim() || null,
+        video: video ?? null,
+        reel_thumbnail: reelThumbnail.trim() || null,
+        reel_video: reelVideo ?? null,
+        order,
+        is_active: isActive,
+      };
+      const res =
+        mode === "create"
+          ? await createIndustryAction(payload)
+          : await updateIndustryAction(initial!._id, payload);
+      if (!res.ok) {
+        toast.error(res.error ?? "Save failed");
+        return;
+      }
+      toast.success(mode === "create" ? "Industry added" : "Industry updated");
+      router.push("/admin/industries");
+      router.refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Save failed");
+    } finally {
+      setSaving(false);
     }
-    toast.success(mode === "create" ? "Industry added" : "Industry updated");
-    router.push("/admin/industries");
-    router.refresh();
   };
 
   return (

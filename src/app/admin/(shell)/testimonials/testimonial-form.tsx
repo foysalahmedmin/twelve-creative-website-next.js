@@ -105,22 +105,26 @@ export function TestimonialForm({
     }
 
     setSaving(true);
-    const res =
-      mode === "create"
-        ? await createTestimonialAction(payload)
-        : await updateTestimonialAction(initial!._id, payload);
+    try {
+      const res =
+        mode === "create"
+          ? await createTestimonialAction(payload)
+          : await updateTestimonialAction(initial!._id, payload);
 
-    setSaving(false);
-
-    if (!res.ok) {
-      toast.error(res.error ?? "Save failed");
-      return;
+      if (!res.ok) {
+        toast.error(res.error ?? "Save failed");
+        return;
+      }
+      toast.success(
+        mode === "create" ? "Testimonial created" : "Testimonial updated",
+      );
+      router.push("/admin/testimonials");
+      router.refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Save failed");
+    } finally {
+      setSaving(false);
     }
-    toast.success(
-      mode === "create" ? "Testimonial created" : "Testimonial updated",
-    );
-    router.push("/admin/testimonials");
-    router.refresh();
   };
 
   const isVideo = form.category === "video_message";

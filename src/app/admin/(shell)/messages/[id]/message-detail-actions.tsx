@@ -36,14 +36,19 @@ export function MessageDetailActions({ message }: Props) {
     success: string,
   ) => {
     setPending(true);
-    const res = await action();
-    setPending(false);
-    if (!res.ok) {
-      toast.error(res.error ?? "Action failed");
-      return;
+    try {
+      const res = await action();
+      if (!res.ok) {
+        toast.error(res.error ?? "Action failed");
+        return;
+      }
+      toast.success(success);
+      router.refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Action failed");
+    } finally {
+      setPending(false);
     }
-    toast.success(success);
-    router.refresh();
   };
 
   const replyHref = `mailto:${message.email}?subject=${encodeURIComponent(

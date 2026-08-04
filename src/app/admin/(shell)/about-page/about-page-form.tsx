@@ -370,18 +370,23 @@ export function AboutPageForm({ initial }: AboutPageFormProps) {
     };
 
     setSaving(true);
-    const result = await updateAboutPageAction(payload);
-    setSaving(false);
-    if (!result.ok) {
-      toast.error(result.error ?? "Save failed");
-      return;
+    try {
+      const result = await updateAboutPageAction(payload);
+      if (!result.ok) {
+        toast.error(result.error ?? "Save failed");
+        return;
+      }
+      toast.success(
+        form.is_active
+          ? "About page saved and active"
+          : "About page saved as inactive; managed sections are hidden publicly",
+      );
+      router.refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Save failed");
+    } finally {
+      setSaving(false);
     }
-    toast.success(
-      form.is_active
-        ? "About page saved and active"
-        : "About page saved as inactive; managed sections are hidden publicly",
-    );
-    router.refresh();
   };
 
   const renderSectionHeader = (key: HeaderKey, heading: string) => {

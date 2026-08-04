@@ -58,18 +58,23 @@ export function BookingDetailActions({ booking }: Props) {
 
   const handleSave = async () => {
     setSaving(true);
-    const res = await updateBookingAction(booking._id, {
-      status,
-      internal_note: note,
-      lead_source: leadSource || null,
-    });
-    setSaving(false);
-    if (!res.ok) {
-      toast.error(res.error ?? "Save failed");
-      return;
+    try {
+      const res = await updateBookingAction(booking._id, {
+        status,
+        internal_note: note,
+        lead_source: leadSource || null,
+      });
+      if (!res.ok) {
+        toast.error(res.error ?? "Save failed");
+        return;
+      }
+      toast.success("Booking updated");
+      router.refresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Save failed");
+    } finally {
+      setSaving(false);
     }
-    toast.success("Booking updated");
-    router.refresh();
   };
 
   const handleDelete = async () => {
