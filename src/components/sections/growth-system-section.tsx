@@ -21,6 +21,8 @@ const pad = (n: number) => String(n).padStart(2, "0");
 
 // One full-screen sticky card. Cards stack over one another as the page
 // scrolls (increasing z-index) — the same one-by-one parallax as WorkWithUs.
+// Pinning is enabled on all breakpoints, not just lg: — see the content
+// wrapper below for how it stays safe on short mobile viewports.
 function StackCard({
   index,
   total,
@@ -32,11 +34,7 @@ function StackCard({
 }) {
   return (
     <div
-      // min-h-screen only below: the sticky/h-screen pin effect is desktop-only
-      // (lg:). Forcing a full-viewport minimum height on mobile too — where
-      // cards aren't sticky, just stacked in normal flow — left a screen's
-      // worth of empty gradient above each card's vertically-centered content.
-      className="relative w-full overflow-visible lg:sticky lg:top-0 lg:h-screen lg:overflow-hidden"
+      className="sticky top-0 h-dvh w-full overflow-hidden"
       style={{ zIndex: index + 1 }}
     >
       {/* Frosted brand background — lets the previous card blur through */}
@@ -65,12 +63,14 @@ function StackCard({
         className="bg-brand-glow pointer-events-none absolute inset-0"
       />
 
-      {/* Content */}
-      <div className="relative z-10 container flex flex-col justify-center py-16 lg:h-full lg:min-h-0 lg:py-20">
+      {/* Content — h-full + min-h-0 let this shrink inside the pinned card;
+          overflow-y-auto is a safety net so unusually long CMS copy scrolls
+          within the card instead of being clipped or pushed off-screen. */}
+      <div className="relative z-10 container flex h-full min-h-0 flex-col justify-center overflow-y-auto py-10 lg:py-20">
         {children}
 
         {/* Progress indicators */}
-        <div className="mt-10 flex gap-2 lg:absolute lg:right-0 lg:bottom-10 lg:left-0 lg:container lg:mt-0">
+        <div className="mt-6 flex gap-2 lg:absolute lg:right-0 lg:bottom-10 lg:left-0 lg:container lg:mt-0">
           {Array.from({ length: total }).map((_, idx) => (
             <div
               key={idx}
@@ -117,8 +117,8 @@ export function GrowthSystemSection({
 
   return (
     <section
-      className={cn("relative lg:h-[var(--stack-height)]", className)}
-      style={{ "--stack-height": `${total * 100}vh` } as CSSProperties}
+      className={cn("relative h-[var(--stack-height)]", className)}
+      style={{ "--stack-height": `${total * 100}dvh` } as CSSProperties}
     >
       {/* ── Intro card ── */}
       <StackCard index={0} total={total}>
@@ -158,7 +158,7 @@ export function GrowthSystemSection({
               <span className="font-heading text-primary/10 pointer-events-none absolute -top-14 -left-2 z-0 hidden text-[8rem] leading-none font-black select-none lg:block">
                 {pad(i + 1)}
               </span>
-              <div className="border-border relative z-10 aspect-16/10 max-h-[32vh] w-full overflow-hidden rounded-2xl border shadow-xl lg:max-h-none lg:rounded-3xl">
+              <div className="border-border relative z-10 aspect-16/10 max-h-[22vh] w-full overflow-hidden rounded-2xl border shadow-xl lg:max-h-none lg:rounded-3xl">
                 <CmsMediaDisplay
                   media={step.media}
                   alt={step.title}
@@ -170,7 +170,7 @@ export function GrowthSystemSection({
             </div>
 
             {/* Copy + checklist */}
-            <div className="space-y-4 lg:space-y-5">
+            <div className="space-y-3 lg:space-y-5">
               <div className="flex items-center gap-3">
                 <span className="text-primary text-xs font-bold tracking-[0.2em] uppercase">
                   Stage {pad(i + 1)} / {pad(steps.length)}
