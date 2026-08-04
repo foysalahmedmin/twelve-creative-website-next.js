@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { LogoIcon } from "@/components/icons/logo-icon";
 import { cn } from "@/lib/utils";
 import type { AdminUser } from "@/lib/admin/types";
-import { ADMIN_NAV, type AdminNavEntry } from "./admin-nav-config";
+import { ADMIN_NAV } from "./admin-nav-config";
 
 interface AdminSidebarProps {
   user: AdminUser;
@@ -15,9 +15,19 @@ interface AdminSidebarProps {
 export function AdminSidebar({ user, className }: AdminSidebarProps) {
   const pathname = usePathname();
 
-  const visibleNav = ADMIN_NAV.filter(
-    (entry) => entry.type === "section" || !entry.roles || entry.roles.includes(user.role),
+  const allowedNav = ADMIN_NAV.filter(
+    (entry) =>
+      entry.type === "section" || !entry.roles || entry.roles.includes(user.role),
   );
+
+  // A group whose every item was just filtered out by role would otherwise
+  // leave its header stranded above the next group. A header only survives if
+  // an actual item follows it.
+  const visibleNav = allowedNav.filter((entry, i) => {
+    if (entry.type !== "section") return true;
+    const next = allowedNav[i + 1];
+    return next !== undefined && next.type !== "section";
+  });
 
   return (
     <aside
