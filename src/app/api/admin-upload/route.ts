@@ -6,11 +6,16 @@
  * forwards the file to the backend's /api/file endpoint, and returns the
  * uploaded `File` document (including its public `url`).
  *
- * Accepts up to MAX_UPLOAD_BYTES (see lib/admin/upload-limits.ts) per the
- * backend's file middleware limit. This handler buffers the whole file in
- * memory via req.formData() before re-forwarding it, so PM2's
- * max_memory_restart (ecosystem.config.cjs) must have enough headroom above
- * baseline usage to hold one full-size file without getting killed mid-upload.
+ * Streams the request body straight through to the backend rather than
+ * parsing it with req.formData() and rebuilding a new FormData — that
+ * buffer-then-rebuild approach was measured (a 700MB upload) at ~1.9GB of
+ * resident memory, nearly 3x the file size, because the file exists at once
+ * as the parsed File/Blob AND again as the re-encoded outgoing multipart
+ * body. A raw pass-through keeps memory flat regardless of file size, since
+ * the incoming body already has the right multipart framing (boundary and
+ * all) for the backend's multer to parse — nothing needs to be re-parsed on
+ * this hop, just relayed. Accepts up to MAX_UPLOAD_BYTES (see
+ * lib/admin/upload-limits.ts) per the backend's file middleware limit.
  */
 
 import { NextRequest, NextResponse } from "next/server";
@@ -31,23 +36,13 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const incoming = await req.formData();
-  const file = incoming.get("file");
-  if (!(file instanceof File)) {
+  const contentType = req.headers.get("content-type");
+  if (!contentType?.startsWith("multipart/form-data") || !req.body) {
     return NextResponse.json(
-      { success: false, message: "No file provided in 'file' field" },
+      { success: false, message: "Expected multipart/form-data" },
       { status: 400 },
     );
   }
-
-  const forwarded = new FormData();
-  forwarded.append("file", file, file.name);
-  // optional metadata fields the backend file module accepts
-  const name = incoming.get("name");
-  if (typeof name === "string" && name) forwarded.append("name", name);
-  const category = incoming.get("category");
-  if (typeof category === "string" && category)
-    forwarded.append("category", category);
 
   let backendRes: Response;
   try {
@@ -55,13 +50,17 @@ export async function POST(req: NextRequest) {
       method: "POST",
       headers: {
         Authorization: token,
+        "Content-Type": contentType,
         ...(ADMIN_CONFIG.serverApiKey && {
           "X-Server-Api-Key": ADMIN_CONFIG.serverApiKey,
         }),
       },
-      body: forwarded,
+      body: req.body,
+      // Required by undici/fetch whenever the body is a stream rather than
+      // a fully-buffered value — see nodejs/node#46221.
+      duplex: "half",
       cache: "no-store",
-    });
+    } as RequestInit & { duplex: "half" });
   } catch (err) {
     return NextResponse.json(
       {
