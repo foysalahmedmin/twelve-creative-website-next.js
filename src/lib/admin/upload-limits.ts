@@ -3,15 +3,16 @@
  *
  * ⚠️ Must match `MAX_UPLOAD_BYTES` in the backend
  * (twelve-creative-server/src/constants/upload-policy.ts) and stay below
- * nginx's `client_max_body_size`. If this value is higher than the server's,
- * the user waits through a long upload only to be rejected at the end.
+ * nginx's `client_max_body_size` (currently 1100m). If this value is higher
+ * than the server's, the user waits through a long upload only to be
+ * rejected at the end.
  *
  * Used to pre-check a file in the browser so an oversized pick is reported
  * instantly, and to render the limit next to every upload control.
  */
-export const MAX_UPLOAD_BYTES = 300 * 1024 * 1024; // 300 MB
+export const MAX_UPLOAD_BYTES = 1024 * 1024 * 1024; // 1 GB
 
-export const MAX_UPLOAD_LABEL = "300MB";
+export const MAX_UPLOAD_LABEL = "1GB";
 
 export function formatBytes(bytes: number): string {
   if (bytes >= 1024 * 1024 * 1024) {

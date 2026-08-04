@@ -11,7 +11,11 @@ module.exports = {
       instances: 1,
       autorestart: true,
       watch: false,
-      max_memory_restart: '512M',
+      // The admin-upload proxy (src/app/api/admin-upload/route.ts) buffers
+      // the whole file via req.formData() before re-forwarding it to the
+      // backend, so this must clear baseline usage (~400M) plus a full
+      // MAX_UPLOAD_BYTES (1G) file, or PM2 kills the process mid-upload.
+      max_memory_restart: '2048M',
       env: {
         NODE_ENV: 'production',
         PORT: 5005,

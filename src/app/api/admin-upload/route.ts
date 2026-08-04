@@ -6,7 +6,11 @@
  * forwards the file to the backend's /api/file endpoint, and returns the
  * uploaded `File` document (including its public `url`).
  *
- * Accepts up to 50 MB per the backend's file middleware limit.
+ * Accepts up to MAX_UPLOAD_BYTES (see lib/admin/upload-limits.ts) per the
+ * backend's file middleware limit. This handler buffers the whole file in
+ * memory via req.formData() before re-forwarding it, so PM2's
+ * max_memory_restart (ecosystem.config.cjs) must have enough headroom above
+ * baseline usage to hold one full-size file without getting killed mid-upload.
  */
 
 import { NextRequest, NextResponse } from "next/server";

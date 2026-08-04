@@ -66,7 +66,7 @@ export function VideoInput({
 
   const handleUpload = async (file: File) => {
     setError(null);
-    // Check before uploading — otherwise a 300MB file uploads for minutes
+    // Check before uploading — otherwise a large file uploads for minutes
     // only to be rejected at the end.
     const tooBig = checkUploadSize(file);
     if (tooBig) {
