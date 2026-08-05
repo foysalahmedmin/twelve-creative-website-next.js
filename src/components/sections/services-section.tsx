@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const ServicesSection = ({ className, data, heading }: Props) => {
-  const services = data && data.length ? data : SERVICES_DATA;
+  const services = data && data.length ? data : SERVICES_DATA.services;
   return (
     <section
       className={cn(
@@ -25,12 +25,9 @@ export const ServicesSection = ({ className, data, heading }: Props) => {
         {heading !== null && (
           <ScrollReveal animation="fade-in-up" durationMs={800}>
             <CenteredSectionHeader
-              label={heading?.label ?? "Our Services"}
-              title={heading?.title ?? "Services Built to Move the Business"}
-              description={
-                heading?.description ??
-                "We help businesses build positioning, creative, and systems that turn attention into revenue."
-              }
+              label={heading?.label ?? SERVICES_DATA.label}
+              title={heading?.title ?? SERVICES_DATA.title}
+              description={heading?.description ?? SERVICES_DATA.description}
               className="mb-0 lg:mb-0"
             />
           </ScrollReveal>

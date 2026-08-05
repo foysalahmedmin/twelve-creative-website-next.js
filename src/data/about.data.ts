@@ -40,7 +40,20 @@ export const ABOUT_STORY_DATA = [
   },
 ];
 
-export const ABOUT_TEAM_DATA = [
+export type TTeamMember = {
+  name: string;
+  designation: string;
+  photourl: string;
+};
+
+export type TTeamData = {
+  label: string;
+  title: string;
+  description: string;
+  members: TTeamMember[];
+};
+
+export const ABOUT_TEAM_MEMBERS: TTeamMember[] = [
   {
     name: "Carlos Doce",
     designation: "Founder, Twelve Creative",
@@ -78,6 +91,14 @@ export const ABOUT_TEAM_DATA = [
       "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&h=600&fit=crop&auto=format",
   },
 ];
+
+export const ABOUT_TEAM_DATA: TTeamData = {
+  label: "Our Members",
+  title: "Inside Twelve Creative",
+  description:
+    "Our office, our team, our everyday moments. The real people behind every edit, every thumbnail, and every deadline we hit for you.",
+  members: ABOUT_TEAM_MEMBERS,
+};
 
 export const ABOUT_GALLERY_DATA = [
   "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&h=400&fit=crop&auto=format",

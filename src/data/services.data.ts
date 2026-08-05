@@ -16,11 +16,18 @@ export type TService = {
   href: string;
 };
 
+export type TServicesData = {
+  label: string;
+  title: string;
+  description: string;
+  services: TService[];
+};
+
 /**
  * Placeholder thumbnails use Unsplash. Replace `thumbnail_src` per service
  * with real Twelve Creative imagery when available.
  */
-export const SERVICES_DATA: TService[] = [
+export const SERVICES: TService[] = [
   {
     id: "positioning",
     icon: "positioning",
@@ -118,3 +125,11 @@ export const SERVICES_DATA: TService[] = [
     href: "/what-we-build#growth",
   },
 ];
+
+export const SERVICES_DATA: TServicesData = {
+  label: "Our Services",
+  title: "Services Built to Move the Business",
+  description:
+    "We help businesses build positioning, creative, and systems that turn attention into revenue.",
+  services: SERVICES,
+};

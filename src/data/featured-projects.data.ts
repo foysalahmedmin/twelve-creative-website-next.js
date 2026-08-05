@@ -18,3 +18,23 @@ export type TFeaturedIndustryGroup = {
 
 /** @deprecated Groups are Industry relations, not free-form categories. */
 export type TFeaturedCategory = TFeaturedIndustryGroup;
+
+export type TFeaturedProjectsData = {
+  label: string;
+  title: string;
+  description: string;
+  groups: TFeaturedIndustryGroup[];
+};
+
+/**
+ * Header copy only — `groups` stays empty on purpose. Featured projects are
+ * real client work, so there is no demo set to fall back to: with no CMS
+ * entries the section renders nothing rather than showing invented projects.
+ */
+export const FEATURED_PROJECTS_DATA: TFeaturedProjectsData = {
+  label: "Our Works",
+  title: "Featured Projects",
+  description:
+    "Real projects that show how strategy, creative, and systems work together.",
+  groups: [],
+};

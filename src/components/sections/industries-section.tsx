@@ -147,7 +147,7 @@ interface Props {
 }
 
 export const IndustriesSection = ({ className, data, heading }: Props) => {
-  const industries = data === undefined ? INDUSTRIES_DATA : data;
+  const industries = data === undefined ? INDUSTRIES_DATA.industries : data;
   const [activeId, setActiveId] = useState(industries[0]?.id ?? "");
 
   if (industries.length === 0) return null;
@@ -162,12 +162,9 @@ export const IndustriesSection = ({ className, data, heading }: Props) => {
             {/* Header styled exactly like Our Works */}
             {heading !== null && (
               <CenteredSectionHeader
-                label={heading?.label ?? "Industries"}
-                title={heading?.title ?? "Industries We Work With"}
-                description={
-                  heading?.description ??
-                  "We work across industries where the buying decision depends on credibility, timing, taste, and a clear path to action."
-                }
+                label={heading?.label ?? INDUSTRIES_DATA.label}
+                title={heading?.title ?? INDUSTRIES_DATA.title}
+                description={heading?.description ?? INDUSTRIES_DATA.description}
                 className="mb-10 lg:mb-12"
               />
             )}

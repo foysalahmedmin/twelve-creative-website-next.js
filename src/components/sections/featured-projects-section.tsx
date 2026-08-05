@@ -11,6 +11,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import {
+  FEATURED_PROJECTS_DATA,
   type TFeaturedIndustryGroup,
   type TFeaturedProject,
 } from "@/data/featured-projects.data";
@@ -77,7 +78,7 @@ interface FeaturedProjectsSectionProps {
 
 export const FeaturedProjectsSection = ({
   className,
-  data = [],
+  data = FEATURED_PROJECTS_DATA.groups,
   heading,
 }: FeaturedProjectsSectionProps) => {
   // Industry tabs are off for now — every group's projects show together in
@@ -97,11 +98,10 @@ export const FeaturedProjectsSection = ({
         {/* Header */}
         {heading !== null && (
           <CenteredSectionHeader
-            label={heading?.label ?? "Our Works"}
-            title={heading?.title ?? "Featured Projects"}
+            label={heading?.label ?? FEATURED_PROJECTS_DATA.label}
+            title={heading?.title ?? FEATURED_PROJECTS_DATA.title}
             description={
-              heading?.description ??
-              "Real projects that show how strategy, creative, and systems work together."
+              heading?.description ?? FEATURED_PROJECTS_DATA.description
             }
             className="mb-0 lg:mb-0"
           />

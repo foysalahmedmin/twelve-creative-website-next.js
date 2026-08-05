@@ -2,22 +2,19 @@
 
 import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { CenteredSectionHeader } from "@/components/common/section-label";
-import { ABOUT_TEAM_DATA } from "@/data/about.data";
+import { ABOUT_TEAM_DATA, type TTeamMember } from "@/data/about.data";
 import Image from "next/image";
 import { useState } from "react";
 
-export interface TeamSectionItem {
-  name: string;
-  designation: string;
-  photourl: string;
-}
+/** Kept as a named re-export so call sites can keep importing it from here. */
+export type TeamSectionItem = TTeamMember;
 
 interface TeamSectionProps {
   data?: TeamSectionItem[];
 }
 
 export function TeamSection({ data }: TeamSectionProps = {}) {
-  const members = data && data.length ? data : ABOUT_TEAM_DATA;
+  const members = data && data.length ? data : ABOUT_TEAM_DATA.members;
   const [visibleCount, setVisibleCount] = useState(6);
 
   const handleToggle = () => {
@@ -34,9 +31,9 @@ export function TeamSection({ data }: TeamSectionProps = {}) {
     <section className="w-full bg-muted py-16 sm:py-20 lg:py-24">
       <div className="container">
         <CenteredSectionHeader
-          title="Inside Twelve Creative"
-          description="Our office, our team, our everyday moments. The real people behind every edit, every thumbnail, and every deadline we hit for you."
-          label="Our Members"
+          label={ABOUT_TEAM_DATA.label}
+          title={ABOUT_TEAM_DATA.title}
+          description={ABOUT_TEAM_DATA.description}
         />
 
         <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 lg:mt-16 lg:grid-cols-3">

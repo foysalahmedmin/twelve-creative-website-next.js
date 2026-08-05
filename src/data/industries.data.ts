@@ -25,7 +25,14 @@ export type TIndustry = {
   reelThumbnailSrc?: string;
 };
 
-export const INDUSTRIES_DATA: TIndustry[] = [
+export type TIndustriesData = {
+  label: string;
+  title: string;
+  description: string;
+  industries: TIndustry[];
+};
+
+export const INDUSTRIES: TIndustry[] = [
   {
     id: "real-estate",
     icon: "real-estate",
@@ -107,3 +114,11 @@ export const INDUSTRIES_DATA: TIndustry[] = [
     href: "/industries#professional-services",
   },
 ];
+
+export const INDUSTRIES_DATA: TIndustriesData = {
+  label: "Industries",
+  title: "Industries We Work With",
+  description:
+    "We work across industries where the buying decision depends on credibility, timing, taste, and a clear path to action.",
+  industries: INDUSTRIES,
+};

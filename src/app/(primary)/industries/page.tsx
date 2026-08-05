@@ -41,7 +41,7 @@ export default async function IndustriesPage() {
     ]);
 
   const industries = liveIndustries.failed
-    ? INDUSTRIES_DATA
+    ? INDUSTRIES_DATA.industries
     : liveIndustries.data;
 
   return (
