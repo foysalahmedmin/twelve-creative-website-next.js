@@ -68,6 +68,7 @@ export default async function HomePage() {
       testimonialsHeading,
       difference,
       industriesHeading,
+      insightsHeading,
       whyChooseUs,
       faqHeading,
     ],
@@ -100,6 +101,7 @@ export default async function HomePage() {
       "testimonials",
       "difference",
       "home-industries",
+      "home-insights",
       "why-choose-us",
       "faq",
     ]),
@@ -146,7 +148,7 @@ export default async function HomePage() {
       />
       {difference && <DifferenceSection data={difference} className="dark" />}
       <IndustriesSection data={industries} heading={industriesHeading} />
-      <InsightsSection data={insights} />
+      <InsightsSection data={insights} heading={insightsHeading} />
       <FaqSection data={faqsData} heading={faqHeading} />
       {homeCta && <CtaSection data={homeCta} />}
     </div>

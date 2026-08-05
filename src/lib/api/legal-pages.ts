@@ -113,7 +113,17 @@ export async function getPublicLegalPage(
     return normalizeLegalPage(response.data, false) as PublicLegalPage | null;
   } catch (error) {
     unstable_rethrow(error);
-    if (error instanceof ApiError && error.status === 404) return null;
+    // Every other public reader degrades to a fallback when the API is
+    // unreachable; this one used to rethrow anything that was not a 404, so a
+    // brief backend blip turned /privacy-policy and /terms-and-conditions into
+    // 500s. Both pages already render a sane placeholder from `null`, and
+    // these are footer/compliance links that should never hard-fail.
+    if (error instanceof ApiError) {
+      console.error(
+        `Legal page "${slug}" unavailable (${error.status}); rendering placeholder.`,
+      );
+      return null;
+    }
     throw error;
   }
 }

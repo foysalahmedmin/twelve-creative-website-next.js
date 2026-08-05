@@ -1,6 +1,7 @@
 import { unstable_rethrow } from "next/navigation";
 import { DIFFERENCE_DATA } from "@/data/difference.data";
 import { GROWTH_SYSTEM_DATA } from "@/data/growth-system.data";
+import { INSIGHTS_DATA } from "@/data/insights.data";
 import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
 import { CANVAS_PORTFOLIO_DATA } from "@/data/thumbnail-work-section.data";
 import { WHY_CHOOSE_US_DATA } from "@/data/why-choose-us.data";
@@ -564,6 +565,12 @@ export const SHARED_SECTION_FALLBACKS: Record<
     "Industries",
     "Industries We Work With",
     "We work across industries where the buying decision depends on credibility, timing, taste, and a clear path to action.",
+  ),
+  "home-insights": heading(
+    "home-insights",
+    INSIGHTS_DATA.label,
+    INSIGHTS_DATA.title,
+    INSIGHTS_DATA.description,
   ),
   testimonials: heading(
     "testimonials",

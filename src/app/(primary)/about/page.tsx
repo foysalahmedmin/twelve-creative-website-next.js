@@ -39,7 +39,7 @@ export default async function AboutPage() {
     faqsData,
     hero,
     about,
-    [testimonialsHeading, faqHeading],
+    [testimonialsHeading, faqHeading, insightsHeading],
     pageCta,
     insights,
   ] = await Promise.all([
@@ -59,7 +59,7 @@ export default async function AboutPage() {
     }),
     getPublicPageHero("about"),
     getPublicAboutPage(),
-    getPublicSharedSections(["testimonials", "faq"]),
+    getPublicSharedSections(["testimonials", "faq", "home-insights"]),
     getPublicPageCta("about"),
     getPublicInsights(),
   ]);
@@ -116,7 +116,7 @@ export default async function AboutPage() {
       />
 
       {/* Latest writing */}
-      <InsightsSection data={insights} />
+      <InsightsSection data={insights} heading={insightsHeading} />
 
       {/* FAQ */}
       <div className="container py-8 lg:py-12">
