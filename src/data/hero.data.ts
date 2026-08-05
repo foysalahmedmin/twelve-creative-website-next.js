@@ -1,4 +1,4 @@
-export type THomeHero = {
+export type THero = {
   trust_label: string;
   trust_avatars: { id: string; label: string; icon: string }[];
   title: string;
@@ -8,7 +8,7 @@ export type THomeHero = {
   video: { src: string; poster?: string };
 };
 
-export const HOME_HERO_DATA: THomeHero = {
+export const HERO_DATA: THero = {
   trust_label: "Trusted across industries",
   trust_avatars: [
     { id: "real-estate", label: "Real Estate", icon: "building" },

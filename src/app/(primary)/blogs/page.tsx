@@ -1,9 +1,6 @@
-import { format } from "date-fns";
-import Image from "next/image";
-import Link from "next/link";
 import { ComingSoon } from "@/components/common/coming-soon";
-import { PageHeader } from "@/components/sections/page-header-section";
 import { ScrollReveal } from "@/components/common/scroll-reveal";
+import { HeroV1Section } from "@/components/sections/hero-v1-section";
 import { getPublicInsights } from "@/lib/api/insights";
 import {
   getPublicPageHero,
@@ -11,7 +8,10 @@ import {
   resolveThumbnail,
   resolveVideoSrc,
 } from "@/lib/api/page-heroes";
+import { format } from "date-fns";
 import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
 
 export async function generateMetadata(): Promise<Metadata> {
   const hero = await getPublicPageHero("blogs");
@@ -36,10 +36,15 @@ export default async function BlogsPage() {
 
   return (
     <main className="bg-background min-h-screen">
-      <PageHeader
+      <HeroV1Section
         label={hero?.label ?? "Insights"}
-        title={hero?.title ?? "Notes on positioning, creative, and growth systems."}
-        description={hero?.description ?? "Field-tested thinking from the work we do for hospitality, real estate, ventures, and professional service operators."}
+        title={
+          hero?.title ?? "Notes on positioning, creative, and growth systems."
+        }
+        description={
+          hero?.description ??
+          "Field-tested thinking from the work we do for hospitality, real estate, ventures, and professional service operators."
+        }
         videoSrc={resolveVideoSrc(hero?.video)}
         thumbnailSrc={resolveThumbnail(hero?.thumbnail, hero?.video)}
       />

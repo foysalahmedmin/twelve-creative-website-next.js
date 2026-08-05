@@ -1,10 +1,10 @@
+import { BrandsStrip } from "@/components/sections/brands-strip";
+import { CtaSection } from "@/components/sections/cta-section";
 import { DifferenceSection } from "@/components/sections/difference-section";
+import FaqSection from "@/components/sections/faqs-section";
 import { FeaturedProjectsSection } from "@/components/sections/featured-projects-section";
 import { HeroSection } from "@/components/sections/hero-section";
-import { HomeCtaSection } from "@/components/sections/home-cta-section";
 import { IndustriesSection } from "@/components/sections/industries-section";
-import { BrandsStrip } from "@/components/sections/brands-strip";
-import FaqSection from "@/components/sections/faqs-section";
 import { ProcessSection } from "@/components/sections/process-section";
 import { ScrollStatementSection } from "@/components/sections/scroll-statement-section";
 import { TestimonialSection } from "@/components/sections/testimonial-section";
@@ -143,7 +143,7 @@ export default async function HomePage() {
       {difference && <DifferenceSection data={difference} className="dark" />}
       <IndustriesSection data={industries} heading={industriesHeading} />
       <FaqSection data={faqsData} heading={faqHeading} />
-      {homeCta && <HomeCtaSection data={homeCta} />}
+      {homeCta && <CtaSection data={homeCta} />}
     </div>
   );
 }

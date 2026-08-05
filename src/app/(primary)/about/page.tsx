@@ -1,23 +1,23 @@
 import { BrandsStrip } from "@/components/sections/brands-strip";
-import { CTASection } from "@/components/sections/cta-section";
+import { CTAV1Section } from "@/components/sections/cta-v1-section";
 import { FaqSection } from "@/components/sections/faqs-section";
 import { FounderSection } from "@/components/sections/founder-section";
 import { GalleryMarqueeSection } from "@/components/sections/gallery-marquee-section";
+import { HeroV1Section } from "@/components/sections/hero-v1-section";
 import { OurMissionSection } from "@/components/sections/our-mission-section";
-import { PageHeader } from "@/components/sections/page-header-section";
 import { StorySection } from "@/components/sections/story-section";
 import { TestimonialSection } from "@/components/sections/testimonial-section";
 import { FAQS_DATA } from "@/data/faqs.data";
 import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
 import { getPublicAboutPage } from "@/lib/api/about-page";
 import { getPublicFaqsForSection } from "@/lib/api/faqs";
+import { getPublicPageCta, toLegacyPageCta } from "@/lib/api/page-ctas";
 import {
   getPublicPageHero,
   resolvePageMetadata,
   resolveThumbnail,
   resolveVideoSrc,
 } from "@/lib/api/page-heroes";
-import { getPublicPageCta, toLegacyPageCta } from "@/lib/api/page-ctas";
 import { getPublicSharedSections } from "@/lib/api/shared-sections";
 import { getPublicTestimonialsForSection } from "@/lib/api/testimonials";
 import type { Metadata } from "next";
@@ -62,7 +62,7 @@ export default async function AboutPage() {
 
   return (
     <main className="bg-background min-h-screen">
-      <PageHeader
+      <HeroV1Section
         label={hero?.label ?? "About"}
         title={
           hero?.title ??
@@ -120,7 +120,7 @@ export default async function AboutPage() {
       </div>
 
       {/* CTA */}
-      {pageCta && <CTASection data={toLegacyPageCta(pageCta)} />}
+      {pageCta && <CTAV1Section data={toLegacyPageCta(pageCta)} />}
     </main>
   );
 }

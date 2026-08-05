@@ -84,7 +84,7 @@ export default async function ContactPage() {
   return (
     <main className="bg-background min-h-screen">
       {/* Now this section should comment out. When we need we will enable this section */}
-      {/* <PageHeader
+      {/* <HeroV1Section
         label={hero?.label ?? "Contact"}
         title={hero?.title ?? header.title}
         description={hero?.description ?? header.description}

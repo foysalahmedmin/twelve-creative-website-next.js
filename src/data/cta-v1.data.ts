@@ -1,4 +1,4 @@
-import type { TCTAData } from "@/components/sections/cta-section";
+import type { TCTAV1Data } from "@/components/sections/cta-v1-section";
 
 /**
  * Page-level CTAs. Every CTA on Twelve Creative drives to /contact under the
@@ -6,7 +6,7 @@ import type { TCTAData } from "@/components/sections/cta-section";
  * Replace `image` URLs with real Twelve Creative photography when available.
  */
 
-export const CTA_WHAT_WE_BUILD: TCTAData = {
+export const CTA_WHAT_WE_BUILD: TCTAV1Data = {
   title: "Need more than marketing activity?",
   description:
     "If your business needs clearer positioning, stronger creative, better distribution, and a system that supports real follow-up — Twelve Creative can help build the structure.",
@@ -16,7 +16,7 @@ export const CTA_WHAT_WE_BUILD: TCTAData = {
   buttonText: "Start a Conversation",
 };
 
-export const CTA_INDUSTRIES: TCTAData = {
+export const CTA_INDUSTRIES: TCTAV1Data = {
   title: "Working in one of these industries?",
   description:
     "We understand the buying decision in hospitality, real estate, ventures, and professional services — where credibility, taste, and follow-up directly impact revenue.",
@@ -26,7 +26,7 @@ export const CTA_INDUSTRIES: TCTAData = {
   buttonText: "Start a Conversation",
 };
 
-export const CTA_PROCESS: TCTAData = {
+export const CTA_PROCESS: TCTAV1Data = {
   title: "Ready to start with clarity?",
   description:
     "We do not begin by making random assets. We begin by understanding what the business is trying to move, where the friction is, and what structure needs to be built.",
@@ -36,7 +36,7 @@ export const CTA_PROCESS: TCTAData = {
   buttonText: "Request a Diagnostic",
 };
 
-export const CTA_WORKS: TCTAData = {
+export const CTA_WORKS: TCTAV1Data = {
   title: "Want this kind of structure for your business?",
   description:
     "Our work is measured by whether the business becomes clearer, more credible, and better equipped to convert attention into action.",
@@ -46,7 +46,7 @@ export const CTA_WORKS: TCTAData = {
   buttonText: "Start a Conversation",
 };
 
-export const CTA_ABOUT: TCTAData = {
+export const CTA_ABOUT: TCTAV1Data = {
   title: "Want to talk to Carlos directly?",
   description:
     "Tell us what you are building, where the business is now, and what needs to move next. If it is a fit, we will schedule a conversation.",
@@ -56,7 +56,7 @@ export const CTA_ABOUT: TCTAData = {
   buttonText: "Start a Conversation",
 };
 
-export const CTA_CONTACT: TCTAData = {
+export const CTA_CONTACT: TCTAV1Data = {
   title: "Prefer to talk before sending an inquiry?",
   description:
     "Send a short note about what you are building. We will reach out to schedule a conversation if the project is aligned.",

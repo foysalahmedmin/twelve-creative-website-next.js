@@ -1,6 +1,6 @@
+import { CTAV1Section } from "@/components/sections/cta-v1-section";
 import { DifferenceSection } from "@/components/sections/difference-section";
-import { CTASection } from "@/components/sections/cta-section";
-import { PageHeader } from "@/components/sections/page-header-section";
+import { HeroV1Section } from "@/components/sections/hero-v1-section";
 import { ProcessSection } from "@/components/sections/process-section";
 import { getPublicPageCta, toLegacyPageCta } from "@/lib/api/page-ctas";
 import {
@@ -32,7 +32,7 @@ export default async function ProcessPage() {
 
   return (
     <main className="bg-background min-h-screen">
-      <PageHeader
+      <HeroV1Section
         label={hero?.label ?? "Our Process"}
         title={hero?.title ?? "Our process is built around clarity first."}
         description={
@@ -53,7 +53,7 @@ export default async function ProcessPage() {
       {difference && <DifferenceSection data={difference} />}
 
       {/* CTA */}
-      {cta && <CTASection data={toLegacyPageCta(cta)} />}
+      {cta && <CTAV1Section data={toLegacyPageCta(cta)} />}
     </main>
   );
 }

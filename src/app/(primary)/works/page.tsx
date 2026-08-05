@@ -2,8 +2,8 @@ import { WorksCard } from "@/components/cards/works-card";
 import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { BrandsStrip } from "@/components/sections/brands-strip";
 import { CoreVerticalsSection } from "@/components/sections/core-verticals-section";
-import { CTASection } from "@/components/sections/cta-section";
-import { PageHeader } from "@/components/sections/page-header-section";
+import { CTAV1Section } from "@/components/sections/cta-v1-section";
+import { HeroV1Section } from "@/components/sections/hero-v1-section";
 import { ThumbnailWorkSection } from "@/components/sections/thumbnail-work-section";
 import { CANVAS_PORTFOLIO_DATA } from "@/data/thumbnail-work-section.data";
 import { getPublicIndustries } from "@/lib/api/industries";
@@ -53,7 +53,7 @@ export default async function WorksPage() {
 
   return (
     <main className="bg-background min-h-screen">
-      <PageHeader
+      <HeroV1Section
         label={hero?.label ?? "Work"}
         title={hero?.title ?? "Work built around business context."}
         description={
@@ -102,7 +102,7 @@ export default async function WorksPage() {
       />
 
       {/* CTA */}
-      {cta && <CTASection data={toLegacyPageCta(cta)} />}
+      {cta && <CTAV1Section data={toLegacyPageCta(cta)} />}
     </main>
   );
 }

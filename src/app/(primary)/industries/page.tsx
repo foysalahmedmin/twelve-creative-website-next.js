@@ -1,6 +1,6 @@
-import { CTASection } from "@/components/sections/cta-section";
+import { CTAV1Section } from "@/components/sections/cta-v1-section";
+import { HeroV1Section } from "@/components/sections/hero-v1-section";
 import { IndustriesDetailSection } from "@/components/sections/industries-detail-section";
-import { PageHeader } from "@/components/sections/page-header-section";
 import { TestimonialSection } from "@/components/sections/testimonial-section";
 import { INDUSTRIES_DATA } from "@/data/industries.data";
 import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
@@ -46,7 +46,7 @@ export default async function IndustriesPage() {
 
   return (
     <main className="bg-background min-h-screen">
-      <PageHeader
+      <HeroV1Section
         label={hero?.label ?? "Industries"}
         title={
           hero?.title ??
@@ -70,7 +70,7 @@ export default async function IndustriesPage() {
       />
 
       {/* CTA */}
-      {cta && <CTASection data={toLegacyPageCta(cta)} />}
+      {cta && <CTAV1Section data={toLegacyPageCta(cta)} />}
     </main>
   );
 }

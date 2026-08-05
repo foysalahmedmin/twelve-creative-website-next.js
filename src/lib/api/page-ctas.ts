@@ -1,14 +1,14 @@
-import { unstable_rethrow } from "next/navigation";
-import { HOME_CTA_DATA } from "@/data/home-cta.data";
 import {
   CTA_ABOUT,
   CTA_INDUSTRIES,
   CTA_PROCESS,
   CTA_WHAT_WE_BUILD,
   CTA_WORKS,
-} from "@/data/page-ctas.data";
+} from "@/data/cta-v1.data";
+import { CTA_DATA } from "@/data/cta.data";
 import { apiFetch } from "@/lib/admin/api-client";
 import { ApiError } from "@/lib/admin/types";
+import { unstable_rethrow } from "next/navigation";
 import type { IndustrySummary } from "./industries";
 
 export const PAGE_CTA_TAG = "page-ctas";
@@ -198,12 +198,12 @@ export const PAGE_CTA_FALLBACKS: Record<PageCtaPlacement, ApiPageCta> = {
   home: {
     placement: "home",
     industry: null,
-    eyebrow: HOME_CTA_DATA.eyebrow,
-    title: HOME_CTA_DATA.title,
-    description: HOME_CTA_DATA.description,
+    eyebrow: CTA_DATA.eyebrow,
+    title: CTA_DATA.title,
+    description: CTA_DATA.description,
     image: CTA_WHAT_WE_BUILD.image,
-    primary_cta: HOME_CTA_DATA.primary_cta,
-    secondary_cta: HOME_CTA_DATA.secondary_cta,
+    primary_cta: CTA_DATA.primary_cta,
+    secondary_cta: CTA_DATA.secondary_cta,
     is_active: true,
   },
   about: fromLegacy("about", CTA_ABOUT),

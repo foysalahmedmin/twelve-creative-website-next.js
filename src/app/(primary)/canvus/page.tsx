@@ -3,12 +3,12 @@ import { BrandsSection } from "@/components/sections/brands-section";
 import { ContactInfoMapSection } from "@/components/sections/contact-info-map-section";
 import { ContactSection } from "@/components/sections/contact-section";
 import { PageContactSection } from "@/components/sections/contact-section-section";
-import { CTASection } from "@/components/sections/cta-section";
+import { CTAV1Section } from "@/components/sections/cta-v1-section";
 import { FaqSection } from "@/components/sections/faqs-section";
 import { GalleryMarqueeSection } from "@/components/sections/gallery-marquee-section";
-import { OurMissionSection } from "@/components/sections/our-mission-section";
-import { PageHeader } from "@/components/sections/page-header-section";
 import { GrowthSystemSection } from "@/components/sections/growth-system-section";
+import { HeroV1Section } from "@/components/sections/hero-v1-section";
+import { OurMissionSection } from "@/components/sections/our-mission-section";
 import { ProcessSection } from "@/components/sections/process-section";
 import { SaasInsight } from "@/components/sections/saas-insight";
 import { ServiceServicesSection } from "@/components/sections/service-services-section";
@@ -20,17 +20,17 @@ import { VerticalMarqueeSlider } from "@/components/sections/vertical-marquee-sl
 import { WhyChooseUsSection } from "@/components/sections/why-choose-us-section";
 
 import { CONTACT_PAGE_DATA } from "@/data/contact.data";
+import { CTA_PROCESS } from "@/data/cta-v1.data";
 import { FAQS_DATA } from "@/data/faqs.data";
-import { CTA_PROCESS } from "@/data/page-ctas.data";
 import { SERVICE_SERVICES_DATA } from "@/data/service-services-section.data";
 import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
 import { CANVAS_PORTFOLIO_DATA } from "@/data/thumbnail-work-section.data";
 import { CANVAS_MARQUEE_DATA } from "@/data/vertical-marquee.data";
-import { getPublicProcessSection } from "@/lib/api/process-section";
 import { getPublicAboutPage } from "@/lib/api/about-page";
+import { getPublicIndustryOptions } from "@/lib/api/industries";
+import { getPublicProcessSection } from "@/lib/api/process-section";
 import { getPublicSharedSections } from "@/lib/api/shared-sections";
 import { getPublicTestimonialsForSection } from "@/lib/api/testimonials";
-import { getPublicIndustryOptions } from "@/lib/api/industries";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -72,7 +72,7 @@ export default async function CanvasPage() {
 
   return (
     <main className="bg-background min-h-screen space-y-12 pb-20 sm:space-y-16">
-      <PageHeader
+      <HeroV1Section
         label="Canvas Playroom"
         title="Premium Reusable Sections Canvas"
         description="Interact and preview the complete catalog of premium components designed to be fully dynamic, responsive, and reusable across all marketing subpages."
@@ -145,7 +145,7 @@ export default async function CanvasPage() {
         heading={testimonialsHeading}
       />
 
-      <CTASection data={CTA_PROCESS} />
+      <CTAV1Section data={CTA_PROCESS} />
 
       <FaqSection data={FAQS_DATA} heading={faqHeading} />
 

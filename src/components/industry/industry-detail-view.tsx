@@ -1,13 +1,16 @@
 import { BookingInlineSection } from "@/components/sections/booking-inline-section";
 import { BrandsStrip } from "@/components/sections/brands-strip";
-import { CTASection, type TCTAData } from "@/components/sections/cta-section";
-import { PageHeader } from "@/components/sections/page-header-section";
+import {
+  CTAV1Section,
+  type TCTAV1Data,
+} from "@/components/sections/cta-v1-section";
+import { HeroV1Section } from "@/components/sections/hero-v1-section";
 import { ProcessSection } from "@/components/sections/process-section";
 import { ScrollStatementSection } from "@/components/sections/scroll-statement-section";
 import { TestimonialSection } from "@/components/sections/testimonial-section";
 import { ThumbnailWorkSection } from "@/components/sections/thumbnail-work-section";
 import { WorkWithUsSection } from "@/components/sections/work-with-us-section";
-import { CTA_ABOUT } from "@/data/page-ctas.data";
+import { CTA_ABOUT } from "@/data/cta-v1.data";
 import type { TProcessData } from "@/data/process.data";
 import type { TTestimonialData } from "@/data/testimonials.data";
 import type { TPortfolioData } from "@/data/thumbnail-work-section.data";
@@ -57,7 +60,7 @@ interface IndustryDetailViewProps {
   testimonials: TTestimonialData;
   process: TProcessData;
   calendlyUrl?: string;
-  ctaData?: TCTAData | null;
+  ctaData?: TCTAV1Data | null;
   sharedContent?: IndustryDetailSharedContent;
   slots?: IndustryDetailSlots;
 }
@@ -78,7 +81,7 @@ export function IndustryDetailView({
     industry.thumbnail,
     industry.video,
   );
-  const resolvedCta: TCTAData | null =
+  const resolvedCta: TCTAV1Data | null =
     ctaData === null
       ? null
       : (ctaData ??
@@ -86,14 +89,14 @@ export function IndustryDetailView({
           ...CTA_ABOUT,
           href: industry.cta_href?.trim() || CTA_ABOUT.href,
           buttonText: industry.cta_label?.trim() || CTA_ABOUT.buttonText,
-        } satisfies TCTAData));
+        } satisfies TCTAV1Data));
 
   const renderSlot = (key: keyof IndustryDetailSlots, fallback: ReactNode) =>
     Object.prototype.hasOwnProperty.call(slots, key) ? slots[key] : fallback;
 
   return (
     <div className="bg-background min-h-screen">
-      <PageHeader
+      <HeroV1Section
         label={industry.tagline ?? industry.name}
         title={industry.headline}
         description={industry.description}
@@ -141,7 +144,7 @@ export function IndustryDetailView({
       {renderSlot("process", <ProcessSection data={process} />)}
       {renderSlot(
         "cta",
-        resolvedCta ? <CTASection data={resolvedCta} /> : null,
+        resolvedCta ? <CTAV1Section data={resolvedCta} /> : null,
       )}
     </div>
   );

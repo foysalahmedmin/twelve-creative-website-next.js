@@ -1,16 +1,16 @@
-import { ServicesSection } from "@/components/sections/services-section";
-import { CTASection } from "@/components/sections/cta-section";
+import { CTAV1Section } from "@/components/sections/cta-v1-section";
 import { GrowthSystemSection } from "@/components/sections/growth-system-section";
-import { PageHeader } from "@/components/sections/page-header-section";
+import { HeroV1Section } from "@/components/sections/hero-v1-section";
+import { ServicesSection } from "@/components/sections/services-section";
 import { WhyChooseUsSection } from "@/components/sections/why-choose-us-section";
 import { getPublicPageCta, toLegacyPageCta } from "@/lib/api/page-ctas";
-import { getPublicServicesAsLegacy } from "@/lib/api/services";
 import {
   getPublicPageHero,
   resolvePageMetadata,
   resolveThumbnail,
   resolveVideoSrc,
 } from "@/lib/api/page-heroes";
+import { getPublicServicesAsLegacy } from "@/lib/api/services";
 import { getPublicSharedSections } from "@/lib/api/shared-sections";
 import type { Metadata } from "next";
 
@@ -44,7 +44,7 @@ export default async function WhatWeBuildPage() {
 
   return (
     <main className="bg-background min-h-screen">
-      <PageHeader
+      <HeroV1Section
         label={hero?.label ?? "What We Build"}
         title={
           hero?.title ?? "Marketing works better when the pieces are connected."
@@ -68,7 +68,7 @@ export default async function WhatWeBuildPage() {
       {whyChooseUs && <WhyChooseUsSection cmsData={whyChooseUs} tone="brand" />}
 
       {/* CTA */}
-      {cta && <CTASection data={toLegacyPageCta(cta)} />}
+      {cta && <CTAV1Section data={toLegacyPageCta(cta)} />}
     </main>
   );
 }

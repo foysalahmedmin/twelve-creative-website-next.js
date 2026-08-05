@@ -1,4 +1,4 @@
-export type THomeCta = {
+export type TCta = {
   eyebrow: string;
   title: string;
   description: string;
@@ -6,7 +6,7 @@ export type THomeCta = {
   secondary_cta: { label: string; href: string };
 };
 
-export const HOME_CTA_DATA: THomeCta = {
+export const CTA_DATA: TCta = {
   eyebrow: "Let's build it",
   title: "Need more than marketing activity?",
   description:

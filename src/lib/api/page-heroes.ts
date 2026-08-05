@@ -1,10 +1,10 @@
-import { unstable_rethrow } from "next/navigation";
 import { apiFetch } from "@/lib/admin/api-client";
-import { ApiError } from "@/lib/admin/types";
 import type { VideoRef } from "@/lib/admin/types";
+import { ApiError } from "@/lib/admin/types";
 import { extractYouTubeId } from "@/lib/media/video";
-import { PAGE_HERO_TAG } from "./page-heroes.constants";
+import { unstable_rethrow } from "next/navigation";
 import type { PageKey } from "./page-heroes.constants";
+import { PAGE_HERO_TAG } from "./page-heroes.constants";
 export { PAGE_HERO_TAG, PAGE_KEYS, PAGE_LABELS } from "./page-heroes.constants";
 export type { PageKey } from "./page-heroes.constants";
 
@@ -35,8 +35,7 @@ export function resolvePageMetadata(
   fallback: { title: string; description: string },
 ) {
   const title = hero?.seo?.title?.trim() || fallback.title;
-  const description =
-    hero?.seo?.description?.trim() || fallback.description;
+  const description = hero?.seo?.description?.trim() || fallback.description;
   const ogImage = hero?.seo?.og_image?.trim();
   const canonical = hero?.seo?.canonical_url?.trim();
 
@@ -44,9 +43,7 @@ export function resolvePageMetadata(
     title,
     description,
     ...(canonical ? { alternates: { canonical } } : {}),
-    ...(hero?.seo?.no_index
-      ? { robots: { index: false, follow: false } }
-      : {}),
+    ...(hero?.seo?.no_index ? { robots: { index: false, follow: false } } : {}),
     openGraph: {
       title,
       description,
@@ -94,19 +91,12 @@ export async function getAdminPageHero(
   }
 }
 
-/** Resolves a VideoRef to a plain URL string for react-player / PageHeader. */
 export function resolveVideoSrc(
   video: (VideoRef & { poster?: string }) | null | undefined,
 ): string | undefined {
   return video?.value || undefined;
 }
 
-/**
- * Resolves the thumbnail for a page hero with priority:
- * 1. Manually set thumbnail (always wins)
- * 2. YouTube video → auto-extract hqdefault.jpg
- * 3. undefined (no thumbnail)
- */
 export function resolveThumbnail(
   thumbnail: string | undefined,
   video: (VideoRef & { poster?: string }) | null | undefined,

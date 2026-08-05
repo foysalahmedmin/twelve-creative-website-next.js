@@ -4,7 +4,7 @@ import { BookingModal } from "@/components/common/booking-modal";
 import { InlineVideoPlayer } from "@/components/common/inline-video-player";
 import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { buttonVariants } from "@/components/ui/button";
-import { HOME_HERO_DATA, type THomeHero } from "@/data/home-hero.data";
+import { HERO_DATA, type THero } from "@/data/hero.data";
 import type { PublicIndustryOption } from "@/lib/api/industries";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
@@ -13,10 +13,10 @@ import { useState } from "react";
 
 interface HeroSectionProps {
   className?: string;
-  data?: Omit<Partial<THomeHero>, "primary_cta" | "secondary_cta" | "video"> & {
-    primary_cta?: THomeHero["primary_cta"] | null;
-    secondary_cta?: THomeHero["secondary_cta"] | null;
-    video?: THomeHero["video"] | null;
+  data?: Omit<Partial<THero>, "primary_cta" | "secondary_cta" | "video"> & {
+    primary_cta?: THero["primary_cta"] | null;
+    secondary_cta?: THero["secondary_cta"] | null;
+    video?: THero["video"] | null;
   };
   calendlyUrl?: string;
   industries?: PublicIndustryOption[];
@@ -28,7 +28,7 @@ export const HeroSection = ({
   calendlyUrl,
   industries = [],
 }: HeroSectionProps) => {
-  const data = { ...HOME_HERO_DATA, ...override };
+  const data = { ...HERO_DATA, ...override };
   const [isBookingOpen, setIsBookingOpen] = useState(false);
 
   return (
@@ -145,9 +145,6 @@ export const HeroSection = ({
             durationMs={900}
             className="hidden w-full px-4 lg:block lg:px-12"
           >
-            {/* max-w-4xl matches PageHeader's hero media, whose width is
-                capped by that section's max-w-4xl column — so the home hero
-                and every other page hero read at the same width. */}
             <div className="border-foreground/10 relative mx-auto mt-8 aspect-video w-full max-w-4xl overflow-hidden rounded-2xl border shadow-sm lg:mt-10 lg:rounded-3xl">
               {data.video.src ? (
                 <InlineVideoPlayer

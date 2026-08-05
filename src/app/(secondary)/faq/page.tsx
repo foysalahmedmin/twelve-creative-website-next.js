@@ -1,14 +1,14 @@
 import { FaqSection } from "@/components/sections/faqs-section";
-import { PageHeader } from "@/components/sections/page-header-section";
+import { HeroV1Section } from "@/components/sections/hero-v1-section";
 import { FAQS_DATA } from "@/data/faqs.data";
 import { getPublicFaqsForSection } from "@/lib/api/faqs";
-import { getPublicSharedSection } from "@/lib/api/shared-sections";
 import {
   getPublicPageHero,
   resolvePageMetadata,
   resolveThumbnail,
   resolveVideoSrc,
 } from "@/lib/api/page-heroes";
+import { getPublicSharedSection } from "@/lib/api/shared-sections";
 import type { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -37,7 +37,7 @@ export default async function FaqPage() {
 
   return (
     <main className="bg-background min-h-screen">
-      <PageHeader
+      <HeroV1Section
         label={hero?.label ?? "FAQ"}
         title={hero?.title ?? "Frequently Asked Questions"}
         description={

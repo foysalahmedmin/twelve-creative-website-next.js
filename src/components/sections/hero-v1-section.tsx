@@ -20,7 +20,7 @@ interface BreadcrumbItemType {
   active?: boolean;
 }
 
-interface PageHeaderProps {
+interface HeroV1SectionProps {
   label?: string;
   title: string;
   description?: string;
@@ -30,7 +30,7 @@ interface PageHeaderProps {
   className?: string;
 }
 
-export const PageHeader = ({
+export const HeroV1Section = ({
   label,
   title,
   description,
@@ -38,7 +38,7 @@ export const PageHeader = ({
   videoSrc,
   thumbnailSrc,
   className,
-}: PageHeaderProps) => {
+}: HeroV1SectionProps) => {
   return (
     <section
       className={cn(

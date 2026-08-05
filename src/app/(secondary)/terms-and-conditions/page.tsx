@@ -1,5 +1,5 @@
 import { LegalPageView } from "@/components/legal/legal-page-view";
-import { PageHeader } from "@/components/sections/page-header-section";
+import { HeroV1Section } from "@/components/sections/hero-v1-section";
 import { getPublicLegalPage } from "@/lib/api/legal-pages";
 import type { Metadata } from "next";
 
@@ -27,7 +27,7 @@ export default async function TermsAndConditionsPage() {
     "This page is being prepared. Contact Twelve Creative for terms information.";
   return (
     <main className="bg-background min-h-screen">
-      <PageHeader
+      <HeroV1Section
         title={title}
         description={description}
         breadcrumb={[{ label: title, active: true }]}
