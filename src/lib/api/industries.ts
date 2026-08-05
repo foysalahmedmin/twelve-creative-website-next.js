@@ -190,3 +190,18 @@ export async function getPublicIndustriesAsLegacyResult(): Promise<{
   const result = await getPublicIndustriesResult();
   return { data: toLegacyIndustries(result.data), failed: result.failed };
 }
+
+/**
+ * Ready to hand straight to `IndustriesSection`'s `data` prop.
+ *
+ * Encodes the one policy the section itself cannot infer: `undefined` means
+ * "the fetch failed, fall back to the static demo industries", while an empty
+ * array means "the CMS genuinely has none, render nothing". Collapsing those
+ * two into one value would resurrect removed content whenever the API blips.
+ */
+export async function getPublicIndustriesForSection(): Promise<
+  TIndustry[] | undefined
+> {
+  const { data, failed } = await getPublicIndustriesAsLegacyResult();
+  return failed ? undefined : data;
+}

@@ -71,13 +71,13 @@ const ProjectCard = ({
 
 interface FeaturedProjectsSectionProps {
   className?: string;
-  data: TFeaturedIndustryGroup[];
+  data?: TFeaturedIndustryGroup[];
   heading?: HeadingSection | null;
 }
 
 export const FeaturedProjectsSection = ({
   className,
-  data,
+  data = [],
   heading,
 }: FeaturedProjectsSectionProps) => {
   // Industry tabs are off for now — every group's projects show together in

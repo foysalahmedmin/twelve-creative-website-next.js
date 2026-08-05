@@ -1,9 +1,10 @@
-import { LiveServicesSection } from "@/components/sections/services-section-live";
+import { ServicesSection } from "@/components/sections/services-section";
 import { CTASection } from "@/components/sections/cta-section";
 import { GrowthSystemSection } from "@/components/sections/growth-system-section";
 import { PageHeader } from "@/components/sections/page-header-section";
 import { WhyChooseUsSection } from "@/components/sections/why-choose-us-section";
 import { getPublicPageCta, toLegacyPageCta } from "@/lib/api/page-ctas";
+import { getPublicServicesAsLegacy } from "@/lib/api/services";
 import {
   getPublicPageHero,
   resolvePageMetadata,
@@ -25,10 +26,12 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function WhatWeBuildPage() {
   const [
     hero,
+    services,
     cta,
     [coreHeading, servicesHeading, growthSystem, difference, whyChooseUs],
   ] = await Promise.all([
     getPublicPageHero("what-we-build"),
+    getPublicServicesAsLegacy(),
     getPublicPageCta("what-we-build"),
     getPublicSharedSections([
       "core-verticals",
@@ -56,7 +59,7 @@ export default async function WhatWeBuildPage() {
 
       {/* Services — moved here from the home page: the deliverables follow
           naturally once someone has seen who we build for. */}
-      <LiveServicesSection heading={servicesHeading} />
+      <ServicesSection data={services} heading={servicesHeading} />
 
       {/* Growth system end-to-end deep dive */}
       {growthSystem && <GrowthSystemSection cmsData={growthSystem} />}
