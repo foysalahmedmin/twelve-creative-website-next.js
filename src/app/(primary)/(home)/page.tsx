@@ -1,8 +1,8 @@
-import { DifferenceSection } from "@/components/_primary_/home-page/difference-section";
-import { LiveFeaturedProjectsSection } from "@/components/_primary_/home-page/featured-projects-section-live";
-import { LiveHeroSection } from "@/components/_primary_/home-page/hero-section-live";
-import { HomeCtaSection } from "@/components/_primary_/home-page/home-cta-section";
-import { LiveIndustriesSection } from "@/components/_primary_/home-page/industries-section-live";
+import { DifferenceSection } from "@/components/sections/difference-section";
+import { LiveFeaturedProjectsSection } from "@/components/sections/featured-projects-section-live";
+import { LiveHeroSection } from "@/components/sections/hero-section-live";
+import { HomeCtaSection } from "@/components/sections/home-cta-section";
+import { LiveIndustriesSection } from "@/components/sections/industries-section-live";
 import { BrandsStrip } from "@/components/sections/brands-strip";
 import FaqSection from "@/components/sections/faqs-section";
 import { ProcessSection } from "@/components/sections/process-section";

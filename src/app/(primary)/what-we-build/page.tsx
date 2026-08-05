@@ -1,4 +1,4 @@
-import { LiveServicesSection } from "@/components/_primary_/home-page/services-section-live";
+import { LiveServicesSection } from "@/components/sections/services-section-live";
 import { CTASection } from "@/components/sections/cta-section";
 import { GrowthSystemSection } from "@/components/sections/growth-system-section";
 import { PageHeader } from "@/components/sections/page-header-section";

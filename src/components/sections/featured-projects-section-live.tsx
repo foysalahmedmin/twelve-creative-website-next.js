@@ -4,7 +4,7 @@
  * demo projects.
  */
 
-import { FeaturedProjectsSection } from "@/components/_primary_/home-page/featured-projects-section";
+import { FeaturedProjectsSection } from "@/components/sections/featured-projects-section";
 import { getPublicFeaturedProjectsGrouped } from "@/lib/api/featured-projects";
 import type { HeadingSection } from "@/lib/api/shared-sections";
 

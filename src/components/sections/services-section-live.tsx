@@ -5,7 +5,7 @@
  * renders an empty section.
  */
 
-import { ServicesSection } from "@/components/_primary_/home-page/services-section";
+import { ServicesSection } from "@/components/sections/services-section";
 import { getPublicServicesAsLegacy } from "@/lib/api/services";
 import type { HeadingSection } from "@/lib/api/shared-sections";
 

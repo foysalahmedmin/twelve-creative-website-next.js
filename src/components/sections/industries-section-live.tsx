@@ -5,7 +5,7 @@
  * empty response stays empty so removed CMS content is not resurrected.
  */
 
-import { IndustriesSection } from "@/components/_primary_/home-page/industries-section";
+import { IndustriesSection } from "@/components/sections/industries-section";
 import { getPublicIndustriesAsLegacyResult } from "@/lib/api/industries";
 import type { HeadingSection } from "@/lib/api/shared-sections";
 

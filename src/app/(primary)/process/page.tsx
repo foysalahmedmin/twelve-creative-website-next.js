@@ -1,4 +1,4 @@
-import { DifferenceSection } from "@/components/_primary_/home-page/difference-section";
+import { DifferenceSection } from "@/components/sections/difference-section";
 import { CTASection } from "@/components/sections/cta-section";
 import { PageHeader } from "@/components/sections/page-header-section";
 import { ProcessSection } from "@/components/sections/process-section";
