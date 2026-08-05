@@ -27,6 +27,7 @@ import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
 import { CANVAS_PORTFOLIO_DATA } from "@/data/thumbnail-work-section.data";
 import { CANVAS_MARQUEE_DATA } from "@/data/vertical-marquee.data";
 import { getPublicAboutPage } from "@/lib/api/about-page";
+import { getPublicBookingSetting } from "@/lib/api/booking-settings";
 import { getPublicIndustryOptions } from "@/lib/api/industries";
 import { getPublicProcessSection } from "@/lib/api/process-section";
 import { getPublicSharedSections } from "@/lib/api/shared-sections";
@@ -45,6 +46,7 @@ export default async function CanvasPage() {
     processData,
     industries,
     about,
+    bookingSetting,
     [
       whyChooseUs,
       growthSystem,
@@ -61,6 +63,7 @@ export default async function CanvasPage() {
     getPublicProcessSection(),
     getPublicIndustryOptions(),
     getPublicAboutPage(),
+    getPublicBookingSetting(),
     getPublicSharedSections([
       "why-choose-us",
       "growth-system",
@@ -154,6 +157,7 @@ export default async function CanvasPage() {
         title={CONTACT_PAGE_DATA.booking.title}
         description={CONTACT_PAGE_DATA.booking.description}
         industries={industries}
+        booking={bookingSetting}
       />
 
       <ContactInfoMapSection

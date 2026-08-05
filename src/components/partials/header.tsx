@@ -9,6 +9,7 @@ import {
   TESTIMONIALS_SECTION_ID,
   useTestimonialsSectionState,
 } from "@/hooks/use-testimonials-section-state";
+import type { TBookingData } from "@/data/booking.data";
 import type { PublicIndustryOption } from "@/lib/api/industries";
 import { cn } from "@/lib/utils";
 import {
@@ -25,12 +26,14 @@ interface HeaderProps {
   className?: string;
   calendlyUrl?: string;
   industries?: PublicIndustryOption[];
+  booking?: TBookingData;
 }
 
 export const Header = ({
   className,
   calendlyUrl,
   industries = [],
+  booking,
 }: HeaderProps) => {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -275,6 +278,7 @@ export const Header = ({
           isOpen={isBookingOpen}
           onClose={() => setIsBookingOpen(false)}
           industries={industries}
+          booking={booking}
         />
       )}
     </>

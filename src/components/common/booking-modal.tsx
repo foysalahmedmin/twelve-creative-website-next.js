@@ -3,6 +3,7 @@
 import { LogoIcon } from "@/components/icons/logo-icon";
 import { submitBookingAction } from "@/lib/api/bookings-actions";
 import type { PublicIndustryOption } from "@/lib/api/industries";
+import { BOOKING_DATA, type TBookingData } from "@/data/booking.data";
 import { localDateInputValue } from "@/lib/local-date";
 import { cn } from "@/lib/utils";
 import {
@@ -22,26 +23,40 @@ export function isStartConversationCta(label?: string | null): boolean {
   return (label ?? "").trim().toLowerCase() === "start a conversation";
 }
 
-const TIME_SLOTS = [
-  { label: "Morning", range: "9:00 AM – 12:00 PM" },
-  { label: "Afternoon", range: "12:00 PM – 4:00 PM" },
-  { label: "Evening", range: "4:00 PM – 7:00 PM" },
-  { label: "Flexible", range: "Any time works" },
-];
-
 const TOTAL_STEPS = 3;
 
 interface BookingModalProps {
   isOpen: boolean;
   onClose: () => void;
   industries?: PublicIndustryOption[];
+  /** Admin-managed questions + availability. Falls back to BOOKING_DATA. */
+  booking?: TBookingData;
 }
 
 export function BookingModal({
   isOpen,
   onClose,
   industries = [],
+  booking = BOOKING_DATA,
 }: BookingModalProps) {
+  const { questions, availability } = booking;
+
+  // The date input can only express a contiguous range, so weekdays the studio
+  // does not work are additionally rejected on selection with a visible note —
+  // a native picker cannot grey individual days out.
+  const addDays = (days: number) => {
+    const d = new Date();
+    d.setDate(d.getDate() + days);
+    return d;
+  };
+  const minDate = localDateInputValue(addDays(availability.min_lead_days));
+  const maxDate = localDateInputValue(addDays(availability.max_advance_days));
+  const isBookableDay = (value: string) => {
+    if (!value) return true;
+    // Parsed as local midday so a timezone shift cannot roll it to another day.
+    const day = new Date(`${value}T12:00:00`).getDay();
+    return availability.available_weekdays.includes(day);
+  };
   const router = useRouter();
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
@@ -59,6 +74,9 @@ export function BookingModal({
     email: "",
     company: "",
   });
+
+  const selectedDayUnavailable =
+    !!formData.preferredDate && !isBookableDay(formData.preferredDate);
 
   // Keep latest onClose without restarting the countdown on parent re-render.
   const onCloseRef = useRef(onClose);
@@ -175,6 +193,7 @@ export function BookingModal({
 
   const handleDateTime = () => {
     if (!formData.preferredDate || !formData.preferredTime) return;
+    if (selectedDayUnavailable) return;
     setStep(3);
   };
 
@@ -276,7 +295,7 @@ export function BookingModal({
                         id="booking-modal-title"
                         className="font-heading text-foreground text-2xl font-black tracking-tight"
                       >
-                        Which sector are we discussing?
+                        {questions.sector_title}
                       </h2>
                     </div>
                     <div className="grid gap-2.5">
@@ -324,10 +343,10 @@ export function BookingModal({
                         id="booking-modal-title"
                         className="font-heading text-foreground text-2xl font-black tracking-tight"
                       >
-                        Pick a date &amp; preferred time.
+                        {questions.schedule_title}
                       </h2>
                       <p className="text-muted-foreground text-sm">
-                        We&apos;ll reach out around your selected time slot.
+                        {questions.schedule_subtitle}
                       </p>
                     </div>
 
@@ -343,7 +362,8 @@ export function BookingModal({
                         id="booking-preferred-date"
                         type="date"
                         value={formData.preferredDate}
-                        min={localDateInputValue()}
+                        min={minDate}
+                        max={maxDate}
                         onChange={(e) =>
                           setFormData((d) => ({
                             ...d,
@@ -352,6 +372,12 @@ export function BookingModal({
                         }
                         className="border-border bg-muted/50 text-foreground focus:border-primary w-full rounded-lg border px-4 py-3 text-sm transition-colors focus:outline-none"
                       />
+                      {selectedDayUnavailable && (
+                        <p role="alert" className="text-destructive text-xs">
+                          We don&apos;t take calls that day — please pick
+                          another date.
+                        </p>
+                      )}
                     </div>
 
                     {/* Time slots */}
@@ -360,7 +386,7 @@ export function BookingModal({
                         Preferred Time
                       </p>
                       <div className="grid grid-cols-2 gap-2.5">
-                        {TIME_SLOTS.map((slot) => (
+                        {availability.slots.map((slot) => (
                           <button
                             key={slot.label}
                             type="button"
@@ -400,7 +426,9 @@ export function BookingModal({
                       type="button"
                       onClick={handleDateTime}
                       disabled={
-                        !formData.preferredDate || !formData.preferredTime
+                        !formData.preferredDate ||
+                        !formData.preferredTime ||
+                        selectedDayUnavailable
                       }
                       className="bg-primary hover:bg-primary/90 text-primary-foreground mt-1 w-full rounded-lg py-4 text-sm font-bold tracking-wider uppercase transition-all active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
                     >
@@ -426,7 +454,7 @@ export function BookingModal({
                         id="booking-modal-title"
                         className="font-heading text-foreground text-2xl font-black tracking-tight"
                       >
-                        Great! Now let us know who you are.
+                        {questions.details_title}
                       </h2>
                     </div>
 

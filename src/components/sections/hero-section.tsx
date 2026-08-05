@@ -5,6 +5,7 @@ import { InlineVideoPlayer } from "@/components/common/inline-video-player";
 import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { buttonVariants } from "@/components/ui/button";
 import { HERO_DATA, type THero } from "@/data/hero.data";
+import type { TBookingData } from "@/data/booking.data";
 import type { PublicIndustryOption } from "@/lib/api/industries";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
@@ -20,6 +21,7 @@ interface HeroSectionProps {
   };
   calendlyUrl?: string;
   industries?: PublicIndustryOption[];
+  booking?: TBookingData;
 }
 
 export const HeroSection = ({
@@ -27,6 +29,7 @@ export const HeroSection = ({
   data: override,
   calendlyUrl,
   industries = [],
+  booking,
 }: HeroSectionProps) => {
   const data = { ...HERO_DATA, ...override };
   const [isBookingOpen, setIsBookingOpen] = useState(false);
@@ -172,6 +175,7 @@ export const HeroSection = ({
           isOpen={isBookingOpen}
           onClose={() => setIsBookingOpen(false)}
           industries={industries}
+          booking={booking}
         />
       )}
     </section>

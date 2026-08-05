@@ -2,6 +2,7 @@ import { BookingSection } from "@/components/sections/booking-section";
 import { ContactInfoMapSection } from "@/components/sections/contact-info-map-section";
 import { PageContactSection } from "@/components/sections/contact-section-section";
 import { CONTACT_PAGE_DATA, type TContactCard } from "@/data/contact.data";
+import { getPublicBookingSetting } from "@/lib/api/booking-settings";
 import { getPublicIndustryOptions } from "@/lib/api/industries";
 import { getPublicPageHero, resolvePageMetadata } from "@/lib/api/page-heroes";
 import { getPublicSiteSetting } from "@/lib/api/site-setting";
@@ -45,9 +46,10 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function ContactPage() {
   const { contact_cards, booking, map } = CONTACT_PAGE_DATA;
-  const [settings, industries] = await Promise.all([
+  const [settings, industries, bookingSetting] = await Promise.all([
     getPublicSiteSetting(),
     getPublicIndustryOptions(),
+    getPublicBookingSetting(),
   ]);
 
   const inquiryCopy = settings.contact_page?.inquiry;
@@ -107,6 +109,7 @@ export default async function ContactPage() {
         description={bookingCopy?.description || booking.description}
         calendlyUrl={settings.calendly_url || undefined}
         industries={industries}
+        booking={bookingSetting}
       />
 
       {/* Contact cards (left) + Map (right) — side-by-side on lg */}

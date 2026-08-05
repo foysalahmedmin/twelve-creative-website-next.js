@@ -16,6 +16,7 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useState } from "react";
+import { BOOKING_DATA, type TBookingData } from "@/data/booking.data";
 
 interface BookingSectionProps {
   label: string;
@@ -24,39 +25,19 @@ interface BookingSectionProps {
   className?: string;
   calendlyUrl?: string;
   industries?: PublicIndustryOption[];
+  /** Admin-managed copy + availability. Falls back to BOOKING_DATA. */
+  booking?: TBookingData;
 }
 
-const BOOKING_STEPS = [
-  {
-    id: 1,
-    icon: Briefcase01Icon,
-    title: "Sector",
-    description: "Tell us what industry you operate in.",
-  },
-  {
-    id: 2,
-    icon: Calendar01Icon,
-    title: "Timeline",
-    description: "Pick when you're looking to start.",
-  },
-  {
-    id: 3,
-    icon: Clock01Icon,
-    title: "Date & Time",
-    description: "Choose a date and preferred slot.",
-  },
-  {
-    id: 4,
-    icon: UserCircle02Icon,
-    title: "Your Details",
-    description: "Quick contact info and we're set.",
-  },
-];
-
-const BOOKING_BENEFITS = [
-  "30-minute strategic conversation",
-  "No commitment, no pitch deck",
-  "Response within 24 hours",
+/**
+ * Step icons stay in code: they are part of the visual design rather than
+ * copy, and cycle in order so a step added in the admin still gets one.
+ */
+const STEP_ICONS = [
+  Briefcase01Icon,
+  Calendar01Icon,
+  Clock01Icon,
+  UserCircle02Icon,
 ];
 
 export const BookingSection = ({
@@ -66,8 +47,10 @@ export const BookingSection = ({
   className,
   calendlyUrl,
   industries = [],
+  booking = BOOKING_DATA,
 }: BookingSectionProps) => {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const { content } = booking;
 
   return (
     <section
@@ -98,26 +81,29 @@ export const BookingSection = ({
                 >
                   <div className="space-y-3">
                     <span className="border-foreground/25 text-foreground inline-block rounded-md border px-3 py-1 text-[11px] font-bold tracking-[0.12em] uppercase">
-                      4-Step Booking
+                      {content.label}
                     </span>
                     <h3 className="font-heading text-foreground text-2xl leading-tight font-black tracking-tight sm:text-3xl">
-                      A quick path from interest to conversation.
+                      {content.title}
                     </h3>
                   </div>
 
                   <div className="space-y-3">
-                    {BOOKING_STEPS.map((step) => (
+                    {content.steps.map((step, stepIndex) => (
                       <div
-                        key={step.id}
+                        key={`${step.title}-${stepIndex}`}
                         className="border-border bg-background flex items-start gap-4 rounded-2xl border p-4"
                       >
                         <div className="bg-primary/10 text-primary flex size-11 shrink-0 items-center justify-center rounded-lg">
-                          <HugeiconsIcon icon={step.icon} className="size-5" />
+                          <HugeiconsIcon
+                            icon={STEP_ICONS[stepIndex % STEP_ICONS.length]}
+                            className="size-5"
+                          />
                         </div>
                         <div className="flex-1 space-y-0.5">
                           <div className="flex items-baseline gap-2">
                             <span className="text-primary/60 text-xs font-bold tracking-widest">
-                              STEP {step.id}
+                              STEP {stepIndex + 1}
                             </span>
                             <h4 className="font-heading text-foreground text-base font-semibold">
                               {step.title}
@@ -148,16 +134,15 @@ export const BookingSection = ({
                         />
                       </div>
                       <h3 className="font-heading text-primary-foreground text-2xl leading-tight font-black tracking-tight sm:text-3xl dark:text-[#eaeae4]">
-                        Book a 30-minute call.
+                        {content.card_title}
                       </h3>
                       <p className="text-primary-foreground/80 text-sm leading-relaxed sm:text-base dark:text-[#eaeae4]/75">
-                        Skip the form. Pick a sector, share your timeline and a
-                        preferred slot — we&rsquo;ll reach out within 24 hours.
+                        {content.card_description}
                       </p>
                     </div>
 
                     <ul className="relative space-y-2.5">
-                      {BOOKING_BENEFITS.map((benefit) => (
+                      {content.benefits.map((benefit) => (
                         <li
                           key={benefit}
                           className="text-primary-foreground/85 flex items-start gap-2.5 text-sm font-medium dark:text-[#eaeae4]/85"
@@ -178,7 +163,7 @@ export const BookingSection = ({
                         rel="noopener noreferrer"
                         className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 group/cta dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/90 relative inline-flex h-14 w-full items-center justify-center gap-2 rounded-lg text-base font-semibold tracking-[0.05em] uppercase transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
                       >
-                        Start Booking
+                        {content.cta_label}
                         <HugeiconsIcon
                           icon={ArrowRight01Icon}
                           className="size-5 transition-transform group-hover/cta:translate-x-1"
@@ -192,7 +177,7 @@ export const BookingSection = ({
                         onClick={() => setIsBookingOpen(true)}
                         className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 group/cta dark:bg-secondary dark:text-secondary-foreground dark:hover:bg-secondary relative h-14 w-full"
                       >
-                        Start Booking
+                        {content.cta_label}
                         <HugeiconsIcon
                           icon={ArrowRight01Icon}
                           className="size-5 transition-transform group-hover/cta:translate-x-1"
@@ -201,7 +186,7 @@ export const BookingSection = ({
                     )}
 
                     <p className="text-primary-foreground/70 relative text-center text-xs dark:text-[#eaeae4]/60">
-                      Or send a detailed inquiry using the form above.
+                      {content.footnote}
                     </p>
                   </div>
                 </ScrollReveal>
