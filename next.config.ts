@@ -2,6 +2,19 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   allowedDevOrigins: ["192.168.0.110"],
+  // The blog moved from /blogs to /insights to match the wording used
+  // everywhere else. Permanent so already-indexed URLs and any link shared
+  // before the rename keep working instead of 404ing.
+  async redirects() {
+    return [
+      { source: "/blogs", destination: "/insights", permanent: true },
+      {
+        source: "/blogs/:slug",
+        destination: "/insights/:slug",
+        permanent: true,
+      },
+    ];
+  },
   images: {
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",

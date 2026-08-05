@@ -6,11 +6,13 @@ import { GalleryMarqueeSection } from "@/components/sections/gallery-marquee-sec
 import { HeroV1Section } from "@/components/sections/hero-v1-section";
 import { OurMissionSection } from "@/components/sections/our-mission-section";
 import { StorySection } from "@/components/sections/story-section";
+import { InsightsSection } from "@/components/sections/insights-section";
 import { TestimonialSection } from "@/components/sections/testimonial-section";
 import { FAQS_DATA } from "@/data/faqs.data";
 import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
 import { getPublicAboutPage } from "@/lib/api/about-page";
 import { getPublicFaqsForSection } from "@/lib/api/faqs";
+import { getPublicInsights } from "@/lib/api/insights";
 import { getPublicPageCta, toLegacyPageCta } from "@/lib/api/page-ctas";
 import {
   getPublicPageHero,
@@ -39,6 +41,7 @@ export default async function AboutPage() {
     about,
     [testimonialsHeading, faqHeading],
     pageCta,
+    insights,
   ] = await Promise.all([
     getPublicTestimonialsForSection({
       label: TESTIMONIALS_DATA.label,
@@ -58,6 +61,7 @@ export default async function AboutPage() {
     getPublicAboutPage(),
     getPublicSharedSections(["testimonials", "faq"]),
     getPublicPageCta("about"),
+    getPublicInsights(),
   ]);
 
   return (
@@ -110,6 +114,9 @@ export default async function AboutPage() {
         data={testimonialsData}
         heading={testimonialsHeading}
       />
+
+      {/* Latest writing */}
+      <InsightsSection data={insights} />
 
       {/* FAQ */}
       <div className="container py-8 lg:py-12">

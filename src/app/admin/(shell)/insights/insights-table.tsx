@@ -66,7 +66,7 @@ export function InsightsTable({ items }: Props) {
       <div className="flex flex-col items-center justify-center gap-2 px-6 py-16 text-center">
         <p className="text-foreground text-sm font-medium">No articles yet</p>
         <p className="text-muted-foreground text-sm">
-          Write your first article to populate the public /blogs page.
+          Write your first article to populate the public /insights page.
         </p>
         <Button asChild className="mt-3">
           <Link href="/admin/insights/new">Add article</Link>
@@ -151,7 +151,7 @@ export function InsightsTable({ items }: Props) {
         open={!!deleteTarget}
         onOpenChange={(open) => !open && setDeleteTarget(null)}
         title={`Delete ${deleteTarget?.title ?? "article"}?`}
-        description="Removes from the public /blogs section. Can be restored from soft-delete."
+        description="Removes from the public /insights section. Can be restored from soft-delete."
         confirmLabel="Delete"
         destructive
         onConfirm={handleDelete}

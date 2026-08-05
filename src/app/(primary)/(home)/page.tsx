@@ -5,6 +5,7 @@ import FaqSection from "@/components/sections/faqs-section";
 import { FeaturedProjectsSection } from "@/components/sections/featured-projects-section";
 import { HeroSection } from "@/components/sections/hero-section";
 import { IndustriesSection } from "@/components/sections/industries-section";
+import { InsightsSection } from "@/components/sections/insights-section";
 import { ProcessSection } from "@/components/sections/process-section";
 import { ScrollStatementSection } from "@/components/sections/scroll-statement-section";
 import { TestimonialSection } from "@/components/sections/testimonial-section";
@@ -13,6 +14,7 @@ import { FAQS_DATA } from "@/data/faqs.data";
 import { TESTIMONIALS_DATA } from "@/data/testimonials.data";
 import { getPublicFaqsForSection } from "@/lib/api/faqs";
 import { getPublicFeaturedProjectsGrouped } from "@/lib/api/featured-projects";
+import { getPublicInsights } from "@/lib/api/insights";
 import {
   getPublicIndustriesForSection,
   getPublicIndustryOptions,
@@ -55,6 +57,7 @@ export default async function HomePage() {
     industryOptions,
     featuredProjects,
     industries,
+    insights,
     testimonialsData,
     faqsData,
     processData,
@@ -74,6 +77,7 @@ export default async function HomePage() {
     getPublicIndustryOptions(),
     getPublicFeaturedProjectsGrouped(),
     getPublicIndustriesForSection(),
+    getPublicInsights(),
     getPublicTestimonialsForSection({
       label: TESTIMONIALS_DATA.label,
       title: TESTIMONIALS_DATA.title,
@@ -142,6 +146,7 @@ export default async function HomePage() {
       />
       {difference && <DifferenceSection data={difference} className="dark" />}
       <IndustriesSection data={industries} heading={industriesHeading} />
+      <InsightsSection data={insights} />
       <FaqSection data={faqsData} heading={faqHeading} />
       {homeCta && <CtaSection data={homeCta} />}
     </div>

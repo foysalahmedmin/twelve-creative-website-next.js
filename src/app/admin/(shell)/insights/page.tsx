@@ -42,7 +42,7 @@ export default async function InsightsPage({ searchParams }: PageProps) {
     <div className="container max-w-6xl space-y-6 py-8">
       <AdminPageHeader
         title="Insights"
-        description={`${meta?.total ?? data.length} ${filter ?? "total"} · published articles appear at /blogs.`}
+        description={`${meta?.total ?? data.length} ${filter ?? "total"} · published articles appear at /insights.`}
         breadcrumb={[
           { label: "Admin", href: "/admin/dashboard" },
           { label: "Insights" },

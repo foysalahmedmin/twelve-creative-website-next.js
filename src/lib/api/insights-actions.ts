@@ -26,7 +26,7 @@ const invalidate = (slug?: string) => {
   updateTag(INSIGHTS_TAG);
   if (slug) updateTag(`insight:${slug}`);
   revalidatePath("/admin/insights");
-  revalidatePath("/blogs");
+  revalidatePath("/insights");
 };
 
 export async function createInsightAction(

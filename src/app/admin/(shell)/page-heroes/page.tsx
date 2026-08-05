@@ -22,7 +22,7 @@ const PUBLIC_PATH: Record<PageKey, string> = {
   "what-we-build": "/what-we-build",
   contact: "/contact",
   faq: "/faq",
-  blogs: "/blogs",
+  insights: "/insights",
   process: "/process",
 };
 

@@ -39,7 +39,7 @@ export default async function InsightDetailPage({ params }: PageProps) {
         <header className="mb-10 space-y-5">
           <div className="text-muted-foreground flex flex-wrap items-center gap-2 text-xs font-medium">
             <Link
-              href="/blogs"
+              href="/insights"
               className="hover:text-foreground transition-colors"
             >
               ← All insights

@@ -164,7 +164,7 @@ export function InsightForm({ mode, initial }: Props) {
               required
               rows={3}
               maxLength={280}
-              placeholder="Shown on /blogs cards (max 280 chars)…"
+              placeholder="Shown on /insights cards (max 280 chars)…"
               value={excerpt}
               onChange={(e) => setExcerpt(e.target.value)}
             />
@@ -254,7 +254,7 @@ export function InsightForm({ mode, initial }: Props) {
               </SelectContent>
             </Select>
             <p className="text-muted-foreground text-xs">
-              Published articles appear on /blogs immediately. published_at is
+              Published articles appear on /insights immediately. published_at is
               set on first publish.
             </p>
           </div>
