@@ -161,7 +161,13 @@ export function AdminTopbar({
               </p>
             ) : (
               <div className="max-h-80 overflow-y-auto">
-                {notifications.map((n) => (
+                {notifications
+                  // A recipient row outlives the notification it points at if
+                  // that notification is deleted, and the populated value then
+                  // comes back null. Reading .type off it used to throw during
+                  // render, which took down every admin page, not just the bell.
+                  .filter((n) => n.notification)
+                  .map((n) => (
                   <div
                     key={n._id}
                     className={`hover:bg-accent flex cursor-pointer items-start gap-2.5 px-3 py-2.5 transition-colors ${
