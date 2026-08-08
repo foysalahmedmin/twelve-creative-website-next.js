@@ -28,6 +28,7 @@ import { CANVAS_PORTFOLIO_DATA } from "@/data/thumbnail-work-section.data";
 import { CANVAS_MARQUEE_DATA } from "@/data/vertical-marquee.data";
 import { getPublicAboutPage } from "@/lib/api/about-page";
 import { getPublicBookingSetting } from "@/lib/api/booking-settings";
+import { getPublicContactSetting } from "@/lib/api/contact-settings";
 import { getPublicIndustryOptions } from "@/lib/api/industries";
 import { getPublicProcessSection } from "@/lib/api/process-section";
 import { getPublicSharedSections } from "@/lib/api/shared-sections";
@@ -47,6 +48,7 @@ export default async function CanvasPage() {
     industries,
     about,
     bookingSetting,
+    contactForm,
     [
       whyChooseUs,
       growthSystem,
@@ -64,6 +66,7 @@ export default async function CanvasPage() {
     getPublicIndustryOptions(),
     getPublicAboutPage(),
     getPublicBookingSetting(),
+    getPublicContactSetting(),
     getPublicSharedSections([
       "why-choose-us",
       "growth-system",
@@ -171,7 +174,7 @@ export default async function CanvasPage() {
         }}
       />
 
-      <PageContactSection industries={industries} />
+      <PageContactSection industries={industries} form={contactForm} />
 
       <ContactSection />
     </main>

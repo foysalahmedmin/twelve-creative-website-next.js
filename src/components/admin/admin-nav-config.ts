@@ -6,6 +6,7 @@ import {
   ClipboardList,
   ContactRound,
   FileText,
+  FormInput,
   Film,
   HelpCircle,
   ImagePlay,
@@ -70,6 +71,8 @@ export const ADMIN_NAV: AdminNavEntry[] = [
   // Sits with Bookings rather than under Pages: it is where availability is
   // set, which is read far more often than the section copy it also holds.
   { label: "Booking Setup", href: "/admin/booking", icon: CalendarCog },
+  // Beside Booking Setup: both configure how an enquiry is captured.
+  { label: "Contact Form", href: "/admin/contact-form", icon: FormInput },
 
   // Page-level structure and copy — the skeleton each page is assembled from.
   { type: "section", label: "Pages" },

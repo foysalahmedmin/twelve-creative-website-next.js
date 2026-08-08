@@ -4,6 +4,11 @@ import { ScrollReveal } from "@/components/common/scroll-reveal";
 import { CenteredSectionHeader } from "@/components/common/section-label";
 import { cn } from "@/lib/utils";
 import { submitContactMessageAction } from "@/lib/api/contact-messages-actions";
+import {
+  CONTACT_FORM_DATA,
+  findContactField,
+  type TContactFormData,
+} from "@/data/contact-form.data";
 import type { PublicIndustryOption } from "@/lib/api/industries";
 import React, { useState } from "react";
 import { toast } from "sonner";
@@ -14,6 +19,8 @@ export interface ContactSectionProps {
   label?: string;
   title?: string;
   description?: string;
+  /** Admin-managed labels, placeholders and dropdowns. Falls back to defaults. */
+  form?: TContactFormData;
 }
 
 interface FormDataType {
@@ -47,11 +54,17 @@ const INITIAL_FORM_DATA: FormDataType = {
 // ── Contact Inquiry Form ──────────────────────────────
 const ContactFormSection = ({
   industries,
+  form = CONTACT_FORM_DATA,
 }: {
   industries: PublicIndustryOption[];
+  form?: TContactFormData;
 }) => {
   const [formData, setFormData] = useState<FormDataType>(INITIAL_FORM_DATA);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const f = (key: Parameters<typeof findContactField>[1]) =>
+    findContactField(form.fields, key);
+  const content = form.content;
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -69,8 +82,22 @@ const ContactFormSection = ({
     const parts: string[] = [];
     if (formData.lookingFor) parts.push(`Looking for: ${formData.lookingFor}`);
     if (formData.notWorking) parts.push(`Not working: ${formData.notWorking}`);
-    if (formData.timeline) parts.push(`Timeline: ${formData.timeline}`);
-    if (formData.budget) parts.push(`Budget: ${formData.budget}`);
+    // Record the label the visitor actually chose. This used to push the
+    // <option> value, so notifications read "Budget: 10k-plus" instead of
+    // "Budget: $10,000+".
+    const optionLabel = (
+      options: { label: string; value: string }[],
+      value: string,
+    ) => options.find((o) => o.value === value)?.label ?? value;
+
+    if (formData.timeline)
+      parts.push(
+        `Timeline: ${optionLabel(form.timeline_options, formData.timeline)}`,
+      );
+    if (formData.budget)
+      parts.push(
+        `Budget: ${optionLabel(form.budget_options, formData.budget)}`,
+      );
     if (formData.website) parts.push(`Website/Instagram: ${formData.website}`);
     if (formData.industry) {
       const selectedIndustry = industries.find(
@@ -115,16 +142,18 @@ const ContactFormSection = ({
             className="text-foreground text-sm font-semibold sm:text-base"
             htmlFor="name"
           >
-            Full Name <span className="text-primary">*</span>
+            {f("name").label}{f("name").is_required && (
+              <span className="text-primary"> *</span>
+            )}
           </label>
           <input
             id="name"
             name="name"
             type="text"
-            required
+            required={f("name").is_required}
             value={formData.name}
             onChange={handleChange}
-            placeholder="John Doe"
+            placeholder={f("name").placeholder}
             className="border-border bg-background text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-13 w-full rounded-lg border px-4 transition-all focus:ring-1 focus:outline-none"
           />
         </div>
@@ -135,210 +164,249 @@ const ContactFormSection = ({
             className="text-foreground text-sm font-semibold sm:text-base"
             htmlFor="email"
           >
-            Email Address <span className="text-primary">*</span>
+            {f("email").label}{f("email").is_required && (
+              <span className="text-primary"> *</span>
+            )}
           </label>
           <input
             id="email"
             name="email"
             type="email"
-            required
+            required={f("email").is_required}
             value={formData.email}
             onChange={handleChange}
-            placeholder="john@example.com"
+            placeholder={f("email").placeholder}
             className="border-border bg-background text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-13 w-full rounded-lg border px-4 transition-all focus:ring-1 focus:outline-none"
           />
         </div>
 
         {/* Phone */}
-        <div className="flex flex-col gap-2">
-          <label
-            className="text-foreground text-sm font-semibold sm:text-base"
-            htmlFor="phone"
-          >
-            Phone Number
-          </label>
-          <input
-            id="phone"
-            name="phone"
-            type="tel"
-            value={formData.phone}
-            onChange={handleChange}
-            placeholder="+1 (234) 567-890"
-            className="border-border bg-background text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-13 w-full rounded-lg border px-4 transition-all focus:ring-1 focus:outline-none"
-          />
-        </div>
+        {f("phone").is_visible && (
+          <div className="flex flex-col gap-2">
+            <label
+              className="text-foreground text-sm font-semibold sm:text-base"
+              htmlFor="phone"
+            >
+              {f("phone").label}{f("phone").is_required && (
+                <span className="text-primary"> *</span>
+              )}
+            </label>
+            <input
+              id="phone"
+              name="phone"
+              type="tel"
+              required={f("phone").is_required}
+              value={formData.phone}
+              onChange={handleChange}
+              placeholder={f("phone").placeholder}
+              className="border-border bg-background text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-13 w-full rounded-lg border px-4 transition-all focus:ring-1 focus:outline-none"
+            />
+          </div>
+        )}
 
         {/* Company Name */}
-        <div className="flex flex-col gap-2">
-          <label
-            className="text-foreground text-sm font-semibold sm:text-base"
-            htmlFor="company"
-          >
-            Company Name
-          </label>
-          <input
-            id="company"
-            name="company"
-            type="text"
-            value={formData.company}
-            onChange={handleChange}
-            placeholder="SparkLabs Inc"
-            className="border-border bg-background text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-13 w-full rounded-lg border px-4 transition-all focus:ring-1 focus:outline-none"
-          />
-        </div>
+        {f("company").is_visible && (
+          <div className="flex flex-col gap-2">
+            <label
+              className="text-foreground text-sm font-semibold sm:text-base"
+              htmlFor="company"
+            >
+              {f("company").label}{f("company").is_required && (
+                <span className="text-primary"> *</span>
+              )}
+            </label>
+            <input
+              id="company"
+              name="company"
+              type="text"
+              required={f("company").is_required}
+              value={formData.company}
+              onChange={handleChange}
+              placeholder={f("company").placeholder}
+              className="border-border bg-background text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-13 w-full rounded-lg border px-4 transition-all focus:ring-1 focus:outline-none"
+            />
+          </div>
+        )}
 
         {/* Website / Instagram */}
-        <div className="flex flex-col gap-2">
-          <label
-            className="text-foreground text-sm font-semibold sm:text-base"
-            htmlFor="website"
-          >
-            Website / Instagram
-          </label>
-          <input
-            id="website"
-            name="website"
-            type="text"
-            value={formData.website}
-            onChange={handleChange}
-            placeholder="example.com"
-            className="border-border bg-background text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-13 w-full rounded-lg border px-4 transition-all focus:ring-1 focus:outline-none"
-          />
-        </div>
+        {f("website").is_visible && (
+          <div className="flex flex-col gap-2">
+            <label
+              className="text-foreground text-sm font-semibold sm:text-base"
+              htmlFor="website"
+            >
+              {f("website").label}{f("website").is_required && (
+                <span className="text-primary"> *</span>
+              )}
+            </label>
+            <input
+              id="website"
+              name="website"
+              type="text"
+              required={f("website").is_required}
+              value={formData.website}
+              onChange={handleChange}
+              placeholder={f("website").placeholder}
+              className="border-border bg-background text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-13 w-full rounded-lg border px-4 transition-all focus:ring-1 focus:outline-none"
+            />
+          </div>
+        )}
 
         {/* Industry */}
-        <div className="flex flex-col gap-2">
-          <label
-            className="text-foreground text-sm font-semibold sm:text-base"
-            htmlFor="industry"
-          >
-            Industry Category
-          </label>
-          <select
-            id="industry"
-            name="industry"
-            value={formData.industry}
-            onChange={handleChange}
-            className="border-border bg-background text-foreground focus:border-primary focus:ring-primary/20 h-13 w-full rounded-lg border px-4 transition-all focus:ring-1 focus:outline-none"
-          >
-            <option value="" className="bg-card">
-              Select Industry
-            </option>
-            {industries.map((industry) => (
-              <option
-                key={industry._id}
-                value={industry._id}
-                className="bg-card"
-              >
-                {industry.name}
+        {f("industry").is_visible && (
+          <div className="flex flex-col gap-2">
+            <label
+              className="text-foreground text-sm font-semibold sm:text-base"
+              htmlFor="industry"
+            >
+              {f("industry").label}{f("industry").is_required && (
+                <span className="text-primary"> *</span>
+              )}
+            </label>
+            <select
+              id="industry"
+              name="industry"
+              required={f("industry").is_required}
+              value={formData.industry}
+              onChange={handleChange}
+              className="border-border bg-background text-foreground focus:border-primary focus:ring-primary/20 h-13 w-full rounded-lg border px-4 transition-all focus:ring-1 focus:outline-none"
+            >
+              <option value="" className="bg-card">
+                {content.industry_placeholder}
               </option>
-            ))}
-            <option value="other" className="bg-card">
-              Other
-            </option>
-          </select>
-        </div>
+              {industries.map((industry) => (
+                <option
+                  key={industry._id}
+                  value={industry._id}
+                  className="bg-card"
+                >
+                  {industry.name}
+                </option>
+              ))}
+              <option value="other" className="bg-card">
+                {content.industry_other_label}
+              </option>
+            </select>
+          </div>
+        )}
       </div>
 
       {/* Looking For */}
-      <div className="flex w-full flex-col gap-2">
-        <label
-          className="text-foreground text-sm font-semibold sm:text-base"
-          htmlFor="lookingFor"
-        >
-          What are you looking for help with?
-        </label>
-        <textarea
-          id="lookingFor"
-          name="lookingFor"
-          value={formData.lookingFor}
-          onChange={handleChange}
-          placeholder="e.g. Creative Production, SaaS Video Editing, CRM Integrations..."
-          className="border-border bg-background text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-24 w-full resize-none rounded-lg border p-4 transition-all focus:ring-1 focus:outline-none"
-        />
-      </div>
+      {f("lookingFor").is_visible && (
+        <div className="flex w-full flex-col gap-2">
+          <label
+            className="text-foreground text-sm font-semibold sm:text-base"
+            htmlFor="lookingFor"
+          >
+            {f("lookingFor").label}{f("lookingFor").is_required && (
+                <span className="text-primary"> *</span>
+              )}
+          </label>
+          <textarea
+            id="lookingFor"
+            name="lookingFor"
+            required={f("lookingFor").is_required}
+            value={formData.lookingFor}
+            onChange={handleChange}
+            placeholder={f("lookingFor").placeholder}
+            className="border-border bg-background text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-24 w-full resize-none rounded-lg border p-4 transition-all focus:ring-1 focus:outline-none"
+          />
+        </div>
+      )}
 
       {/* Bottle Necks */}
-      <div className="flex w-full flex-col gap-2">
-        <label
-          className="text-foreground text-sm font-semibold sm:text-base"
-          htmlFor="notWorking"
-        >
-          What is currently not working?
-        </label>
-        <textarea
-          id="notWorking"
-          name="notWorking"
-          value={formData.notWorking}
-          onChange={handleChange}
-          placeholder="Describe your current bottleneck problems in detail..."
-          className="border-border bg-background text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-24 w-full resize-none rounded-lg border p-4 transition-all focus:ring-1 focus:outline-none"
-        />
-      </div>
+      {f("notWorking").is_visible && (
+        <div className="flex w-full flex-col gap-2">
+          <label
+            className="text-foreground text-sm font-semibold sm:text-base"
+            htmlFor="notWorking"
+          >
+            {f("notWorking").label}{f("notWorking").is_required && (
+                <span className="text-primary"> *</span>
+              )}
+          </label>
+          <textarea
+            id="notWorking"
+            name="notWorking"
+            required={f("notWorking").is_required}
+            value={formData.notWorking}
+            onChange={handleChange}
+            placeholder={f("notWorking").placeholder}
+            className="border-border bg-background text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-24 w-full resize-none rounded-lg border p-4 transition-all focus:ring-1 focus:outline-none"
+          />
+        </div>
+      )}
 
       <div className="grid w-full grid-cols-1 gap-5 md:grid-cols-2">
         {/* Timeline */}
-        <div className="flex flex-col gap-2">
-          <label
-            className="text-foreground text-sm font-semibold sm:text-base"
-            htmlFor="timeline"
-          >
-            Timeline
-          </label>
-          <select
-            id="timeline"
-            name="timeline"
-            value={formData.timeline}
-            onChange={handleChange}
-            className="border-border bg-background text-foreground focus:border-primary focus:ring-primary/20 h-13 w-full rounded-lg border px-4 transition-all focus:ring-1 focus:outline-none"
-          >
-            <option value="" className="bg-card">
-              Select Timeline
-            </option>
-            <option value="asap" className="bg-card">
-              ASAP
-            </option>
-            <option value="1-3-months" className="bg-card">
-              1-3 Months
-            </option>
-            <option value="3-6-months" className="bg-card">
-              3-6 Months
-            </option>
-            <option value="flexible" className="bg-card">
-              Flexible
-            </option>
-          </select>
-        </div>
+        {f("timeline").is_visible && (
+          <div className="flex flex-col gap-2">
+            <label
+              className="text-foreground text-sm font-semibold sm:text-base"
+              htmlFor="timeline"
+            >
+              {f("timeline").label}{f("timeline").is_required && (
+                <span className="text-primary"> *</span>
+              )}
+            </label>
+            <select
+              id="timeline"
+              name="timeline"
+              required={f("timeline").is_required}
+              value={formData.timeline}
+              onChange={handleChange}
+              className="border-border bg-background text-foreground focus:border-primary focus:ring-primary/20 h-13 w-full rounded-lg border px-4 transition-all focus:ring-1 focus:outline-none"
+            >
+              <option value="" className="bg-card">
+                {content.timeline_placeholder}
+              </option>
+              {form.timeline_options.map((option) => (
+                <option
+                  key={option.value}
+                  value={option.value}
+                  className="bg-card"
+                >
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
         {/* Budget */}
-        <div className="flex flex-col gap-2">
-          <label
-            className="text-foreground text-sm font-semibold sm:text-base"
-            htmlFor="budget"
-          >
-            Monthly Budget Range
-          </label>
-          <select
-            id="budget"
-            name="budget"
-            value={formData.budget}
-            onChange={handleChange}
-            className="border-border bg-background text-foreground focus:border-primary focus:ring-primary/20 h-13 w-full rounded-lg border px-4 transition-all focus:ring-1 focus:outline-none"
-          >
-            <option value="" className="bg-card">
-              Select Range
-            </option>
-            <option value="2k-5k" className="bg-card">
-              $2,000 - $5,000
-            </option>
-            <option value="5k-10k" className="bg-card">
-              $5,000 - $10,000
-            </option>
-            <option value="10k-plus" className="bg-card">
-              $10,000+
-            </option>
-          </select>
-        </div>
+        {f("budget").is_visible && (
+          <div className="flex flex-col gap-2">
+            <label
+              className="text-foreground text-sm font-semibold sm:text-base"
+              htmlFor="budget"
+            >
+              {f("budget").label}{f("budget").is_required && (
+                <span className="text-primary"> *</span>
+              )}
+            </label>
+            <select
+              id="budget"
+              name="budget"
+              required={f("budget").is_required}
+              value={formData.budget}
+              onChange={handleChange}
+              className="border-border bg-background text-foreground focus:border-primary focus:ring-primary/20 h-13 w-full rounded-lg border px-4 transition-all focus:ring-1 focus:outline-none"
+            >
+              <option value="" className="bg-card">
+                {content.budget_placeholder}
+              </option>
+              {form.budget_options.map((option) => (
+                <option
+                  key={option.value}
+                  value={option.value}
+                  className="bg-card"
+                >
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
 
       {/* Submit button */}
@@ -347,7 +415,7 @@ const ContactFormSection = ({
         disabled={isSubmitting}
         className="bg-primary text-primary-foreground mt-4 flex h-14 w-full items-center justify-center rounded-lg text-sm font-semibold tracking-[0.05em] uppercase transition-all duration-200 select-none hover:scale-105 active:scale-95 disabled:pointer-events-none disabled:opacity-50"
       >
-        {isSubmitting ? "Submitting Inquiry..." : "Submit Inquiry"}
+        {isSubmitting ? content.submitting_label : content.submit_label}
       </button>
     </form>
   );
@@ -355,6 +423,7 @@ const ContactFormSection = ({
 
 // ── Main Layout Coordinator ────────────────────────────
 export const PageContactSection = ({
+  form,
   className,
   industries = [],
   label = "Send an Inquiry",
@@ -390,7 +459,7 @@ export const PageContactSection = ({
               delayMs={200}
               className="border-border bg-muted/40 w-full rounded-3xl border p-6 sm:p-8 lg:p-10"
             >
-              <ContactFormSection industries={industries} />
+              <ContactFormSection industries={industries} form={form} />
             </ScrollReveal>
           </div>
         </div>
