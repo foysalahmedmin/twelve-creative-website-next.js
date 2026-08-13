@@ -74,6 +74,9 @@ function VideoCoverButton({
   );
 }
 
+/** Used until the film's own shape is known, and kept if it never becomes known. */
+const DEFAULT_ASPECT_RATIO = 16 / 9;
+
 interface InlineVideoPlayerProps {
   src: string;
   title: string;
@@ -81,6 +84,21 @@ interface InlineVideoPlayerProps {
   className?: string;
   /** Applied to the poster's <Image>, matching each grid's own responsive columns. */
   thumbnailSizes?: string;
+  /**
+   * How the player's box is shaped.
+   *
+   * `false` (the default) is a **fixed frame**: the player fills whatever box
+   * the call site gives it, and a film whose shape doesn't match that box is
+   * letterboxed against the black background below. Most sections want this,
+   * because their media sits in a grid or a row whose alignment depends on the
+   * box staying a known, constant shape no matter which film is in it.
+   *
+   * `true` is an **adaptive frame**: the player owns its own height and takes
+   * the film's own aspect ratio, so nothing is ever letterboxed or cropped.
+   * Use it where the media is free to be whatever shape the film is, and
+   * nothing alongside it is aligned against a fixed height.
+   */
+  adaptiveFrame?: boolean;
 }
 
 /**
@@ -104,6 +122,7 @@ export function InlineVideoPlayer({
   thumbnailSrc,
   className,
   thumbnailSizes = "(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw",
+  adaptiveFrame = false,
 }: InlineVideoPlayerProps) {
   const [started, setStarted] = useState(false);
   const [status, setStatus] = useState<PlayerStatus>("loading");
@@ -124,8 +143,24 @@ export function InlineVideoPlayer({
   const [size, setSize] = useState<{ width: number; height: number } | null>(
     null,
   );
+  // The film's real shape, once it is knowable, for `adaptiveFrame`. Only a
+  // native <video> reports this: the YouTube/Vimeo/etc. providers render
+  // through a cross-origin iframe whose shim exposes no intrinsic dimensions
+  // at all, so for those this stays null and the frame keeps the 16:9 default
+  // — right for ordinary landscape embeds, and no worse than a fixed frame for
+  // anything else.
+  const [videoRatio, setVideoRatio] = useState<number | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const readIntrinsicRatio = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    const { videoWidth, videoHeight } = video;
+    if (!videoWidth || !videoHeight) return;
+    const ratio = videoWidth / videoHeight;
+    setVideoRatio((prev) => (prev === ratio ? prev : ratio));
+  }, []);
 
   // Real, already-settled pixel dimensions instead of the "100%" the box's
   // own aspect-ratio CSS would otherwise resolve to. Same reason VideoDialog
@@ -202,9 +237,10 @@ export function InlineVideoPlayer({
         setStatus((s) => (s === "error" ? s : "ready"));
         if (!video.paused) setIsPlaying(true);
       }
+      readIntrinsicRatio();
     }, 200);
     return () => window.clearInterval(id);
-  }, [started, status]);
+  }, [started, status, readIntrinsicRatio]);
 
   const start = useCallback(() => {
     setStatus("loading");
@@ -245,6 +281,15 @@ export function InlineVideoPlayer({
         "group/video relative w-full overflow-hidden bg-black",
         className,
       )}
+      // Adaptive only: the box takes the film's own shape, so `contain` below
+      // has no leftover space to fill and no black bar can appear. A fixed
+      // frame passes nothing here and keeps taking its height from the call
+      // site exactly as before.
+      style={
+        adaptiveFrame
+          ? { aspectRatio: videoRatio ?? DEFAULT_ASPECT_RATIO }
+          : undefined
+      }
     >
       {!started ? (
         <VideoCoverButton
@@ -279,14 +324,21 @@ export function InlineVideoPlayer({
                 height: size.height,
                 objectFit: "contain",
               }}
-              onReady={() => setStatus((s) => (s === "error" ? s : "ready"))}
-              onCanPlay={() => setStatus((s) => (s === "error" ? s : "ready"))}
+              onReady={() => {
+                setStatus((s) => (s === "error" ? s : "ready"));
+                readIntrinsicRatio();
+              }}
+              onCanPlay={() => {
+                setStatus((s) => (s === "error" ? s : "ready"));
+                readIntrinsicRatio();
+              }}
               onWaiting={() =>
                 setStatus((s) => (s === "ready" ? "buffering" : s))
               }
               onPlaying={() => {
                 setStatus((s) => (s === "error" ? s : "ready"));
                 setIsPlaying(true);
+                readIntrinsicRatio();
               }}
               onError={() => setStatus("error")}
               onPlay={() => {

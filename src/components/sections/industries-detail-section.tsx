@@ -18,13 +18,23 @@ function IndustryMedia({ industry }: { industry: TIndustry }) {
   const poster = industry.thumbnailSrc || industry.image;
 
   return (
-    <div className="border-border relative aspect-4/3 w-full overflow-hidden rounded-2xl border shadow-sm lg:aspect-16/11">
+    <div
+      className={cn(
+        "border-border relative w-full overflow-hidden rounded-2xl border shadow-sm",
+        // Nothing in this row is aligned against the media's height — the grid
+        // centres the two columns against each other — so the film is free to
+        // set its own shape and never needs letterboxing. The still is not:
+        // it is object-cover, so it keeps the editorial crop it was designed
+        // with.
+        !industry.videoSrc && "aspect-4/3 lg:aspect-16/11",
+      )}
+    >
       {industry.videoSrc ? (
         <InlineVideoPlayer
           src={industry.videoSrc}
           title={`${industry.name} film`}
           thumbnailSrc={poster}
-          className="h-full"
+          adaptiveFrame
         />
       ) : (
         <Link href={detailHref(industry)} className="group block h-full w-full">
