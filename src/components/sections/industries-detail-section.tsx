@@ -35,6 +35,7 @@ function IndustryMedia({ industry }: { industry: TIndustry }) {
           title={`${industry.name} film`}
           thumbnailSrc={poster}
           adaptiveFrame
+          orientation="landscape"
         />
       ) : (
         <Link href={detailHref(industry)} className="group block h-full w-full">

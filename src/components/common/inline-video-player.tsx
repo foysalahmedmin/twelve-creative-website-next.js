@@ -74,8 +74,41 @@ function VideoCoverButton({
   );
 }
 
-/** Used until the film's own shape is known, and kept if it never becomes known. */
-const DEFAULT_ASPECT_RATIO = 16 / 9;
+/**
+ * The two ways up a film is cut. Which one a call site is showing comes from
+ * its own data — whether it resolved a landscape film or a short-form reel —
+ * and a reel is not a smaller landscape but the frame turned the other way, so
+ * the two carry separate defaults instead of sharing one.
+ */
+export type VideoFrameOrientation = "landscape" | "reel";
+
+/** What each way up is shaped like unless the call site overrides it. */
+export const VIDEO_FRAME_ASPECT_RATIO: Record<VideoFrameOrientation, number> = {
+  landscape: 16 / 9,
+  reel: 9 / 16,
+};
+
+/**
+ * Either one ratio for whichever orientation is showing, or a ratio per
+ * orientation for a call site that renders both depending on its data.
+ */
+export type VideoFrameAspectRatio =
+  | number
+  | Partial<Record<VideoFrameOrientation, number>>;
+
+/**
+ * The shape the box should hold: the call site's override for the orientation
+ * in play, else that orientation's default, else nothing — which leaves the
+ * box exactly as the call site sized it.
+ */
+function resolveFrameAspectRatio(
+  orientation: VideoFrameOrientation | undefined,
+  override: VideoFrameAspectRatio | undefined,
+): number | undefined {
+  if (typeof override === "number") return override;
+  if (!orientation) return undefined;
+  return override?.[orientation] ?? VIDEO_FRAME_ASPECT_RATIO[orientation];
+}
 
 interface InlineVideoPlayerProps {
   src: string;
@@ -87,18 +120,37 @@ interface InlineVideoPlayerProps {
   /**
    * How the player's box is shaped.
    *
-   * `false` (the default) is a **fixed frame**: the player fills whatever box
-   * the call site gives it, and a film whose shape doesn't match that box is
-   * letterboxed against the black background below. Most sections want this,
-   * because their media sits in a grid or a row whose alignment depends on the
-   * box staying a known, constant shape no matter which film is in it.
+   * `false` (the default) is a **fixed frame**: the box keeps one shape
+   * whatever film is in it, and a film that doesn't match is letterboxed
+   * against the black background below. Most sections want this, because their
+   * media sits in a grid or a row whose alignment depends on the box staying a
+   * known, constant height. Give that shape with `orientation` or
+   * `aspectRatio`; pass neither and the call site's own box is used, untouched.
    *
-   * `true` is an **adaptive frame**: the player owns its own height and takes
-   * the film's own aspect ratio, so nothing is ever letterboxed or cropped.
-   * Use it where the media is free to be whatever shape the film is, and
-   * nothing alongside it is aligned against a fixed height.
+   * `true` is an **adaptive frame**: the player owns its height and takes the
+   * film's own aspect ratio as soon as that is readable, so nothing is ever
+   * letterboxed or cropped. `orientation`/`aspectRatio` still apply — they are
+   * the shape held until the film's own is known. Use an adaptive frame where
+   * nothing alongside the media is aligned against a fixed height.
    */
   adaptiveFrame?: boolean;
+  /**
+   * Which way up the film being shown is cut — normally read straight off the
+   * call site's own data, e.g. `reel_video ? "reel" : "landscape"`. Passing it
+   * hands the frame to the player: it sizes its own box, at
+   * `VIDEO_FRAME_ASPECT_RATIO[orientation]`, rather than filling the call
+   * site's.
+   */
+  orientation?: VideoFrameOrientation;
+  /**
+   * Overrides the default for a frame that isn't shaped like either default —
+   * a 4:5 social cut, say. Give one number to shape whichever orientation is
+   * showing (`4 / 5`), or one per orientation where the data decides which
+   * appears (`{ reel: 4 / 5 }` keeps landscape on its own default). Passing a
+   * number likewise hands the frame to the player, with or without
+   * `orientation`.
+   */
+  aspectRatio?: VideoFrameAspectRatio;
 }
 
 /**
@@ -123,6 +175,8 @@ export function InlineVideoPlayer({
   className,
   thumbnailSizes = "(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw",
   adaptiveFrame = false,
+  orientation,
+  aspectRatio,
 }: InlineVideoPlayerProps) {
   const [started, setStarted] = useState(false);
   const [status, setStatus] = useState<PlayerStatus>("loading");
@@ -154,13 +208,26 @@ export function InlineVideoPlayer({
   const containerRef = useRef<HTMLDivElement>(null);
 
   const readIntrinsicRatio = useCallback(() => {
+    // Only an adaptive frame acts on this; skipping it elsewhere keeps every
+    // fixed-frame player off this re-render path entirely.
+    if (!adaptiveFrame) return;
     const video = videoRef.current;
     if (!video) return;
     const { videoWidth, videoHeight } = video;
     if (!videoWidth || !videoHeight) return;
     const ratio = videoWidth / videoHeight;
     setVideoRatio((prev) => (prev === ratio ? prev : ratio));
-  }, []);
+  }, [adaptiveFrame]);
+
+  const requestedRatio = resolveFrameAspectRatio(orientation, aspectRatio);
+
+  // What the box is actually set to. A fixed frame holds the requested shape
+  // for good. An adaptive one holds it only until the film's own shape is
+  // readable — and falls back to landscape if the call site named no shape and
+  // the film never reports one (every cross-origin iframe provider).
+  const framedRatio = adaptiveFrame
+    ? (videoRatio ?? requestedRatio ?? VIDEO_FRAME_ASPECT_RATIO.landscape)
+    : requestedRatio;
 
   // Real, already-settled pixel dimensions instead of the "100%" the box's
   // own aspect-ratio CSS would otherwise resolve to. Same reason VideoDialog
@@ -281,15 +348,11 @@ export function InlineVideoPlayer({
         "group/video relative w-full overflow-hidden bg-black",
         className,
       )}
-      // Adaptive only: the box takes the film's own shape, so `contain` below
-      // has no leftover space to fill and no black bar can appear. A fixed
-      // frame passes nothing here and keeps taking its height from the call
-      // site exactly as before.
-      style={
-        adaptiveFrame
-          ? { aspectRatio: videoRatio ?? DEFAULT_ASPECT_RATIO }
-          : undefined
-      }
+      // Set only once a shape has been asked for or worked out. Matching the
+      // box to the film leaves `contain` below no space to fill, so no black
+      // bar can appear; left unset, the box keeps taking its height from the
+      // call site exactly as it always has.
+      style={framedRatio ? { aspectRatio: framedRatio } : undefined}
     >
       {!started ? (
         <VideoCoverButton

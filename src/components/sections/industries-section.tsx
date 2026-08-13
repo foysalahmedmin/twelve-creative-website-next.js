@@ -45,6 +45,10 @@ const IndustryPanel = ({ industry }: { industry: TIndustry }) => {
   const reelVideoSrc = industry.reelVideoSrc ?? industry.videoSrc;
   const reelThumbnailSrc =
     industry.reelThumbnailSrc ?? industry.thumbnailSrc ?? industry.image;
+  // Which way up this panel's film is cut comes straight off the data: a reel
+  // only when one was actually set, and the landscape film whenever the line
+  // above had to fall back to it.
+  const orientation = industry.reelVideoSrc ? "reel" : "landscape";
 
   return (
     <div className="relative w-full">
@@ -111,13 +115,27 @@ const IndustryPanel = ({ industry }: { industry: TIndustry }) => {
 
         {/* Right: Visual Showcase — plays the industry video when set,
           otherwise shows the thumbnail/image; appears first on mobile */}
-        <div className="border-border relative order-first mx-auto aspect-4/5 w-full max-w-md overflow-hidden rounded-2xl border lg:order-last">
+        <div
+          className={cn(
+            "border-border relative order-first mx-auto w-full max-w-md overflow-hidden rounded-2xl border lg:order-last",
+            // The still has no shape of its own to honour — object-cover fills
+            // whatever it is given — so it keeps the panel's designed 4:5.
+            !reelVideoSrc && "aspect-4/5",
+          )}
+        >
           {reelVideoSrc ? (
             <InlineVideoPlayer
               src={reelVideoSrc}
               title={`${industry.name} reel`}
               thumbnailSrc={reelThumbnailSrc}
-              className="h-full"
+              orientation={orientation}
+              // This panel's reels are cut 4:5 rather than the full-height 9:16
+              // a reel defaults to, so that one is overridden and landscape is
+              // left on its own default — which is what the box becomes on the
+              // industries that have no reel set and fall back to the wide
+              // film. Before this it was a hardcoded 4:5 either way, so that
+              // fallback was letterboxed down to 45% of the box.
+              aspectRatio={{ reel: 4 / 5 }}
             />
           ) : (
             <>
