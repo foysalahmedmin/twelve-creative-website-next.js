@@ -45,10 +45,14 @@ const IndustryPanel = ({ industry }: { industry: TIndustry }) => {
   const reelVideoSrc = industry.reelVideoSrc ?? industry.videoSrc;
   const reelThumbnailSrc =
     industry.reelThumbnailSrc ?? industry.thumbnailSrc ?? industry.image;
-  // Which way up this panel's film is cut comes straight off the data: a reel
-  // only when one was actually set, and the landscape film whenever the line
-  // above had to fall back to it.
-  const orientation = industry.reelVideoSrc ? "reel" : "landscape";
+  // Which way up this panel's film is cut. `reelVideoSrc` is not the test for
+  // it: the API mapper already resolves reel_video ?? video, so it is filled
+  // in even for an industry that has no reel at all. What distinguishes a real
+  // reel is that the resolved source *differs* from the hero film — equal
+  // means that fallback ran and what we are about to show is the wide film,
+  // which must not be forced into the reel's 4:5 box.
+  const orientation =
+    reelVideoSrc && reelVideoSrc !== industry.videoSrc ? "reel" : "landscape";
 
   return (
     <div className="relative w-full">
@@ -126,7 +130,7 @@ const IndustryPanel = ({ industry }: { industry: TIndustry }) => {
           {reelVideoSrc ? (
             <InlineVideoPlayer
               src={reelVideoSrc}
-              title={`${industry.name} reel`}
+              title={`${industry.name} ${orientation === "reel" ? "reel" : "film"}`}
               thumbnailSrc={reelThumbnailSrc}
               orientation={orientation}
               // This panel's reels are cut 4:5 rather than the full-height 9:16

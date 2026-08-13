@@ -105,9 +105,20 @@ function resolveFrameAspectRatio(
   orientation: VideoFrameOrientation | undefined,
   override: VideoFrameAspectRatio | undefined,
 ): number | undefined {
-  if (typeof override === "number") return override;
+  // A zero, negative or NaN ratio would render as an invalid `aspect-ratio`
+  // declaration, which the browser drops — leaving the box with no height at
+  // all rather than the wrong height. Discard it and fall through to the
+  // orientation's default, so a bad value degrades instead of disappearing.
+  const usable = (value: number | undefined) =>
+    value !== undefined && Number.isFinite(value) && value > 0
+      ? value
+      : undefined;
+
+  if (typeof override === "number") return usable(override);
   if (!orientation) return undefined;
-  return override?.[orientation] ?? VIDEO_FRAME_ASPECT_RATIO[orientation];
+  return (
+    usable(override?.[orientation]) ?? VIDEO_FRAME_ASPECT_RATIO[orientation]
+  );
 }
 
 interface InlineVideoPlayerProps {
