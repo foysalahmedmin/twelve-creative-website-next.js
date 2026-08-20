@@ -11,6 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { getSystemLogs, type SystemLogLevel } from "@/lib/api/system-logs";
+import { requireAdminRole } from "@/lib/admin/session";
 
 export const dynamic = "force-dynamic";
 
@@ -23,6 +24,10 @@ const LEVEL_TONE: Record<SystemLogLevel, Tone> = {
 };
 
 export default async function SystemLogsPage() {
+  // Admin-only, and the sidebar hides it for editors — this is what stops the
+  // URL being reachable regardless.
+  await requireAdminRole("admin");
+
   const { data, meta } = await getSystemLogs({ limit: 100 });
 
   return (

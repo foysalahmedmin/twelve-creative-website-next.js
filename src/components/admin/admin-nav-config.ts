@@ -110,15 +110,12 @@ export const ADMIN_NAV: AdminNavEntry[] = [
   { label: "FAQs", href: "/admin/faqs", icon: HelpCircle },
   { label: "Team", href: "/admin/team", icon: UsersRound },
 
-  // Admin-only, and set once rather than edited day to day.
+  // Set once rather than edited day to day. Only Users is admin-only: site
+  // settings carry the footer copy and contact details, which are editors'
+  // day-to-day work, so that page is open to them too.
   { type: "section", label: "Administration" },
   { label: "Users", href: "/admin/users", icon: Users, roles: ["admin"] },
-  {
-    label: "Settings",
-    href: "/admin/settings",
-    icon: Settings,
-    roles: ["admin"],
-  },
+  { label: "Settings", href: "/admin/settings", icon: Settings },
 
   // Internal tooling. Actionable queues first, read-only diagnostics last.
   { type: "section", label: "Tech Ops" },
