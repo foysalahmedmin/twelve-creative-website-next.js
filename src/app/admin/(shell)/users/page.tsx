@@ -1,14 +1,12 @@
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
-import { redirect } from "next/navigation";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { AdminPagination } from "@/components/admin/admin-pagination";
 import { AdminSearch } from "@/components/admin/admin-search";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { requireAdminSession } from "@/lib/admin/session";
-import { ADMIN_CONFIG } from "@/lib/admin/config";
+import { requireAdminRole } from "@/lib/admin/session";
 import { getAdminAccounts } from "@/lib/api/admin-users";
 import { positivePage } from "@/lib/admin/pagination";
 import { UsersTable } from "./users-table";
@@ -20,8 +18,10 @@ interface PageProps {
 }
 
 export default async function UsersPage({ searchParams }: PageProps) {
-  const session = await requireAdminSession();
-  if (session.role !== "admin") redirect(ADMIN_CONFIG.dashboardPath);
+  // Kept alongside the layout's guard, not replaced by it: this one runs in
+  // the same component as the admin-only fetch below, so an editor is turned
+  // away before that request is ever made.
+  const session = await requireAdminRole("admin");
 
   const params = await searchParams;
   const page = positivePage(params.page);
